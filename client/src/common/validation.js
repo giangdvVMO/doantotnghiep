@@ -52,3 +52,49 @@ export const checkBirthday = (birthday) => {
 export const checkConfirmPass = (password, confirm) => {
     return (confirm !== password);
 }
+
+export const checkUniversity = (university) => {
+    return !university==='';
+}
+
+export const checkFaculty = (faculty) => {
+    return !faculty==='';
+}
+
+export const checkCourse = (course) => {
+    const value = course.split('-');
+    try{
+        if(value.lengt<2||+value[0]||+value[1]){
+            return false;
+        }
+    }catch{
+        return false;
+    }
+    return true;
+}
+
+export const checkCCCD = (cccd) => {
+    if(!cccd||cccd.length!==9||cccd.length!==12){
+        return false;
+    }
+    return true;
+}
+
+export const checkAddress = (address) => {
+    return address!=='';
+}
+
+export const checkCardStudent = (cardStudent) => {
+    return cardStudent!=='';
+}
+
+export const checkMajor = (major) => {
+    return major!=='';
+}
+
+export const checkGPA = (gpa) => {
+    if(+gpa<0||+gpa>4){
+        return false;
+    }
+    return true;
+}

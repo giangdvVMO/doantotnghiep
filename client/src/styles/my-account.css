@@ -104,3 +104,9 @@
 .change-btn{
     margin: 0 0 0 10px;
 }
+
+.text-display{
+    border-bottom: 1.5px solid gray;
+    text-align: start;
+    font-weight: 350;
+}

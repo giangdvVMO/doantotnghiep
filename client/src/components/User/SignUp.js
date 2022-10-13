@@ -226,6 +226,7 @@ const SignUp = () => {
         count = checkRoleFunc(account.role) ? count : count + 1;
         count = checkUserNameFunc(account.username) ? count : count + 1;
         count = checkBirthdayFunc(account.birthday) ? count : count + 1;
+        count = checkRePasswordFunc(repassword) ? count : count + 1;
         console.log('validate', count);
         if (count === 0) {
             account.phone = '+84' + account.phone;

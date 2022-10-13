@@ -1,9 +1,11 @@
-import { InfoCircleOutlined, KeyOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, DatePicker, Form, Input, message, Modal, Select, Tooltip } from 'antd';
+import { CheckCircleOutlined, InfoCircleOutlined, KeyOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, DatePicker, Form, Input, message, Modal, Tag, Tooltip } from 'antd';
 import { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as moment from 'moment';
 
 import { messageSignUpError } from '../../common/error';
+import { DateToShortString } from '../../common/service';
 import { checkBirthday, checkFullName, checkMail, checkPassword, checkPhone, checkRole, checkUsername } from '../../common/validation';
 import { serverURL } from '../../configs/server.config';
 import '../../styles/form.css'
@@ -23,8 +25,8 @@ export const DetailAccount = () => {
         password: "12345678",
         fullname: "giang",
         email: "123@gmail.com",
-        birthday: new Date("2000-12-12"),
-        phone: "+840866023111",
+        birthday: "2000-12-12",
+        phone: "0866023111",
         role: "student",
         status: 1
     }
@@ -255,9 +257,17 @@ export const DetailAccount = () => {
 
     const renderStatus = () => {
         if (account.status) {
-            return <div className='active'>active</div>
+            return (
+                <Tag icon={<CheckCircleOutlined />} 
+                    color="success">
+                    active
+                </Tag>)
         } else {
-            return <div className='inactive'>inactive</div>
+            (
+                <Tag icon={<MinusCircleOutlined />} color="default">
+                    inactive
+                </Tag>
+            )
         }
     }
 
@@ -295,39 +305,51 @@ export const DetailAccount = () => {
                             initialValue={account.username}
                             label="Tên đăng nhập"
                             name="username"
+                            className='label'
                             validateStatus={validateUsername.status}
                             help={validateUsername.errorMsg}
                         >
-                            <Input
-                                ref={refUserName}
-                                disabled={!isEdit}
-                                className='input-login max-width'
-                                placeholder="Nhập tên đăng nhập"
-                                autoFocus={true}
-                                prefix={<UserOutlined className='input-icon' />}
-                                suffix={
-                                    <Tooltip title="Tên đăng nhập là duy nhất">
-                                        <InfoCircleOutlined className='input-icon opacity-less'
-                                        />
-                                    </Tooltip>
-                                }
-                                value={account.username}
-                                onChange={handleChangeUserName}
-                            />
+                            {
+                                isEdit?
+                                <Input
+                                    ref={refUserName}
+                                    disabled={!isEdit}
+                                    className='input-login max-width'
+                                    placeholder="Nhập tên đăng nhập"
+                                    autoFocus={true}
+                                    prefix={<UserOutlined className='input-icon' />}
+                                    suffix={
+                                        <Tooltip title="Tên đăng nhập là duy nhất">
+                                            <InfoCircleOutlined className='input-icon opacity-less'
+                                            />
+                                        </Tooltip>
+                                    }
+                                    value={account.username}
+                                    onChange={handleChangeUserName}
+                                />
+                                :
+                                <p className="text-display">{account.username}</p>
+                            }
                         </Form.Item>
                         <Form.Item
                             label="Mật khẩu"
                             name="password"
+                            className='label'
                             validateStatus={validatePassword.status}
                             help={validatePassword.errorMsg}
                         >
                             <div className='group'>
+                            {
+                                isEdit?
                                 <Input.Password
                                     className='input-login max-width'
                                     disabled={!isEdit}
                                     prefix={<KeyOutlined className='input-icon' />}
                                     onChange={handleChangePassword}
                                 />
+                               :
+                               <p className="text-display">********</p>
+                            }
                                 {
                                     renderChangePasswordBtn()
                                 }
@@ -336,72 +358,106 @@ export const DetailAccount = () => {
                         <Form.Item
                             label="Họ và tên"
                             name="fullname"
+                            className='label'
+                            initialValue={account.fullname}
                             validateStatus={validateFullname.status}
                             help={validateFullname.errorMsg}
                         >
-                            <Input
-                                disabled={!isEdit}
-                                className='input-login max-width'
-                                placeholder="Nhập họ và tên"
-                                autoFocus={true}
-                                value={account.fullname}
-                                onChange={handleChangeFullName}
-                            />
+                            {
+                                isEdit?
+                                <Input
+                                    disabled={!isEdit}
+                                    className='input-login max-width'
+                                    placeholder="Nhập họ và tên"
+                                    autoFocus={true}
+                                    value={account.fullname}
+                                    onChange={handleChangeFullName}
+                                />
+                                :
+                                <p className="text-display">{account.fullname}</p>
+                            }
                         </Form.Item>
                         <Form.Item
                             label="Email"
                             name="email"
+                            className='label'
+                            initialValue={account.email}
                             validateStatus={validateEmail.status}
                             help={validateEmail.errorMsg}
                         >
-                            <Input
-                                className='input-login max-width'
-                                placeholder="Nhập Email"
-                                type='email'
-                                disabled={!isEdit}
-                                autoFocus={true}
-                                prefix={<MailOutlined className='input-icon' />}
-                                value={account.email}
-                                onChange={handleChangeEmail}
-                            />
+                            {
+                                isEdit?
+                                <Input
+                                    className='input-login max-width'
+                                    placeholder="Nhập Email"
+                                    type='email'
+                                    disabled={!isEdit}
+                                    autoFocus={true}
+                                    prefix={<MailOutlined className='input-icon' />}
+                                    value={account.email}
+                                    onChange={handleChangeEmail}
+                                />
+                                :
+                                <p className="text-display">{account.email}</p>
+                            }
                         </Form.Item>
 
                         <Form.Item
                             label="Số điện thoại"
                             name="phone"
+                            className='label'
+                            initialValue={account.phone}
                             validateStatus={validatePhone.status}
                             help={validatePhone.errorMsg}
                         >
-                            <Input
-                                className='input-login max-width'
-                                placeholder="Nhập Số điện thoại"
-                                autoFocus={true}
-                                disabled={!isEdit}
-                                prefix={<><PhoneOutlined className='input-icon' /><span>+84 </span></>}
-                                value={account.phone}
-                                onChange={handleChangePhone}
-                            />
+                            {
+                                isEdit?
+                                <Input
+                                    className='input-login max-width'
+                                    placeholder="Nhập Số điện thoại"
+                                    autoFocus={true}
+                                    disabled={!isEdit}
+                                    prefix={<><PhoneOutlined className='input-icon' /><span>+84 </span></>}
+                                    value={account.phone}
+                                    onChange={handleChangePhone}
+                                />
+                                :
+                                <p className="text-display">{account.phone}</p>
+                            }
+                            
                         </Form.Item>
                         <Form.Item
                             label="Ngày sinh"
                             name="birthday"
+                            className='label'
                             validateStatus={validateBirthday.status}
                             help={validateBirthday.errorMsg}
                         >
-                            <DatePicker className='birthday-input'
-                                autoFocus={true}
-                                disabled={!isEdit}
-                                value={account.birthday}
-                                onChange={handleChangeBirthday} />
+                            {
+                                isEdit?
+                                <DatePicker className='birthday-input'
+                                    autoFocus={true}
+                                    disabled={!isEdit}
+                                    defaultValue= {moment(moment(account.birthday),'DD/MM/YYYY')}
+                                    value={account.birthday}
+                                    onChange={handleChangeBirthday} />
+                                :
+                                <p className="text-display">{DateToShortString(account.birthday)}</p>
+                            }
+                            
                         </Form.Item>
                         <Form.Item name='role' label="Đối tượng"
+                        className='label'
                             validateStatus={validateRole.status}
                             help={validateRole.errorMsg}
                         >
-                            <div className='role-name'>{account.role}</div>
+                            <div className='role'>
+                                <Tag color="orange">{account.role}</Tag>
+                            </div>
                         </Form.Item>
                         <Form.Item name='status' label="Trạng thái"
                             validateStatus={validateRole.status}
+                            className='label'
                             help={validateRole.errorMsg}
                         >
                             <div className='status'>{

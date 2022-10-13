@@ -11,7 +11,7 @@ const Account = () => {
         {
             key: '1',
             label: (
-                <Link to='/profile'>Thông tin cá nhân</Link>
+                <Link to='/profiles'>Thông tin cá nhân</Link>
             ),
         },
         {
@@ -27,19 +27,22 @@ const Account = () => {
             ),
         },
     ];
+    // eslint-disable-next-line default-case
     switch (user.role) {
         case 'student': items.concat([{
             key: '3',
             label: (
                 <Link to='/student-profile'>Thông tin sinh viên</Link>
             ),
-        }])
+        }]);
+        break;
         case 'company': items.concat([{
             key: '3',
             label: (
                 <Link to='/company-profile'>Thông tin doanh nghiệp</Link>
             ),
-        }])
+        }]);
+        break;
     }
     const detailAccount = (
         <Menu className="menu-account"

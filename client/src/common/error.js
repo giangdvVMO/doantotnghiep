@@ -11,3 +11,7 @@ export const messageSignUpError = {
 export const messageChangePass = {
     confirmPass: 'Mật khẩu nhập lại chưa đúng',
 }
+
+export const messageStudentError = {
+    
+}

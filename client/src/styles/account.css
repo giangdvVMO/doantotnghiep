@@ -28,3 +28,8 @@
 .menu-account {
     background-color: azure;
 }
+
+.role{
+    display: flex;
+    align-items: flex-start;
+}
