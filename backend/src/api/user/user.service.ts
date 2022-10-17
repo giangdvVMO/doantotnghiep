@@ -11,18 +11,20 @@ import { SALT_ROUNDS } from 'src/configs/constant.config';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+  ) {}
   async create(createUserDto: RegisterDto): Promise<any> {
     console.log(createUserDto);
     //create id
     const count: any = await this.userModel.aggregate([
       {
-        $group:{
-          _id:null,
+        $group: {
+          _id: null,
           max: {
-            $max:"$_id"
-          }
-        }
+            $max: '$_id',
+          },
+        },
       },
     ]);
     console.log(count);
@@ -59,9 +61,9 @@ export class UserService {
     return `This action returns all users`;
   }
 
-  findOneByCondition(condition: any) {
-    const user = this.userModel.find({ condition });
-    return user;
+  async findOneByCondition(condition: any) {
+    const user = await this.userModel.find(condition).exec();
+    return user[0];
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

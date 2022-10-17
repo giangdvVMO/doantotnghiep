@@ -76,8 +76,8 @@ const SignUp = () => {
         setAccount((preUser) => { return { ...preUser, role: value } });
     }
 
-    function handleChangeRePassword(value) {
-        setRepassword(value);
+    function handleChangeRePassword(e) {
+        setRepassword(e.target.value);
     }
 
     function handleKeyUp(e) {
@@ -153,6 +153,7 @@ const SignUp = () => {
     }
 
     function checkRePasswordFunc(repassword, password) {
+        console.log(repassword, password,repassword !== password );
         if (repassword !== password) {
             setValidatePassword({
                 status: 'error',
@@ -226,8 +227,9 @@ const SignUp = () => {
         count = checkRoleFunc(account.role) ? count : count + 1;
         count = checkUserNameFunc(account.username) ? count : count + 1;
         count = checkBirthdayFunc(account.birthday) ? count : count + 1;
-        count = checkRePasswordFunc(repassword) ? count : count + 1;
-        console.log('validate', count);
+        count = checkRePasswordFunc(repassword, account.password) ? count : count + 1;
+        console.log(account);
+
         if (count === 0) {
             account.phone = '+84' + account.phone;
             console.log(account);
@@ -243,8 +245,13 @@ const SignUp = () => {
                 );
                 //const response = await axios.post(url, JSON.stringify(account),{})
                 console.log('response', await response.json());
-                message.success("Bạn đã đăng kí thành công")
-                navigate('/sign-in');
+                if(response.status!==201){
+                    message.error('Đăng ký không thành công!');
+                }
+                else{
+                    message.success("Bạn đã đăng ký thành công")
+                    navigate('/sign-in');
+                }
             }
             catch (err) {
                 console.log(err);
@@ -303,6 +310,7 @@ const SignUp = () => {
                             placeholder="Nhập mật khẩu"
                             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                             prefix={<KeyOutlined className='input-icon' />}
+                            value={account.password}
                             onChange={handleChangePassword}
                         />
                     </Form.Item>
@@ -319,6 +327,7 @@ const SignUp = () => {
                             placeholder="Nhập lại mật khẩu"
                             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                             prefix={<KeyOutlined className='input-icon' />}
+                            value={repassword}
                             onChange={handleChangeRePassword}
                         />
                     </Form.Item>

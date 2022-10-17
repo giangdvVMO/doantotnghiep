@@ -8,7 +8,7 @@ import { SignInUp } from './SignInUp';
 
 const Nav = () => {
     const { user } = useContext(UserContext);
-    console.log(user);
+    console.log("user",user);
     return (
         <div className="nav">
             <div className="left-nav"><MenuNav /></div>

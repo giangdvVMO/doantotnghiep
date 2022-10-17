@@ -1,6 +1,6 @@
 import { CheckCircleOutlined, InfoCircleOutlined, KeyOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, DatePicker, Form, Input, message, Modal, Tag, Tooltip } from 'antd';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as moment from 'moment';
 
@@ -15,34 +15,36 @@ import { UserContext } from '../User/UserProvider';
 export const DetailAccountAdmin = () => {
     const { user } = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
-    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [account, setAccount] = useState({});
     const {id} = useParams();
     console.log('id:', id);
-    const role = user ? user.role : 'student';
-    let users = user ? user : {
-        _id: 1,
-        username: "giang",
-        password: "12345678",
-        fullname: "giang",
-        email: "123@gmail.com",
-        birthday: "2000-12-12",
-        phone: "0866023111",
-        role: "student",
-        status: 1
-    }
+    useEffect(()=>{
+        let users = user ? user : {
+            _id: 1,
+            username: "giang",
+            password: "12345678",
+            fullname: "giang",
+            email: "123@gmail.com",
+            birthday: "2000-12-12",
+            phone: "0866023111",
+            role: "admin",
+            status: 1
+        }
+        setAccount({
+            _id: users._id,
+            username: users.username,
+            password: users.password,
+            fullname: users.fullname,
+            email: users.email,
+            birthday: users.birthday,
+            phone: users.phone,
+            role: users.role,
+            status: users.status
+        })
+    },[]);
+    
     const date = new Date();
     console.log(date.toISOString());
-    const [account, setAccount] = useState({
-        _id: users._id,
-        username: users.username,
-        password: users.password,
-        fullname: users.fullname,
-        email: users.email,
-        birthday: users.birthday,
-        phone: users.phone,
-        role: users.role,
-        status: users.status
-    });
     console.log(account);
     const defaultTrueStatus = {
         status: 'success',
@@ -204,11 +206,6 @@ export const DetailAccountAdmin = () => {
         return;
     }
 
-    async function handleChange(e) {
-        setIsOpenModal(true);
-        return;
-    }
-
     async function handleSave(e) {
         ref.current.submit();
         let count = 0;
@@ -276,14 +273,6 @@ export const DetailAccountAdmin = () => {
         }
     }
 
-    const renderChangePasswordBtn = () => {
-        if (!isEdit) {
-            return (
-                <Button className='button change-btn' onClick={handleChange}>Đổi</Button>
-            )
-        }
-    }
-
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
             <div className='background-image'></div>
@@ -322,6 +311,7 @@ export const DetailAccountAdmin = () => {
                                     className='input-login max-width'
                                     placeholder="Nhập tên đăng nhập"
                                     autoFocus={true}
+                                    defaultValue={account.username}
                                     prefix={<UserOutlined className='input-icon' />}
                                     suffix={
                                         <Tooltip title="Tên đăng nhập là duy nhất">
@@ -351,6 +341,7 @@ export const DetailAccountAdmin = () => {
                                     className='input-login max-width'
                                     placeholder="Nhập họ và tên"
                                     autoFocus={true}
+                                    defaultValue={account.fullname}
                                     value={account.fullname}
                                     onChange={handleChangeFullName}
                                 />
@@ -374,6 +365,7 @@ export const DetailAccountAdmin = () => {
                                     type='email'
                                     disabled={!isEdit}
                                     autoFocus={true}
+                                    defaultValue={account.email}
                                     prefix={<MailOutlined className='input-icon' />}
                                     value={account.email}
                                     onChange={handleChangeEmail}
@@ -398,6 +390,7 @@ export const DetailAccountAdmin = () => {
                                     placeholder="Nhập Số điện thoại"
                                     autoFocus={true}
                                     disabled={!isEdit}
+                                    defaultValue={account.phone}
                                     prefix={<><PhoneOutlined className='input-icon' /><span>+84 </span></>}
                                     value={account.phone}
                                     onChange={handleChangePhone}

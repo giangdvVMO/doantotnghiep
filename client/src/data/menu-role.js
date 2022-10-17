@@ -1,4 +1,4 @@
-import { AlertOutlined, BankOutlined, BookOutlined, ContactsOutlined, CopyOutlined, HomeOutlined, UsergroupAddOutlined } from "@ant-design/icons";
+import { AlertOutlined, BankOutlined, BookOutlined, ContactsOutlined, ContainerOutlined, CopyOutlined, HomeOutlined, SnippetsOutlined, UsergroupAddOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 export const MenuRole = {
@@ -19,27 +19,27 @@ export const MenuRole = {
             key: 'home'
         },
         {
-            label: <Link to='user-manager'>Quản lý người dùng</Link>,
+            label: <Link to='account-management'>Quản lý người dùng</Link>,
             icon: <UsergroupAddOutlined />,
             key: 'usermanagerment'
         },
         {
-            label: <Link to='student-manager'>Quản lý sinh viên</Link>,
+            label: <Link to='student-management'>Quản lý sinh viên</Link>,
             icon: <ContactsOutlined />,
             key: 'studentmanagerment'
         },
         {
-            label: <Link to='company-manager'>Quản lý doanh nghiệp</Link>,
+            label: <Link to='company-management'>Quản lý doanh nghiệp</Link>,
             icon: <BankOutlined />,
             key: 'companymanagerment'
         },
         {
-            label: <Link to='hire-manager'>Quản lý bài đăng tuyển dụng</Link>,
+            label: <Link to='hire-management'>Quản lý bài đăng tuyển dụng</Link>,
             icon: <CopyOutlined />,
             key: 'hiremanagerment'
         },
         {
-            label: <Link to='news-manager'>Quản lý bài đăng tin tức</Link>,
+            label: <Link to='news-management'>Quản lý bài đăng tin tức</Link>,
             icon: <BookOutlined />,
             key: 'newsmanagerment'
         },
@@ -59,22 +59,22 @@ export const MenuRole = {
             key: 'home'
         },
         {
-            label: <Link to='cv-student'>Quản lý người dùng</Link>,
-            icon: <UsergroupAddOutlined />,
+            label: <Link to='cv-student'>CV của tôi</Link>,
+            icon: <SnippetsOutlined />,
             key: 'cvstudent'
         },
         {
-            label: <Link to='company-list'>Quản lý sinh viên</Link>,
-            icon: <ContactsOutlined />,
+            label: <Link to='company-list'>Danh sách doanh nghiệp</Link>,
+            icon: <BankOutlined />,
             key: 'companylist'
         },
         {
-            label: <Link to='hire-list'>Quản lý sinh viên</Link>,
-            icon: <ContactsOutlined />,
+            label: <Link to='hire-list'>Bài đăng tuyển dụng</Link>,
+            icon: <ContainerOutlined />,
             key: 'hirelist'
         },
         {
-            label: <Link to='news'>Quản lý bài đăng tin tức</Link>,
+            label: <Link to='news'>Tin tức</Link>,
             icon: <BookOutlined />,
             key: 'news'
         },

@@ -29,7 +29,7 @@ let students = {
 }
 
 export const StudentProfile = ()=>{
-const {user, changeUser} = useContext(UserContext);
+    const {user, changeUser} = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
     
     const role = user?user.role:'student';
@@ -701,5 +701,6 @@ const {user, changeUser} = useContext(UserContext);
                 </Form>
             </div>
         </div>
-        </div>)
+        </div>
+    )
 }

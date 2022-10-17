@@ -1,13 +1,15 @@
 import { InfoCircleOutlined, UserOutlined, EyeInvisibleOutlined, EyeTwoTone, KeyOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, message, Tooltip, Typography } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { messageSignUpError } from '../../common/error';
 import { checkPassword, checkUsername } from '../../common/validation';
 import { serverURL } from '../../configs/server.config';
 import '../../styles/form.css';
+import { UserContext } from './UserProvider';
 
 const SignIn = () => {
+    const { changeUser, changeToken} = useContext(UserContext);
     const [user, setUser] = useState({
         username: '',
         password: ''
@@ -92,9 +94,16 @@ const SignIn = () => {
                     },
                 }
                 );
-                console.log(await response.json());
-                message.success("Bạn đã đăng nhập thành công")
-                navigate('/');
+                const result = await response.json();
+                if(response.status!==201){
+                    message.error("Đăng nhập không thành công!");
+                }else{
+                    message.success("Bạn đã đăng nhập thành công");
+                    console.log(result.user, result.accessToken);
+                    changeUser(result.user);
+                    changeToken(result.accessToken)
+                    navigate('/');
+                }
             }
             catch (err) {
                 console.log(err);

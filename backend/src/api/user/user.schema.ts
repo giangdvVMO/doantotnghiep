@@ -36,14 +36,6 @@ export class User {
 
   @Prop({ type: String, maxlength: maxLengthPhone })
   phone: string;
-
-  @Prop({
-    type: Number,
-    ref: 'tbl_company',
-    nullable: true,
-    default: null
-  })
-  idCompany: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

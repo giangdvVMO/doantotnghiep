@@ -2,11 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
-import { LoginResponseDto } from './dto/login-response.dto';
 import { UserService } from '../user/user.service';
 import { ValidatorService } from './validations/check-expiration-time';
 import { JwtPayload } from './payloads/jwt.payload';
-import { UserSchema } from '../../api/user/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -17,21 +15,23 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, password: string) {
+    console.log('validate');
     const user: any = await this.userService.findOneByCondition({
       username: username,
     });
-    console.log(user);
-    if (!user.length) {
+    console.log('user', user);
+    if (!user) {
       throw new BadRequestException('User not found, disabled or locked');
     }
-    const comparePassword = bcrypt.compareSync(password, user[0].password);
-    if (user.length && comparePassword) {
-      return user[0];
+    const comparePassword = bcrypt.compareSync(password, user.password);
+    if (user && comparePassword) {
+      console.log(user);
+      return user;
     }
     return null;
   }
 
-  async login(user: any): Promise<LoginResponseDto> {
+  async login(user: any): Promise<any> {
     const payload: JwtPayload = {
       sub: user._id,
       username: user.username,
@@ -39,6 +39,7 @@ export class AuthService {
     };
     console.log(payload);
     return {
+      user,
       accessToken: this.jwtService.sign(payload),
     };
   }

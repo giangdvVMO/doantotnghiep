@@ -1,5 +1,5 @@
 import { Button, Input, Pagination, Select, Table, Tag } from 'antd';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { UserContext } from '../User/UserProvider';
@@ -7,32 +7,50 @@ import '../../styles/manager-page.css'
 import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
+let majors =[];
 
-export const AccountManager = () => {
+export const StudentManager = () => {
     const { user } = useContext(UserContext);
+    const [school, setSchool] = useState(-1);
+    const [faculty, setFaculty] = useState(-1);
+    const [major, setMajor] = useState(-1);
     const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
     const [current, setCurrent] = useState(2);
     const [totalPage, setTotal] = useState(10);
+    useEffect(()=>{
+        majors = ['tiếng nga', 'tiếng trung', 'tiếng trung'];
+    })
     const listUser = [
         {
             key: '1',
-            username: 'Mike',
             fullname: 32,
             birthday: '2022-12-12',
             address: '10 Downing Street',
-            role: 'sinh viên',
             phone: '082937826',
+
+            cccd:'12345',
+            university: 'abc',
+            faculty: 'toán học',
+            major: 'toán học',
+            course: '2012-2022',
+            gpa: 2.9,
+            card_student: '1234',
             status: 1
         },
         {
             key: '2',
-            username: 'Mike',
             fullname: 32,
             birthday: '2022-12-12',
             address: '10 Downing Street',
-            role: 'sinh viên',
             phone: '082937826',
+            cccd:'12345',
+            university: 'abc',
+            faculty: 'toán học',
+            major: 'toán học',
+            course: '2012-2022',
+            gpa: 2.9,
+            card_student: '1234',
             status: 0
         },
     ];
@@ -42,12 +60,6 @@ export const AccountManager = () => {
             title: 'STT',
             dataIndex: 'key',
             key: 'key',
-            fixed: 'left',
-        },
-        {
-            title: 'Tên đăng nhập',
-            dataIndex: 'username',
-            key: 'username',
             fixed: 'left',
         },
         {
@@ -66,14 +78,39 @@ export const AccountManager = () => {
             key: 'address',
         },
         {
-            title: 'Vị trí',
-            dataIndex: 'role',
-            key: 'role',
-        },
-        {
             title: 'Số điện thoại',
             dataIndex: 'phone',
             key: 'phone',
+        },
+        {
+            title: 'CCCD',
+            dataIndex: 'cccd',
+            key: 'cccd',
+        },
+        {
+            title: 'Trường',
+            dataIndex: 'university',
+            key: 'university',
+        },
+        {
+            title: 'Khoa',
+            dataIndex: 'faculty',
+            key: 'faculty',
+        },
+        {
+            title: 'Chuyên ngành',
+            dataIndex: 'major',
+            key: 'major',
+        },
+        {
+            title: 'Khóa học',
+            dataIndex: 'course',
+            key: 'course',
+        },
+        {
+            title: 'GPA',
+            dataIndex: 'gpa',
+            key: 'gpa',
         },
         {
             title: 'Trạng thái',
@@ -82,11 +119,11 @@ export const AccountManager = () => {
                      record.status?
                         <Tag icon={<CheckCircleOutlined />} 
                             color="success">
-                            active
+                            duyệt
                         </Tag>
                         :
                         <Tag icon={<MinusCircleOutlined />} color="default">
-                            inactive
+                            chưa duyệt
                         </Tag>
             ),
             fixed: 'right',
@@ -100,6 +137,10 @@ export const AccountManager = () => {
             fixed: 'right',
         },
     ];
+
+    const handleChangeMajor = (value)=>{
+        setMajor(value);
+    }
 
     const handleChangeSelect = (value)=>{
         setStatus(value);
@@ -118,6 +159,23 @@ export const AccountManager = () => {
             <div className='banner-content'>Quản lý danh sách tài khoản</div>
             <div className='container-filter'>
                 <div className='filter'>
+                    <label>Chuyên ngành:</label>
+                    <Select
+                        value={major}
+                        defaultValue='all'
+                        labelInValue='Chuyên ngành'
+                        className='filter-content'
+                        onChange={handleChangeMajor}
+                    >
+                        <Option value={-1}>all</Option>
+                        {
+                            majors.map(()=>{
+                                
+                            })
+                        }
+                    </Select>
+                </div>
+                <div className='filter'>
                     <label>Trạng thái:</label>
                     <Select
                         value={status}
@@ -127,8 +185,8 @@ export const AccountManager = () => {
                         onChange={handleChangeSelect}
                     >
                         <Option value={-1}>all</Option>
-                        <Option value={1}>active</Option>
-                        <Option value={0}>inactive</Option>
+                        <Option value={1}>duyệt</Option>
+                        <Option value={0}>chưa duyệt</Option>
                     </Select>
                 </div>
                 <div className='search'>
@@ -152,7 +210,6 @@ export const AccountManager = () => {
             <Pagination 
                 pageSize= {1}
                 current = {current}
-                    // defaultCurrent: 1,
                 onChange= {handleChangePage}
                 total={totalPage}
                 />

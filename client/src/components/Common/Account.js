@@ -7,37 +7,31 @@ import '../../styles/account.css';
 const Account = () => {
     const { user } = useContext(UserContext)
     console.log(user);
-    const items = [
+    let items = [
         {
-            key: '1',
+            key: 1,
             label: (
-                <Link to='/profiles'>Thông tin cá nhân</Link>
+                <Link to='/myaccount'>Thông tin tài khoản</Link>
             ),
         },
         {
-            key: '2',
+            key: 3,
             label: (
-                <Link to='/account'>Thông tin tài khoản</Link>
-            ),
-        },
-        {
-            key: '4',
-            label: (
-                <Link to='/signIn'>Đăng xuất</Link>
+                <Link to='/sign-in'>Đăng xuất</Link>
             ),
         },
     ];
     // eslint-disable-next-line default-case
     switch (user.role) {
-        case 'student': items.concat([{
-            key: '3',
+        case 'student': items = items.concat([{
+            key: 2,
             label: (
                 <Link to='/student-profile'>Thông tin sinh viên</Link>
             ),
         }]);
         break;
-        case 'company': items.concat([{
-            key: '3',
+        case 'company': items = items.concat([{
+            key: 2,
             label: (
                 <Link to='/company-profile'>Thông tin doanh nghiệp</Link>
             ),
@@ -49,6 +43,19 @@ const Account = () => {
             items={items}
         />
     )
+
+    function compareFn(a, b) {
+        if (a.key<b.key) {
+          return -1;
+        }
+        if (a.key>b.key) {
+          return 1;
+        }
+        // a must be equal to b
+        return 0;
+      }
+
+    items = items.sort(compareFn);
     return (
         <>
             <Dropdown
@@ -60,7 +67,7 @@ const Account = () => {
                 }}
             >
                 <div className="account-avatar-container">
-                    <Typography className="account-name">{user.name === 'x' ? "Account" : user.name}</Typography>
+                    <Typography className="account-name">{user.fullname === 'x' ? "Account" : user.fullname}</Typography>
                     {
                         user.avatar ?
                             <Avatar
