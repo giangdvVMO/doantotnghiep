@@ -169,8 +169,8 @@ export const StudentManager = () => {
                     >
                         <Option value={-1}>all</Option>
                         {
-                            majors.map(()=>{
-                                
+                            majors.map((major)=>{
+                                return (<Option key={major} value={major}>{major}</Option>)
                             })
                         }
                     </Select>
