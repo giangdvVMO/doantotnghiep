@@ -1,10 +1,12 @@
-import { Button, Input, Pagination, Select, Table, Tag } from 'antd';
-import { useContext, useRef, useState } from 'react';
+import { Button, Input, message, Pagination, Select, Table, Tag } from 'antd';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
+import { serverURL } from '../../configs/server.config';
 import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import * as axios from 'axios';
 
 const { Option } = Select;
 
@@ -12,36 +14,42 @@ export const AccountManager = () => {
     const { user } = useContext(UserContext);
     const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
-    const [current, setCurrent] = useState(2);
-    const [totalPage, setTotal] = useState(10);
-    const listUser = [
-        {
-            key: '1',
-            username: 'Mike',
-            fullname: 32,
-            birthday: '2022-12-12',
-            address: '10 Downing Street',
-            role: 'sinh viên',
-            phone: '082937826',
-            status: 1
-        },
-        {
-            key: '2',
-            username: 'Mike',
-            fullname: 32,
-            birthday: '2022-12-12',
-            address: '10 Downing Street',
-            role: 'sinh viên',
-            phone: '082937826',
-            status: 0
-        },
-    ];
+    const [current, setCurrent] = useState(1);
+    const [totalPage, setTotal] = useState(0);
+    const [listUser, setListUser] = useState([]);
+    const getAccountList = async ()=>{
+        let query = '?current='+current;
+        query = status!==-1? query+'?status='+status:query;
+        query = search!==-1? query+'?search='+status:query;
+        const url = serverURL + 'account'+ query;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                if(response.status!==200){
+                    message.error("Lỗi hệ thống!");
+                }else{
+                    console.log(result)
+                    setListUser(result.data);
+                    setTotal(result.totalPage);
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        };
+    useEffect( getAccountList,[current]);
 
     const columns = [
         {
             title: 'STT',
-            dataIndex: 'key',
-            key: 'key',
+            dataIndex: '_id',
+            key: '_id',
             fixed: 'left',
         },
         {

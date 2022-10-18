@@ -7,20 +7,22 @@ import '../../styles/manager-page.css'
 import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
-let majors =[];
 
 export const StudentManager = () => {
     const { user } = useContext(UserContext);
     const [school, setSchool] = useState(-1);
     const [faculty, setFaculty] = useState(-1);
+    const [majors, setMajors] = useState([]);
     const [major, setMajor] = useState(-1);
     const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
     const [current, setCurrent] = useState(2);
     const [totalPage, setTotal] = useState(10);
     useEffect(()=>{
-        majors = ['tiếng nga', 'tiếng trung', 'tiếng trung'];
-    })
+      console.log('useEffect')
+      const  majorList = ['tiếng nga', 'tiếng trung', 'tiếng nhật'];
+      setMajors([...majorList]);
+    },[])
     const listUser = [
         {
             key: '1',
@@ -138,8 +140,8 @@ export const StudentManager = () => {
         },
     ];
 
-    const handleChangeMajor = (value)=>{
-        setMajor(value);
+    const handleChangeMajor = (e)=>{
+        setMajor(e.value);
     }
 
     const handleChangeSelect = (value)=>{
@@ -156,7 +158,7 @@ export const StudentManager = () => {
 
     return (
         <>
-            <div className='banner-content'>Quản lý danh sách tài khoản</div>
+            <div className='banner-content'>Quản lý danh sách sinh viên</div>
             <div className='container-filter'>
                 <div className='filter'>
                     <label>Chuyên ngành:</label>

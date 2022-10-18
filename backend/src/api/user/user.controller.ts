@@ -1,22 +1,54 @@
 import {
-  ClassSerializerInterceptor,
   Controller,
-  UseInterceptors,
+  Body,
+  Get,
+  Param,
+  Patch,
+  Delete,
+  Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { QueryParamDto } from './dto/query-param.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
 @Controller({
   version: ['1'],
-  path: 'user',
+  path: 'account',
 })
-@UseInterceptors(ClassSerializerInterceptor)
-@ApiTags('User')
+@ApiTags('Account')
 // @ApiBearerAuth()
 // @UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get()
+  getList(@Query() query: QueryParamDto) {
+    return this.userService.findAll(query);
+  }
+  @Get(':id')
+  getUser(@Param('id') id: number) {
+    return this.userService.findOneByCondition({ _id: id });
+  }
+
+  @Patch(':id')
+  updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(id, updateUserDto);
+  }
+
+  @Patch('confirm/:id')
+  confirmUser(@Param('id') id: number) {
+    return this.userService.confirmUser(id);
+  }
+
+  @Delete(':id')
+  @ApiParam({
+    type: 'number',
+    name: 'id',
+  })
+  deleteUser(@Param('id') id: number) {
+    return this.userService.remove(id);
+  }
   // @Post('create-user')
   // createUser(@Body() createUserDto: CreateUserDto) {
   //   return this.userService.create(createUserDto);

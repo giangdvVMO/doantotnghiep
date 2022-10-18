@@ -8,7 +8,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './user.schema';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { SALT_ROUNDS } from 'src/configs/constant.config';
-
 @Injectable()
 export class UserService {
   constructor(
@@ -57,9 +56,36 @@ export class UserService {
     return user;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(query) {
+    const { pageIndex = 1, pageSize = 5, status, search } = query;
+    const condition = {};
+    if (search) {
+      const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
+      const searchRgx = rgx(search);
+      condition['$or'] = [
+        { fullname: { $regex: searchRgx, $options: 'i' } },
+        { email: { $regex: searchRgx, $options: 'i' } },
+        { username: { $regex: searchRgx, $options: 'i' } },
+      ];
+    }
+    if (status) {
+      condition['status'] = status;
+    }
+
+    const total = await this.userModel.find(condition).count();
+    const accountList = await this.userModel
+      .find(condition)
+      .limit(+pageSize)
+      .skip((+pageIndex - 1) * +pageSize);
+    return {
+      data: accountList,
+      pageIndex: +pageIndex,
+      pageSize: +pageSize,
+      totalPage: Math.ceil(total / +pageSize),
+    };
   }
+
+  async changePassword() {}
 
   async findOneByCondition(condition: any) {
     const user = await this.userModel.find(condition).exec();
@@ -67,11 +93,41 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const updateUser = await this.userModel.updateOne();
-    return `This action updates a #${id} user`;
+    const updateUser = await this.userModel.updateOne(
+      { _id: id },
+      updateUserDto,
+    );
+    return updateUser;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async confirmUser(id: number) {
+    const confirm_date = new Date();
+    const result = await this.userModel.updateOne(
+      { _id: id },
+      { confirm_date },
+    );
+    if (result.modifiedCount) {
+      return {
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+      };
+    }
+  }
+
+  async remove(id: number) {
+    const delete_date = new Date();
+    const result = await this.userModel.updateOne({ _id: id }, { delete_date });
+    if (result.modifiedCount) {
+      return {
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+      };
+    }
   }
 }

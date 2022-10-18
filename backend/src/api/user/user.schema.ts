@@ -7,7 +7,7 @@ import { maxLengthPhone } from 'src/share/common/constanst';
 export type UserDocument = User & Document;
 
 @Schema({
-  collection: 'tbl_user',
+  collection: 'tbl_account',
 })
 export class User {
   @Prop()
@@ -31,11 +31,20 @@ export class User {
   @Prop({ type: String, enum: RoleEnum, required: true })
   role: string;
 
-  @Prop({ type: String, enum: StatusEnum, default: StatusEnum.inActive })
+  @Prop({ type: Boolean, default: true })
   status: boolean;
 
   @Prop({ type: String, maxlength: maxLengthPhone })
   phone: string;
+
+  @Prop({ type: Date, default: Date.now(), required: true })
+  create_date: Date;
+
+  @Prop({ type: Date, default: null })
+  update_date: Date;
+
+  @Prop({ type: Date, default: null })
+  delete_date: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

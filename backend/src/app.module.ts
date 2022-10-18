@@ -3,14 +3,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { UserModule } from './api/user/user.module';
 import { AuthModule } from './api/auth/auth.module';
-import { CompanyModule } from './api/company/company.module';
+import { StudentModule } from './api/student/student.module';
 
 @Module({
   imports: [
     UserModule,
     AuthModule,
-    MongooseModule.forRoot('mongodb://localhost/test'),
-    CompanyModule,
+    MongooseModule.forRoot('mongodb://localhost/assignment'),
+    StudentModule,
   ],
 })
 export class AppModule {}

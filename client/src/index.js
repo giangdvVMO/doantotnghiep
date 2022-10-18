@@ -16,6 +16,8 @@ import { StudentProfile } from './components/Student/StudentProfile';
 import { CompanyProfile } from './components/Company/CompanyProfile';
 import { AccountManager } from './components/Admin/AccountManager';
 import { DetailAccountAdmin } from './components/Admin/DetailAccountAdmin';
+import { StudentManager } from './components/Admin/StudentManager';
+import { StudentDetail } from './components/Admin/StudentDetail';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -34,6 +36,10 @@ root.render(
           <Route path='company-profile' element={<CompanyProfile />} />
           <Route path='account-management' element={<AccountManager />} />
           <Route path='account/:id'  element={<DetailAccountAdmin />} />
+          <Route path='student-management' element={<StudentManager />} />
+          <Route path='admin'>
+            <Route path='student/:id' element={<StudentDetail/>}/>
+          </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

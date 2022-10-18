@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsDateString,
+  IsEmail,
   IsIn,
   IsNotEmpty,
   IsOptional,
@@ -10,7 +11,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class UpdateUserDto {
+export class UpdateUserDtox {
   @ApiPropertyOptional({
     description: 'name',
   })
@@ -25,6 +26,48 @@ export class UpdateUserDto {
   @IsOptional()
   @IsIn([1, 0])
   status: number;
+}
+
+export class UpdateUserDto {
+  @ApiPropertyOptional({
+    description: 'username',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  username: string;
+
+  @ApiPropertyOptional({
+    description: 'email',
+  })
+  @IsOptional()
+  @IsEmail()
+  @MaxLength(100)
+  email: string;
+
+  @ApiPropertyOptional({
+    description: 'fullname',
+  })
+  @IsOptional()
+  @IsEmail()
+  @MaxLength(100)
+  fullname: string;
+
+  @ApiPropertyOptional({
+    description: 'birthday',
+  })
+  @IsOptional()
+  @IsDateString()
+  @MaxLength(100)
+  birthday: string;
+
+  @ApiPropertyOptional({
+    description: 'phone',
+  })
+  @IsOptional()
+  @IsPhoneNumber()
+  @MaxLength(100)
+  phone: string;
 }
 
 export class ChangeUserPasswordDto {

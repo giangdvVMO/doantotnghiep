@@ -10,7 +10,7 @@ import {
 export class QueryParamDto {
   @ApiPropertyOptional()
   @IsOptional()
-  page: number;
+  pageIndex: number;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -36,18 +36,6 @@ export class QueryParamDto {
   @IsNumberString()
   @IsOptional()
   status: string;
-
-  @ApiPropertyOptional()
-  @IsNumberString()
-  @IsOptional()
-  @IsEnum(['1', '2', '3'])
-  position: number;
-
-  @ApiPropertyOptional()
-  @IsNumberString()
-  @IsOptional()
-  @IsEnum(['1', '2'])
-  type: number;
 }
 
 export class ParamIdDto {
