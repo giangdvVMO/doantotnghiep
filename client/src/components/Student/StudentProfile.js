@@ -1,6 +1,6 @@
 import { BulbOutlined, CheckCircleOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, DatePicker, Form, Input, InputNumber, message, Select, Tag } from "antd";
-import { useContext, useRef, useState } from "react"
+import { Avatar, Button, DatePicker, Form, Input, InputNumber, message, Modal, Select, Tag } from "antd";
+import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom";
 
 import { serverURL } from "../../configs/server.config";
@@ -15,57 +15,66 @@ import * as moment from 'moment';
 const { Option } = Select;
 
 let students = {
-    _id:1,
-    cccd: "19378273828",
-    address: "HP",
-    university: "University",
-    faculty: "English",
-    course: "2012-2020",
-    gpa: 3.5,
-    status: true,
+    _id:-1,
+    cccd: '',
+    address: '',
+    university: '',
+    faculty: '',
+    course: '',
+    gpa: '',
+    status: '',
     avatar: '',
-    card_student: '18A100100',
-    major: 'Công nghệ phần mềm'
+    card_student: '',
+    major: ''
 }
 
 export const StudentProfile = ()=>{
     const {user, changeUser} = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
-    
-    const role = user?user.role:'student';
-    let users= user?user:{
-        _id: 1,
-        username: "giang",
-        password: "12345678",
-        fullname: "giang",
-        email: "123@gmail.com",
-        birthday: "2000-12-12",
-        phone: "0866023111",
-        role: "student",
-        status: 1
+    const [isOpenModal, setOpenModal] = useState(false);
+    const navigate = useNavigate();
+    if(!user){
+        navigate('/sign-in');
     }
-    // changeUser(users);
-    
-    // const date = new Date();
-    // console.log(date.toISOString());
-    // const x = {
-    //     _id: users._id,
-    //     username: users.username,
-    //     password: users.password,
-    //     fullname: users.fullname,
-    //     email: users.email,
-    //     birthday: users.birthday,
-    //     phone: users.phone,
-    //     role: users.role,
-    //     status: users.status
-    // }
-    const [account, setAccount] = useState(users);
+    const [account, setAccount] = useState(user);
     const [student, setStudent] = useState(students)
-    console.log(account);
     const defaultTrueStatus = {
         status: 'success',
         errorMsg: null
     }
+
+    async function fetchStudent(){
+        try {
+            const _id = account._id;
+            const url = serverURL + 'student/'+ _id;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            if(response.status!==200){
+                message.error("Lỗi hệ thống!");
+            }else{
+                console.log("result",result);
+                if(result.data==='empty'){
+                    setOpenModal(true);
+                }else{
+                    setStudent(result);
+                }
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    useEffect(()=>{
+        fetchStudent();
+    },[]);
+
     const [validateFullname,setValidateFullname] = useState(defaultTrueStatus);
     const [validatePhone,setValidatePhone] = useState(defaultTrueStatus);
     const [validateEmail,setValidateEmail] = useState(defaultTrueStatus);
@@ -82,7 +91,6 @@ export const StudentProfile = ()=>{
     const ref = useRef();
     const refUserName = useRef();
     const refButtonSubmit = useRef();
-    const navigate = useNavigate();
 
     async function handleEdit(e){
         setIsEdit(true);
@@ -183,7 +191,7 @@ export const StudentProfile = ()=>{
         if (!checkCourse(Course)) {
             setValidateCourse({
                 status: 'error',
-                errorMsg: messageStudentError.Course
+                errorMsg: messageStudentError.course
             })
             return false;
         } else {
@@ -254,6 +262,83 @@ export const StudentProfile = ()=>{
         }
     }
     
+     function checkChangeAccount(){
+        if(account.fullname!==user.fullname||account.email!==user.email||
+            account.phone!==user.phone||account.birthday!==user.birthday){
+                return true;
+            }
+            return false;
+    }
+
+    async function fetchAccount(){
+        try {
+            const url = serverURL + 'account/'+ account._id;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            if(response.status!==200){
+                message.error("Lỗi hệ thống!");
+            }else{
+                console.log("result",result)
+                setAccount(result);
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+    async function updateAccount(){
+        const url = serverURL + 'account/'+account._id;
+            try {
+                const response = await fetch(url, {
+                    method: 'PATCH',
+                    body: JSON.stringify(account)
+                }
+                );
+                const result = await response.json();
+                console.log(result);
+                if(response.status!==200){
+                    message.error(result.message);
+                }else{
+                    message.success("Bạn đã sửa thành công!");
+                    setIsEdit(false);
+                }
+            }
+            catch (err) {
+                console.log(err);
+                message.error("Đã có lỗi xảy ra!");
+            }
+            fetchAccount();
+    }
+
+    async function updateStudent(){
+        const url = serverURL + 'student/'+account._id;
+            try {
+                const response = await fetch(url, {
+                    method: 'PATCH',
+                    body: JSON.stringify(student)
+                }
+                );
+                const result = await response.json();
+                console.log(result);
+                if(response.status!==200){
+                    message.error(result.message);
+                }else{
+                    message.success("Bạn đã sửa thành công!");
+                    setIsEdit(false);
+                }
+            }
+            catch (err) {
+                console.log(err);
+                message.error("Đã có lỗi xảy ra!");
+            }
+            fetchStudent();
+    }
     async function handleSave(e) {
         ref.current.submit();
         let count =0;
@@ -267,30 +352,22 @@ export const StudentProfile = ()=>{
         count = checkAddressFunc(student.address) ? count : count + 1;
         count = checkCardStudentFunc(student.card_student) ? count : count + 1;
         count = checkBirthdayFunc(account.birthday) ? count : count + 1;
-        count = checkMajorFunc(account.major) ? count : count + 1;
-        count = checkGPAFunc(account.gpa) ? count : count + 1;
+        count = checkMajorFunc(student.major) ? count : count + 1;
+        count = checkGPAFunc(student.gpa) ? count : count + 1;
         console.log(count);
         if(count===0){
-            account.phone = '+84'+account.phone;
-            const url = serverURL + 'auth/register';
-            try{
-                // const response = await axios.post(url, account);
-                const response = await fetch(url,{
-                    method: 'PATCH',
-                    body: JSON.stringify(account)
-                }
-                );
-
-                console.log(response);
-                message.success("Bạn đã sửa thành công!")
-                navigate('/');
+            if(checkChangeAccount()){
+                updateAccount();
             }
-            catch(err){
-                console.log(err);
-                message.error("Đã có lỗi xảy ra!");
-            }
+            updateStudent();
         }
+        return;
+    }
+
+    async function handleCancel(e) {
         setIsEdit(false);
+        fetchAccount();
+        fetchStudent();
         return;
     }
 
@@ -387,7 +464,7 @@ export const StudentProfile = ()=>{
                     className='form'
                     name="basic"
                     layout='vertical'
-                    // initialValues={{ ...account }}
+                    // initialValues={{ ...account }} 
                     autoComplete="off"
                 >
                     <div className='two-colums'>
@@ -455,7 +532,7 @@ export const StudentProfile = ()=>{
                                     placeholder="Nhập Số điện thoại"
                                     autoFocus={true}
                                     disabled={!isEdit}
-                                    prefix={<><PhoneOutlined className='input-icon' /><span>+84 </span></>}
+                                    prefix={<><PhoneOutlined className='input-icon' /></>}
                                     value={account.phone}
                                     onChange={handleChangePhone}
                                 />
@@ -701,6 +778,9 @@ export const StudentProfile = ()=>{
                 </Form>
             </div>
         </div>
+        <Modal  title="Xác nhận" open={isOpenModal} onOk={()=>setOpenModal(false)} onCancel={()=>setOpenModal(false)}>
+            <p>Bạn hãy cập nhật thông tin để sử dụng các chức năng website!</p>
+        </Modal>
         </div>
     )
 }

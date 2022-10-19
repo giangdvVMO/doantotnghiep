@@ -1,12 +1,12 @@
 import { CheckCircleOutlined, InfoCircleOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, DatePicker, Form, Input, message, Tag, Tooltip } from 'antd';
+import { Avatar, Button, DatePicker, Form, Input, message, Modal, Tag, Tooltip } from 'antd';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as moment from 'moment';
 
 import { messageSignUpError } from '../../common/error';
 import { DateToShortString } from '../../common/service';
-import { checkBirthday, checkFullName, checkMail, checkPassword, checkPhone, checkRole, checkUsername } from '../../common/validation';
+import { checkBirthday, checkFullName, checkMail, checkPhone, checkRole, checkUsername } from '../../common/validation';
 import { serverURL } from '../../configs/server.config';
 import '../../styles/form.css'
 import '../../styles/my-account.css'
@@ -15,11 +15,12 @@ import { UserContext } from '../User/UserProvider';
 export const DetailAccountAdmin = () => {
     const { user } = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
-
-    const [account, setAccount] = useState({...user});
+    const [isOpenModal, setOpenModal] = useState(false);
+    const [account, setAccount] = useState({});
     useEffect(()=>{
         fetchAccount();
     },[]);
+
     const {id} = useParams();
     async function fetchAccount(){
         try {
@@ -43,9 +44,29 @@ export const DetailAccountAdmin = () => {
             console.log(err);
         }
     }
-    
-    console.log('id:', id);
-    
+
+    async function deleteAccount(){
+        try {
+            const url = serverURL + 'account/'+ id;
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            if(response.status!==200){
+                message.error("Lỗi hệ thống!");
+            }else{
+                console.log("result",result);
+                navigate('/account-management');
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
     
     const date = new Date();
     console.log(date.toISOString());
@@ -178,11 +199,22 @@ export const DetailAccountAdmin = () => {
         return;
     }
     async function handleDelete(e){
-        
+        setOpenModal(true);
         return;
     }
     async function handleCancel(e) {
         setIsEdit(false);
+        fetchAccount();
+        return;
+    }
+    async function handleConfirmDelete(e) {
+        setOpenModal(false);
+        deleteAccount();
+        return;
+    }
+    async function handleCancelDelete(e) {
+        setOpenModal(false);
+        message.info("Bạn xác nhận không xóa!");
         return;
     }
 
@@ -197,25 +229,28 @@ export const DetailAccountAdmin = () => {
         count = checkBirthdayFunc(account.birthday) ? count : count + 1;
         console.log(count);
         if (count === 0) {
-            const url = serverURL + 'auth/register';
+            const url = serverURL + 'account/'+id;
             try {
-                // const response = await axios.post(url, account);
                 const response = await fetch(url, {
                     method: 'PATCH',
                     body: JSON.stringify(account)
                 }
                 );
-
-                console.log(response);
-                message.success("Bạn đã sửa thành công!")
-                navigate('/');
+                const result = await response.json();
+                console.log(result);
+                if(response.status!==200){
+                    message.error(result.message);
+                }else{
+                    message.success("Bạn đã sửa thành công!");
+                    setIsEdit(false);
+                }
             }
             catch (err) {
                 console.log(err);
                 message.error("Đã có lỗi xảy ra!");
             }
+            fetchAccount();
         }
-        setIsEdit(false);
         return;
     }
     const renderButtonGroup = () => {
@@ -427,6 +462,9 @@ export const DetailAccountAdmin = () => {
                 </Form>
             </div>
         </div>
+        <Modal  title="Xác nhận" open={isOpenModal} onOk={handleConfirmDelete} onCancel={handleCancelDelete}>
+            <p>Bạn có chắc chắn muốn xóa!</p>
+        </Modal>
     </div>
     )
 }

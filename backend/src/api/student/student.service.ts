@@ -20,8 +20,12 @@ export class StudentService {
     return studentList;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} student`;
+  async findOne(id: number) {
+    const student = await this.studentModel.findOne({ id_account: id });
+    if (!student) {
+      return { data: 'empty' };
+    }
+    return student;
   }
 
   update(id: number, updateStudentDto: UpdateStudentDto) {

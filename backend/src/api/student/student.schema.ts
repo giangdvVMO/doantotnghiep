@@ -37,7 +37,7 @@ export class Student {
   @Prop({ type: String, maxlength: 20 })
   card_student: string;
 
-  @Prop({ type: String, maxlength: 20 })
+  @Prop({ type: String, maxlength: 100 })
   avatar: string;
 
   @Prop({ type: Number, ref: 'tbl_account' })

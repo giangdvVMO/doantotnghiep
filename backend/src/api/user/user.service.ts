@@ -58,7 +58,9 @@ export class UserService {
   async findAll(query) {
     const { pageIndex = 1, pageSize = 5, status, search } = query;
     console.log(status, search);
-    const condition = {};
+    const condition = {
+      delete_date: null,
+    };
     if (search) {
       const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
       const searchRgx = rgx(search);

@@ -13,5 +13,12 @@ export const messageChangePass = {
 }
 
 export const messageStudentError = {
-    
+    university: 'Chưa nhập tên trường',
+    faculty: 'Chưa nhập khoa',
+    course: 'chưa nhập khóa học hoặc sai định dạng năm-năm',
+    CCCD: 'Chưa nhập CCCD hoặc nhập sai định dạng CCCD (9-12 kí tự)',
+    Address: 'Chưa nhập địa chỉ',
+    CardStudent: 'Chưa nhập thẻ sinh viên',
+    Major: 'Chưa chọn chuyên ngành',
+    GPA: 'GPA trong khoảng từ 0-4'
 }
