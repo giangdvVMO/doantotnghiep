@@ -1,5 +1,5 @@
-import { CheckCircleOutlined, InfoCircleOutlined, KeyOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, DatePicker, Form, Input, message, Modal, Tag, Tooltip } from 'antd';
+import { CheckCircleOutlined, InfoCircleOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, DatePicker, Form, Input, message, Tag, Tooltip } from 'antd';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as moment from 'moment';
@@ -15,33 +15,37 @@ import { UserContext } from '../User/UserProvider';
 export const DetailAccountAdmin = () => {
     const { user } = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
-    const [account, setAccount] = useState({});
-    const {id} = useParams();
-    console.log('id:', id);
+
+    const [account, setAccount] = useState({...user});
     useEffect(()=>{
-        let users = user ? user : {
-            _id: 1,
-            username: "giang",
-            password: "12345678",
-            fullname: "giang",
-            email: "123@gmail.com",
-            birthday: "2000-12-12",
-            phone: "0866023111",
-            role: "admin",
-            status: 1
-        }
-        setAccount({
-            _id: users._id,
-            username: users.username,
-            password: users.password,
-            fullname: users.fullname,
-            email: users.email,
-            birthday: users.birthday,
-            phone: users.phone,
-            role: users.role,
-            status: users.status
-        })
+        fetchAccount();
     },[]);
+    const {id} = useParams();
+    async function fetchAccount(){
+        try {
+            const url = serverURL + 'account/'+ id;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            if(response.status!==200){
+                message.error("Lỗi hệ thống!");
+            }else{
+                console.log("result",result)
+                setAccount(result);
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+    
+    console.log('id:', id);
+    
     
     const date = new Date();
     console.log(date.toISOString());
@@ -53,7 +57,6 @@ export const DetailAccountAdmin = () => {
     const [validateEmail, setValidateEmail] = useState(defaultTrueStatus);
     const [validatePhone, setValidatePhone] = useState(defaultTrueStatus);
     const [validateUsername, setValidateUsername] = useState(defaultTrueStatus);
-    const [validatePassword, setValidatePassword] = useState(defaultTrueStatus);
     const [validateRole, setValidateRole] = useState(defaultTrueStatus);
     const [validateFullname, setValidateFullname] = useState(defaultTrueStatus);
     const [validateBirthday, setValidateBirthday] = useState(defaultTrueStatus);
@@ -63,18 +66,8 @@ export const DetailAccountAdmin = () => {
     const refButtonSubmit = useRef();
     const navigate = useNavigate();
 
-    //Autocomplete list type: 
-    const options = [
-        { value: 'company', label: 'Doanh nghiệp' },
-        { value: 'student', label: 'Sinh viên' },
-    ];
-
     function handleChangeUserName(e) {
         setAccount((preUser) => { return { ...preUser, username: e.target.value } });
-    }
-
-    function handleChangePassword(e) {
-        setAccount((preUser) => { return { ...preUser, password: e.target.value } });
     }
 
     function handleChangeFullName(e) {
@@ -141,19 +134,6 @@ export const DetailAccountAdmin = () => {
         }
     }
 
-    function checkPasswordFunc(password) {
-        if (!checkPassword(password)) {
-            setValidatePassword({
-                status: 'error',
-                errorMsg: messageSignUpError.password
-            })
-            return false;
-        } else {
-            setValidatePassword(defaultTrueStatus)
-            return true;
-        }
-    }
-
     function checkRoleFunc(role) {
         if (!checkRole(role)) {
             setValidateRole({
@@ -212,13 +192,11 @@ export const DetailAccountAdmin = () => {
         count = checkMailFunc(account.email) ? count : count + 1;
         count = checkPhoneFunc(account.phone) ? count : count + 1;
         count = checkFullNameFunc(account.fullname) ? count : count + 1;
-        count = checkPasswordFunc(account.password) ? count : count + 1;
         count = checkRoleFunc(account.role) ? count : count + 1;
         count = checkUserNameFunc(account.username) ? count : count + 1;
         count = checkBirthdayFunc(account.birthday) ? count : count + 1;
         console.log(count);
         if (count === 0) {
-            account.phone = '+84' + account.phone;
             const url = serverURL + 'auth/register';
             try {
                 // const response = await axios.post(url, account);
@@ -391,7 +369,7 @@ export const DetailAccountAdmin = () => {
                                     autoFocus={true}
                                     disabled={!isEdit}
                                     defaultValue={account.phone}
-                                    prefix={<><PhoneOutlined className='input-icon' /><span>+84 </span></>}
+                                    prefix={<><PhoneOutlined className='input-icon' /></>}
                                     value={account.phone}
                                     onChange={handleChangePhone}
                                 />

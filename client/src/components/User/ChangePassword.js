@@ -89,20 +89,24 @@ export const ChangePassword = ({ setIsOpenModal }) => {
         count = checkPassword(newPassword, setValidateNewPassword) ? count : count + 1;
         count = checkConfirmPassFunc(newPassword, confirmPassword) ? count : count + 1;
         if (count === 0) {
-            const url = serverURL + 'user/change-password';
+            const url = serverURL + 'account/change-password';
             try {
                 const response = await fetch(url, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ newPassword })
+                    body: JSON.stringify({id:user._id, oldPassword, newPassword, confirmPassword })
                 }
                 );
-                //const response = await axios.post(url, JSON.stringify(account),{})
-                console.log('response', await response.json());
-                message.success("Bạn đã đổi mật khẩu thành công");
-                setIsOpenModal(false);
+                const result = await response.json();
+                console.log(result);
+                if(response.status!==200){
+                    message.error(result.message);
+                }else{
+                    message.success("Bạn đã đổi mật khẩu thành công");
+                    setIsOpenModal(false);
+                }
             }
             catch (err) {
                 console.log(err);

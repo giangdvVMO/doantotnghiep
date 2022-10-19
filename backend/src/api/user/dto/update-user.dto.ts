@@ -11,23 +11,6 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class UpdateUserDtox {
-  @ApiPropertyOptional({
-    description: 'name',
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(100)
-  name: string;
-
-  @ApiPropertyOptional({
-    description: 'status',
-  })
-  @IsOptional()
-  @IsIn([1, 0])
-  status: number;
-}
-
 export class UpdateUserDto {
   @ApiPropertyOptional({
     description: 'username',
@@ -72,8 +55,15 @@ export class UpdateUserDto {
 
 export class ChangeUserPasswordDto {
   @ApiProperty({
+    description: 'id',
+    example: 12,
+  })
+  @IsNotEmpty()
+  id: number;
+
+  @ApiProperty({
     description: 'old password',
-    example: '12345a',
+    example: '123456abc',
   })
   @IsNotEmpty()
   @IsString()
@@ -81,7 +71,7 @@ export class ChangeUserPasswordDto {
 
   @ApiProperty({
     description: 'new password',
-    example: '12345ab',
+    example: '123456abc',
   })
   @IsNotEmpty()
   @IsString()
@@ -90,7 +80,7 @@ export class ChangeUserPasswordDto {
 
   @ApiProperty({
     description: 'confirm password',
-    example: '12345ab',
+    example: '123456abc',
   })
   @IsNotEmpty()
   @IsString()

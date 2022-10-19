@@ -10,11 +10,13 @@ import {
 export class QueryParamDto {
   @ApiPropertyOptional()
   @IsOptional()
-  pageIndex: number;
+  @IsNumberString()
+  pageIndex: string;
 
   @ApiPropertyOptional()
   @IsOptional()
-  pageSize: number;
+  @IsNumberString()
+  pageSize: string;
 
   @ApiPropertyOptional()
   @IsString()

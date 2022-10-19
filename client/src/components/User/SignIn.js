@@ -99,8 +99,8 @@ const SignIn = () => {
                     message.error("Đăng nhập không thành công!");
                 }else{
                     message.success("Bạn đã đăng nhập thành công");
-                    console.log(result.user, result.accessToken);
-                    changeUser(result.user);
+                    const account = result.user;
+                    changeUser(account);
                     changeToken(result.accessToken)
                     navigate('/');
                 }

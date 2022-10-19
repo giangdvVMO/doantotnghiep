@@ -231,7 +231,6 @@ const SignUp = () => {
         console.log(account);
 
         if (count === 0) {
-            account.phone = '+84' + account.phone;
             console.log(account);
             const url = serverURL + 'auth/register';
             try {
@@ -376,7 +375,7 @@ const SignUp = () => {
                             className='input-login'
                             placeholder="Nhập Số điện thoại"
                             autoFocus={true}
-                            prefix={<><PhoneOutlined className='input-icon' /><span>+84 </span></>}
+                            prefix={<><PhoneOutlined className='input-icon' /></>}
                             value={account.phone}
                             onChange={handleChangePhone}
                         />

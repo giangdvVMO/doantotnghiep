@@ -50,7 +50,7 @@ export const checkBirthday = (birthday) => {
 }
 
 export const checkConfirmPass = (password, confirm) => {
-    return (confirm !== password);
+    return (confirm === password);
 }
 
 export const checkUniversity = (university) => {

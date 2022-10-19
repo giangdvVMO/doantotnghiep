@@ -1,12 +1,11 @@
 import { Button, Input, message, Pagination, Select, Table, Tag } from 'antd';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
 import { serverURL } from '../../configs/server.config';
 import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
-import * as axios from 'axios';
 
 const { Option } = Select;
 
@@ -17,33 +16,42 @@ export const AccountManager = () => {
     const [current, setCurrent] = useState(1);
     const [totalPage, setTotal] = useState(0);
     const [listUser, setListUser] = useState([]);
-    const getAccountList = async ()=>{
-        let query = '?current='+current;
-        query = status!==-1? query+'?status='+status:query;
-        query = search!==-1? query+'?search='+status:query;
-        const url = serverURL + 'account'+ query;
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+    const navigate = useNavigate();
+    if(!user||user.role!=='admin'){
+        navigate('/');
+    }
+    const getAccountList = ()=>{
+            async function fetchData(){
+                let query = '?current='+current;
+                query = status!==-1? query+'&status='+status:query;
+                query = search!==-1? query+'&search='+search:query;
+                const url = serverURL + 'account'+ query;
+                console.log(query);
+                try {
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                    );
+                    const result = await response.json();
+                    if(response.status!==200){
+                        message.error("Lỗi hệ thống!");
+                    }else{
+                        console.log(result)
+                        setListUser(result.data);
+                        setTotal(result.totalPage);
+                    }
                 }
-                );
-                const result = await response.json();
-                if(response.status!==200){
-                    message.error("Lỗi hệ thống!");
-                }else{
-                    console.log(result)
-                    setListUser(result.data);
-                    setTotal(result.totalPage);
+                catch (err) {
+                    console.log(err);
                 }
             }
-            catch (err) {
-                console.log(err);
-            }
+            console.log('fetch data');
+        fetchData();
         };
-    useEffect( getAccountList,[current]);
+    useEffect( getAccountList,[current, search, status]);
 
     const columns = [
         {
@@ -69,9 +77,9 @@ export const AccountManager = () => {
             key: 'birthday',
         },
         {
-            title: 'Quê quán',
-            dataIndex: 'address',
-            key: 'address',
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
         },
         {
             title: 'Vị trí',
@@ -103,17 +111,18 @@ export const AccountManager = () => {
             title: 'Hành động',
             key: 'action',
             render: (_, record) => (
-                <Link to={`../account/${record.key}`}>Xem chi tiết</Link>
+                <Link to={`../account/${record._id}`}>Xem chi tiết</Link>
             ),
             fixed: 'right',
         },
     ];
 
-    const handleChangeSelect = (value)=>{
-        setStatus(value);
+    const handleChangeSelect = (e)=>{
+        setStatus(e.value);
     }
 
     const handleChangeSearch = (e)=>{
+        console.log(e.target.value);
         setSearch(e.target.value);
     }
 

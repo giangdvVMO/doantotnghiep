@@ -144,8 +144,8 @@ export const StudentManager = () => {
         setMajor(e.value);
     }
 
-    const handleChangeSelect = (value)=>{
-        setStatus(value);
+    const handleChangeSelect = (e)=>{
+        setStatus(e.value);
     }
 
     const handleChangeSearch = (e)=>{

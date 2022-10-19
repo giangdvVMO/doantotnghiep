@@ -14,35 +14,14 @@ import { ChangePassword } from './ChangePassword';
 import { UserContext } from './UserProvider';
 
 export const DetailAccount = () => {
-    const { user } = useContext(UserContext);
+    const { user, changeUser } = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     const role = user ? user.role : 'student';
-    let users = user ? user : {
-        _id: 1,
-        username: "giang",
-        password: "12345678",
-        fullname: "giang",
-        email: "123@gmail.com",
-        birthday: "2000-12-12",
-        phone: "0866023111",
-        role: "student",
-        status: 1
-    }
     const date = new Date();
     console.log(date.toISOString());
-    const [account, setAccount] = useState({
-        _id: users._id,
-        username: users.username,
-        password: users.password,
-        fullname: users.fullname,
-        email: users.email,
-        birthday: users.birthday,
-        phone: users.phone,
-        role: users.role,
-        status: users.status
-    });
+    const [account, setAccount] = useState(user);
     console.log(account);
     const defaultTrueStatus = {
         status: 'success',
@@ -60,12 +39,6 @@ export const DetailAccount = () => {
     const refUserName = useRef();
     const refButtonSubmit = useRef();
     const navigate = useNavigate();
-
-    //Autocomplete list type: 
-    const options = [
-        { value: 'company', label: 'Doanh nghiệp' },
-        { value: 'student', label: 'Sinh viên' },
-    ];
 
     function handleChangeUserName(e) {
         setAccount((preUser) => { return { ...preUser, username: e.target.value } });
@@ -197,6 +170,7 @@ export const DetailAccount = () => {
     }
 
     async function handleCancel(e) {
+        setAccount({...user});
         setIsEdit(false);
         return;
     }
@@ -218,26 +192,32 @@ export const DetailAccount = () => {
         count = checkBirthdayFunc(account.birthday) ? count : count + 1;
         console.log(count);
         if (count === 0) {
-            account.phone = '+84' + account.phone;
-            const url = serverURL + 'auth/register';
+            const url = serverURL + 'account/'+user._id;
             try {
-                // const response = await axios.post(url, account);
                 const response = await fetch(url, {
                     method: 'PATCH',
                     body: JSON.stringify(account)
                 }
                 );
-
-                console.log(response);
-                message.success("Bạn đã sửa thành công!")
-                navigate('/');
+                const result = await response.json();
+                console.log(result);
+                if(response.status!==200){
+                    message.error(result.message);
+                    setAccount({...user});
+                }else{
+                    message.success("Bạn đã sửa thành công!");
+                    changeUser({...account})
+                    setIsEdit(false);
+                }
             }
             catch (err) {
                 console.log(err);
+                setAccount({...user});
                 message.error("Đã có lỗi xảy ra!");
             }
         }
-        setIsEdit(false);
+        // setAccount(...user);
+        // setIsEdit(false);
         return;
     }
     const renderButtonGroup = () => {
@@ -331,7 +311,9 @@ export const DetailAccount = () => {
                                 <p className="text-display">{account.username}</p>
                             }
                         </Form.Item>
-                        <Form.Item
+                        {
+                            isEdit?null:
+                            <Form.Item
                             label="Mật khẩu"
                             name="password"
                             className='label'
@@ -339,22 +321,12 @@ export const DetailAccount = () => {
                             help={validatePassword.errorMsg}
                         >
                             <div className='group'>
-                            {
-                                isEdit?
-                                <Input.Password
-                                    className='input-login max-width'
-                                    disabled={!isEdit}
-                                    prefix={<KeyOutlined className='input-icon' />}
-                                    onChange={handleChangePassword}
-                                />
-                               :
-                               <p className="text-display">********</p>
-                            }
-                                {
-                                    renderChangePasswordBtn()
-                                }
+                                <p className="text-display">********</p>
+                                {renderChangePasswordBtn()}
                             </div>
                         </Form.Item>
+                        }
+                        
                         <Form.Item
                             label="Họ và tên"
                             name="fullname"
@@ -417,7 +389,7 @@ export const DetailAccount = () => {
                                     placeholder="Nhập Số điện thoại"
                                     autoFocus={true}
                                     disabled={!isEdit}
-                                    prefix={<><PhoneOutlined className='input-icon' /><span>+84 </span></>}
+                                    prefix={<><PhoneOutlined className='input-icon' /></>}
                                     value={account.phone}
                                     onChange={handleChangePhone}
                                 />

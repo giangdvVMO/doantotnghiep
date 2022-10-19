@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { BadRequestException } from '@nestjs/common/exceptions';
+import {
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common/exceptions';
 import * as bcrypt from 'bcrypt';
 
-import { UpdateUserDto } from './dto/update-user.dto';
+import { ChangeUserPasswordDto, UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './user.schema';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { SALT_ROUNDS } from 'src/configs/constant.config';
@@ -49,15 +52,12 @@ export class UserService {
     }
     userDocument.password = bcrypt.hashSync(userDocument.password, SALT_ROUNDS);
     const user = await this.userModel.create(userDocument);
-    // if(user){
-    //   return true;
-    // }
-    // return false;
     return user;
   }
 
   async findAll(query) {
     const { pageIndex = 1, pageSize = 5, status, search } = query;
+    console.log(status, search);
     const condition = {};
     if (search) {
       const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
@@ -69,7 +69,7 @@ export class UserService {
       ];
     }
     if (status) {
-      condition['status'] = status;
+      condition['status'] = status === '0' ? false : true;
     }
 
     const total = await this.userModel.find(condition).count();
@@ -85,8 +85,6 @@ export class UserService {
     };
   }
 
-  async changePassword() {}
-
   async findOneByCondition(condition: any) {
     const user = await this.userModel.find(condition).exec();
     return user[0];
@@ -98,6 +96,46 @@ export class UserService {
       updateUserDto,
     );
     return updateUser;
+  }
+
+  async changePassword(changeUserPasswordDto: ChangeUserPasswordDto) {
+    console.log(1);
+    const id = changeUserPasswordDto.id;
+    if (
+      changeUserPasswordDto.newPassword !==
+      changeUserPasswordDto.confirmPassword
+    ) {
+      throw new BadRequestException('');
+    }
+    const existed = await this.findOneByCondition({
+      _id: id,
+    });
+    if (!existed) {
+      throw new NotFoundException('Không tồn tại!');
+    }
+    const match = await bcrypt.compare(
+      changeUserPasswordDto.oldPassword,
+      existed.password,
+    );
+    if (!match) {
+      throw new BadRequestException('Sai mật khẩu cũ');
+    }
+    const newPasswordHash = await bcrypt.hash(
+      changeUserPasswordDto.newPassword,
+      SALT_ROUNDS,
+    );
+    const result = await this.userModel.updateOne(
+      { _id: id },
+      { password: newPasswordHash },
+    );
+    if (result.modifiedCount) {
+      return {
+        success: true,
+      };
+    }
+    return {
+      success: false,
+    };
   }
 
   async confirmUser(id: number) {
