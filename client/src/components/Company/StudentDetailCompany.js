@@ -24,7 +24,7 @@ let students = {
     major: 'Công nghệ phần mềm'
 }
 
-export const StudentDetailAdmin = ()=>{
+export const StudentDetailCompany = ()=>{
     const {user} = useContext(UserContext);
     const navigate = useNavigate();
     if(!user||user.role!=='admin'){

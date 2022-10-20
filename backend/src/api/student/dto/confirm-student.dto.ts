@@ -7,10 +7,4 @@ export class ConfirmStudentDto {
   })
   @IsNotEmpty()
   confirm_id: number;
-
-  @ApiProperty({
-    description: 'status',
-  })
-  @IsNotEmpty()
-  status: boolean;
 }

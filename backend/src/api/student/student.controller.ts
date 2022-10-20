@@ -31,9 +31,9 @@ export class StudentController {
     return this.studentService.findAll(query);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.studentService.findOne(+id);
+  @Get('admin/:id')
+  findOneAdmin(@Param('id') id: string) {
+    return this.studentService.findOneAdmin(+id);
   }
 
   @Get('company/:id')
@@ -41,10 +41,17 @@ export class StudentController {
     return this.studentService.findOneAndAccount(+id);
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.studentService.findOne(+id);
+  }
+
   @Patch('confirm/:id')
-  confirm(@Param() id: string, @Body() confirmDto: ConfirmStudentDto) {
+  confirm(@Param('id') id: string, @Body() confirmDto: ConfirmStudentDto) {
+    console.log('confirmDto', confirmDto);
     return this.studentService.confirm(+id, confirmDto);
   }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
     console.log('id', id);

@@ -2,24 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DateToShortString } from 'src/share/external-services/parseDateToString';
-import { ConfirmStudentDto } from './dto/confirm-student.dto';
-import { CreateStudentDto } from './dto/create-student.dto';
-import { QueryParamStudentDto } from './dto/student-params.dto';
-import { UpdateStudentDto } from './dto/update-student.dto';
-import { Student, StudentDocument } from './student.schema';
+import { Company, CompanyDocument } from './company.schema';
+import { CreateCompanyDto } from './dto/create-company.dto';
+import { QueryParamCompanyDto } from './dto/query-param-company.dto';
+import { UpdateCompanyDto } from './dto/update-company.dto';
 
 @Injectable()
-export class StudentService {
+export class CompanyService {
   constructor(
-    @InjectModel(Student.name)
-    private readonly studentModel: Model<StudentDocument>,
+    @InjectModel(Company.name)
+    private readonly companyModel: Model<CompanyDocument>,
   ) {}
-  async create(createStudentDto: CreateStudentDto) {
-    const result = await this.studentModel.create(createStudentDto);
+  async create(createCompanyDto: CreateCompanyDto) {
+    const result = await this.companyModel.create(createCompanyDto);
     return result;
   }
 
-  async findAll(query: QueryParamStudentDto) {
+  async findAll(query: QueryParamCompanyDto) {
     const { university, major, status, search } = query;
     const condition = {};
     console.log('search', search);
@@ -35,7 +34,7 @@ export class StudentService {
       condition['status'] = false;
     }
 
-    const studentList = await this.studentModel.aggregate([
+    const studentList = await this.companyModel.aggregate([
       {
         $lookup: {
           from: 'tbl_account',
@@ -99,7 +98,7 @@ export class StudentService {
   }
 
   async findOneAdmin(id: number) {
-    const student = await this.studentModel.aggregate([
+    const company = await this.companyModel.aggregate([
       {
         $lookup: {
           from: 'tbl_account',
@@ -118,16 +117,16 @@ export class StudentService {
         },
       },
     ]);
-    if (student.length) {
-      const fullStudent = {
-        ...student[0],
-        email: student[0].account.email,
-        fullname: student[0].account.fullname,
-        birthday: student[0].account.birthday,
-        phone: student[0].account.phone,
+    if (company.length) {
+      const fullcompany = {
+        ...company[0],
+        email: company[0].account.email,
+        fullname: company[0].account.fullname,
+        birthday: company[0].account.birthday,
+        phone: company[0].account.phone,
       };
       return {
-        data: fullStudent,
+        data: fullcompany,
       };
     }
     return {
@@ -136,54 +135,18 @@ export class StudentService {
   }
 
   async findOne(id: number) {
-    const student = await this.studentModel.findOne({ id_account: id });
-    if (!student) {
+    const company = await this.companyModel.findOne({ id_account: id });
+    if (!company) {
       return { data: 'empty' };
     }
-    return { data: student };
+    return { data: company };
   }
 
-  async findOneAndAccount(id: number) {
-    const student = await this.studentModel.findOne({ id_account: id });
-    if (!student) {
-      return { data: 'empty' };
-    }
-    return student;
-  }
-  async update(id: number, updateStudentDto: UpdateStudentDto) {
-    const result = await this.studentModel.updateOne(
-      { _id: id },
-      { ...updateStudentDto, status: false, update_date: new Date() },
-    );
-    if (result.modifiedCount) {
-      return {
-        success: true,
-      };
-    } else {
-      return {
-        success: false,
-      };
-    }
-  }
-
-  async confirm(id: number, confirmDto: ConfirmStudentDto) {
-    console.log(id, id);
-    const result = await this.studentModel.updateOne(
-      { _id: id },
-      { ...confirmDto, confirm_date: new Date(), status: true },
-    );
-    if (result.modifiedCount) {
-      return {
-        success: true,
-      };
-    } else {
-      return {
-        success: false,
-      };
-    }
+  update(id: number, updateCompanyDto: UpdateCompanyDto) {
+    return `This action updates a #${id} company`;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} student`;
+    return `This action removes a #${id} company`;
   }
 }

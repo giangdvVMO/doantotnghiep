@@ -1,6 +1,6 @@
 import { Button, Input, message, Select, Table, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
@@ -12,6 +12,11 @@ const { Option } = Select;
 
 export const StudentManager = () => {
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
+    if(!user||user.role!=='admin'){
+        message.warn('Bạn ko có quyền xem trang này');
+        navigate('/home')
+    }
     const [university, setUniversity] = useState(-1);
     const [major, setMajor] = useState(-1);
     const [status, setStatus] = useState(-1);
@@ -52,8 +57,8 @@ export const StudentManager = () => {
     const columns = [
         {
             title: 'STT',
-            dataIndex: 'key',
-            key: 'key',
+            dataIndex: '_id',
+            key: '_id',
             fixed: 'left',
         },
         {
@@ -126,7 +131,7 @@ export const StudentManager = () => {
             title: 'Hành động',
             key: 'action',
             render: (_, record) => (
-                <Link to={`../account/${record.key}`}>Xem chi tiết</Link>
+                <Link to={`../admin/student/${record._id}`}>Xem chi tiết</Link>
             ),
             fixed: 'right',
         },
