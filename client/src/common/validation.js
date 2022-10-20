@@ -54,17 +54,17 @@ export const checkConfirmPass = (password, confirm) => {
 }
 
 export const checkUniversity = (university) => {
-    return !university==='';
+    return university!=='';
 }
 
 export const checkFaculty = (faculty) => {
-    return !faculty==='';
+    return faculty!=='';
 }
 
 export const checkCourse = (course) => {
     const value = course.split('-');
     try{
-        if(value.lengt<2||+value[0]||+value[1]){
+        if(value.length<2||!+value[0]||!+value[1]){
             return false;
         }
     }catch{
@@ -74,7 +74,8 @@ export const checkCourse = (course) => {
 }
 
 export const checkCCCD = (cccd) => {
-    if(!cccd||cccd.length!==9||cccd.length!==12){
+    console.log(cccd.length);
+    if(!cccd||(cccd.length!==9&&cccd.length!==12)){
         return false;
     }
     return true;
@@ -93,7 +94,8 @@ export const checkMajor = (major) => {
 }
 
 export const checkGPA = (gpa) => {
-    if(+gpa<0||+gpa>4){
+    console.log('gpa', parseFloat(gpa) );
+    if(!gpa||!parseFloat(gpa)||parseFloat(gpa)<0||parseFloat(gpa)>4){
         return false;
     }
     return true;

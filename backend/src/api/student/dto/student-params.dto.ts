@@ -1,13 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsString,
-  IsOptional,
-  IsNotEmpty,
-  IsEnum,
-  IsNumberString,
-} from 'class-validator';
+import { IsEnum, IsNumberString, IsOptional, IsString } from 'class-validator';
 
-export class QueryParamDto {
+export class QueryParamStudentDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumberString()
@@ -35,12 +29,17 @@ export class QueryParamDto {
   search: string;
 
   @ApiPropertyOptional()
-  @IsOptional()
-  status: string;
-}
-
-export class ParamIdDto {
-  @IsNotEmpty()
   @IsString()
-  id: string;
+  @IsOptional()
+  university: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  major: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumberString()
+  status: string;
 }

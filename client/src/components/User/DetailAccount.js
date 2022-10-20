@@ -196,7 +196,10 @@ export const DetailAccount = () => {
             try {
                 const response = await fetch(url, {
                     method: 'PATCH',
-                    body: JSON.stringify(account)
+                    body: JSON.stringify(account),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 }
                 );
                 const result = await response.json();
@@ -216,8 +219,6 @@ export const DetailAccount = () => {
                 message.error("Đã có lỗi xảy ra!");
             }
         }
-        // setAccount(...user);
-        // setIsEdit(false);
         return;
     }
     const renderButtonGroup = () => {
@@ -314,17 +315,17 @@ export const DetailAccount = () => {
                         {
                             isEdit?null:
                             <Form.Item
-                            label="Mật khẩu"
-                            name="password"
-                            className='label'
-                            validateStatus={validatePassword.status}
-                            help={validatePassword.errorMsg}
-                        >
-                            <div className='group'>
-                                <p className="text-display">********</p>
-                                {renderChangePasswordBtn()}
-                            </div>
-                        </Form.Item>
+                                label="Mật khẩu"
+                                name="password"
+                                className='label'
+                                validateStatus={validatePassword.status}
+                                help={validatePassword.errorMsg}
+                            >
+                                <div className='group'>
+                                    <p className="text-display">********</p>
+                                    {renderChangePasswordBtn()}
+                                </div>
+                            </Form.Item>
                         }
                         
                         <Form.Item

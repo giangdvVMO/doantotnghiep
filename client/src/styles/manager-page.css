@@ -14,14 +14,15 @@
     margin: 20px 20px;
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
 }
 
 .filter{
     display: flex;
-    flex-direction: row;
-    min-width: 300px;
-    max-width: 400px;
-    align-items: center;
+    flex-direction: column;
+    min-width: 250px;
+    max-width: 350px;
 }
 
 .filter-content{
@@ -38,4 +39,16 @@
 .input{
     text-align: left;
     width: 90%;
+}
+
+.transparent{
+    color: transparent;
+}
+
+.label-filter{
+    margin-left: 5px;
+}
+
+.search-input{
+    width: 1200px;
 }

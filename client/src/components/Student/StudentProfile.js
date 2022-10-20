@@ -7,14 +7,14 @@ import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
-import { universities } from "../../data/university-list";
+import { majorList, universityList } from "../../data/list";
 import { checkAddress, checkBirthday, checkCardStudent, checkCCCD, checkCourse, checkFaculty, checkFullName, checkGPA, checkMail, checkMajor, checkPhone, checkUniversity } from "../../common/validation";
 import { messageSignUpError, messageStudentError } from "../../common/error";
 import { DateToShortString } from "../../common/service";
 import * as moment from 'moment';
 const { Option } = Select;
 
-let students = {
+let initialStudent = {
     _id:-1,
     cccd: '',
     address: '',
@@ -22,7 +22,7 @@ let students = {
     faculty: '',
     course: '',
     gpa: '',
-    status: '',
+    status: false,
     avatar: '',
     card_student: '',
     major: ''
@@ -37,7 +37,7 @@ export const StudentProfile = ()=>{
         navigate('/sign-in');
     }
     const [account, setAccount] = useState(user);
-    const [student, setStudent] = useState(students)
+    const [student, setStudent] = useState(initialStudent);
     const defaultTrueStatus = {
         status: 'success',
         errorMsg: null
@@ -56,13 +56,16 @@ export const StudentProfile = ()=>{
             );
             const result = await response.json();
             if(response.status!==200){
+                console.log("Lỗi hệ thống!")
                 message.error("Lỗi hệ thống!");
             }else{
                 console.log("result",result);
                 if(result.data==='empty'){
                     setOpenModal(true);
+                    setStudent({...initialStudent});
                 }else{
-                    setStudent(result);
+                    console.log('fetch student', result.data);
+                    setStudent({...result.data});
                 }
             }
         }
@@ -94,11 +97,6 @@ export const StudentProfile = ()=>{
 
     async function handleEdit(e){
         setIsEdit(true);
-        return;
-    }
-
-    async function handleCancel(e){
-        setIsEdit(false);
         return;
     }
     function handleKeyUp(e) {
@@ -175,6 +173,7 @@ export const StudentProfile = ()=>{
     }
 
     function checkFacultyFunc(faculty) {
+        checkFaculty(faculty);
         if (!checkFaculty(faculty)) {
             setValidateFaculty({
                 status: 'error',
@@ -297,7 +296,10 @@ export const StudentProfile = ()=>{
             try {
                 const response = await fetch(url, {
                     method: 'PATCH',
-                    body: JSON.stringify(account)
+                    body: JSON.stringify(account),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 }
                 );
                 const result = await response.json();
@@ -317,15 +319,57 @@ export const StudentProfile = ()=>{
     }
 
     async function updateStudent(){
-        const url = serverURL + 'student/'+account._id;
+        if(student._id===-1){
+            const url = serverURL + 'student';
+            const data = {...student, _id: account._id, id_account: account._id};
+            console.log("request", data)
             try {
                 const response = await fetch(url, {
-                    method: 'PATCH',
-                    body: JSON.stringify(student)
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 }
                 );
                 const result = await response.json();
                 console.log(result);
+                if(response.status!==200){
+                    message.error(result.message);
+                }else{
+                    message.success("Bạn đã cập nhật thành công! Hãy đợi admin duyệt!");
+                    setIsEdit(false);
+                }
+            }
+            catch (err) {
+                console.log(err);
+                message.error("Đã có lỗi xảy ra!");
+            }
+        }else{
+            const url = serverURL + 'student/'+student._id;
+            const data = {
+                address: student.address,
+                cccd: student.cccd,
+                university: student.university,
+                faculty: student.faculty,
+                major: student.major,
+                course: student.course,
+                gpa: student.gpa,
+                card_student: student.card_student,
+                update_id: account._id,
+            }
+            console.log('update', data)
+            try {
+                const response = await fetch(url, {
+                    method: 'PATCH',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                console.log("result update",result);
                 if(response.status!==200){
                     message.error(result.message);
                 }else{
@@ -337,11 +381,14 @@ export const StudentProfile = ()=>{
                 console.log(err);
                 message.error("Đã có lỗi xảy ra!");
             }
-            fetchStudent();
+        }
+        fetchStudent();
     }
     async function handleSave(e) {
         ref.current.submit();
         let count =0;
+        console.log("account",account);
+        console.log("student",student);
         count = checkFullNameFunc(account.fullname) ? count : count + 1;
         count = checkMailFunc(account.email) ? count : count + 1;
         count = checkPhoneFunc(account.phone) ? count : count + 1;
@@ -354,7 +401,7 @@ export const StudentProfile = ()=>{
         count = checkBirthdayFunc(account.birthday) ? count : count + 1;
         count = checkMajorFunc(student.major) ? count : count + 1;
         count = checkGPAFunc(student.gpa) ? count : count + 1;
-        console.log(count);
+        console.log("count",count);
         if(count===0){
             if(checkChangeAccount()){
                 updateAccount();
@@ -365,16 +412,16 @@ export const StudentProfile = ()=>{
     }
 
     async function handleCancel(e) {
-        setIsEdit(false);
         fetchAccount();
         fetchStudent();
+        setIsEdit(false);
         return;
     }
 
     const renderButtonGroup = ()=>{
         if(!isEdit){
             return (
-                <Button type='submit' className='button edit-btn' onClick={handleEdit}>Sửa</Button>
+                <Button type='submit' className='button edit-btn' onClick={handleEdit}>{student._id===-1?'Cập nhật':'Sửa'}</Button>
             )
         }else{
             return (
@@ -387,7 +434,7 @@ export const StudentProfile = ()=>{
     }
 
     const renderStatus = ()=>{
-        if(account.status){
+        if(student.status){
             return (
             <Tag icon={<CheckCircleOutlined />} 
                 color="success">
@@ -438,13 +485,16 @@ export const StudentProfile = ()=>{
     function handleChangeBirthday(date, dateString) {
         setAccount((preStudent) => { return { ...preStudent, birthday: dateString } });
     }
-    function handleChangeGPA(e) {
-        setStudent((preStudent) => { return { ...preStudent, gpa: +e.value } });
+    function handleChangeGPA(value) {
+        setStudent((preStudent) => { return { ...preStudent, gpa: value } });
     }
-
-    const [selectedUniversity, setSelectedUniversity] = useState('');
-    const [selectedMajor, setSelectedMajor] = useState('');
-    const OPTIONS = universities;
+    function handleChangeMajor(value) {
+        setStudent((preStudent) => { return { ...preStudent, major: value } });
+    }
+    function handleChangeUniversity(value) {
+        console.log(value);
+        setStudent((preStudent) => { return { ...preStudent, university: value } });
+    }
 
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
@@ -464,7 +514,6 @@ export const StudentProfile = ()=>{
                     className='form'
                     name="basic"
                     layout='vertical'
-                    // initialValues={{ ...account }} 
                     autoComplete="off"
                 >
                     <div className='two-colums'>
@@ -489,7 +538,6 @@ export const StudentProfile = ()=>{
                                 :
                                 <p className="text-display">{account.fullname}</p>
                             }
-                            
                         </Form.Item>
                         <Form.Item
                             label="Email"
@@ -544,7 +592,6 @@ export const StudentProfile = ()=>{
                         <Form.Item
                             label="Trường"
                             name="university"
-                            initialValue={student.university}
                             className='label'
                             validateStatus={validateUniversity.status}
                             help={validateUniversity.errorMsg}
@@ -553,14 +600,15 @@ export const StudentProfile = ()=>{
                                 isEdit?
                                 <Select
                                     showSearch
-                                    value={selectedUniversity}
+                                    value={student.university}
+                                    defaultValue= {student.university}
                                     optionFilterProp="children"
-                                    onChange={setSelectedUniversity}
+                                    onChange={handleChangeUniversity}
                                     style={{ width: '100%' }}
                                     filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
                                 >
                                 {
-                                    OPTIONS.map(item => (
+                                    universityList.map(item => (
                                         <Option key={item} value={item}>
                                         {item}
                                         </Option>
@@ -574,7 +622,6 @@ export const StudentProfile = ()=>{
                         <Form.Item
                             label="Khoa"
                             name="faculty"
-                            initialValue={student.faculty}
                             validateStatus={validateFaculty.status}
                             help={validateFaculty.errorMsg}
                             className='label'
@@ -587,17 +634,17 @@ export const StudentProfile = ()=>{
                                     autoFocus={true}
                                     disabled={!isEdit}
                                     value={student.faculty}
+                                    defaultValue= {student.faculty}
                                     onChange={handleChangeFaculty}
                                 />
                                 :
-                                <p className="text-display">{student.university}</p>
+                                <p className="text-display">{student.faculty}</p>
                             }
                         </Form.Item>
                         <Form.Item
                             label="Chuyên ngành"
                             name="major"
                             className='label'
-                            initialValue={student.major}
                             validateStatus={validateMajor.status}
                             help={validateMajor.errorMsg}
                         >
@@ -605,14 +652,15 @@ export const StudentProfile = ()=>{
                                 isEdit?
                                 <Select
                                     showSearch
-                                    value={selectedMajor}
+                                    value={student.major}
                                     optionFilterProp="children"
-                                    onChange={setSelectedMajor}
+                                    onChange={handleChangeMajor}
                                     style={{ width: '100%' }}
+                                    defaultValue={student.major} 
                                     filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
                                 >
                                 {
-                                    OPTIONS.map(item => (
+                                    majorList.map(item => (
                                         <Option key={item} value={item}>
                                         {item}
                                         </Option>
@@ -626,7 +674,6 @@ export const StudentProfile = ()=>{
                         <Form.Item
                             label="Khóa học"
                             name="course"
-                            initialValue={student.course}
                             validateStatus={validateCourse.status}
                             help={validateCourse.errorMsg}
                             className='label'
@@ -639,6 +686,7 @@ export const StudentProfile = ()=>{
                                     autoFocus={true}
                                     disabled={!isEdit}
                                     value={student.course}
+                                    defaultValue={student.course}
                                     onChange={handleChangeCourse}
                                 />
                                 :
@@ -648,7 +696,6 @@ export const StudentProfile = ()=>{
                         <Form.Item
                             label="CCCD"
                             name="cccd"
-                            initialValue={student.cccd}
                             validateStatus={validateCCCD.status}
                             help={validateCCCD.errorMsg}
                             className='label'
@@ -661,6 +708,7 @@ export const StudentProfile = ()=>{
                                     autoFocus={true}
                                     disabled={!isEdit}
                                     value={student.cccd}
+                                    defaultValue={student.cccd}
                                     onChange={handleChangeCCCD}
                                 />
                                 :
@@ -670,7 +718,6 @@ export const StudentProfile = ()=>{
                         <Form.Item
                             label="Quê quán"
                             name="address"
-                            initialValue={student.address}
                             validateStatus={validateAddress.status}
                             help={validateAddress.errorMsg}
                             className='label'
@@ -683,6 +730,7 @@ export const StudentProfile = ()=>{
                                     autoFocus={true}
                                     disabled={!isEdit}
                                     value={student.address}
+                                    defaultValue={student.address}
                                     onChange={handleChangeAddress}
                                 />
                                 :
@@ -692,7 +740,6 @@ export const StudentProfile = ()=>{
                         <Form.Item
                             label="Mã sinh viên"
                             name="card_student"
-                            initialValue={student.card_student}
                             validateStatus={validateCardStudent.status}
                             help={validateCardStudent.errorMsg}
                             className='label'
@@ -705,6 +752,7 @@ export const StudentProfile = ()=>{
                                     autoFocus={true}
                                     disabled={!isEdit}
                                     value={student.card_student}
+                                    defaultValue={student.card_student}
                                     onChange={handleChangeCardStudent}
                                 />
                                 :
@@ -732,7 +780,6 @@ export const StudentProfile = ()=>{
                         <Form.Item
                             label="GPA"
                             name="gpa"
-                            initialValue={student.gpa}
                             validateStatus={validateGPA.status}
                             help={validateGPA.errorMsg}
                             className='label'
@@ -743,12 +790,11 @@ export const StudentProfile = ()=>{
                                     className='input-login max-width'
                                     style={{width: '100%'}}
                                     placeholder="Nhập GPA"
-                                    min={0}
-                                    max={4}
                                     step={0.01}
                                     autoFocus={true}
                                     disabled={!isEdit}
                                     value={student.gpa}
+                                    defaultValue={student.gpa}
                                     onChange={handleChangeGPA}
                                 />
                                 :
@@ -767,6 +813,7 @@ export const StudentProfile = ()=>{
                                 <span>Hãy cập nhật thông tin đầy đủ để có thể sử dụng các chức năng của hệ thống!</span>
                             </div>
                         </Form.Item>
+                        </div>
                         <Form.Item>
                             <div className='group-button'>
                                 {
@@ -774,7 +821,6 @@ export const StudentProfile = ()=>{
                                 }
                             </div>
                         </Form.Item>
-                    </div>
                 </Form>
             </div>
         </div>

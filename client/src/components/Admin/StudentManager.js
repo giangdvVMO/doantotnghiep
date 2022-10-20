@@ -1,62 +1,54 @@
-import { Button, Input, Pagination, Select, Table, Tag } from 'antd';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { Button, Input, message, Select, Table, Tag } from 'antd';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
 import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { majorList, universityList } from '../../data/list';
+import { serverURL } from '../../configs/server.config';
 
 const { Option } = Select;
 
 export const StudentManager = () => {
     const { user } = useContext(UserContext);
-    const [school, setSchool] = useState(-1);
-    const [faculty, setFaculty] = useState(-1);
-    const [majors, setMajors] = useState([]);
+    const [university, setUniversity] = useState(-1);
     const [major, setMajor] = useState(-1);
     const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
-    const [current, setCurrent] = useState(2);
-    const [totalPage, setTotal] = useState(10);
+    const [listUser, setListUser] = useState([]);
+    async function fetchListStudent(){
+        let query = '?1=1';
+                query = status!==-1? query+'&status='+status:query;
+                query = major!==-1? query+'&major='+major:query;
+                query = university!==-1? query+'&university='+university:query;
+                query = search!==-1? query+'&search='+search:query;
+                const url = serverURL + 'student'+ query;
+                console.log(query);
+                try {
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                    );
+                    const result = await response.json();
+                    if(response.status!==200){
+                        message.error("Lỗi hệ thống!");
+                    }else{
+                        console.log(result)
+                        setListUser(result.data);
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                }
+    }
     useEffect(()=>{
-      console.log('useEffect')
-      const  majorList = ['tiếng nga', 'tiếng trung', 'tiếng nhật'];
-      setMajors([...majorList]);
-    },[])
-    const listUser = [
-        {
-            key: '1',
-            fullname: 32,
-            birthday: '2022-12-12',
-            address: '10 Downing Street',
-            phone: '082937826',
-
-            cccd:'12345',
-            university: 'abc',
-            faculty: 'toán học',
-            major: 'toán học',
-            course: '2012-2022',
-            gpa: 2.9,
-            card_student: '1234',
-            status: 1
-        },
-        {
-            key: '2',
-            fullname: 32,
-            birthday: '2022-12-12',
-            address: '10 Downing Street',
-            phone: '082937826',
-            cccd:'12345',
-            university: 'abc',
-            faculty: 'toán học',
-            major: 'toán học',
-            course: '2012-2022',
-            gpa: 2.9,
-            card_student: '1234',
-            status: 0
-        },
-    ];
-
+        fetchListStudent();
+    },[university, major, status, search])
+    
     const columns = [
         {
             title: 'STT',
@@ -140,6 +132,10 @@ export const StudentManager = () => {
         },
     ];
 
+    const handleChangeUniversity = (e)=>{
+        setUniversity(e.value);
+    }
+
     const handleChangeMajor = (e)=>{
         setMajor(e.value);
     }
@@ -152,16 +148,29 @@ export const StudentManager = () => {
         setSearch(e.target.value);
     }
 
-    const handleChangePage = (value)=>{
-        setCurrent(value);
-    }
-
     return (
         <>
             <div className='banner-content'>Quản lý danh sách sinh viên</div>
             <div className='container-filter'>
                 <div className='filter'>
-                    <label>Chuyên ngành:</label>
+                    <label className='label-filter'>Trường:</label>
+                    <Select
+                        value={university}
+                        defaultValue='all'
+                        labelInValue='Chuyên ngành'
+                        className='filter-content'
+                        onChange={handleChangeUniversity}
+                    >
+                        <Option value={-1}>all</Option>
+                        {
+                            universityList.map((university)=>{
+                                return (<Option key={university} value={university}>{university}</Option>)
+                            })
+                        }
+                    </Select>
+                </div>
+                <div className='filter'>
+                    <label className='label-filter'>Chuyên ngành:</label>
                     <Select
                         value={major}
                         defaultValue='all'
@@ -171,14 +180,14 @@ export const StudentManager = () => {
                     >
                         <Option value={-1}>all</Option>
                         {
-                            majors.map((major)=>{
+                            majorList.map((major)=>{
                                 return (<Option key={major} value={major}>{major}</Option>)
                             })
                         }
                     </Select>
                 </div>
                 <div className='filter'>
-                    <label>Trạng thái:</label>
+                    <label className='label-filter'>Trạng thái:</label>
                     <Select
                         value={status}
                         defaultValue='all'
@@ -191,13 +200,15 @@ export const StudentManager = () => {
                         <Option value={0}>chưa duyệt</Option>
                     </Select>
                 </div>
-                <div className='search'>
-                    
-                    <Input className='input' placeholder='Nhập thông tin cần tìm' value={search} onChange={handleChangeSearch}>
-                    </Input>
-                    <Button type="primary" icon={<SearchOutlined />}>
-                        Tìm kiếm
-                    </Button>
+                <div className='filter'>
+                    <label className='transparent'>Tìm kiếm</label>
+                    <div className='search'>
+                        <Input className='input search-input' placeholder='Nhập thông tin cần tìm' value={search} onChange={handleChangeSearch}>
+                        </Input>
+                        <Button type="primary" icon={<SearchOutlined />}>
+                            Tìm kiếm
+                        </Button>
+                    </div>
                 </div>
             </div>
             <Table 
@@ -207,14 +218,7 @@ export const StudentManager = () => {
                     x: 800,
                     y: 800,
                 }}
-                pagination={false}
             />;
-            <Pagination 
-                pageSize= {1}
-                current = {current}
-                onChange= {handleChangePage}
-                total={totalPage}
-                />
         </>
     )
 }
