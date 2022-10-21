@@ -13,11 +13,13 @@ import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { ConfirmStudentDto } from './dto/confirm-student.dto';
 import { QueryParamStudentDto } from './dto/student-params.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller({
   version: ['1'],
   path: 'student',
 })
+@ApiTags('Student')
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
 

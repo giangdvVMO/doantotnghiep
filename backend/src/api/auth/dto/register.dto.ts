@@ -18,7 +18,6 @@ export class RegisterDto {
   })
   @IsNotEmpty()
   @IsString()
-  @MaxLength(100)
   username: string;
 
   @ApiProperty({
@@ -26,7 +25,6 @@ export class RegisterDto {
   })
   @IsNotEmpty()
   @IsString()
-  @MaxLength(100)
   password: string;
 
   @ApiProperty({
@@ -57,10 +55,6 @@ export class RegisterDto {
   })
   @IsNotEmpty()
   @IsString()
-  @MaxLength(maxLengthPhone, {
-    message: `Số điện thoại tối đa ${maxLengthPhone} kí tự`,
-  })
-  @IsPhoneNumber()
   phone: string;
 
   @ApiProperty({

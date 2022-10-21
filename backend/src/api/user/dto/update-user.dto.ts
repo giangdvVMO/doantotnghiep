@@ -24,7 +24,6 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @IsEmail()
-  @MaxLength(100)
   email: string;
 
   @ApiPropertyOptional({
@@ -32,7 +31,6 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @IsEmail()
-  @MaxLength(100)
   fullname: string;
 
   @ApiPropertyOptional({
@@ -40,15 +38,12 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @IsDateString()
-  @MaxLength(100)
   birthday: string;
 
   @ApiPropertyOptional({
     description: 'phone',
   })
   @IsOptional()
-  @IsPhoneNumber()
-  @MaxLength(100)
   phone: string;
 }
 

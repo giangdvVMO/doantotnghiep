@@ -22,3 +22,14 @@ export const messageStudentError = {
     Major: 'Chưa chọn chuyên ngành',
     GPA: 'GPA trong khoảng từ 0-4'
 }
+
+export const messageCompanyError = {
+    com_name: 'Chưa nhập tên công ty hoặc vượt quá 50 kí tự',
+    address: 'Chưa nhập địa chỉ công ty',
+    year: 'Năm thành lập trong khoảng 200 năm trở lại đây',
+    com_phone: 'Sai định dạng số điện thoại',
+    com_email: 'Sai định dạng email',
+    website: 'Chưa nhập địa chỉ website',
+    scale: 'Chưa nhập số lao động của công ty',
+    manufacture: 'Chưa chọn ngành sản xuất của công ty'
+}

@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DateToShortString } from 'src/share/external-services/parseDateToString';
+import { ManuCompanyService } from '../manu-company/manu-company.service';
 import { Company, CompanyDocument } from './company.schema';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { QueryParamCompanyDto } from './dto/query-param-company.dto';
@@ -12,6 +13,7 @@ export class CompanyService {
   constructor(
     @InjectModel(Company.name)
     private readonly companyModel: Model<CompanyDocument>,
+    private readonly manuCompanyService: ManuCompanyService,
   ) {}
   async create(createCompanyDto: CreateCompanyDto) {
     const result = await this.companyModel.create(createCompanyDto);
@@ -142,8 +144,49 @@ export class CompanyService {
     return { data: company };
   }
 
-  update(id: number, updateCompanyDto: UpdateCompanyDto) {
-    return `This action updates a #${id} company`;
+  async update(id: number, updateCompanyDto: UpdateCompanyDto) {
+    const {
+      com_name,
+      address,
+      year,
+      com_phone,
+      com_email,
+      website,
+      scale,
+      introduction,
+      manufacture,
+      update_id,
+    } = { ...updateCompanyDto };
+    const updateCompany = await this.companyModel.updateOne(
+      { _id: id },
+      {
+        com_name,
+        address,
+        year,
+        com_phone,
+        com_email,
+        website,
+        scale,
+        introduction,
+        update_id,
+        update_date: new Date(),
+      },
+    );
+
+    const dataUpdateManu = {
+      id_company: id,
+      id_manu_array: manufacture,
+    };
+    const updateManu = await this.manuCompanyService.create(dataUpdateManu);
+    if ((updateCompany && updateManu) || updateCompany.modifiedCount) {
+      return {
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+      };
+    }
   }
 
   remove(id: number) {

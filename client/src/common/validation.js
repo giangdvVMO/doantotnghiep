@@ -100,3 +100,36 @@ export const checkGPA = (gpa) => {
     }
     return true;
 }
+
+export const checkComName = (name) =>{
+    if(!name||name.length>50){
+        return false;
+    }
+    return true
+}
+
+export const checkWebsite = (name) =>{
+    if(!name||name.length>50){
+        return false;
+    }
+    return true
+}
+export const checkYear = (year) =>{
+    const now = new Date().getFullYear();
+    if(!year||!+year||+year>now||+year<(now-200)){
+        return false;
+    }
+    return true
+}
+export const checkScale = (scale) =>{
+    if(!scale||!+scale||+scale<0){
+        return false;
+    }
+    return true
+}
+export const checkManufacture = (manu)=>{
+    if(!manu.length){
+        return false;
+    }
+    return true;
+}

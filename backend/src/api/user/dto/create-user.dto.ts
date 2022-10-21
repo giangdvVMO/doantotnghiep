@@ -100,7 +100,6 @@ export class CreateUserDtoBatch {
   })
   @IsNotEmpty()
   @IsString()
-  @MaxLength(100)
   name: string;
 
   @ApiProperty({
@@ -109,7 +108,6 @@ export class CreateUserDtoBatch {
   @IsNotEmpty()
   @IsString()
   @IsEmail()
-  @MaxLength(100)
   email: string;
 
   @ApiProperty({
@@ -117,7 +115,6 @@ export class CreateUserDtoBatch {
   })
   @IsNotEmpty()
   @IsString()
-  @MaxLength(100)
   password: string;
 
   @ApiPropertyOptional({
@@ -125,7 +122,6 @@ export class CreateUserDtoBatch {
   })
   @IsNotEmpty()
   @IsString()
-  @MaxLength(100)
   created_by: string;
 
   @ApiPropertyOptional({
@@ -133,7 +129,6 @@ export class CreateUserDtoBatch {
   })
   @IsNotEmpty()
   @IsString()
-  @MaxLength(100)
   expired_at: string;
 
   @ApiPropertyOptional({
@@ -211,6 +206,5 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsPhoneNumber()
   phone: string;
 }
