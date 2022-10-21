@@ -21,3 +21,10 @@ export const majorList = [
     "Thương mại điện tử",
     "Khoa học dữ liệu"
 ]
+
+export const scaleList = [
+    "0-100",
+    "100-500",
+    "500-1000",
+    "Trên 1000"
+]

@@ -11,17 +11,17 @@ import TextArea from "antd/lib/input/TextArea";
 import { serverURL } from "../../configs/server.config";
 
 let students = {
-    _id:1,
-    cccd: "19378273828",
-    address: "HP",
-    university: "University",
-    faculty: "English",
-    course: "2012-2020",
-    gpa: 3.5,
+    _id:-1,
+    cccd: "",
+    address: "",
+    university: "",
+    faculty: "",
+    course: "",
+    gpa: '',
     status: false,
     avatar: '',
-    card_student: '18A100100',
-    major: 'Công nghệ phần mềm'
+    card_student: '',
+    major: ''
 }
 
 export const StudentDetailAdmin = ()=>{

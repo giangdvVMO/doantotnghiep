@@ -31,12 +31,7 @@ export class QueryParamCompanyDto {
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  university: string;
-
-  @ApiPropertyOptional()
-  @IsString()
-  @IsOptional()
-  major: string;
+  scaleBound: string;
 
   @ApiPropertyOptional()
   @IsOptional()

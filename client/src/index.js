@@ -19,6 +19,7 @@ import { DetailAccountAdmin } from './components/Admin/DetailAccountAdmin';
 import { StudentManager } from './components/Admin/StudentManager';
 import { StudentDetailAdmin } from './components/Admin/StudentDetail';
 import { StudentDetailCompany } from './components/Company/StudentDetailCompany';
+import { CompanyManager } from './components/Admin/CompanyManager';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -38,6 +39,7 @@ root.render(
           <Route path='account-management' element={<AccountManager />} />
           <Route path='account/:id'  element={<DetailAccountAdmin />} />
           <Route path='student-management' element={<StudentManager />} />
+          <Route path='company-management' element={<CompanyManager />} />
           <Route path='admin'>
             <Route path='student/:id' element={<StudentDetailAdmin/>}/>
           </Route>

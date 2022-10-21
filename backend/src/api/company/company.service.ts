@@ -21,14 +21,23 @@ export class CompanyService {
   }
 
   async findAll(query: QueryParamCompanyDto) {
-    const { university, major, status, search } = query;
+    const { scaleBound, status, search } = query;
     const condition = {};
     console.log('search', search);
     const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
     const searchRgx = rgx(search ? search : '');
-
-    university ? (condition['university'] = university) : null;
-    major ? (condition['major'] = major) : null;
+    let min = 0;
+    let max = 1000000;
+    if (scaleBound) {
+      const minmax = scaleBound.split('-');
+      console.log('minmax', minmax);
+      if (minmax.length === 1) {
+        min = +minmax[0].split(' ')[1];
+      } else {
+        min = +minmax[0];
+        max = +minmax[1];
+      }
+    }
     if (status === '1') {
       condition['status'] = true;
     }
@@ -36,7 +45,7 @@ export class CompanyService {
       condition['status'] = false;
     }
 
-    const studentList = await this.companyModel.aggregate([
+    const companyList = await this.companyModel.aggregate([
       {
         $lookup: {
           from: 'tbl_account',
@@ -60,43 +69,71 @@ export class CompanyService {
             $or: [
               {
                 $regexMatch: {
-                  input: '$account.fullname',
+                  input: '$website',
                   regex: searchRgx,
                   options: 'i',
                 },
               },
               {
                 $regexMatch: {
-                  input: '$university',
+                  input: '$com_name',
+                  regex: searchRgx,
+                  options: 'i',
+                },
+              },
+              {
+                $regexMatch: {
+                  input: '$address',
                   regex: searchRgx,
                   options: 'i',
                 },
               },
             ],
           },
+          minmax: {
+            $and: [{ $gte: ['$scale', min] }, { $lt: ['$scale', max] }],
+          },
         },
       },
       {
         $match: {
           result: true,
+          minmax: true,
         },
       },
+      {
+        $lookup: {
+          from: 'tbl_manu_company',
+          localField: '_id',
+          foreignField: 'id_company',
+          as: 'manu_company',
+        },
+      },
+      {
+        $unwind: '$manu_company',
+      },
+      {
+        $lookup: {
+          from: 'tbl_manufacture',
+          localField: 'manu_company.id_manu',
+          foreignField: '_id',
+          as: 'manufacture',
+        },
+      },
+      {
+        $unwind: '$manufacture',
+      },
     ]);
-    if (studentList.length) {
-      const list = studentList.map((student) => {
-        return {
-          ...student,
-          email: student.account.email,
-          fullname: student.account.fullname,
-          birthday: DateToShortString(student.account.birthday),
-          phone: student.account.phone,
-        };
+    if (companyList.length) {
+      const dataList = { ...companyList[0] };
+      const list = companyList.map((company) => {
+        return company.manufacture;
       });
       return {
-        data: list,
+        data: { ...dataList, manufacture: list },
       };
     }
-    return { data: studentList };
+    return { data: companyList };
   }
 
   async findOneAdmin(id: number) {
