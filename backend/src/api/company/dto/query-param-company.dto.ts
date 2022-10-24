@@ -37,4 +37,9 @@ export class QueryParamCompanyDto {
   @IsOptional()
   @IsNumberString()
   status: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumberString()
+  manufacture: string;
 }

@@ -167,7 +167,6 @@ export class StudentService {
   }
 
   async confirm(id: number, confirmDto: ConfirmStudentDto) {
-    console.log(id, id);
     const result = await this.studentModel.updateOne(
       { _id: id },
       { ...confirmDto, confirm_date: new Date(), status: true },

@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CompanyService } from './company.service';
+import { ConfirmCompanyDto } from './dto/confirm-company.dto';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { QueryParamCompanyDto } from './dto/query-param-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -31,6 +32,14 @@ export class CompanyController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.companyService.findOne(+id);
+  }
+
+  @Patch('confirm/:id')
+  confirm(
+    @Param('id') id: string,
+    @Body() confirmCompanyDto: ConfirmCompanyDto,
+  ) {
+    return this.companyService.confirm(+id, confirmCompanyDto);
   }
 
   @Patch(':id')

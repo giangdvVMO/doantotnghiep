@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { DateToShortString } from 'src/share/external-services/parseDateToString';
 import { ManuCompanyService } from '../manu-company/manu-company.service';
 import { Company, CompanyDocument } from './company.schema';
+import { ConfirmCompanyDto } from './dto/confirm-company.dto';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { QueryParamCompanyDto } from './dto/query-param-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -21,7 +22,7 @@ export class CompanyService {
   }
 
   async findAll(query: QueryParamCompanyDto) {
-    const { scaleBound, status, search } = query;
+    const { scaleBound, status, search, manufacture } = query;
     const condition = {};
     console.log('search', search);
     const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
@@ -44,7 +45,9 @@ export class CompanyService {
     if (status === '0') {
       condition['status'] = false;
     }
-
+    const manu_condition = manufacture
+      ? { $in: [+manufacture, '$manu_id'] }
+      : true;
     const companyList = await this.companyModel.aggregate([
       {
         $lookup: {
@@ -123,16 +126,41 @@ export class CompanyService {
       {
         $unwind: '$manufacture',
       },
+      {
+        $group: {
+          _id: '$_id',
+          com_name: { $first: '$com_name' },
+          address: { $first: '$address' },
+          year: { $first: '$year' },
+          com_phone: { $first: '$com_phone' },
+          com_email: { $first: '$com_email' },
+          website: { $first: '$website' },
+          status: { $first: '$status' },
+          scale: { $first: '$scale' },
+          introduction: { $first: '$introduction' },
+          id_account: { $first: '$id_account' },
+          create_date: { $first: '$create_date' },
+          update_date: { $first: '$update_date' },
+          confirm_date: { $first: '$confirm_date' },
+          manufactures: {
+            $push: '$manufacture',
+          },
+          manu_id: {
+            $push: '$manufacture._id',
+          },
+        },
+      },
+      {
+        $addFields: {
+          manu_in: manu_condition,
+        },
+      },
+      {
+        $match: {
+          manu_in: true,
+        },
+      },
     ]);
-    if (companyList.length) {
-      const dataList = { ...companyList[0] };
-      const list = companyList.map((company) => {
-        return company.manufacture;
-      });
-      return {
-        data: { ...dataList, manufacture: list },
-      };
-    }
     return { data: companyList };
   }
 
@@ -228,5 +256,21 @@ export class CompanyService {
 
   remove(id: number) {
     return `This action removes a #${id} company`;
+  }
+
+  async confirm(id: number, confirmDto: ConfirmCompanyDto) {
+    const result = await this.companyModel.updateOne(
+      { _id: id },
+      { ...confirmDto, confirm_date: new Date(), status: true },
+    );
+    if (result.modifiedCount) {
+      return {
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+      };
+    }
   }
 }
