@@ -674,17 +674,17 @@ export const CompanyProfile = ()=>{
                                     onChange={handleChangeManufacture}
                                     optionLabelProp="label"
                                 >
-                                {
-                                    manufactures.map((manufacture)=>{
-                                        return (
-                                            <Option value={manufacture._id} label={manufacture.name_manu}>
-                                                <div className="demo-option-label-item">
-                                                    {manufacture.name_manu}
-                                                </div>
-                                            </Option>
-                                        )
-                                    })
-                                }
+                                    {
+                                        manufactures.map((manufacture)=>{
+                                            return (
+                                                <Option value={manufacture._id} label={manufacture.name_manu}>
+                                                    <div className="demo-option-label-item">
+                                                        {manufacture.name_manu}
+                                                    </div>
+                                                </Option>
+                                            )
+                                        })
+                                    }
                                 </Select>
                                 :
                                 <div >
@@ -708,7 +708,7 @@ export const CompanyProfile = ()=>{
                                 isEdit?
                                 <TextArea rows={5} value={company.introduction} defaultValue={company.introduction} onChange= {handleChangeIntroduction}/>
                                 :
-                                <p className="text-display">{company.year}</p>
+                                <p className="text-display">{company.introduction}</p>
                             }
                         </Form.Item>
                         <Form.Item name='status' label="Trạng thái">

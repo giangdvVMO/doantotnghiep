@@ -25,7 +25,7 @@ export class Recruit {
   @Prop({ type: String, maxlength: 20 })
   level: string;
 
-  @Prop({ type: Boolean, default: false })
+  @Prop({ type: Boolean, nullable: true, default: null })
   gender: boolean;
 
   @Prop({ type: String, maxlength: 50 })

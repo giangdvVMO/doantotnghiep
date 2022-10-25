@@ -133,3 +133,32 @@ export const checkManufacture = (manu)=>{
     }
     return true;
 }
+
+export const checkString = (data)=>{
+    return data;
+}
+
+export const checkNumber = (data)=>{
+    console.log(+data);
+    return +data || +data>0;
+}
+
+export const checkDate = (data)=>{
+    try{
+        if(data===''){
+            return false
+        }
+        const date = new Date(data);
+
+        console.log('start 1');
+        return true;
+    }catch{
+        console.log('start 0');
+        return false;
+    }
+}
+
+export const checkArray = (data)=>{
+    console.log("data",data)
+    return data.length;
+}

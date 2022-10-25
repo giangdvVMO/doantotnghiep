@@ -132,6 +132,20 @@
     margin: 3px;
 }
 
+.center{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.white{
+    color: white;
+}
+
+.edit-btn{
+    background-color:#AFD7F7
+}
 @media screen and (max-width: 800px){
     .grid-container {
         grid-template-columns: 100%

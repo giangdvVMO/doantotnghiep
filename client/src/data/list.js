@@ -28,3 +28,33 @@ export const scaleList = [
     "500-1000",
     "Trên 1000"
 ]
+
+export const levelList = [
+    'all',
+    'Fresher',
+    'Junior',
+    'Pre-Senior',
+    'Senior',
+    'PM'
+]
+
+export const wayWorkingList = [
+    'all',
+    'parttime',
+    'fulltime',
+]
+
+export const genderList = [
+    {
+        id: null,
+        label: 'all'
+    },
+    {
+        id: 0,
+        label: 'nam'
+    },
+    {
+        id: 1,
+        label: 'nữ'
+    },
+]

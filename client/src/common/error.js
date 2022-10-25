@@ -33,3 +33,19 @@ export const messageCompanyError = {
     scale: 'Chưa nhập số lao động của công ty',
     manufacture: 'Chưa chọn ngành sản xuất của công ty'
 }
+
+export const messageRecruitError = {
+    title: 'Tiêu đề không được bỏ trống',
+    way_working: 'Phương thức làm việc không được bỏ trống',
+    salary: 'Lương không được bỏ trống',
+    quantity: 'Số lượng tuyển không được bỏ trống',
+    level: 'Chức vụ không được bỏ trống',
+    address_working: 'Địa chỉ làm việc không được bỏ trống',
+    experience: 'Số năm kinh nghiệm không được bỏ trống',
+    description: 'Mô tả không được bỏ trống',
+    requirement: 'Yêu cầu không được bỏ trống',
+    welfare: 'Quyền lợi không được bỏ trống',
+    start_date: 'Ngày bắt đầu không được bỏ trống',
+    end_date: 'Ngày kết thúc không được bỏ trống',
+    field: 'Chưa chọn lĩnh vực'
+}

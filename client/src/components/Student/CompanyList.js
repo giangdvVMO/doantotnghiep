@@ -4,25 +4,51 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
-import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import { scaleList } from '../../data/list';
 import { serverURL } from '../../configs/server.config';
 
 const { Option } = Select;
-export const CompanyManager = () => {
+export const CompanyList = () => {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
-    if(!user||user.role!=='admin'){
+    if(!user||user.role!=='student'){
         message.warn('Bạn ko có quyền xem trang này');
         navigate('/home')
     }
     const [scaleBound, setScaleBound] = useState(-1);
-    const [status, setStatus] = useState(-1);
+    const [manufactures, setManufactures] = useState([{_id:'', name_manu: ''}]);
+    const [manufacture, setManufacture] = useState(-1);
     const [search, setSearch] = useState('');
     const [listUser, setListUser] = useState([]);
+    //fetch Manufacture
+    async function fetchManufacture(){
+        const url = serverURL + 'manufacture';
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            console.log(result);
+            if(response.status!==200){
+                message.error(result.message);
+            }else{
+                message.success("Load manufacture thành công!");
+                setManufactures(result.data);
+            }
+        }
+        catch (err) {
+            console.log(err);
+            message.error("Đã có lỗi xảy ra!");
+        }
+    }
     async function fetchListCompany(){
         let query = '?1=1';
-                query = status!==-1? query+'&status='+status:query;
+                query= scaleBound!==-1? query+'&manufacture='+manufacture:query;
                 query = scaleBound!==-1? query+'&scaleBound='+scaleBound:query;
                 query = search!==''? query+'&search='+search:query;
                 const url = serverURL + 'company'+ query;
@@ -47,9 +73,13 @@ export const CompanyManager = () => {
                     console.log(err);
                 }
     }
+
+    useEffect(()=>{
+        fetchManufacture();
+    },[])
     useEffect(()=>{
         fetchListCompany();
-    },[scaleBound, status, search])
+    },[scaleBound, manufacture, search])
     
     const columns = [
         {
@@ -109,26 +139,10 @@ export const CompanyManager = () => {
             }
         },
         {
-            title: 'Trạng thái',
-            key: 'status',
-            render: (_, record) => (
-                     record.status?
-                        <Tag icon={<CheckCircleOutlined />} 
-                            color="success">
-                            duyệt
-                        </Tag>
-                        :
-                        <Tag icon={<MinusCircleOutlined />} color="default">
-                            chưa duyệt
-                        </Tag>
-            ),
-            fixed: 'right',
-        },
-        {
             title: 'Hành động',
             key: 'action',
             render: (_, record) => (
-                <Link to={`../admin/company/${record._id}`}>Xem chi tiết</Link>
+                <Link to={`../student/company/${record._id}`}>Xem chi tiết</Link>
             ),
             fixed: 'right',
         },
@@ -138,7 +152,7 @@ export const CompanyManager = () => {
         setScaleBound(e.value);
     }
     const handleChangeSelect = (e)=>{
-        setStatus(e.value);
+        setManufacture(e.value);
     }
     const handleChangeSearch = (e)=>{
         setSearch(e.target.value);
@@ -166,17 +180,26 @@ export const CompanyManager = () => {
                     </Select>
                 </div>
                 <div className='filter'>
-                    <label className='label-filter'>Trạng thái:</label>
+                    <label className='label-filter'>Ngành sản xuất:</label>
                     <Select
-                        value={status}
+                        value={manufacture}
                         defaultValue='all'
                         labelInValue='Trạng thái'
                         className='filter-content'
                         onChange={handleChangeSelect}
                     >
                         <Option value={-1}>all</Option>
-                        <Option value={1}>duyệt</Option>
-                        <Option value={0}>chưa duyệt</Option>
+                        {
+                            manufactures.map((manufacture)=>{
+                                return (
+                                    <Option value={manufacture._id} label={manufacture.name_manu}>
+                                        <div className="demo-option-label-item">
+                                            {manufacture.name_manu}
+                                        </div>
+                                    </Option>
+                                )
+                            })
+                        }
                     </Select>
                 </div>
                 <div className='filter'>

@@ -50,7 +50,41 @@ export const MenuRole = {
         }
     ],
     company: [
-
+        {
+            label: <Link to='home'>Trang chủ</Link>,
+            icon: <HomeOutlined />,
+            key: 'home'
+        },
+        {
+            label: <Link to='student-list'>Danh sách sinh viên</Link>,
+            icon: <SnippetsOutlined />,
+            key: 'studentlist'
+        },
+        {
+            label: 'Quản lý bài đăng tuyển dụng',
+            icon: <ContainerOutlined />,
+            key: 'submenu',
+            children: [
+                { 
+                    label: <Link to='recruit/add'>Thêm bài đăng tuyển dụng</Link>,
+                    key: 'submenu-item-1' 
+                },
+                { 
+                    label: <Link to='company/recruit-list'>Danh sách bài đăng tuyển dụng</Link>,
+                    key: 'submenu-item-2' 
+                },
+            ],
+        },
+        {
+            label: <Link to='news'>Tin tức</Link>,
+            icon: <BookOutlined />,
+            key: 'news'
+        },
+        {
+            label: <Link to='about'>Về chúng tôi</Link>,
+            icon: <AlertOutlined />,
+            key: 'about'
+        }
     ],
     student: [
         {
@@ -69,9 +103,9 @@ export const MenuRole = {
             key: 'companylist'
         },
         {
-            label: <Link to='hire-list'>Bài đăng tuyển dụng</Link>,
+            label: <Link to='recruit-list'>Bài đăng tuyển dụng</Link>,
             icon: <ContainerOutlined />,
-            key: 'hirelist'
+            key: 'recruitlist'
         },
         {
             label: <Link to='news'>Tin tức</Link>,

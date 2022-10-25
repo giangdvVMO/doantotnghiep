@@ -7,8 +7,9 @@ import { StudentModule } from './api/student/student.module';
 import { CompanyModule } from './api/company/company.module';
 import { ManufactureModule } from './api/manufacture/manufacture.module';
 import { ManuCompanyModule } from './api/manu-company/manu-company.module';
-import { HireModule } from './api/hire/hire.module';
 import { RecruitModule } from './api/recruit/recruit.module';
+import { FieldModule } from './api/field/field.module';
+import { FieldRecruitModule } from './api/field-recruit/field-recruit.module';
 
 @Module({
   imports: [
@@ -19,8 +20,9 @@ import { RecruitModule } from './api/recruit/recruit.module';
     CompanyModule,
     ManufactureModule,
     ManuCompanyModule,
-    HireModule,
     RecruitModule,
+    FieldModule,
+    FieldRecruitModule,
   ],
 })
 export class AppModule {}

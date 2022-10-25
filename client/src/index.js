@@ -15,11 +15,16 @@ import { DetailAccount } from './components/User/DetailAccount';
 import { StudentProfile } from './components/Student/StudentProfile';
 import { CompanyProfile } from './components/Company/CompanyProfile';
 import { AccountManager } from './components/Admin/AccountManager';
-import { DetailAccountAdmin } from './components/Admin/DetailAccountAdmin';
 import { StudentManager } from './components/Admin/StudentManager';
 import { StudentDetailAdmin } from './components/Admin/StudentDetail';
 import { StudentDetailCompany } from './components/Company/StudentDetailCompany';
 import { CompanyManager } from './components/Admin/CompanyManager';
+import { CompanyList } from './components/Student/CompanyList';
+import { DetailAccountAdmin } from './components/Admin/AccountDetail';
+import { CompanyDetailAdmin } from './components/Admin/ComanyDetail';
+import { AddRecruit } from './components/Company/AddRecruit';
+import { RecruitManager } from './components/Company/RecruitManager';
+import { RecruitProfile } from './components/Company/RecruitProfile';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -40,11 +45,18 @@ root.render(
           <Route path='account/:id'  element={<DetailAccountAdmin />} />
           <Route path='student-management' element={<StudentManager />} />
           <Route path='company-management' element={<CompanyManager />} />
+          <Route path='company-list' element={<CompanyList />} />
           <Route path='admin'>
             <Route path='student/:id' element={<StudentDetailAdmin/>}/>
+            <Route path='company/:id' element={<CompanyDetailAdmin/>}/>
           </Route>
           <Route path='company'>
             <Route path='student/:id' element={<StudentDetailCompany/>}/>
+            <Route path='recruit/:id' element={<RecruitProfile/>}/>
+            <Route path='recruit-list' element={<RecruitManager/>}/>
+          </Route>
+          <Route path='recruit'>
+            <Route path='add' element={<AddRecruit/>}/>
           </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />

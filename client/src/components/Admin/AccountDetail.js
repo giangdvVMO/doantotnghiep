@@ -431,7 +431,6 @@ export const DetailAccountAdmin = () => {
                                 :
                                 <p className="text-display">{DateToShortString(account.birthday)}</p>
                             }
-                            
                         </Form.Item>
                         <Form.Item name='role' label="Đối tượng"
                         className='label'

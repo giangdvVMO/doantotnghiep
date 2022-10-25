@@ -5,27 +5,55 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
 import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
-import { scaleList } from '../../data/list';
 import { serverURL } from '../../configs/server.config';
+import { DateToShortStringDate } from '../../common/service';
 
 const { Option } = Select;
-export const CompanyManager = () => {
+export const RecruitManager = () => {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
     if(!user||user.role!=='admin'){
         message.warn('Bạn ko có quyền xem trang này');
         navigate('/home')
     }
-    const [scaleBound, setScaleBound] = useState(-1);
+    const [fields, setFields] = useState([]);
+    const [field, setField] = useState([]);
     const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
-    const [listUser, setListUser] = useState([]);
-    async function fetchListCompany(){
+    const [listRecruit, setListRecruit] = useState([]);
+
+    //fetch Fields
+    async function fetchField(){
+        const url = serverURL + 'field';
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            console.log(result);
+            if(response.status!==201){
+                message.error(result.message);
+            }else{
+                message.success("Load field thành công!");
+                setFields(result.data);
+            }
+        }
+        catch (err) {
+            console.log(err);
+            message.error("Đã có lỗi xảy ra!");
+        }
+}
+
+    async function fetchListRecruit(){
         let query = '?1=1';
                 query = status!==-1? query+'&status='+status:query;
-                query = scaleBound!==-1? query+'&scaleBound='+scaleBound:query;
+                query = field.length? query+'&field='+field:query;
                 query = search!==''? query+'&search='+search:query;
-                const url = serverURL + 'company'+ query;
+                const url = serverURL + 'recruit'+ query;
                 console.log(query);
                 try {
                     const response = await fetch(url, {
@@ -40,7 +68,7 @@ export const CompanyManager = () => {
                         message.error("Lỗi hệ thống!");
                     }else{
                         console.log("result",result)
-                        setListUser(result.data);
+                        setListRecruit(result.data);
                     }
                 }
                 catch (err) {
@@ -48,9 +76,9 @@ export const CompanyManager = () => {
                 }
     }
     useEffect(()=>{
-        fetchListCompany();
-    },[scaleBound, status, search])
-    
+        fetchListRecruit();
+    },[field, status, search])
+    useEffect(()=>{fetchField()},[]);
     const columns = [
         {
             title: 'STT',
@@ -59,44 +87,73 @@ export const CompanyManager = () => {
             fixed: 'left',
         },
         {
-            title: 'Tên công ty',
-            dataIndex: 'com_name',
-            key: 'com_name',
+            title: 'Tiêu đề',
+            dataIndex: 'title',
+            key: 'title',
         },
         {
-            title: 'Địa chỉ',
-            dataIndex: 'address',
-            key: 'address',
+            title: 'Phương thức làm việc',
+            dataIndex: 'way_working',
+            key: 'way_working',
         },
         {
-            title: 'Năm thành lập',
-            dataIndex: 'year',
-            key: 'year',
+            title: 'Lương',
+            dataIndex: 'salary',
+            key: 'salary',
         },
         {
-            title: 'Số điện thoại',
-            dataIndex: 'com_phone',
-            key: 'com_phone',
+            title: 'Số lượng tuyển',
+            dataIndex: 'quantity',
+            key: 'quantity',
         },
         {
-            title: 'Email',
-            dataIndex: 'com_email',
-            key: 'com_email',
+            title: 'Cấp bậc',
+            dataIndex: 'level',
+            key: 'level',
         },
         {
-            title: 'Website',
-            dataIndex: 'website',
-            key: 'website',
+            title: 'Giới tính',
+            dataIndex: 'gender',
+            key: 'gender',
         },
         {
-            title: 'Số lao động',
-            dataIndex: 'scale',
-            key: 'scale',
+            title: 'Địa chỉ làm việc',
+            dataIndex: 'address_working',
+            key: 'address_working',
         },
         {
-            title: 'Giới thiệu',
-            dataIndex: 'introduction',
-            key: 'introduction',
+            title: 'Kinh nghiệm',
+            dataIndex: 'experience',
+            key: 'experience',
+        },
+        {
+            title: 'Mô tả công việc',
+            dataIndex: 'description',
+            key: 'description',
+        },
+        {
+            title: 'Yêu cầu',
+            dataIndex: 'requirement',
+            key: 'requirement',
+        },
+        {
+            title: 'Quyền lợi',
+            dataIndex: 'welfare',
+            key: 'welfare',
+        },
+        {
+            title: 'Ngày bắt đầu',
+            key: 'start_date',
+            render: (_,record) =>{ 
+                return record.start_date? <>{DateToShortStringDate(record.start_date)}</>:''
+            }
+        },
+        {
+            title: 'Ngày kết thúc',
+            key: 'end_date',
+            render: (_,record) =>{ 
+                return record.end_date? <>{DateToShortStringDate(record.end_date)}</>:''
+            }
         },
         {
             title: 'Ngành sản xuất',
@@ -133,10 +190,10 @@ export const CompanyManager = () => {
             fixed: 'right',
         },
     ];
-
-    const handleChangeScale= (e)=>{
-        setScaleBound(e.value);
+    const handleChangeField = (e)=>{
+        setStatus([...e.value]);
     }
+
     const handleChangeSelect = (e)=>{
         setStatus(e.value);
     }
@@ -146,25 +203,44 @@ export const CompanyManager = () => {
 
     return (
         <>
-            <div className='banner-content'>Quản lý danh sách doanh nghiệp</div>
+            <div className='banner-content'>Quản lý danh sách bài đăng</div>
             <div className='container-filter'>
                 <div className='filter'>
-                    <label className='label-filter'>Số lao động:</label>
+                    <label className='label-filter'>Lĩnh vực bài đăng:</label>
                     <Select
-                        value={scaleBound}
+                    mode='multiple'
+                        value={field}
                         defaultValue='all'
-                        labelInValue='Số lao động'
+                        labelInValue='Lĩnh vực bài đăng'
                         className='filter-content'
-                        onChange={handleChangeScale}
+                        onChange={handleChangeField}
                     >
                         <Option value={-1}>all</Option>
                         {
-                            scaleList.map((scale)=>{
-                                return (<Option key={scale} value={scale}>{scale}</Option>)
+                            fields.map((field)=>{
+                                return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
                             })
                         }
                     </Select>
                 </div>
+                {/* <div className='filter'>
+                    <label className='label-filter'>Địa điểm:</label>
+                    <Select
+                    mode='multiple'
+                        value={field}
+                        defaultValue='all'
+                        labelInValue='Địa điểm'
+                        className='filter-content'
+                        onChange={handleChangeField}
+                    >
+                        <Option value={-1}>all</Option>
+                        {
+                            fields.map((field)=>{
+                                return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
+                            })
+                        }
+                    </Select>
+                </div> */}
                 <div className='filter'>
                     <label className='label-filter'>Trạng thái:</label>
                     <Select
@@ -191,7 +267,7 @@ export const CompanyManager = () => {
                 </div>
             </div>
             <Table 
-                dataSource={listUser} 
+                dataSource={listRecruit} 
                 columns={columns} 
                 scroll={{
                     x: 800,

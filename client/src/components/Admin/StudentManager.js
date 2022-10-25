@@ -27,7 +27,7 @@ export const StudentManager = () => {
                 query = status!==-1? query+'&status='+status:query;
                 query = major!==-1? query+'&major='+major:query;
                 query = university!==-1? query+'&university='+university:query;
-                query = search!==-1? query+'&search='+search:query;
+                query = search!==''? query+'&search='+search:query;
                 const url = serverURL + 'student'+ query;
                 console.log(query);
                 try {
@@ -43,7 +43,7 @@ export const StudentManager = () => {
                         message.error("Lỗi hệ thống!");
                     }else{
                         console.log(result)
-                        setListUser(result.data);
+                        setListUser([...result.data]);
                     }
                 }
                 catch (err) {

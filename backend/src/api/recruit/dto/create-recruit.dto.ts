@@ -1,62 +1,56 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateRecruitDto {
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'title',
   })
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   title: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'way_working',
   })
-  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
   way_working: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'salary',
   })
-  @IsOptional()
+  @IsNotEmpty()
   salary: number;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'quantity',
   })
-  @IsOptional()
+  @IsNotEmpty()
   quantity: number;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'level',
   })
-  @IsOptional()
+  @IsNotEmpty()
   level: string;
 
   @ApiPropertyOptional({
     description: 'gender',
   })
   @IsOptional()
-  gender: boolean;
+  gender: boolean | number;
 
   @ApiPropertyOptional({
     description: 'address_working',
   })
   @IsOptional()
-  @IsEmail()
   address_working: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'experience',
   })
-  @IsOptional()
+  @IsNotEmpty()
   experience: number;
-
-  @ApiPropertyOptional({
-    description: 'website',
-  })
-  @IsOptional()
-  website: string;
 
   @ApiPropertyOptional({
     description: 'description',
@@ -64,33 +58,38 @@ export class CreateRecruitDto {
   @IsOptional()
   description: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'requirement',
   })
-  @IsOptional()
+  @IsNotEmpty()
   requirement: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'welfare',
   })
-  @IsOptional()
+  @IsNotEmpty()
   welfare: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'start_date',
   })
-  @IsOptional()
+  @IsNotEmpty()
   start_date: string;
 
-  @ApiPropertyOptional({
-    description: 'start_date',
+  @ApiProperty({
+    description: 'end_date',
   })
-  @IsOptional()
+  @IsNotEmpty()
   end_date: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'id_company',
   })
-  @IsOptional()
+  @IsNotEmpty()
   id_company: number;
+
+  @ApiProperty({
+    description: 'list-field',
+  })
+  fields: number[];
 }
