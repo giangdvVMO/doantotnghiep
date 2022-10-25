@@ -333,7 +333,7 @@ export const AddRecruit = ()=>{
                 );
                 const result = await response.json();
                 console.log(result);
-                if(response.status!==200){
+                if(response.status!==201){
                     message.error(result.message);
                 }else{
                     message.success("Bạn đã thêm bài đăng tuyển dụng thành công! Hãy đợi admin duyệt!");

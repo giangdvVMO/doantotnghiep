@@ -12,7 +12,7 @@ const { Option } = Select;
 export const RecruitManager = () => {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
-    if(!user||user.role!=='admin'){
+    if(!user||user.role!=='company'){
         message.warn('Bạn ko có quyền xem trang này');
         navigate('/home')
     }

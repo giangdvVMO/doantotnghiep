@@ -112,9 +112,10 @@ export class RecruitService {
     if (status === '0') {
       condition['status'] = false;
     }
-    // const manu_condition = field
-    //   ? { $in: [+manufacture, '$id_field'] }
-    //   : true;
+    const fields = field.map((item) => {
+      return +item;
+    });
+    const field_condition = field ? { $in: [fields, '$id_field'] } : true;
     const companyList = await this.recruitModel.aggregate([
       {
         $lookup: {
