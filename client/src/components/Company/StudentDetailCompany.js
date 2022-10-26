@@ -1,5 +1,5 @@
 import { CheckCircleOutlined, MinusCircleOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Form, message, Modal, Tag } from "antd";
+import { Avatar, Button, Card, Form, message, Modal, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -27,13 +27,11 @@ let students = {
 export const StudentDetailCompany = ()=>{
     const {user} = useContext(UserContext);
     const navigate = useNavigate();
-    if(!user||user.role!=='admin'){
+    if(!user||user.role!=='company'){
         message.warn('Bạn ko có quyền xem trang này');
         navigate('/home')
     }
-    const [isOpen, setOpen] = useState(false);
     const [student, setStudent] = useState(students);
-    const [reason, setReason] = useState('');
 
     const {id} = useParams();
 
@@ -105,25 +103,6 @@ export const StudentDetailCompany = ()=>{
     const ref = useRef();
     const refButtonSubmit = useRef();
 
-    async function handleAccept(e){
-        confirmStudent();
-    }
-    async function handleReject(e){
-        setOpen(true);
-        return;
-    }
-    async function handleSubmitDeny(){
-        // set notification (later)
-        message.success('Đã gửi thông báo tới sinh viên!');
-        setOpen(false);
-    }
-    async function handleCancelDeny(){
-        setOpen(false);
-    }
-    async function handleChangeReason(e){
-        setReason(e.target.value);
-        return;
-    }
     function handleKeyUp(e) {
         if (e.keyCode === 13) {
             console.log('enter');
@@ -131,12 +110,13 @@ export const StudentDetailCompany = ()=>{
             refButtonSubmit.current.click();
         }
     }
-
+    const handleAccept = async ()=>{
+        return;
+    }
     const renderButtonGroup = ()=>{
         return (
             <>
-                <Button type='submit' className='button save-btn' onClick={handleAccept}>Duyệt</Button>
-                <Button className='button reject-btn' onClick={handleReject}>Từ chối</Button>
+                <Button type='submit' className='button save-btn' onClick={handleAccept}>Gửi thư mời phỏng vấn</Button>
             </>
         )
     }
@@ -274,43 +254,18 @@ export const StudentDetailCompany = ()=>{
                         >
                                 <p className="text-display">{student.gpa}</p>
                         </Form.Item>
-                        <Form.Item name='status' label="Trạng thái"
-                                >
-                                    <div className='status'>{
-                                        renderStatus()
-                                    }</div>
-                        </Form.Item> 
-                        
+                    
                     </div>
                     <Form.Item>
-                            <div className='group-button'>
-                                {
-                                    student.status?
-                                    '':
-                                    renderButtonGroup()
-                                }
-                            </div>
-                        </Form.Item>
+                        {renderButtonGroup()}
+                    </Form.Item>
                 </Form>
                 </div>
             </div>
-            <Modal title='Xác nhận từ chối' open={isOpen} footer={null}>
-                <label>Lý do từ chối</label>
-                <TextArea 
-                    className='input-login max-width'
-                    placeholder="Nhập lí do"
-                    autoFocus={true}
-                    rows={6}
-                    defaultValue={reason}
-                    value={reason}
-                    onChange={handleChangeReason}
-                    />
-                    <br/>
-                    <div className='group-button'>
-                        <Button type='submit' className='button save-btn' onClick={handleSubmitDeny}>Từ chối</Button>
-                        <Button type='reset' className='button cancel-btn' onClick={handleCancelDeny}>Hủy</Button>
-                    </div>
-            </Modal>
+            <Card title='Thông tin CV'>
+
+            </Card>
+           
         </div>
     )
 }

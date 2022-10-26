@@ -56,7 +56,7 @@ export const MenuRole = {
             key: 'home'
         },
         {
-            label: <Link to='student-list'>Danh sách sinh viên</Link>,
+            label: <Link to='company/student-list'>Danh sách sinh viên</Link>,
             icon: <SnippetsOutlined />,
             key: 'studentlist'
         },
@@ -98,7 +98,7 @@ export const MenuRole = {
             key: 'cvstudent'
         },
         {
-            label: <Link to='company-list'>Danh sách doanh nghiệp</Link>,
+            label: <Link to='student/company-list'>Danh sách doanh nghiệp</Link>,
             icon: <BankOutlined />,
             key: 'companylist'
         },

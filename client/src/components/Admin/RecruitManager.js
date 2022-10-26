@@ -190,7 +190,7 @@ export const RecruitManagerAdmin = () => {
             title: 'Hành động',
             key: 'action',
             render: (_, record) => (
-                <Link to={`../recruit/${record._id}`}>Xem chi tiết</Link>
+                <Link to={`../recruit/${record._id},${record.id_company}`}>Xem chi tiết</Link>
             ),
             fixed: 'right',
         },

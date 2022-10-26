@@ -47,7 +47,7 @@ export const CompanyList = () => {
         }
     }
     async function fetchListCompany(){
-        let query = '?1=1';
+        let query = '?status=1';
                 query= manufacture!==-1? query+'&manufacture='+manufacture:query;
                 query = scaleBound!==-1? query+'&scaleBound='+scaleBound:query;
                 query = search!==''? query+'&search='+search:query;
@@ -142,7 +142,7 @@ export const CompanyList = () => {
             title: 'Hành động',
             key: 'action',
             render: (_, record) => (
-                <Link to={`../student/company/${record._id}`}>Xem chi tiết</Link>
+                <Link to={`../company/${record._id}`}>Xem chi tiết</Link>
             ),
             fixed: 'right',
         },

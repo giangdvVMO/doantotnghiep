@@ -1,7 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { DateToShortString } from 'src/share/external-services/parseDateToString';
 import { ManuCompanyService } from '../manu-company/manu-company.service';
 import { Company, CompanyDocument } from './company.schema';
 import { ConfirmCompanyDto } from './dto/confirm-company.dto';

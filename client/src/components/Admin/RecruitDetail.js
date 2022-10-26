@@ -30,7 +30,19 @@ let initialRecruit = {
     fields: []
 }
 
-let initialCompany = {}
+let initialCompany = {
+    _id:-1,
+    com_name: '',
+    address: '',
+    year: '',
+    com_phone: '',
+    com_email: '',
+    website: '',
+    status: true,
+    scale: '',
+    introduction: '',
+    manufacture: []
+}
 
 export const RecruitDetailAdmin = ()=>{
     const {user} = useContext(UserContext);
@@ -42,6 +54,7 @@ export const RecruitDetailAdmin = ()=>{
         navigate('/sign-in');
     }
     const {id} = useParams();
+    const ids = id.split(',');
     const [account, setAccount] = useState(user);
     const [company, setCompany] = useState(initialCompany);
     const [recruit, setRecruit] = useState(initialRecruit);
@@ -49,7 +62,8 @@ export const RecruitDetailAdmin = ()=>{
     //fetch manucomany and Company
     async function fetchManuCompany(){
         try {
-            const _id = account._id;
+            console.log("fetch manu Company!", recruit.id_company)
+            const _id = ids[1];
             const url = serverURL + 'manu-company/company/'+ _id;
             const response = await fetch(url, {
                 method: 'GET',
@@ -65,7 +79,7 @@ export const RecruitDetailAdmin = ()=>{
             }else{
                 console.log("result",result);
                 if(result.data==='empty'){
-                    setOpenModal(true);
+                    // setOpenModal(true);
                     setCompany({...initialCompany});
                 }else{
                     console.log('fetch Manu Company', result.data);
@@ -83,8 +97,8 @@ export const RecruitDetailAdmin = ()=>{
     }
     async function fetchCompany(){
         try {
-            const _id = recruit.id_company;
-            const url = serverURL + 'company/'+ _id;
+            console.log("fetch Company!", recruit.id_company)
+            const url = serverURL + 'company/'+ ids[1];
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -94,7 +108,7 @@ export const RecruitDetailAdmin = ()=>{
             );
             const result = await response.json();
             if(response.status!==200){
-                console.log("Lỗi hệ thống!")
+                console.log("Lỗi hệ thống!");
                 message.error("Lỗi hệ thống!");
             }else{
                 console.log("result",result);
@@ -113,7 +127,7 @@ export const RecruitDetailAdmin = ()=>{
     }
     
     async function fetchRecruit(){
-        const url = serverURL + 'recruit/'+id;
+        const url = serverURL + 'recruit/'+ids[0];
         try {
             const response = await fetch(url, {
                 method: 'GET',
@@ -156,7 +170,7 @@ export const RecruitDetailAdmin = ()=>{
     //handle action
     async function confirmRecruit(){
         try {
-            const url = serverURL + 'recruit/confirm/'+ id;
+            const url = serverURL + 'recruit/confirm/'+ ids[0];
             const data = {
                 confirm_id: user._id
             }
@@ -186,8 +200,8 @@ export const RecruitDetailAdmin = ()=>{
     }
 
     async function deleteRecruit(){
-        const url = serverURL + 'recruit/'+id;
-        const data = {delete_id: account._id}
+        const url = serverURL + 'recruit/'+ids[0];
+        const data = {delete_id: user._id}
             console.log("request", data)
             try {
                 const response = await fetch(url, {
@@ -200,11 +214,11 @@ export const RecruitDetailAdmin = ()=>{
                 );
                 const result = await response.json();
                 console.log(result);
-                if(response.status!==201){
+                if(response.status!==200){
                     message.error(result.message);
                 }else{
                     message.success("Bạn đã xóa bài đăng tuyển dụng thành công!");
-                    navigate('/');
+                    navigate('/admin/recruit-list');
                 }
             }
             catch (err) {
@@ -248,9 +262,13 @@ export const RecruitDetailAdmin = ()=>{
         return;
     }
     const renderButtonGroup = () => {
-            return (<>
-                <Button type='submit' className='button save-btn' onClick={handleAccept}>Duyệt</Button>
-                <Button className='button reject-btn' onClick={handleReject}>Từ chối</Button>
+            return (<>{
+                recruit.status?'':(<>
+                    <Button type='submit' className='button save-btn' onClick={handleAccept}>Duyệt</Button>
+                    <Button className='button reject-btn' onClick={handleReject}>Từ chối</Button>
+                </>
+                )
+            }
                 <Button type='submit' className='button delete-btn' onClick={handleDelete}>Xóa</Button>
                 </>
             )
@@ -426,6 +444,109 @@ export const RecruitDetailAdmin = ()=>{
                                         renderStatus()
                                     }</div>
                         </Form.Item>
+                        </Card>
+                        <Card >
+                        <div className='detail-swapper'>
+                            <p className='title-account'>Thông tin công ty</p>
+                            <div className='underline'></div>
+                            <div className='body'>
+                            <Form
+                                    ref={ref}
+                                    className='form'
+                                    name="basic"
+                                    layout='vertical'
+                                    autoComplete="off"
+                                >
+                                    <div className='two-colums'>
+                                        <Form.Item
+                                            label="Tên công ty:"
+                                            name="com_name"
+                                            initialValue={company.com_name}
+                                            className='label'
+                                        >
+                                            <p className="text-display">{company.com_name}</p>
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Email:"
+                                            name="email"
+                                            initialValue={company.com_email}
+                                            className='label'
+                                        >
+                                            <p className="text-display">{company.com_email}</p>
+                                        </Form.Item>
+
+                                        <Form.Item
+                                            label="Số điện thoại:"
+                                            name="phone"
+                                            initialValue={company.com_phone}
+                                            className='label'
+                                        >
+                                            <p className="text-display">{company.com_phone}</p>
+                                        </Form.Item>
+                                        
+                                        <Form.Item
+                                            label="Website:"
+                                            name="website"
+                                            initialValue={company.website}
+                                            className='label'
+                                        >
+                                                <p className="text-display">{company.website}</p>
+                                        </Form.Item>
+                                        
+                                        <Form.Item
+                                            label="Địa chỉ:"
+                                            name="address"
+                                            initialValue={company.address}
+                                            className='label'
+                                        >
+                                            <p className="text-display">{company.address}</p>
+                                        </Form.Item>
+                                        
+                                        <Form.Item
+                                            label="Số lao động:"
+                                            name="scale"
+                                            initialValue={company.scale}
+                                            className='label'
+                                        >
+                                            <p className="text-display">{company.scale}</p>
+                                        </Form.Item>
+
+                                        <Form.Item
+                                            label="Năm thành lập:"
+                                            name="year"
+                                            initialValue={company.year}
+                                            className='label'
+                                        >
+                                            <p className="text-display">{company.year}</p>
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Ngành sản xuất:"
+                                            name="manufacture"
+                                            initialValue={company.manufacture}
+                                            className='label'
+                                        >
+                                                <div >
+                                                {
+                                                    company.manufacture.length?
+                                                    company.manufacture.map((manu)=>{
+                                                        return <Tag className="tag" color="cyan">{manu.name_manu}</Tag>
+                                                    }):
+                                                    <p className="text-display"></p>
+                                                }
+                                                </div>
+                                        </Form.Item>
+                                        </div>
+                                        <Form.Item
+                                            label="Thông tin giới thiệu:"
+                                            name="introduction"
+                                            initialValue={company.introduction}
+                                            className='label'
+                                        >
+                                            <TextArea rows={5} disabled value={company.introduction} defaultValue={company.introduction} />
+                                        </Form.Item>
+                                </Form>
+                            </div>
+                            </div>
                         </Card>
                         <Form.Item>
                             <div className='group-button'>
