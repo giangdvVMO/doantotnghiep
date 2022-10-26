@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { RecruitService } from './recruit.service';
 import { CreateRecruitDto } from './dto/create-recruit.dto';
-import { UpdateRecruitDto } from './dto/update-recruit.dto';
+import { DeleteDto, UpdateRecruitDto } from './dto/update-recruit.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { QueryParamRecruitDto } from './dto/query-recruit.dto';
 
 @Controller('recruit')
 @ApiTags('Recruit')
@@ -24,8 +26,8 @@ export class RecruitController {
   }
 
   @Get()
-  findAll() {
-    return this.recruitService.findAll();
+  findAll(@Query() query: QueryParamRecruitDto) {
+    return this.recruitService.findAll(query);
   }
 
   @Get(':id')
@@ -39,7 +41,7 @@ export class RecruitController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.recruitService.remove(+id);
+  remove(@Param('id') id: string, @Body() data: DeleteDto) {
+    return this.recruitService.remove(+id, +data.delete_id);
   }
 }

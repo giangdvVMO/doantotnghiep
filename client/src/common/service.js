@@ -4,6 +4,7 @@ export const DateToShortString = (dateString)=>{
     return date.getDate() +'/'+(date.getMonth()+1)+'/'+date.getFullYear();
 }
 
-export const DateToShortStringDate = (date)=>{
+export const DateToShortStringDate = (dateString)=>{
+    const date = new Date(dateString);
     return date.getDate() +'/'+(date.getMonth()+1)+'/'+date.getFullYear();
 }

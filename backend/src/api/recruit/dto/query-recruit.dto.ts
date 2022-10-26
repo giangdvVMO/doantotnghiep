@@ -29,12 +29,15 @@ export class QueryParamRecruitDto {
   search: string;
 
   @ApiPropertyOptional()
-  @IsString()
   @IsOptional()
-  field: number[];
+  field: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsNumberString()
   status: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  id_company: string;
 }

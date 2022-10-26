@@ -301,7 +301,7 @@ export const CompanyProfile = ()=>{
                 );
                 const result = await response.json();
                 console.log(result);
-                if(response.status!==200){
+                if(response.status!==201){
                     message.error(result.message);
                 }else{
                     message.success("Bạn đã cập nhật thành công! Hãy đợi admin duyệt!");
@@ -341,7 +341,7 @@ export const CompanyProfile = ()=>{
                 message.error("Đã có lỗi xảy ra!");
             }
         }else{
-            const url = serverURL + company._id;
+            const url = serverURL +'company/'+ company._id;
             const data = {
                 com_name: company.com_name,
                 address: company.address,
@@ -368,8 +368,8 @@ export const CompanyProfile = ()=>{
                 if(response.status!==200){
                     message.error(result.message);
                 }else{
-                    message.success("Bạn đã sửa thành công!");
-                    setIsEdit(false);
+                    updateManuCompany();
+                    //setIsEdit(false);
                 }
             }
             catch (err) {
@@ -489,7 +489,6 @@ export const CompanyProfile = ()=>{
                         <Form.Item
                             label="Tên công ty:"
                             name="com_name"
-                            initialValue={company.com_name}
                             validateStatus={validateComName.status}
                             help={validateComName.errorMsg}
                             className='label'
@@ -501,6 +500,7 @@ export const CompanyProfile = ()=>{
                                     className='input-login max-width'
                                     placeholder="Nhập tên công ty"
                                     autoFocus={true}
+                                    defaultValue={company.com_name}
                                     value={company.com_name}
                                     onChange={handleChangeComName}
                                 />
@@ -511,7 +511,6 @@ export const CompanyProfile = ()=>{
                         <Form.Item
                             label="Email:"
                             name="email"
-                            initialValue={company.com_email}
                             validateStatus={validateEmail.status}
                             help={validateEmail.errorMsg}
                             className='label'
@@ -524,6 +523,7 @@ export const CompanyProfile = ()=>{
                                     type='email'
                                     disabled={!isEdit}
                                     autoFocus={true}
+                                    defaultValue={company.com_email}
                                     prefix={<MailOutlined className='input-icon' />}
                                     value={company.com_email}
                                     onChange={handleChangeEmail}
@@ -537,7 +537,6 @@ export const CompanyProfile = ()=>{
                         <Form.Item
                             label="Số điện thoại:"
                             name="phone"
-                            initialValue={company.com_phone}
                             validateStatus={validatePhone.status}
                             help={validatePhone.errorMsg}
                             className='label'
@@ -549,6 +548,7 @@ export const CompanyProfile = ()=>{
                                     placeholder="Nhập Số điện thoại"
                                     autoFocus={true}
                                     disabled={!isEdit}
+                                    defaultValue={company.com_phone}
                                     prefix={<><PhoneOutlined className='input-icon' /></>}
                                     value={company.com_phone}
                                     onChange={handleChangePhone}
@@ -670,7 +670,8 @@ export const CompanyProfile = ()=>{
                                     width: '100%',
                                     }}
                                     placeholder="Hãy chọn ít nhất một ngành sản xuất"
-                                    defaultValue={company.manufacture}
+                                    defaultValue={company.manufacture.map(item=>{return item._id})}
+                                    value={company.manufacture}
                                     onChange={handleChangeManufacture}
                                     optionLabelProp="label"
                                 >

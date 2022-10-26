@@ -34,7 +34,7 @@ export const MenuRole = {
             key: 'companymanagerment'
         },
         {
-            label: <Link to='hire-management'>Quản lý bài đăng tuyển dụng</Link>,
+            label: <Link to='admin/recruit-list'>Quản lý bài đăng tuyển dụng</Link>,
             icon: <CopyOutlined />,
             key: 'hiremanagerment'
         },

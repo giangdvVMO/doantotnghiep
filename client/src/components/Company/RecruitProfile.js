@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Form, Input, InputNumber, message, Modal, Select } from "antd";
+import { Button, Card, DatePicker, Form, Input, InputNumber, message, Modal, Select, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -8,14 +8,16 @@ import '../../styles/form.css'
 import '../../styles/my-account.css'
 import { checkString, checkNumber, checkDate, checkArray } from "../../common/validation";
 import { messageRecruitError } from "../../common/error";
-import moment from "moment";
 import { genderList, levelList, wayWorkingList } from "../../data/list";
+import { DateToShortString } from "../../common/service";
+import { CheckCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import moment from "moment";
 const { Option } = Select;
 const { TextArea } = Input;
 
 let initialRecruit = {
     _id:-1,
-    title: '',
+    title: 'x',
     way_working: '',
     salary: '',
     quantity: '',
@@ -38,6 +40,7 @@ let initialCompany = {}
 export const RecruitProfile = ()=>{
     const {user} = useContext(UserContext);
     const [isOpenModal, setOpenModal] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     const navigate = useNavigate();
     if(!user||user.role!=="company"){
         navigate('/sign-in');
@@ -143,6 +146,31 @@ export const RecruitProfile = ()=>{
                 message.error("Đã có lỗi xảy ra!");
             }
     }
+    async function fetchRecruit(){
+        const url = serverURL + 'recruit/'+id;
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            console.log(result);
+            if(response.status!==200){
+                message.error(result.message);
+            }else{
+                message.success("Load recruit thành công!");
+                setRecruit({...result.data});
+            }
+        }
+        catch (err) {
+            console.log(err);
+            message.error("Đã có lỗi xảy ra!");
+        }
+    }
+    useEffect(()=>{fetchRecruit()},[]);
     useEffect(()=>{fetchCompany()},[]);
     useEffect(()=>{fetchField()},[]);
 
@@ -319,13 +347,13 @@ export const RecruitProfile = ()=>{
         }
     }
     //handle action
-    async function createRecruit(){
-        const url = serverURL + 'recruit';
-            const data = { ...recruit,id_company: company._id};
+    async function updateRecruit(){
+        const url = serverURL + 'recruit/'+id;
+            const data = { ...recruit, update_id: company._id};
             console.log("request", data)
             try {
                 const response = await fetch(url, {
-                    method: 'POST',
+                    method: 'PATCH',
                     body: JSON.stringify(data),
                     headers: {
                         'Content-Type': 'application/json',
@@ -334,11 +362,11 @@ export const RecruitProfile = ()=>{
                 );
                 const result = await response.json();
                 console.log(result);
-                if(response.status!==200){
+                if(response.status!==201){
                     message.error(result.message);
                 }else{
-                    message.success("Bạn đã thêm bài đăng tuyển dụng thành công! Hãy đợi admin duyệt!");
-                    fetchCompany();
+                    message.success("Bạn đã cập nhật bài đăng tuyển dụng thành công!");
+                    // fetchCompany();
                 }
             }
             catch (err) {
@@ -346,6 +374,35 @@ export const RecruitProfile = ()=>{
                 message.error("Đã có lỗi xảy ra!");
             }
     }
+
+    async function deleteRecruit(){
+        const url = serverURL + 'recruit/'+id;
+        const data = {delete_id: account._id}
+            console.log("request", data)
+            try {
+                const response = await fetch(url, {
+                    method: 'DELETE',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                console.log(result);
+                if(response.status!==201){
+                    message.error(result.message);
+                }else{
+                    message.success("Bạn đã xóa bài đăng tuyển dụng thành công!");
+                    navigate('/');
+                }
+            }
+            catch (err) {
+                console.log(err);
+                message.error("Đã có lỗi xảy ra!");
+            }
+    }
+
     async function handleSave(e) {
         ref.current.submit();
         let count =0;
@@ -366,19 +423,66 @@ export const RecruitProfile = ()=>{
          console.log("count",count);
          console.log(recruit)
         if(count===0){
-            createRecruit();
+            updateRecruit();
         }
         return;
     }
 
-    const renderButtonGroup = ()=>{
-            return (
-                <Button type='submit' 
-                    className='button edit-btn' 
-                    onClick={handleSave}>
-                    Thêm
-                </Button>
+    async function handleEdit(e) {
+        await fetchRecruit();
+        setIsEdit(true);
+        console.log('edit', recruit)
+        // return;
+    }
+    async function handleDelete(e){
+        setOpenModal(true);
+        return;
+    }
+    async function handleCancel(e) {
+        setIsEdit(false);
+        fetchRecruit();
+        return;
+    }
+    async function handleConfirmDelete(e) {
+        setOpenModal(false);
+        deleteRecruit();
+        return;
+    }
+    async function handleCancelDelete(e) {
+        setOpenModal(false);
+        message.info("Bạn xác nhận không xóa!");
+        return;
+    }
+    const renderButtonGroup = () => {
+        if (!isEdit) {
+            return (<>
+                <Button type='submit' className='button edit-btn' onClick={handleEdit}>Sửa</Button>
+                <Button type='submit' className='button delete-btn' onClick={handleDelete}>Xóa</Button>
+                </>
             )
+        } else {
+            return (
+                <>
+                    <Button type='submit' className='button save-btn' onClick={handleSave}>Lưu</Button>
+                    <Button type='reset' className='button cancel-btn' onClick={handleCancel}>Hủy</Button>
+                </>
+            )
+        }
+    }
+    const renderStatus = ()=>{
+        if(recruit.status){
+            return (
+            <Tag icon={<CheckCircleOutlined />} 
+                color="success">
+                Đã duyệt
+            </Tag>)
+        }else{
+            return (
+                <Tag icon={<MinusCircleOutlined />} color="default">
+                    Chưa duyệt
+                </Tag>
+            )
+        }
     }
     function handleChangeTitle(e) {
         setRecruit((preRecruit) => { return { ...preRecruit, title: e.target.value } });
@@ -430,7 +534,7 @@ export const RecruitProfile = ()=>{
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
             <div className='background-image center'>
-                <p className='title-account center '>Thêm bài đăng tuyển dụng</p>
+                <p className='title-account center '>Chi tiết bài đăng tuyển dụng</p>
 
             </div>
         </div>
@@ -443,25 +547,29 @@ export const RecruitProfile = ()=>{
                     className='form'
                     name="basic"
                     layout='vertical'
-                    autoComplete="off"
                 >
                     <div className="title-recruit">
                         <Form.Item
                             label="Tiêu đề bài đăng:"
                             name="title"
-                            initialValue={recruit.title}
                             validateStatus={validateTitle.status}
                             help={validateTitle.errorMsg}
                             className='label'
                             required
                         >
-                            <Input
-                                className='input-login max-width'
-                                placeholder="Nhập tiêu đề bài đăng tuyển dụng"
-                                autoFocus={true}
-                                value={recruit.title}
-                                onChange={handleChangeTitle}
-                            />
+                            {
+                                isEdit?
+                                <Input
+                                    className='input-login max-width'
+                                    placeholder="Nhập tiêu đề bài đăng tuyển dụng"
+                                    defaultValue={recruit.title}
+                                    value={recruit.title}
+                                    onChange={handleChangeTitle}
+                                />
+                                :
+                                <p className="text-display">{recruit.title}</p>
+                            }
+                            
                         </Form.Item>
                     </div>
                     <Card title="Chi tiết bài đăng tuyển dụng">
@@ -476,37 +584,45 @@ export const RecruitProfile = ()=>{
                             className='label'
                             required
                         >
+                            {
+                                isEdit?
                                 <InputNumber
                                     className='input-login max-width'
                                     style={{width: '100%'}}
                                     placeholder="Nhập lương"
                                     step={1}
-                                    autoFocus={true}
                                     value={recruit.salary}
                                     defaultValue={recruit.salary}
                                     onChange={handleChangeSalary}
                                 />
+                                :
+                                <p className="text-display">{recruit.salary}</p>
+                            }
                         </Form.Item>
 
                         <Form.Item
                             label="Số lượng tuyển:"
                             name="quantity"
-                            initialValue={recruit.quantity}
                             validateStatus={validateQuantity.status}
                             help={validateQuantity.errorMsg}
                             className='label'
                             required
                         >
-                            <InputNumber
-                                className='input-login max-width'
-                                style={{width: '100%'}}
-                                placeholder="Nhập số lượng tuyển dụng"
-                                step={1}
-                                autoFocus={true}
-                                value={recruit.quantity}
-                                defaultValue={recruit.quantity}
-                                onChange={handleChangeQuatity}
-                            />
+                        {
+                            isEdit?
+                                <InputNumber
+                                    className='input-login max-width'
+                                    style={{width: '100%'}}
+                                    placeholder="Nhập số lượng tuyển dụng"
+                                    step={1}
+                                    autoFocus={true}
+                                    value={recruit.quantity}
+                                    defaultValue={recruit.quantity}
+                                    onChange={handleChangeQuatity}
+                                />
+                                :
+                                <p className="text-display">{recruit.quantity}</p>
+                            }
                         </Form.Item>
                         
                         <Form.Item
@@ -517,25 +633,31 @@ export const RecruitProfile = ()=>{
                             className='label'
                             required
                         >
-                            <Input
-                                className='input-login max-width'
-                                placeholder="Nhập địa chỉ website"
-                                autoFocus={true}
-                                value={recruit.address_working}
-                                defaultValue= {recruit.address_working}
-                                onChange={handleChangeAddressWorking}
-                            />
+                            {
+                                isEdit?
+                                    <Input
+                                        className='input-login max-width'
+                                        placeholder="Nhập địa chỉ website"
+                                        autoFocus={true}
+                                        value={recruit.address_working}
+                                        defaultValue= {recruit.address_working}
+                                        onChange={handleChangeAddressWorking}
+                                    />
+                                :
+                                <p className="text-display">{recruit.address_working}</p>
+                            }
                         </Form.Item>
                         
                         <Form.Item
                             label="Kinh nghiệm:"
                             name="experience"
-                            initialValue={recruit.experience}
                             validateStatus={validateExperience.status}
                             help={validateExperience.errorMsg}
                             className='label'
                             required
                         >
+                        {
+                            isEdit?
                             <InputNumber
                                 className='input-login max-width'
                                 style={{width: '100%'}}
@@ -545,7 +667,9 @@ export const RecruitProfile = ()=>{
                                 value={recruit.experience}
                                 defaultValue={recruit.experience}
                                 onChange={handleChangeExperience}
-                            />
+                            />:
+                            <p className="text-display">{recruit.experience}</p>
+                        }
                         </Form.Item>
             
                         <Form.Item
@@ -556,6 +680,8 @@ export const RecruitProfile = ()=>{
                             className='label'
                             required
                         >
+                        {
+                            isEdit?
                             <Select
                                 label='Phương thức làm việc'
                                 style={{
@@ -575,7 +701,9 @@ export const RecruitProfile = ()=>{
                                             )
                                         })
                                     }
-                            </Select>
+                            </Select>:
+                            <p className="text-display">{recruit.way_working}</p>
+                        }
                         </Form.Item>
                         <Form.Item
                             label="Chức vụ:"
@@ -585,6 +713,8 @@ export const RecruitProfile = ()=>{
                             className='label'
                             required
                         >
+                        {
+                            isEdit?
                             <Select
                                 label='Chức vụ'
                                 style={{
@@ -604,19 +734,25 @@ export const RecruitProfile = ()=>{
                                             )
                                         })
                                     }
-                            </Select>
+                            </Select>:
+                            <p className="text-display">{recruit.level}</p>
+                        }
                         </Form.Item>
                         <Form.Item
                             label="Giới tính:"
                             name="gender"
                             className='label'
                         >
+                        {
+                            isEdit?
                             <Select
                                 label='Giới tính'
                                 style={{
                                 width: '100%',
                                 }}
+                                defaultValue={recruit.gender}
                                 onChange={handleChangeGender}
+                                optionLabelProp="label"
                             >
                                     {
                                         genderList.map((gender)=>{
@@ -629,25 +765,31 @@ export const RecruitProfile = ()=>{
                                             )
                                         })
                                     }
-                            </Select>
+                            </Select>:
+                                <p className="text-display">{recruit.gender===null?'all':recruit.gender===false?'nam':'nữ'}</p>
+                            }
                         </Form.Item>
                         
                         <Form.Item
                             label="Lĩnh vực:"
                             name="fields"
+                            // initialValue={recruit.fields}
                             validateStatus={validateFields.status}
                             help={validateFields.errorMsg}
                             className='label'
                             required
                         >
+                        {
+                            isEdit?
                             <Select
                                 mode='multiple'
                                 label='Lĩnh vực'
                                 style={{
                                 width: '100%',
                                 }}
+                                defaultValue={recruit.fields.map(item=>{return item._id})}
+                                value={recruit.fields}
                                 placeholder="Hãy chọn ít nhất một lĩnh vực"
-                                defaultValue={recruit.fields}
                                 onChange={handleChangeFields}
                                 optionLabelProp="label"
                             >
@@ -662,47 +804,66 @@ export const RecruitProfile = ()=>{
                                             )
                                         })
                                     }
-                            </Select>
+                            </Select>:
+                                <div >
+                                {
+                                    recruit.fields.length?
+                                    recruit.fields.map((field)=>{
+                                        return <Tag className="tag" color="cyan">{field.nameField}</Tag>
+                                    }):
+                                    <p className="text-display"></p>
+                                }
+                                </div>
+                            }
                         </Form.Item>
                     </div>
                         <Form.Item
                             label="Thông tin mô tả công việc:"
                             name="description"
-                            initialValue={recruit.description}
                             className='label'
                         >
+                            {
+                                isEdit?
                             <TextArea rows={5} value={recruit.description} 
                                 defaultValue={recruit.description} 
                                 onChange= {handleChangeDescription}
-                            />
+                            />:
+                            <p className="text-display">{recruit.description}</p>
+                        }
                         </Form.Item>
                         <Form.Item
                             label="Thông tin yêu cầu ứng tuyển:"
                             name="requirement"
-                            initialValue={recruit.requirement}
                             validateStatus={validateRequirement.status}
                             help={validateRequirement.errorMsg}
                             className='label'
                             required
                         >
+                        {
+                            isEdit?
                             <TextArea rows={5} value={recruit.requirement} 
                                 defaultValue={recruit.requirement} 
                                 onChange= {handleChangeRequirement}
-                            />
+                            />:
+                            <p className="text-display">{recruit.requirement}</p>
+                        }
                         </Form.Item>
                         <Form.Item
                             label="Thông tin quyền lợi:"
                             name="welfare"
-                            initialValue={recruit.welfare}
                             validateStatus={validateWelfare.status}
                             help={validateWelfare.errorMsg}
                             className='label'
                             required
                         >
+                        {
+                            isEdit?
                             <TextArea rows={5} value={recruit.welfare} 
                                 defaultValue={recruit.welfare} 
                                 onChange= {handleChangeWelfare}
-                            />
+                            />:
+                            <p className="text-display">{recruit.welfare}</p>
+                        }
                         </Form.Item>
                         <div className='two-colums'>
                             <Form.Item
@@ -713,10 +874,15 @@ export const RecruitProfile = ()=>{
                                 help={validateStartDate.errorMsg}
                                 required
                             >
+                            {
+                                isEdit?
                                 <DatePicker className='birthday-input'
                                     value={recruit.start_date}
                                     onChange={handleChangeStartDate} 
-                                />
+                                    defaultValue= {moment(moment(recruit.start_date),'DD/MM/YYYY')}
+                                />:
+                                <p className="text-display">{DateToShortString(recruit.start_date)}</p>
+                            }
                             </Form.Item>
                             <Form.Item
                                 label="Ngày kết thúc:"
@@ -726,12 +892,22 @@ export const RecruitProfile = ()=>{
                                 help={validateEndDate.errorMsg}
                                 required
                             >
+                            {
+                                isEdit?
                                 <DatePicker className='birthday-input'
                                     value={recruit.end_date}
                                     onChange={handleChangeEndDate} 
-                                />
+                                    defaultValue= {moment(moment(recruit.end_date),'DD/MM/YYYY')}
+                                />:
+                                <p className="text-display">{DateToShortString(recruit.end_date)}</p>
+                            }
                             </Form.Item>
                         </div>
+                        <Form.Item name='status' label="Trạng thái">
+                                    <div className='status'>{
+                                        renderStatus()
+                                    }</div>
+                        </Form.Item>
                         </Card>
                         <Form.Item>
                             <div className='group-button'>
@@ -743,8 +919,8 @@ export const RecruitProfile = ()=>{
                 </Form>
             </div>
         </div>
-        <Modal  title="Xác nhận" open={isOpenModal} onOk={()=>setOpenModal(false)} onCancel={()=>setOpenModal(false)}>
-            <p>Bạn hãy cập nhật thông tin để sử dụng các chức năng website!</p>
+        <Modal  title="Xác nhận" open={isOpenModal} onOk={handleConfirmDelete} onCancel={handleCancelDelete}>
+            <p>Bạn có chắc chắn muốn xóa!</p>
         </Modal>
         </div>
     )

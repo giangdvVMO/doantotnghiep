@@ -48,15 +48,53 @@ export class RecruitService {
     return result;
   }
 
-  // async findAll() {
-  //   const data = this.calculateId();
-  //   //const data = await this.recruitModel.aggregate();
-  //   return { data: data };
-  // }
-
   async findOne(id: number) {
-    const data = await this.recruitModel.aggregate();
-    return { data: data };
+    const data = await this.recruitModel.aggregate([
+      {
+        $match: {
+          _id: id,
+        },
+      },
+      {
+        $lookup: {
+          from: 'tbl_company',
+          localField: 'id_company',
+          foreignField: '_id',
+          as: 'company',
+        },
+      },
+      {
+        $unwind: '$company',
+      },
+      {
+        $lookup: {
+          from: 'tbl_account',
+          localField: 'company._id',
+          foreignField: '_id',
+          as: 'account',
+        },
+      },
+      {
+        $unwind: '$account',
+      },
+      {
+        $lookup: {
+          from: 'tbl_field_recruit',
+          localField: '_id',
+          foreignField: 'id_recruit',
+          as: 'field_recruit',
+        },
+      },
+      {
+        $lookup: {
+          from: 'tbl_field',
+          localField: 'field_recruit.id_field',
+          foreignField: '_id',
+          as: 'fields',
+        },
+      },
+    ]);
+    return { data: data[0] };
   }
 
   async update(id: number, updateRecruitDto: UpdateRecruitDto) {
@@ -67,11 +105,11 @@ export class RecruitService {
     return `This action updates a #${id} recruit`;
   }
 
-  async remove(id: number) {
+  async remove(id: number, data: number) {
     const delete_date = new Date();
     const result = await this.recruitModel.updateOne(
       { _id: id },
-      { delete_date },
+      { delete_date, delete_id: data },
     );
     if (result.modifiedCount) {
       return {
@@ -101,26 +139,54 @@ export class RecruitService {
   }
 
   async findAll(query: QueryParamRecruitDto) {
-    const { field, status, search } = query;
+    const { field, status, search, id_company } = query;
+    console.log('field', field);
     const condition = {};
-    console.log('search', search);
+
     const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
     const searchRgx = rgx(search ? search : '');
+
     if (status === '1') {
       condition['status'] = true;
     }
     if (status === '0') {
       condition['status'] = false;
     }
-    const fields = field.map((item) => {
-      return +item;
-    });
-    const field_condition = field ? { $in: [fields, '$id_field'] } : true;
+
+    if (id_company) {
+      condition['id_company'] = id_company;
+    }
+
+    let field_condition: any = true;
+    if (field && +field) {
+      field_condition = { $in: [+field, '$id_fields'] };
+    } else {
+      if (field && field.length) {
+        const field_array = field.split(',');
+        const conditionOr = field_array.map((item) => {
+          return { $in: [+item, '$id_fields'] };
+        });
+        field_condition = { $or: conditionOr };
+      }
+    }
+    console.log('field_condition', field_condition);
     const companyList = await this.recruitModel.aggregate([
+      //account not delete
+      {
+        $lookup: {
+          from: 'tbl_company',
+          localField: 'id_company',
+          foreignField: '_id',
+          as: 'company',
+        },
+      },
+      {
+        $unwind: '$company',
+      },
       {
         $lookup: {
           from: 'tbl_account',
-          localField: 'id_account',
+          localField: 'company._id',
           foreignField: '_id',
           as: 'account',
         },
@@ -131,90 +197,83 @@ export class RecruitService {
       {
         $match: {
           'account.delete_date': null,
+          delete_date: null,
           ...condition,
         },
       },
+      //add field
+      {
+        $lookup: {
+          from: 'tbl_field_recruit',
+          localField: '_id',
+          foreignField: 'id_recruit',
+          as: 'field_recruit',
+          pipeline: [
+            {
+              $group: {
+                _id: '$id_recruit',
+                id_fields: {
+                  $push: '$id_field',
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$field_recruit',
+      },
       {
         $addFields: {
+          //search
           result: {
             $or: [
               {
                 $regexMatch: {
-                  input: '$website',
+                  input: '$level',
                   regex: searchRgx,
                   options: 'i',
                 },
               },
               {
                 $regexMatch: {
-                  input: '$com_name',
+                  input: '$way_working',
                   regex: searchRgx,
                   options: 'i',
                 },
               },
               {
                 $regexMatch: {
-                  input: '$address',
+                  input: '$title',
                   regex: searchRgx,
                   options: 'i',
                 },
               },
             ],
           },
+          id_fields: '$field_recruit.id_fields',
+        },
+      },
+      {
+        $addFields: {
+          isfields: field_condition,
         },
       },
       {
         $match: {
           result: true,
-          minmax: true,
+          isfields: true,
         },
       },
       {
         $lookup: {
-          from: 'tbl_manu_company',
-          localField: '_id',
-          foreignField: 'id_company',
-          as: 'manu_company',
-        },
-      },
-      {
-        $unwind: '$manu_company',
-      },
-      {
-        $lookup: {
-          from: 'tbl_manufacture',
-          localField: 'manu_company.id_manu',
+          from: 'tbl_field',
+          localField: 'id_fields',
           foreignField: '_id',
-          as: 'manufacture',
+          as: 'fields',
         },
       },
-      {
-        $unwind: '$manufacture',
-      },
-      {
-        $group: {
-          _id: '$_id',
-          com_name: { $first: '$com_name' },
-          address: { $first: '$address' },
-          year: { $first: '$year' },
-          com_phone: { $first: '$com_phone' },
-          com_email: { $first: '$com_email' },
-          website: { $first: '$website' },
-          status: { $first: '$status' },
-          scale: { $first: '$scale' },
-          introduction: { $first: '$introduction' },
-          id_account: { $first: '$id_account' },
-          create_date: { $first: '$create_date' },
-          update_date: { $first: '$update_date' },
-          confirm_date: { $first: '$confirm_date' },
-          manufactures: {
-            $push: '$manufacture',
-          },
-          manu_id: {
-            $push: '$manufacture._id',
-          },
-        },
-      },
+      //field
     ]);
     return { data: companyList };
   }

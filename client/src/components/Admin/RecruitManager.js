@@ -8,10 +8,10 @@ import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-d
 import { serverURL } from '../../configs/server.config';
 
 const { Option } = Select;
-export const RecruitManager = () => {
+export const RecruitManagerAdmin = () => {
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
-    if(!user||user.role!=='company'){
+    if(!user||user.role!=='admin'){
         message.warn('Bạn ko có quyền xem trang này');
         navigate('/home')
     }

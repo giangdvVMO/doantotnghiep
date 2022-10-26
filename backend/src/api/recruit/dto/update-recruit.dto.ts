@@ -1,4 +1,4 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class UpdateRecruitDto {
@@ -93,4 +93,11 @@ export class UpdateRecruitDto {
   })
   @IsOptional()
   id_company: number;
+}
+
+export class DeleteDto {
+  @ApiProperty({
+    description: 'title',
+  })
+  delete_id: number;
 }

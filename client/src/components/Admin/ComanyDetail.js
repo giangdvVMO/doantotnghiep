@@ -196,7 +196,7 @@ export const CompanyDetailAdmin = ()=>{
             </Tag>)
         }else{
             return (
-                <Tag icon={<MinusCircleOutlined />} color="default">
+                <Tag icon={<MinusCircleOutlined />} color="warning">
                     Chưa duyệt
                 </Tag>
             )

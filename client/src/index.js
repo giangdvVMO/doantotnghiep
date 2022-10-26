@@ -25,6 +25,9 @@ import { CompanyDetailAdmin } from './components/Admin/ComanyDetail';
 import { AddRecruit } from './components/Company/AddRecruit';
 import { RecruitManager } from './components/Company/RecruitManager';
 import { RecruitProfile } from './components/Company/RecruitProfile';
+import { CompanyDetailStudent } from './components/Student/CompanyDetailStudent';
+import { RecruitManagerAdmin } from './components/Admin/RecruitManager';
+import { RecruitDetailAdmin } from './components/Admin/RecruitDetail';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -49,11 +52,16 @@ root.render(
           <Route path='admin'>
             <Route path='student/:id' element={<StudentDetailAdmin/>}/>
             <Route path='company/:id' element={<CompanyDetailAdmin/>}/>
+            <Route path='recruit/:id' element={<RecruitDetailAdmin/>}/>
+            <Route path='recruit-list' element={<RecruitManagerAdmin/>}/>
           </Route>
           <Route path='company'>
             <Route path='student/:id' element={<StudentDetailCompany/>}/>
             <Route path='recruit/:id' element={<RecruitProfile/>}/>
             <Route path='recruit-list' element={<RecruitManager/>}/>
+          </Route>
+          <Route path='student'>
+            <Route path='company/:id' element={<CompanyDetailStudent/>}/>
           </Route>
           <Route path='recruit'>
             <Route path='add' element={<AddRecruit/>}/>

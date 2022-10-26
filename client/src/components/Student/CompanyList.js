@@ -48,7 +48,7 @@ export const CompanyList = () => {
     }
     async function fetchListCompany(){
         let query = '?1=1';
-                query= scaleBound!==-1? query+'&manufacture='+manufacture:query;
+                query= manufacture!==-1? query+'&manufacture='+manufacture:query;
                 query = scaleBound!==-1? query+'&scaleBound='+scaleBound:query;
                 query = search!==''? query+'&search='+search:query;
                 const url = serverURL + 'company'+ query;
