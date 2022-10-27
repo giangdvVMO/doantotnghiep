@@ -10,6 +10,16 @@ import { ManuCompanyModule } from './api/manu-company/manu-company.module';
 import { RecruitModule } from './api/recruit/recruit.module';
 import { FieldModule } from './api/field/field.module';
 import { FieldRecruitModule } from './api/field-recruit/field-recruit.module';
+import { CvModule } from './api/cv/cv.module';
+import { LetterModule } from './api/letter/letter.module';
+import { NotiModule } from './api/noti/noti.module';
+import { NewsModule } from './api/news/news.module';
+import { RateModule } from './api/rate/rate.module';
+import { FieldCvModule } from './api/field_cv/field_cv.module';
+import { FieldNewsModule } from './api/field_news/field_news.module';
+import { AccountNotiModule } from './api/account_noti/account_noti.module';
+import { LetterStudentModule } from './api/letter_student/letter_student.module';
+import { ApplyModule } from './api/apply/apply.module';
 
 @Module({
   imports: [
@@ -23,6 +33,16 @@ import { FieldRecruitModule } from './api/field-recruit/field-recruit.module';
     RecruitModule,
     FieldModule,
     FieldRecruitModule,
+    CvModule,
+    LetterModule,
+    NotiModule,
+    NewsModule,
+    RateModule,
+    FieldCvModule,
+    FieldNewsModule,
+    AccountNotiModule,
+    LetterStudentModule,
+    ApplyModule,
   ],
 })
 export class AppModule {}
