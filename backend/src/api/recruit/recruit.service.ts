@@ -139,8 +139,22 @@ export class RecruitService {
   }
 
   async findAll(query: QueryParamRecruitDto) {
-    const { field, status, search, id_company } = query;
+    const {
+      field,
+      status,
+      search,
+      id_company,
+      experience,
+      pageIndex,
+      pageSize,
+    } = query;
     console.log('field', field);
+    console.log('status', status);
+    console.log('search', search);
+    console.log('pageIndex', pageIndex);
+    console.log('pageSize', pageSize);
+    console.log('id_company', id_company);
+    console.log('experience', experience);
     const condition = {};
 
     const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
@@ -154,7 +168,36 @@ export class RecruitService {
     }
 
     if (id_company) {
-      condition['id_company'] = id_company;
+      condition['id_company'] = +id_company;
+    }
+
+    let isExperience = {};
+    switch (experience) {
+      case '0': {
+        isExperience = {
+          $eq: ['$experience', 0],
+        };
+        break;
+      }
+      case '1': {
+        isExperience = {
+          $and: [{ $gt: ['$experience', 0] }, { $lt: ['$experience', 12] }],
+        };
+        break;
+      }
+      case '2': {
+        isExperience = {
+          $gte: ['$experience', 12],
+        };
+        break;
+      }
+      default: {
+        isExperience = true;
+        break;
+      }
+    }
+
+    if (pageIndex && pageSize) {
     }
 
     let field_condition: any = true;
@@ -257,12 +300,14 @@ export class RecruitService {
       {
         $addFields: {
           isfields: field_condition,
+          isExperience: isExperience,
         },
       },
       {
         $match: {
           result: true,
           isfields: true,
+          isExperience: true,
         },
       },
       {
@@ -273,8 +318,133 @@ export class RecruitService {
           as: 'fields',
         },
       },
-      //field
+      {
+        $skip: (+pageIndex - 1) * +pageSize,
+      },
+      {
+        $limit: +pageSize,
+      },
     ]);
-    return { data: companyList };
+    let total = 0;
+    if (companyList.length) {
+      //calculate total
+      const companyListTotal = await this.recruitModel.aggregate([
+        //account not delete
+        {
+          $lookup: {
+            from: 'tbl_company',
+            localField: 'id_company',
+            foreignField: '_id',
+            as: 'company',
+          },
+        },
+        {
+          $unwind: '$company',
+        },
+        {
+          $lookup: {
+            from: 'tbl_account',
+            localField: 'company._id',
+            foreignField: '_id',
+            as: 'account',
+          },
+        },
+        {
+          $unwind: '$account',
+        },
+        {
+          $match: {
+            'account.delete_date': null,
+            delete_date: null,
+            ...condition,
+          },
+        },
+        //add field
+        {
+          $lookup: {
+            from: 'tbl_field_recruit',
+            localField: '_id',
+            foreignField: 'id_recruit',
+            as: 'field_recruit',
+            pipeline: [
+              {
+                $group: {
+                  _id: '$id_recruit',
+                  id_fields: {
+                    $push: '$id_field',
+                  },
+                },
+              },
+            ],
+          },
+        },
+        {
+          $unwind: '$field_recruit',
+        },
+        {
+          $addFields: {
+            //search
+            result: {
+              $or: [
+                {
+                  $regexMatch: {
+                    input: '$level',
+                    regex: searchRgx,
+                    options: 'i',
+                  },
+                },
+                {
+                  $regexMatch: {
+                    input: '$way_working',
+                    regex: searchRgx,
+                    options: 'i',
+                  },
+                },
+                {
+                  $regexMatch: {
+                    input: '$title',
+                    regex: searchRgx,
+                    options: 'i',
+                  },
+                },
+              ],
+            },
+            id_fields: '$field_recruit.id_fields',
+          },
+        },
+        {
+          $addFields: {
+            isfields: field_condition,
+            isExperience: isExperience,
+          },
+        },
+        {
+          $match: {
+            result: true,
+            isfields: true,
+            isExperience: true,
+          },
+        },
+        {
+          $lookup: {
+            from: 'tbl_field',
+            localField: 'id_fields',
+            foreignField: '_id',
+            as: 'fields',
+          },
+        },
+        {
+          $count: 'total',
+        },
+      ]);
+      total = companyListTotal[0].total;
+    }
+    console.log(companyList);
+    return {
+      data: companyList,
+      pageSize: +pageIndex,
+      pageIndex: +pageSize,
+      total: total,
+    };
   }
 }

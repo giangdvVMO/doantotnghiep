@@ -110,3 +110,7 @@
     text-align: start;
     font-weight: 350;
 }
+
+.apply-container{
+    position: relative;
+}

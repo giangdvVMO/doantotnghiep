@@ -40,4 +40,8 @@ export class QueryParamRecruitDto {
   @ApiPropertyOptional()
   @IsOptional()
   id_company: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  experience: string;
 }

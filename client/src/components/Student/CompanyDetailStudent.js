@@ -212,7 +212,7 @@ export const CompanyDetailStudent = ()=>{
                             <TextArea rows={5} disabled value={company.introduction} defaultValue={company.introduction} />
                         </Form.Item>
                 </Form>
-                <Link to={`../recruit/company/${id}`}><Button>Xem các bài đăng tuyển dụng</Button></Link>
+                <Link to={`../recruit-list/company/${id}`}><Button>Xem các bài đăng tuyển dụng</Button></Link>
             </div>
         </div>
 

@@ -103,7 +103,7 @@ export const MenuRole = {
             key: 'companylist'
         },
         {
-            label: <Link to='recruit-list'>Bài đăng tuyển dụng</Link>,
+            label: <Link to='student/recruit-list'>Bài đăng tuyển dụng</Link>,
             icon: <ContainerOutlined />,
             key: 'recruitlist'
         },

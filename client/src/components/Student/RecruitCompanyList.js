@@ -1,17 +1,17 @@
 import { Button, Card, Image, Input, message, Pagination, Select, Table, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
 import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
-import '../../styles/list.css'
 import { DateToShortStringDate } from '../../common/service';
 
 const { Option } = Select;
-export const RecruitListStudent = () => {
+export const RecruitCompanyListStudent = () => {
     const { user } = useContext(UserContext);
+    const {id} = useParams();
     const navigate = useNavigate();
     if(!user||user.role!=='student'){
         message.warn('Bạn ko có quyền xem trang này');
@@ -23,7 +23,7 @@ export const RecruitListStudent = () => {
     const [search, setSearch] = useState('');
     const [listRecruit, setListRecruit] = useState([]);
     const [pageIndex, setPageIndex] = useState(1);
-    const [pageSize, setPageSize] = useState(5)
+    const [pageSize, setPageSize] = useState(1)
     const [total, setPageTotal] = useState(1);
 
     //fetch Fields
@@ -54,7 +54,7 @@ export const RecruitListStudent = () => {
     }
 
     async function fetchListRecruit(){
-                let query = '?status=1&pageIndex='+pageIndex+'&pageSize='+pageSize;
+                let query = '?id_company='+id+'&status=1&pageIndex='+pageIndex+'&pageSize='+pageSize;
                 query = field.length? query+'&field='+field:query;
                 query = experience!==-1? query+'&experience='+experience:query;
                 query = search!==''? query+'&search='+search:query;
@@ -88,6 +88,7 @@ export const RecruitListStudent = () => {
     useEffect(()=>{
         fetchListRecruit();
     },[pageIndex, pageSize,field, experience, search])
+    
     const handleChangeField = (e)=>{
         console.log(e);
         const value = e.map(item=>{
@@ -111,7 +112,7 @@ export const RecruitListStudent = () => {
     };
     return (
         <>
-            <div className='banner-content'>Quản lý danh sách bài đăng</div>
+            <div className='banner-content'>Danh sánh sách bài đăng tuyển dụng</div>
             <div className='container-filter'>
                 <div className='filter'>
                     <label className='label-filter'>Lĩnh vực bài đăng:</label>
@@ -175,7 +176,7 @@ export const RecruitListStudent = () => {
                     </div>
                 </div>
             </div>
-
+            
             <div className='list-container'>
                 {
                     listRecruit.map((recruit)=>{

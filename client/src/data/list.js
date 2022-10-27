@@ -58,3 +58,18 @@ export const genderList = [
         label: 'nữ'
     },
 ]
+
+export const experienceList = [
+    {
+        id: -1,
+        label: 'Không yêu cầu'
+    },
+    {
+        id: 0,
+        label: 'Dưới 1 năm'
+    },
+    {
+        id: 1,
+        label: '1-5 năm'
+    },
+]
