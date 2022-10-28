@@ -1,12 +1,43 @@
-import { Avatar, Dropdown, Image, Menu, Typography } from "antd";
-import { useContext } from "react";
+import { Avatar, Dropdown, Image, Menu, message, Typography } from "antd";
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+import {decodeToken , isExpired} from 'react-jwt';
+
 import { UserContext } from "../User/UserProvider";
 import '../../styles/account.css';
+import { serverURL } from "../../configs/server.config";
 
 const Account = () => {
-    const { user } = useContext(UserContext)
-    console.log(user);
+    const { user, changeUser, token, changeToken } = useContext(UserContext)
+    //fetch User
+    // const fetchUser = async()=>{
+    //     console.log('fetch user Account')
+    //     const tokenx = token? token: window.localStorage.getItem('accessToken');
+    //     const id = decodeToken(tokenx).sub;
+    //     const url = serverURL + 'account/'+id;
+    //         try {
+    //             const response = await fetch(url, {
+    //                 method: 'GET',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //             }
+    //             );
+    //             const result = await response.json();
+    //             if(response.status!==200){
+    //                 message.error("Lỗi hệ thống load user!");
+    //             }else{
+    //                 console.log('account', user);
+    //                 changeUser({...result})
+    //             }
+    //         }
+    //         catch (err) {
+    //             console.log(err);
+    //         }
+    // }
+    // useEffect(()=>{fetchUser()},[]);
+    //
+
     let items = [
         {
             key: 1,
@@ -17,7 +48,7 @@ const Account = () => {
         {
             key: 3,
             label: (
-                <Link to='/sign-in'>Đăng xuất</Link>
+                <Link to='/sign-in' onClick={()=>{window.localStorage.setItem('accessToken', '')}}>Đăng xuất</Link>
             ),
         },
     ];

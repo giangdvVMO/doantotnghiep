@@ -1,8 +1,9 @@
 import { CheckCircleOutlined, InfoCircleOutlined, KeyOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, DatePicker, Form, Input, message, Modal, Tag, Tooltip } from 'antd';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as moment from 'moment';
+import {decodeToken , isExpired} from 'react-jwt';
 
 import { messageSignUpError } from '../../common/error';
 import { DateToShortString } from '../../common/service';
@@ -14,15 +15,37 @@ import { ChangePassword } from './ChangePassword';
 import { UserContext } from './UserProvider';
 
 export const DetailAccount = () => {
-    const { user, changeUser } = useContext(UserContext);
+    const { user, changeUser, token } = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(false);
-
-    const role = user ? user.role : 'student';
-    const date = new Date();
-    console.log(date.toISOString());
-    const [account, setAccount] = useState(user);
-    console.log(account);
+    const fetchUser = async()=>{
+        const tokenx = token?token:window.localStorage.getItem('accessToken');
+        console.log('tokenx', tokenx);
+        const id = decodeToken(tokenx).sub;
+        console.log("id",id);
+        const url = serverURL + 'account/'+id;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                if(response.status!==200){
+                    message.error("Lỗi hệ thống load user!");
+                }else{
+                    setAccount({...result})
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+    }
+    useEffect(()=>{fetchUser()},[]);
+    
+    const [account, setAccount] = useState(user&&user.role?user:{});
     const defaultTrueStatus = {
         status: 'success',
         errorMsg: null

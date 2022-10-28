@@ -11,6 +11,7 @@ const { Option } = Select;
 
 export const AccountManager = () => {
     const { user } = useContext(UserContext);
+    console.log('AccountManager', user)
     const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
     const [current, setCurrent] = useState(1);

@@ -101,7 +101,8 @@ const SignIn = () => {
                     message.success("Bạn đã đăng nhập thành công");
                     const account = result.user;
                     changeUser(account);
-                    changeToken(result.accessToken)
+                    window.localStorage.setItem('accessToken', result.accessToken)
+                    changeToken(result.accessToken);
                     navigate('/');
                 }
             }

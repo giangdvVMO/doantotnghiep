@@ -1,6 +1,7 @@
 import { Button, Input, message, Select, Table, Tag } from 'antd';
-import { useContext, useEffect, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {decodeToken , isExpired} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
@@ -11,48 +12,79 @@ import { serverURL } from '../../configs/server.config';
 const { Option } = Select;
 
 export const StudentManager = () => {
-    const { user } = useContext(UserContext);
+    const { user, changeUser , token, changeToken} = useContext(UserContext)
     const navigate = useNavigate();
-    if(!user||user.role!=='admin'){
-        message.warn('Bạn ko có quyền xem trang này');
-        navigate('/home')
-    }
+    console.log('StudentManager', user)
     const [university, setUniversity] = useState(-1);
     const [major, setMajor] = useState(-1);
     const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
     const [listUser, setListUser] = useState([]);
-    async function fetchListStudent(){
-        let query = '?1=1';
-                query = status!==-1? query+'&status='+status:query;
-                query = major!==-1? query+'&major='+major:query;
-                query = university!==-1? query+'&university='+university:query;
-                query = search!==''? query+'&search='+search:query;
-                const url = serverURL + 'student'+ query;
-                console.log(query);
-                try {
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+    const fetchUser = async()=>{
+              console.log('fetch user account')
+              const tokenx = token? token: window.localStorage.getItem('accessToken');
+              console.log('tokenx', tokenx);
+              const id = decodeToken(tokenx).sub;
+              console.log("id",id);
+              const url = serverURL + 'account/'+id;
+                  try {
+                      const response = await fetch(url, {
+                          method: 'GET',
+                          headers: {
+                              'Content-Type': 'application/json',
+                          },
+                      }
+                      );
+                      const result = await response.json();
+                      if(response.status!==200){
+                          message.error("Lỗi hệ thống load user!");
+                      }else{
+                          changeUser({...result})
+                      }
+                  }
+                  catch (err) {
+                      console.log(err);
+                  }
+          }
+
+    const fetchListStudentx = ()=>{
+        console.log("user fetch second", user)
+        if(!user||user.role!=='admin'){
+            message.warn('Bạn ko có quyền xem trang này');
+            navigate('/')
+        }
+        async function fetchListStudents(){
+            let query = '?1=1';
+                    query = status!==-1? query+'&status='+status:query;
+                    query = major!==-1? query+'&major='+major:query;
+                    query = university!==-1? query+'&university='+university:query;
+                    query = search!==''? query+'&search='+search:query;
+                    const url = serverURL + 'student'+ query;
+                    console.log(query);
+                    try {
+                        const response = await fetch(url, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        }
+                        );
+                        const result = await response.json();
+                        if(response.status!==200){
+                            message.error("Lỗi hệ thống!");
+                        }else{
+                            console.log("fetch result",result)
+                            setListUser([...result.data]);
+                        }
                     }
-                    );
-                    const result = await response.json();
-                    if(response.status!==200){
-                        message.error("Lỗi hệ thống!");
-                    }else{
-                        console.log(result)
-                        setListUser([...result.data]);
+                    catch (err) {
+                        console.log(err);
                     }
-                }
-                catch (err) {
-                    console.log(err);
-                }
-    }
-    useEffect(()=>{
-        fetchListStudent();
-    },[university, major, status, search])
+            }
+            fetchListStudents()
+        }
+        useEffect(()=>{fetchUser()}, []);
+    useEffect(fetchListStudentx,[university, major, status, search])
     
     const columns = [
         {

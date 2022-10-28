@@ -213,6 +213,17 @@ export class RecruitService {
       }
     }
     console.log('field_condition', field_condition);
+    let limitSkip = [];
+    if (pageIndex && pageSize) {
+      limitSkip = [
+        {
+          $skip: (+pageIndex - 1) * +pageSize,
+        },
+        {
+          $limit: +pageSize,
+        },
+      ];
+    }
     const companyList = await this.recruitModel.aggregate([
       //account not delete
       {
@@ -318,12 +329,7 @@ export class RecruitService {
           as: 'fields',
         },
       },
-      {
-        $skip: (+pageIndex - 1) * +pageSize,
-      },
-      {
-        $limit: +pageSize,
-      },
+      ...limitSkip,
     ]);
     let total = 0;
     if (companyList.length) {
