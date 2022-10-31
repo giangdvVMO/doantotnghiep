@@ -833,6 +833,8 @@ export const StudentProfile = ()=>{
                                     className='input-login max-width'
                                     style={{width: '100%'}}
                                     placeholder="Nhập GPA"
+                                    min={0}
+                                    max={4}
                                     step={0.01}
                                     autoFocus={true}
                                     disabled={!isEdit}

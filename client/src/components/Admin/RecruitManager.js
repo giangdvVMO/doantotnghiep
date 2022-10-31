@@ -1,7 +1,7 @@
 import { Button, Input, message, Select, Table, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {decodeToken , isExpired} from 'react-jwt';
+import {decodeToken} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
