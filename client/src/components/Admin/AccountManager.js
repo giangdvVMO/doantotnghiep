@@ -1,17 +1,18 @@
 import { Button, Input, message, Pagination, Select, Table, Tag } from 'antd';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
 import { serverURL } from '../../configs/server.config';
 import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { DateToShortStringDate } from '../../common/service';
 
 const { Option } = Select;
 
 export const AccountManager = () => {
     const { user } = useContext(UserContext);
-    console.log('AccountManager', user)
+    console.log('AccountManager', user);
     const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
     const [current, setCurrent] = useState(1);
@@ -74,8 +75,11 @@ export const AccountManager = () => {
         },
         {
             title: 'Ngày sinh',
-            dataIndex: 'birthday',
+            // dataIndex: 'birthday',
             key: 'birthday',
+            render: (_,record) =>{ 
+                return record.birthday? <>{DateToShortStringDate(record.birthday)}</>:''
+            }
         },
         {
             title: 'Email',
@@ -149,13 +153,15 @@ export const AccountManager = () => {
                         <Option value={0}>inactive</Option>
                     </Select>
                 </div>
-                <div className='search'>
-                    
-                    <Input className='input' placeholder='Nhập thông tin cần tìm' value={search} onChange={handleChangeSearch}>
-                    </Input>
-                    <Button type="primary" icon={<SearchOutlined />}>
-                        Tìm kiếm
-                    </Button>
+                <div className='filter'>
+                    <label className='transparent'>Tìm kiếm</label>
+                    <div className='search'>
+                        <Input className='input' placeholder='Nhập thông tin cần tìm' value={search} onChange={handleChangeSearch}>
+                        </Input>
+                        <Button type="primary" icon={<SearchOutlined />}>
+                            Tìm kiếm
+                        </Button>
+                    </div>
                 </div>
             </div>
             <Table 

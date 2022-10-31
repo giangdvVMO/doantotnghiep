@@ -8,6 +8,8 @@ import { messageSignUpError } from '../../common/error';
 import { DateToShortString } from '../../common/service';
 import { checkBirthday, checkFullName, checkMail, checkPhone, checkRole, checkUsername } from '../../common/validation';
 import { serverURL } from '../../configs/server.config';
+import {decodeToken , isExpired} from 'react-jwt';
+
 import '../../styles/form.css'
 import '../../styles/my-account.css'
 import { UserContext } from '../User/UserProvider';

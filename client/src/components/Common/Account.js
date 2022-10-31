@@ -5,38 +5,9 @@ import {decodeToken , isExpired} from 'react-jwt';
 
 import { UserContext } from "../User/UserProvider";
 import '../../styles/account.css';
-import { serverURL } from "../../configs/server.config";
 
 const Account = () => {
     const { user, changeUser, token, changeToken } = useContext(UserContext)
-    //fetch User
-    // const fetchUser = async()=>{
-    //     console.log('fetch user Account')
-    //     const tokenx = token? token: window.localStorage.getItem('accessToken');
-    //     const id = decodeToken(tokenx).sub;
-    //     const url = serverURL + 'account/'+id;
-    //         try {
-    //             const response = await fetch(url, {
-    //                 method: 'GET',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                 },
-    //             }
-    //             );
-    //             const result = await response.json();
-    //             if(response.status!==200){
-    //                 message.error("Lỗi hệ thống load user!");
-    //             }else{
-    //                 console.log('account', user);
-    //                 changeUser({...result})
-    //             }
-    //         }
-    //         catch (err) {
-    //             console.log(err);
-    //         }
-    // }
-    // useEffect(()=>{fetchUser()},[]);
-    //
 
     let items = [
         {

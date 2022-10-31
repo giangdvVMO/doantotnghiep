@@ -2,6 +2,7 @@ import { CheckCircleOutlined, MinusCircleOutlined, UserOutlined } from "@ant-des
 import { Avatar, Button, Form, Input, message, Modal, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
+import {decodeToken , isExpired} from 'react-jwt';
 
 import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider"
@@ -24,7 +25,7 @@ let initialCompany = {
 }
 
 export const CompanyDetailAdmin = ()=>{
-    const {user} = useContext(UserContext);
+    const {user, changeUser, token} = useContext(UserContext);
     const [isOpen, setOpen] = useState(false);
     const [reason, setReason] = useState('');
     const navigate = useNavigate();
@@ -123,6 +124,42 @@ export const CompanyDetailAdmin = ()=>{
             console.log(err);
         }
     }
+
+    //fetch user
+    const fetchUser = async()=>{
+        console.log('fetch user account')
+        const tokenx = token? token: window.localStorage.getItem('accessToken');
+        console.log('tokenx', tokenx);
+        const id = decodeToken(tokenx).sub;
+        console.log("id",id);
+        const url = serverURL + 'account/'+id;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                if(response.status!==200){
+                    message.error("Lỗi hệ thống load user!");
+                }else{
+                  console.log("user fetch to set role", result)
+                  if(!result||result.role!=='admin'){
+                      message.warn('Bạn ko có quyền xem trang này');
+                      navigate('/')
+                  }
+                    changeUser({...result})
+
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+    }
+
+    useEffect(()=>{fetchUser()}, []);
     
     useEffect(()=>{fetchCompany();},[]);
     useEffect(()=>{fetchAccount()},[]);

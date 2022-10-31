@@ -1,7 +1,8 @@
 import { BulbOutlined, CheckCircleOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, DatePicker, Form, Input, InputNumber, message, Modal, Select, Tag } from "antd";
+import { Avatar, Button, DatePicker, Form, Input, InputNumber, message, Modal, Select, Skeleton, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom";
+import {decodeToken} from 'react-jwt';
 
 import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider"
@@ -29,13 +30,10 @@ let initialStudent = {
 }
 
 export const StudentProfile = ()=>{
-    const {user, changeUser} = useContext(UserContext);
+    const {user, token} = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
     const [isOpenModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
-    if(!user){
-        navigate('/sign-in');
-    }
     const [account, setAccount] = useState(user);
     const [student, setStudent] = useState(initialStudent);
     const defaultTrueStatus = {
@@ -73,10 +71,41 @@ export const StudentProfile = ()=>{
             console.log(err);
         }
     }
+     //fetch user
+     const fetchUser = async()=>{
+        console.log('fetch user account')
+        const tokenx = token? token: window.localStorage.getItem('accessToken');
+        console.log('tokenx', tokenx);
+        const id = decodeToken(tokenx).sub;
+        console.log("id",id);
+        const url = serverURL + 'account/'+id;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                if(response.status!==200){
+                    message.error("Lỗi hệ thống load user!");
+                }else{
+                  console.log("user fetch to set role", result)
+                  if(!result||result.role!=='student'){
+                      message.warn('Bạn ko có quyền xem trang này');
+                      navigate('/')
+                  }
+                    setAccount({...result})
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+    }
 
-    useEffect(()=>{
-        fetchStudent();
-    },[]);
+    useEffect(()=>{fetchUser()}, []);
+    useEffect(()=>{fetchStudent();},[]);
 
     const [validateFullname,setValidateFullname] = useState(defaultTrueStatus);
     const [validatePhone,setValidatePhone] = useState(defaultTrueStatus);
@@ -91,8 +120,21 @@ export const StudentProfile = ()=>{
     const [validateGPA,setValidateGPA] = useState(defaultTrueStatus);
     const [validateBirthday, setValidateBirthday] = useState(defaultTrueStatus);
 
+    const resetStatus = ()=>{
+        setValidateFullname(defaultTrueStatus);
+        setValidatePhone(defaultTrueStatus);
+        setValidateEmail(defaultTrueStatus);
+        setValidateCCCD(defaultTrueStatus);
+        setValidateAddress(defaultTrueStatus);
+        setValidateCardStudent(defaultTrueStatus);
+        setValidateUniversity(defaultTrueStatus);
+        setValidateFaculty(defaultTrueStatus);
+        setValidateMajor(defaultTrueStatus);
+        setValidateCourse(defaultTrueStatus);
+        setValidateGPA(defaultTrueStatus);
+        setValidateBirthday(defaultTrueStatus);
+    }
     const ref = useRef();
-    const refUserName = useRef();
     const refButtonSubmit = useRef();
 
     async function handleEdit(e){
@@ -412,6 +454,7 @@ export const StudentProfile = ()=>{
     }
 
     async function handleCancel(e) {
+        resetStatus();
         fetchAccount();
         fetchStudent();
         setIsEdit(false);
@@ -495,7 +538,7 @@ export const StudentProfile = ()=>{
         console.log(value);
         setStudent((preStudent) => { return { ...preStudent, university: value } });
     }
-
+    if(account){
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
             <div className='background-image'></div>
@@ -829,4 +872,7 @@ export const StudentProfile = ()=>{
         </Modal>
         </div>
     )
+    }else{
+        return <Skeleton active />;
+    }
 }

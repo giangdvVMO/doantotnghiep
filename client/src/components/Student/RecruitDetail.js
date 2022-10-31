@@ -1,13 +1,13 @@
 import { Button, Card, Form, Input, message, Modal, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
+import {decodeToken} from 'react-jwt';
 
 import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
 import { DateToShortString } from "../../common/service";
-import { CheckCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 const { TextArea } = Input;
 
 let initialRecruit = {
@@ -45,7 +45,7 @@ let initialCompany = {
 }
 
 export const RecruitDetailStudent = ()=>{
-    const {user} = useContext(UserContext);
+    const {user, changeUser, token} = useContext(UserContext);
     const [isOpenModal, setOpenModal] = useState(false);
     const [isOpen, setOpen] = useState(false);
     const [reason, setReason] = useState('');
@@ -150,6 +150,40 @@ export const RecruitDetailStudent = ()=>{
             message.error("Đã có lỗi xảy ra!");
         }
     }
+     //fetch user
+     const fetchUser = async()=>{
+        console.log('fetch user account')
+        const tokenx = token? token: window.localStorage.getItem('accessToken');
+        console.log('tokenx', tokenx);
+        const id = decodeToken(tokenx).sub;
+        console.log("id",id);
+        const url = serverURL + 'account/'+id;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                if(response.status!==200){
+                    message.error("Lỗi hệ thống load user!");
+                }else{
+                  console.log("user fetch to set role", result)
+                  if(!result||result.role!=='student'){
+                      message.warn('Bạn ko có quyền xem trang này');
+                      navigate('/')
+                  }
+                    changeUser({...result})
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+    }
+
+    useEffect(()=>{fetchUser()}, []);
     useEffect(()=>{fetchRecruit()},[]);
     useEffect(()=>{fetchCompany()},[]);
 
@@ -299,7 +333,6 @@ export const RecruitDetailStudent = ()=>{
                             label="Tiêu đề bài đăng:"
                             name="title"
                             className='label'
-                            required
                         >
                                 <p className="text-display">{recruit.title}</p>
                         </Form.Item>
@@ -312,7 +345,6 @@ export const RecruitDetailStudent = ()=>{
                             name="salary"
                             initialValue={recruit.salary}
                             className='label'
-                            required
                         >
                                 <p className="text-display">{recruit.salary}</p>
                         </Form.Item>
@@ -321,7 +353,6 @@ export const RecruitDetailStudent = ()=>{
                             label="Số lượng tuyển:"
                             name="quantity"
                             className='label'
-                            required
                         >
                                 <p className="text-display">{recruit.quantity}</p>
                         </Form.Item>
@@ -330,7 +361,6 @@ export const RecruitDetailStudent = ()=>{
                             label="Địa chỉ làm việc:"
                             name="address_working"
                             className='label'
-                            required
                         >
                                 <p className="text-display">{recruit.address_working}</p>
                         </Form.Item>
@@ -339,7 +369,6 @@ export const RecruitDetailStudent = ()=>{
                             label="Kinh nghiệm:"
                             name="experience"
                             className='label'
-                            required
                         >
                             <p className="text-display">{recruit.experience}</p>
                         </Form.Item>
@@ -348,7 +377,6 @@ export const RecruitDetailStudent = ()=>{
                             label="Phương thức làm việc:"
                             name="way_working"
                             className='label'
-                            required
                         >
                             <p className="text-display">{recruit.way_working}</p>
                         </Form.Item>
@@ -356,7 +384,6 @@ export const RecruitDetailStudent = ()=>{
                             label="Chức vụ:"
                             name="level"
                             className='label'
-                            required
                         >
                             <p className="text-display">{recruit.level}</p>
                         </Form.Item>
@@ -372,7 +399,6 @@ export const RecruitDetailStudent = ()=>{
                             label="Lĩnh vực:"
                             name="fields"
                             className='label'
-                            required
                         >
                                 <div >
                                 {
@@ -396,7 +422,6 @@ export const RecruitDetailStudent = ()=>{
                             label="Thông tin yêu cầu ứng tuyển:"
                             name="requirement"
                             className='label'
-                            required
                         >
                             <p className="text-display">{recruit.requirement}</p>
                         </Form.Item>
@@ -404,7 +429,6 @@ export const RecruitDetailStudent = ()=>{
                             label="Thông tin quyền lợi:"
                             name="welfare"
                             className='label'
-                            required
                         >
                             <p className="text-display">{recruit.welfare}</p>
                         </Form.Item>
@@ -413,7 +437,6 @@ export const RecruitDetailStudent = ()=>{
                                 label="Ngày bắt đầu:"
                                 name="start_date"
                                 className='label'
-                                required
                             >
                                 <p className="text-display">{DateToShortString(recruit.start_date)}</p>
                             </Form.Item>
@@ -421,7 +444,6 @@ export const RecruitDetailStudent = ()=>{
                                 label="Ngày kết thúc:"
                                 name="end_date"
                                 className='label'
-                                required
                             >
                                 <p className="text-display">{DateToShortString(recruit.end_date)}</p>
                             </Form.Item>

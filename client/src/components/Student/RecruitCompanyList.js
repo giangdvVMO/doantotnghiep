@@ -1,6 +1,7 @@
 import { Button, Card, Image, Input, message, Pagination, Select, Table, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import {decodeToken , isExpired} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
@@ -10,7 +11,7 @@ import { DateToShortStringDate } from '../../common/service';
 
 const { Option } = Select;
 export const RecruitCompanyListStudent = () => {
-    const { user } = useContext(UserContext);
+    const { user, changeUser, token } = useContext(UserContext);
     const {id} = useParams();
     const navigate = useNavigate();
     if(!user||user.role!=='student'){
@@ -81,7 +82,40 @@ export const RecruitCompanyListStudent = () => {
                     console.log(err);
                 }
     }
+     //fetch user
+     const fetchUser = async()=>{
+        console.log('fetch user account')
+        const tokenx = token? token: window.localStorage.getItem('accessToken');
+        console.log('tokenx', tokenx);
+        const id = decodeToken(tokenx).sub;
+        console.log("id",id);
+        const url = serverURL + 'account/'+id;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                if(response.status!==200){
+                    message.error("Lỗi hệ thống load user!");
+                }else{
+                  console.log("user fetch to set role", result)
+                  if(!result||result.role!=='student'){
+                      message.warn('Bạn ko có quyền xem trang này');
+                      navigate('/')
+                  }
+                    changeUser({...result})
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+    }
 
+    useEffect(()=>{fetchUser()}, []);
     useEffect(()=>{
         fetchField();
     },[]);

@@ -1,7 +1,8 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Form, Input, message, Pagination, Tag } from "antd";
+import { Avatar, Button, Card, Form, Input, message, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom";
+import {decodeToken} from 'react-jwt';
 
 import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider"
@@ -24,14 +25,12 @@ let initialCompany = {
 }
 
 export const CompanyDetailStudent = ()=>{
-    const {user} = useContext(UserContext);
+    const {user, changeUser, token} = useContext(UserContext);
     const navigate = useNavigate();
     if(!user||user.role!=="student"){
         navigate('/sign-in');
     }
-    const [account, setAccount] = useState(user);
     const [company, setCompany] = useState(initialCompany);
-    const [pageIndex, setPageIndex] = useState(1);
 
     const {id} = useParams();
     console.log("company.manufacture",company.manufacture)
@@ -99,7 +98,40 @@ export const CompanyDetailStudent = ()=>{
             console.log(err);
         }
     }
-    
+    //fetch user
+    const fetchUser = async()=>{
+        console.log('fetch user account')
+        const tokenx = token? token: window.localStorage.getItem('accessToken');
+        console.log('tokenx', tokenx);
+        const id = decodeToken(tokenx).sub;
+        console.log("id",id);
+        const url = serverURL + 'account/'+id;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                if(response.status!==200){
+                    message.error("Lỗi hệ thống load user!");
+                }else{
+                  console.log("user fetch to set role", result)
+                  if(!result||result.role!=='student'){
+                      message.warn('Bạn ko có quyền xem trang này');
+                      navigate('/')
+                  }
+                    changeUser({...result})
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+    }
+
+    useEffect(()=>{fetchUser()}, []);
     useEffect(()=>{fetchCompany();},[]);
 
     const ref = useRef();

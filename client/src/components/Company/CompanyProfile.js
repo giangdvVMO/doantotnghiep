@@ -2,6 +2,7 @@ import { BulbOutlined, CheckCircleOutlined, MailOutlined, MinusCircleOutlined, P
 import { Avatar, Button, Form, Input, InputNumber, message, Modal, Select, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom";
+import {decodeToken} from 'react-jwt';
 
 import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider"
@@ -27,7 +28,7 @@ let initialCompany = {
 }
 
 export const CompanyProfile = ()=>{
-    const {user} = useContext(UserContext);
+    const {user, changeUser, token} = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
     const [isOpenModal, setOpenModal] = useState(false);
     const [manufactures, setManufactures] = useState([{_id:'', name_manu: ''}]);
@@ -158,6 +159,39 @@ export const CompanyProfile = ()=>{
             console.log(err);
         }
     }
+    //fetch user
+    const fetchUser = async()=>{
+        console.log('fetch user account')
+        const tokenx = token? token: window.localStorage.getItem('accessToken');
+        console.log('tokenx', tokenx);
+        const id = decodeToken(tokenx).sub;
+        console.log("id",id);
+        const url = serverURL + 'account/'+id;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                if(response.status!==200){
+                    message.error("Lỗi hệ thống load user!");
+                }else{
+                  console.log("user fetch to set role", result)
+                  if(!result||result.role!=='company'){
+                      message.warn('Bạn ko có quyền xem trang này');
+                      navigate('/')
+                  }
+                    changeUser({...result})
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+    }
+    useEffect(()=>{fetchUser()},[]);
     useEffect(()=>{fetchCompany();},[]);
     useEffect(()=>{fetchManufacture()},[]);
 

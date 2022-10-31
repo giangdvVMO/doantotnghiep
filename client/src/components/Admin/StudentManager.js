@@ -39,7 +39,13 @@ export const StudentManager = () => {
                       if(response.status!==200){
                           message.error("Lỗi hệ thống load user!");
                       }else{
+                        console.log("user fetch to set role", result)
+                        if(!result||result.role!=='admin'){
+                            message.warn('Bạn ko có quyền xem trang này');
+                            navigate('/')
+                        }
                           changeUser({...result})
+
                       }
                   }
                   catch (err) {
@@ -48,11 +54,7 @@ export const StudentManager = () => {
           }
 
     const fetchListStudentx = ()=>{
-        console.log("user fetch second", user)
-        if(!user||user.role!=='admin'){
-            message.warn('Bạn ko có quyền xem trang này');
-            navigate('/')
-        }
+        
         async function fetchListStudents(){
             let query = '?1=1';
                     query = status!==-1? query+'&status='+status:query;
@@ -83,7 +85,7 @@ export const StudentManager = () => {
             }
             fetchListStudents()
         }
-        useEffect(()=>{fetchUser()}, []);
+    useEffect(()=>{fetchUser()}, []);
     useEffect(fetchListStudentx,[university, major, status, search])
     
     const columns = [

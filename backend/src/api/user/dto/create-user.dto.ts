@@ -63,10 +63,9 @@ export class CreateInternaleUserDto {
 
   @ApiPropertyOptional({
     description: 'phone',
-    example: '+84 123456789',
+    example: '0123456789',
   })
   @IsOptional()
-  @IsPhoneNumber()
   phone: string;
 
   @ApiPropertyOptional({
