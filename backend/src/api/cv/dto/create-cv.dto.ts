@@ -16,6 +16,4 @@ export class CreateCvDto {
   id_student: number;
 }
 
-export class CreateCvApiDto extends CreateCvDto{
-  
-}
+export class CreateCvApiDto extends CreateCvDto {}

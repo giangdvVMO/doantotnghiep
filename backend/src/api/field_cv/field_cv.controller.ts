@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { FieldCvService } from './field_cv.service';
 import { CreateFieldCvDto } from './dto/create-field_cv.dto';
 import { UpdateFieldCvDto } from './dto/update-field_cv.dto';

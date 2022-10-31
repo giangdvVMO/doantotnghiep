@@ -30,7 +30,7 @@ let initialStudent = {
 }
 
 export const StudentProfile = ()=>{
-    const {user, token} = useContext(UserContext);
+    const {user, changeUser, token} = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
     const [isOpenModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
@@ -97,6 +97,7 @@ export const StudentProfile = ()=>{
                       navigate('/')
                   }
                     setAccount({...result})
+                    changeUser({...result})
                 }
             }
             catch (err) {

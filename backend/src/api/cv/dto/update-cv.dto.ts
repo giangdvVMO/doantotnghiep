@@ -16,7 +16,3 @@ export class UpdateCvDto {
   @IsNotEmpty()
   id_student: number;
 }
-
-export class UpdateCvApiDto extends UpdateCvDto{
-  
-}

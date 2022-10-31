@@ -1,14 +1,13 @@
-import { CheckCircleOutlined, MinusCircleOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Form, message, Modal, Tag } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { Avatar, Button, Card, Form, message, Skeleton } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
-import {decodeToken , isExpired} from 'react-jwt';
+import {decodeToken} from 'react-jwt';
 
 import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
 import { DateToShortString } from "../../common/service";
-import TextArea from "antd/lib/input/TextArea";
 import { serverURL } from "../../configs/server.config";
 
 let students = {
@@ -26,12 +25,9 @@ let students = {
 }
 
 export const StudentDetailCompany = ()=>{
-    const {user} = useContext(UserContext);
+    const {user, changeUser, token} = useContext(UserContext);
     const navigate = useNavigate();
-    if(!user||user.role!=='company'){
-        message.warn('Bạn ko có quyền xem trang này');
-        navigate('/home')
-    }
+    const [account, setAccount] = useState(user);
     const [student, setStudent] = useState(students);
 
     const {id} = useParams();
@@ -63,43 +59,42 @@ export const StudentDetailCompany = ()=>{
             console.log(err);
         }
     }
-
-    async function confirmStudent(){
-        try {
-            const url = serverURL + 'student/confirm/'+ id;
-            const data = {
-                confirm_id: user._id
-            }
-            const response = await fetch(url, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            }
-            );
-            const result = await response.json();
-            if(response.status!==200){
-                message.error("Lỗi hệ thống!");
-            }else{
-                if(result.data===false){
-                    message.warning('Cập nhật không thành công, hãy kiểm tra lại!');
+     //fetch user
+     const fetchUser = async()=>{
+        console.log('fetch user account')
+        const tokenx = token? token: window.localStorage.getItem('accessToken');
+        console.log('tokenx', tokenx);
+        const id = decodeToken(tokenx).sub;
+        console.log("id",id);
+        const url = serverURL + 'account/'+id;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                if(response.status!==200){
+                    message.error("Lỗi hệ thống load user!");
                 }else{
-                    message.success('Cập nhật thành công!');
-                    fetchStudent();
+                  console.log("user fetch to set role", result)
+                  if(!result||result.role!=='company'){
+                      message.warn('Bạn ko có quyền xem trang này');
+                      navigate('/')
+                  }
+                    setAccount({...result});
+                    changeUser({...result})
                 }
             }
-        }
-        catch (err) {
-            console.log(err);
-        }
+            catch (err) {
+                console.log(err);
+            }
     }
 
-    useEffect(
-        ()=>{
-            fetchStudent();
-        },[]
-    )
+    useEffect(()=>{fetchUser()}, []);
+    useEffect(()=>{fetchStudent();},[])
     
     const ref = useRef();
     const refButtonSubmit = useRef();
@@ -121,23 +116,7 @@ export const StudentDetailCompany = ()=>{
             </>
         )
     }
-
-    const renderStatus = ()=>{
-        if(student.status){
-            return (
-            <Tag icon={<CheckCircleOutlined />} 
-                color="success">
-                Đã duyệt
-            </Tag>)
-        }else{
-            return (
-                <Tag icon={<MinusCircleOutlined />} color="default">
-                    Chưa duyệt
-                </Tag>
-            )
-        }
-    }
-
+    if(account){
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
             <div className='background-image'></div>
@@ -269,4 +248,7 @@ export const StudentDetailCompany = ()=>{
            
         </div>
     )
+    }else{
+        return <Skeleton active />;
+    }
 }
