@@ -93,7 +93,7 @@ export const MenuRole = {
             key: 'home'
         },
         {
-            label: <Link to='cv-student'>CV của tôi</Link>,
+            label: <Link to='my-cv'>CV của tôi</Link>,
             icon: <SnippetsOutlined />,
             key: 'cvstudent'
         },

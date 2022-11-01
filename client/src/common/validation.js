@@ -74,8 +74,9 @@ export const checkCourse = (course) => {
 }
 
 export const checkCCCD = (cccd) => {
-    console.log(cccd.length);
-    if(!cccd||(cccd.length!==9&&cccd.length!==12)){
+    const regexCMT = /^0[0-9]{8}$/;
+    const regexCC = /^0[0-9]{11}$/;
+    if(!cccd||(cccd.length!==9&&cccd.length!==12)||(!regexCMT.test(cccd)&&!regexCC.test(cccd))){
         return false;
     }
     return true;
@@ -159,6 +160,11 @@ export const checkDate = (data)=>{
 }
 
 export const checkArray = (data)=>{
+    console.log("data",data)
+    return data.length;
+}
+
+export const checkFileCV = (data)=>{
     console.log("data",data)
     return data.length;
 }

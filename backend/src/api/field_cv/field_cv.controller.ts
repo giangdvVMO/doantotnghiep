@@ -1,17 +1,13 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { FieldCvService } from './field_cv.service';
 import { CreateFieldCvDto } from './dto/create-field_cv.dto';
-import { UpdateFieldCvDto } from './dto/update-field_cv.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('field-cv')
+@Controller({
+  version: ['1'],
+  path: 'field-cv',
+})
+@ApiTags('Field-CV')
 export class FieldCvController {
   constructor(private readonly fieldCvService: FieldCvService) {}
 
@@ -25,18 +21,13 @@ export class FieldCvController {
     return this.fieldCvService.findAll();
   }
 
+  @Get('cv/:id')
+  findAllCompanyManu(@Param('id') id: string) {
+    return this.fieldCvService.findAllFieldCV(+id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.fieldCvService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFieldCvDto: UpdateFieldCvDto) {
-    return this.fieldCvService.update(+id, updateFieldCvDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.fieldCvService.remove(+id);
   }
 }

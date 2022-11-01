@@ -30,7 +30,7 @@ export class UpdateUserDto {
     description: 'fullname',
   })
   @IsOptional()
-  @IsEmail()
+  @IsString()
   fullname: string;
 
   @ApiPropertyOptional({

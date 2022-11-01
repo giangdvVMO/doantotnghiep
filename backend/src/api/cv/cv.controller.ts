@@ -1,15 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CvService } from './cv.service';
-import { CreateCvDto } from './dto/create-cv.dto';
+import { CreateCvDto, FileCreateCVDto } from './dto/create-cv.dto';
 import { UpdateCvDto } from './dto/update-cv.dto';
 
-@Controller('cv')
+@Controller({
+  version: ['1'],
+  path: 'cv',
+})
+@ApiTags('CV')
 export class CvController {
   constructor(private readonly cvService: CvService) {}
 
   @Post()
-  create(@Body() createCvDto: CreateCvDto) {
-    return this.cvService.create(createCvDto);
+  @UseInterceptors(FileInterceptor('file_cv'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'create CV',
+    type: FileCreateCVDto,
+  })
+  create(
+    @Body() createCvDto: CreateCvDto,
+    @UploadedFile() file_cv: Express.Multer.File,
+  ) {
+    return this.cvService.create(createCvDto, file_cv);
   }
 
   @Get()
@@ -25,10 +49,5 @@ export class CvController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCvDto: UpdateCvDto) {
     return this.cvService.update(+id, updateCvDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cvService.remove(+id);
   }
 }

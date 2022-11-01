@@ -122,7 +122,7 @@ export const StudentDetailCompany = ()=>{
             <div className='background-image'></div>
             <div className='introduce-bottom'>
                 <Avatar className='avatar' size= {120} icon={<UserOutlined />} />
-                <div className='introduce-fullname'>{student.fullname}</div>
+                <div className='introduce-fullname'>{account.fullname}</div>
             </div>
         </div>
         <div className='detail-swapper'>
@@ -141,27 +141,27 @@ export const StudentDetailCompany = ()=>{
                         <Form.Item
                             label="Họ và tên"
                             name="fullname"
-                            initialValue={student.fullname}
+                            initialValue={account.fullname}
                             className='label'
                         >
-                                <p className="text-display">{student.fullname}</p>
+                                <p className="text-display">{account.fullname}</p>
                         </Form.Item>
                         <Form.Item
                             label="Email"
                             name="email"
-                            initialValue={student.email}
+                            initialValue={account.email}
                             className='label'
                         >
-                                <p className="text-display">{student.email}</p>
+                                <p className="text-display">{account.email}</p>
                         </Form.Item>
 
                         <Form.Item
                             label="Số điện thoại"
                             name="phone"
-                            initialValue={student.phone}
+                            initialValue={account.phone}
                             className='label'
                         >
-                                <p className="text-display">{student.phone}</p>
+                                <p className="text-display">{account.phone}</p>
                         </Form.Item>
                         <Form.Item
                             label="Trường"
@@ -224,7 +224,7 @@ export const StudentDetailCompany = ()=>{
                             name="birthday"
                             className='label'
                         >
-                                <p className="text-display">{DateToShortString(student.birthday)}</p>
+                                <p className="text-display">{DateToShortString(account.birthday)}</p>
                         </Form.Item>
                         <Form.Item
                             label="GPA"
@@ -245,7 +245,6 @@ export const StudentDetailCompany = ()=>{
             <Card title='Thông tin CV'>
 
             </Card>
-           
         </div>
     )
     }else{

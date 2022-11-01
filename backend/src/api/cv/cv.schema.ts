@@ -10,10 +10,10 @@ export class CV {
   @Prop()
   _id: number;
 
-  @Prop({ type: String, maxlength: 50 , required: true})
+  @Prop({ type: String, maxlength: 50, required: true })
   title: string;
 
-  @Prop({ type: String, maxlength: 100 , required: true})
+  @Prop({ type: String, maxlength: 100, required: true })
   file_cv: string;
 
   @Prop({ type: Number, default: 0 })
@@ -42,4 +42,3 @@ export class CV {
 }
 
 export const CVSchema = SchemaFactory.createForClass(CV);
-// UserSchema.index({ email: 1, username: 1 }, { unique: true });

@@ -16,7 +16,7 @@ export const messageStudentError = {
     university: 'Chưa nhập tên trường',
     faculty: 'Chưa nhập khoa',
     course: 'chưa nhập khóa học hoặc sai định dạng năm-năm',
-    CCCD: 'Chưa nhập CCCD hoặc nhập sai định dạng CCCD (9-12 kí tự)',
+    CCCD: 'Chưa nhập CCCD hoặc nhập sai định dạng CCCD (9-12 kí tự số)',
     Address: 'Chưa nhập địa chỉ',
     CardStudent: 'Chưa nhập thẻ sinh viên',
     Major: 'Chưa chọn chuyên ngành',
@@ -47,5 +47,11 @@ export const messageRecruitError = {
     welfare: 'Quyền lợi không được bỏ trống',
     start_date: 'Ngày bắt đầu không được bỏ trống',
     end_date: 'Ngày kết thúc không được bỏ trống',
+    field: 'Chưa chọn lĩnh vực'
+}
+
+export const messageCVError = {
+    title: 'Tiêu đề không được bỏ trống',
+    fileCV: 'Định dạng CV chưa đúng',
     field: 'Chưa chọn lĩnh vực'
 }

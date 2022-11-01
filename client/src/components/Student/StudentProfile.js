@@ -42,6 +42,7 @@ export const StudentProfile = ()=>{
     }
 
     async function fetchStudent(){
+        if(account){
         try {
             const _id = account._id;
             const url = serverURL + 'student/'+ _id;
@@ -71,6 +72,7 @@ export const StudentProfile = ()=>{
             console.log(err);
         }
     }
+    }
      //fetch user
      const fetchUser = async()=>{
         console.log('fetch user account')
@@ -97,7 +99,7 @@ export const StudentProfile = ()=>{
                       navigate('/')
                   }
                     setAccount({...result})
-                    changeUser({...result})
+                    // changeUser({...result})
                 }
             }
             catch (err) {
@@ -105,8 +107,8 @@ export const StudentProfile = ()=>{
             }
     }
 
-    useEffect(()=>{fetchUser()}, []);
-    useEffect(()=>{fetchStudent();},[]);
+    useEffect(()=>{fetchUser(); }, []);
+    useEffect(()=>{fetchStudent(); }, [account])
 
     const [validateFullname,setValidateFullname] = useState(defaultTrueStatus);
     const [validatePhone,setValidatePhone] = useState(defaultTrueStatus);

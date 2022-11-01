@@ -32,6 +32,7 @@ import { StudentList } from './components/Company/StudentList';
 import { RecruitListStudent } from './components/Student/RecruitList';
 import { RecruitCompanyListStudent } from './components/Student/RecruitCompanyList';
 import { RecruitDetailStudent } from './components/Student/RecruitDetail';
+import { MyCV } from './components/Student/MyCV';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -52,6 +53,7 @@ root.render(
           <Route path='account/:id'  element={<DetailAccountAdmin />} />
           <Route path='student-management' element={<StudentManager />} />
           <Route path='company-management' element={<CompanyManager />} />
+          <Route path='my-cv' element={<MyCV />} />
           <Route path='admin'>
             <Route path='student/:id' element={<StudentDetailAdmin/>}/>
             <Route path='company/:id' element={<CompanyDetailAdmin/>}/>
@@ -71,7 +73,6 @@ root.render(
             <Route path='recruit-list/company/:id' element={<RecruitCompanyListStudent />} />
             <Route path='recruit-list' element={<RecruitListStudent />} />
             <Route path='recruit/:id' element={<RecruitDetailStudent />} />
-            
           </Route>
           <Route path='recruit'>
             <Route path='add' element={<AddRecruit/>}/>

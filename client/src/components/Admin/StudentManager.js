@@ -196,7 +196,7 @@ export const StudentManager = () => {
                     <Select
                         value={university}
                         defaultValue='all'
-                        labelInValue='Chuyên ngành'
+                        labelInValue='Trường'
                         className='filter-content'
                         onChange={handleChangeUniversity}
                     >

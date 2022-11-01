@@ -14,8 +14,12 @@ import { ConfirmCompanyDto } from './dto/confirm-company.dto';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { QueryParamCompanyDto } from './dto/query-param-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+
+@Controller({
+  version: ['1'],
+  path: 'company',
+})
 @ApiTags('Company')
-@Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
