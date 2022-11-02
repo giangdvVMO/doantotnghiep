@@ -104,7 +104,8 @@ export const MyCV = ()=>{
             }
     }
     async function fetchCV(){
-        const url = serverURL + 'cv/'+CV._id;
+        console.log('fetchCV')
+        const url = serverURL + 'cv/'+student._id;
         try {
             const response = await fetch(url, {
                 method: 'GET',
@@ -114,7 +115,7 @@ export const MyCV = ()=>{
             }
             );
             const result = await response.json();
-            console.log(result);
+            console.log('CV',result);
             if(response.status!==200){
                 message.error(result.message);
             }else{
@@ -222,6 +223,34 @@ export const MyCV = ()=>{
         }
     }
     //handle action
+    async function createCV(){
+        const url = serverURL + 'cv';
+            const data = { ...CV, id_student: student._id, id_field_array: CV.fields};
+            console.log("request", data)
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+                );
+                const result = await response.json();
+                console.log(result);
+                if(response.status!==201){
+                    message.error(result.message);
+                }else{
+                    message.success("Bạn đã cập nhật CV!");
+                    // fetchCompany();
+                }
+            }
+            catch (err) {
+                console.log(err);
+                message.error("Đã có lỗi xảy ra!");
+            }
+    }
+
     async function updateCV(){
         const url = serverURL + 'cv/'+CV._id;
             const data = { ...CV, update_id: student._id};
@@ -237,10 +266,10 @@ export const MyCV = ()=>{
                 );
                 const result = await response.json();
                 console.log(result);
-                if(response.status!==201){
+                if(response.status!==200){
                     message.error(result.message);
                 }else{
-                    message.success("Bạn đã cập nhật bài đăng tuyển dụng thành công!");
+                    message.success("Bạn đã cập nhật CV!");
                     // fetchCompany();
                 }
             }
@@ -261,7 +290,11 @@ export const MyCV = ()=>{
          console.log("count",count);
          console.log(CV)
         if(count===0){
-            updateCV();
+            if(CV._id===-1){
+                createCV();
+            }else{
+                updateCV();
+            }
         }
         return;
     }
@@ -337,12 +370,16 @@ export const MyCV = ()=>{
       };
     const handleChange = (info) => {
         // if (info.file.status === 'done') {
-          // Get this url from response in real world.
-        //   getBase64(info.file.originFileObj, (url) => {
-        //     setCV((preCV)=>{console.log(CV);return{...preCV, file_cv: url}; });
-        //   });
-        // }
+        //   Get this url from response in real world.
+          getBase64(info.file.originFileObj, (url) => {
+            setCV((preCV)=>{return{...preCV, file_cv: url}; });
+          });
         console.log("info", info);
+
+        
+        console.log(CV);
+        // setCV((preCV)=>{return{...preCV, file_cv: info.file.thumbUrl}})
+        // console.log('thumbUrl',info.file.thumbUrl);
       };
       const uploadButton = (
         <div>
@@ -564,39 +601,37 @@ export const MyCV = ()=>{
                             required>
                             {
                                 isEdit?
+                                <>
                                 <Upload.Dragger
-                                    name="file_cv"
-                                    multiple
-                                    listType="picture"
-                                    className="avatar-uploader"
-                                    showUploadList={true}
-                                    action="https://localhost:3000/my-cv"
-                                    beforeUpload={(file)=>{
-                                        console.log(file)
-                                    }}
-                                    onChange={handleChange}
-                                    accept="image/*,.pdf"
-                                    >
-                                {
-                                    CV.file_cv ? (
-                                    <img
-                                        src={CV.file_cv}
-                                        alt="avatar"
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                        />
-                                    ) : (
-                                        uploadButton
-                                    )
-                                }
-                                </Upload.Dragger>
+                                                name="file_cv"
+                                                // listType="picture"
+                                                showUploadList={false}
+                                                className="avatar-uploader"
+                                                beforeUpload={(file)=>{
+                                                    console.log(file)
+                                                }}
+                                                onChange={handleChange}
+                                                accept="image/*,.pdf"
+                                                >
+                                            {uploadButton}
+                                            </Upload.Dragger>
+                                    {
+                                        CV.file_cv ? (
+                                        <Image
+                                            src={CV.file_cv}
+                                            alt="avatar"
+                                            style={{
+                                                width: '200px',
+                                            }}
+                                            />
+                                        ) : ''
+                                    }
+                                </>
                                 :
                                 CV.file_cv?
                                 <Image alt="file_cv" src={CV.file_cv} width={300} />
                                 : <p>Chưa có ảnh</p>
                             }
-                            
                         </Form.Item>
                         </div>
                         <Form.Item 

@@ -25,16 +25,17 @@ export class CvController {
   constructor(private readonly cvService: CvService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file_cv'))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    description: 'create CV',
-    type: FileCreateCVDto,
-  })
+  // @UseInterceptors(FileInterceptor('file_cv'))
+  // @ApiConsumes('multipart/form-data')
+  // @ApiBody({
+  //   description: 'create CV',
+  //   type: FileCreateCVDto,
+  // })
   create(
     @Body() createCvDto: CreateCvDto,
-    @UploadedFile() file_cv: Express.Multer.File,
+    // @UploadedFile() file_cv: Express.Multer.File,
   ) {
+    const { file_cv } = createCvDto;
     return this.cvService.create(createCvDto, file_cv);
   }
 

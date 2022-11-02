@@ -13,7 +13,7 @@ export class CV {
   @Prop({ type: String, maxlength: 50, required: true })
   title: string;
 
-  @Prop({ type: String, maxlength: 100, required: true })
+  @Prop({ type: String, required: true })
   file_cv: string;
 
   @Prop({ type: Number, default: 0 })

@@ -20,6 +20,12 @@ export class CreateCvDto {
   })
   @IsNotEmpty()
   id_field_array: number[];
+
+  @ApiProperty({
+    description: 'file_cv',
+  })
+  @IsNotEmpty()
+  file_cv: string;
 }
 
 export class FileCreateCVDto extends CreateCvDto {

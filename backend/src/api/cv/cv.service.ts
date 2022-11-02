@@ -9,7 +9,7 @@ import { FieldCvService } from '../field_cv/field_cv.service';
 import { CV, CVDocument } from './cv.schema';
 import { CreateCvDto } from './dto/create-cv.dto';
 import { UpdateCvDto } from './dto/update-cv.dto';
-import { imgbbUploader } from 'imgbb-uploader';
+// import { imgbbUploader } from 'imgbb-uploader';
 import { QueryParamCVDto } from './dto/query-param-cv.dto';
 
 @Injectable()
@@ -19,29 +19,30 @@ export class CvService {
     private readonly fieldCvService: FieldCvService,
     private readonly fileUploadService: FileUploadService,
   ) {}
-  async create(createCvDto: CreateCvDto, file_cv: Express.Multer.File) {
+  async create(createCvDto: CreateCvDto, file_cv: string) {
     const { title, id_student, id_field_array } = createCvDto;
     const dataCreate: any = {
       title,
       id_student,
+      file_cv,
       _id: createCvDto.id_student,
       create_date: Date.now(),
     };
-    if (file_cv) {
-      console.log('file_cv', file_cv);
-      let upload: any;
-      imgbbUploader({
-        apiKey: 'cd489a5bb5a10aa299d991a4e20599ea',
-        base64string: file_cv.buffer,
-      })
-        .then((response) => {
-          upload = response;
-          console.log('response', response);
-        })
-        .catch((error) => console.log(error));
-      console.log('upload', upload);
-      dataCreate.file_cv = upload.image.url;
-    }
+    // if (file_cv) {
+    //   console.log('file_cv', file_cv);
+    //   let upload: any;
+    //   imgbbUploader({
+    //     apiKey: 'cd489a5bb5a10aa299d991a4e20599ea',
+    //     base64string: file_cv.buffer,
+    //   })
+    //     .then((response) => {
+    //       upload = response;
+    //       console.log('response', response);
+    //     })
+    //     .catch((error) => console.log(error));
+    //   console.log('upload', upload);
+    //   dataCreate.file_cv = upload.image.url;
+    // }
     const resultCreate = await this.cvModel.create(dataCreate);
     console.log(resultCreate);
     const dataCreateFieldCV = { id_cv: id_student, id_field_array };
