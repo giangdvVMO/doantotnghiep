@@ -10,6 +10,7 @@ import { CV, CVDocument } from './cv.schema';
 import { CreateCvDto } from './dto/create-cv.dto';
 import { UpdateCvDto } from './dto/update-cv.dto';
 import { imgbbUploader } from 'imgbb-uploader';
+import { QueryParamCVDto } from './dto/query-param-cv.dto';
 
 @Injectable()
 export class CvService {
@@ -46,10 +47,6 @@ export class CvService {
     const dataCreateFieldCV = { id_cv: id_student, id_field_array };
     const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
     return resultCreate;
-  }
-
-  findAll() {
-    return `This action returns all cv`;
   }
 
   async findOne(id: number) {
@@ -120,319 +117,275 @@ export class CvService {
     return resultUpdate;
   }
 
-  // async findAll(query: QueryParamCVDto) {
-  //   const {
-  //     field,
-  //     status,
-  //     search,
-  //     id_company,
-  //     experience,
-  //     pageIndex,
-  //     pageSize,
-  //   } = query;
-  //   console.log('field', field);
-  //   console.log('status', status);
-  //   console.log('search', search);
-  //   console.log('pageIndex', pageIndex);
-  //   console.log('pageSize', pageSize);
-  //   console.log('id_company', id_company);
-  //   console.log('experience', experience);
-  //   const condition = {};
+  async findAll(query: QueryParamCVDto) {
+    const { field, status, search, id_student, pageIndex, pageSize } = query;
+    console.log('field', field);
+    console.log('status', status);
+    console.log('search', search);
+    console.log('pageIndex', pageIndex);
+    console.log('pageSize', pageSize);
+    console.log('id_student', id_student);
+    const condition = {};
 
-  //   const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
-  //   const searchRgx = rgx(search ? search : '');
+    const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
+    const searchRgx = rgx(search ? search : '');
 
-  //   if (status === '1') {
-  //     condition['status'] = true;
-  //   }
-  //   if (status === '0') {
-  //     condition['status'] = false;
-  //   }
+    if (status === '1') {
+      condition['status'] = true;
+    }
+    if (status === '0') {
+      condition['status'] = false;
+    }
 
-  //   if (id_company) {
-  //     condition['id_company'] = +id_company;
-  //   }
+    if (id_student) {
+      condition['id_student'] = +id_student;
+    }
 
-  //   let isExperience = {};
-  //   switch (experience) {
-  //     case '0': {
-  //       isExperience = {
-  //         $eq: ['$experience', 0],
-  //       };
-  //       break;
-  //     }
-  //     case '1': {
-  //       isExperience = {
-  //         $and: [{ $gt: ['$experience', 0] }, { $lt: ['$experience', 12] }],
-  //       };
-  //       break;
-  //     }
-  //     case '2': {
-  //       isExperience = {
-  //         $gte: ['$experience', 12],
-  //       };
-  //       break;
-  //     }
-  //     default: {
-  //       isExperience = true;
-  //       break;
-  //     }
-  //   }
+    if (pageIndex && pageSize) {
+    }
 
-  //   if (pageIndex && pageSize) {
-  //   }
-
-  //   let field_condition: any = true;
-  //   if (field && +field) {
-  //     field_condition = { $in: [+field, '$id_fields'] };
-  //   } else {
-  //     if (field && field.length) {
-  //       const field_array = field.split(',');
-  //       const conditionOr = field_array.map((item) => {
-  //         return { $in: [+item, '$id_fields'] };
-  //       });
-  //       field_condition = { $or: conditionOr };
-  //     }
-  //   }
-  //   console.log('field_condition', field_condition);
-  //   let limitSkip = [];
-  //   if (pageIndex && pageSize) {
-  //     limitSkip = [
-  //       {
-  //         $skip: (+pageIndex - 1) * +pageSize,
-  //       },
-  //       {
-  //         $limit: +pageSize,
-  //       },
-  //     ];
-  //   }
-  //   const companyList = await this.recruitModel.aggregate([
-  //     //account not delete
-  //     {
-  //       $lookup: {
-  //         from: 'tbl_company',
-  //         localField: 'id_company',
-  //         foreignField: '_id',
-  //         as: 'company',
-  //       },
-  //     },
-  //     {
-  //       $unwind: '$company',
-  //     },
-  //     {
-  //       $lookup: {
-  //         from: 'tbl_account',
-  //         localField: 'company._id',
-  //         foreignField: '_id',
-  //         as: 'account',
-  //       },
-  //     },
-  //     {
-  //       $unwind: '$account',
-  //     },
-  //     {
-  //       $match: {
-  //         'account.delete_date': null,
-  //         delete_date: null,
-  //         ...condition,
-  //       },
-  //     },
-  //     //add field
-  //     {
-  //       $lookup: {
-  //         from: 'tbl_field_recruit',
-  //         localField: '_id',
-  //         foreignField: 'id_recruit',
-  //         as: 'field_recruit',
-  //         pipeline: [
-  //           {
-  //             $group: {
-  //               _id: '$id_recruit',
-  //               id_fields: {
-  //                 $push: '$id_field',
-  //               },
-  //             },
-  //           },
-  //         ],
-  //       },
-  //     },
-  //     {
-  //       $unwind: '$field_recruit',
-  //     },
-  //     {
-  //       $addFields: {
-  //         //search
-  //         result: {
-  //           $or: [
-  //             {
-  //               $regexMatch: {
-  //                 input: '$level',
-  //                 regex: searchRgx,
-  //                 options: 'i',
-  //               },
-  //             },
-  //             {
-  //               $regexMatch: {
-  //                 input: '$way_working',
-  //                 regex: searchRgx,
-  //                 options: 'i',
-  //               },
-  //             },
-  //             {
-  //               $regexMatch: {
-  //                 input: '$title',
-  //                 regex: searchRgx,
-  //                 options: 'i',
-  //               },
-  //             },
-  //           ],
-  //         },
-  //         id_fields: '$field_recruit.id_fields',
-  //       },
-  //     },
-  //     {
-  //       $addFields: {
-  //         isfields: field_condition,
-  //         isExperience: isExperience,
-  //       },
-  //     },
-  //     {
-  //       $match: {
-  //         result: true,
-  //         isfields: true,
-  //         isExperience: true,
-  //       },
-  //     },
-  //     {
-  //       $lookup: {
-  //         from: 'tbl_field',
-  //         localField: 'id_fields',
-  //         foreignField: '_id',
-  //         as: 'fields',
-  //       },
-  //     },
-  //     ...limitSkip,
-  //   ]);
-  //   let total = 0;
-  //   if (companyList.length) {
-  //     //calculate total
-  //     const companyListTotal = await this.recruitModel.aggregate([
-  //       //account not delete
-  //       {
-  //         $lookup: {
-  //           from: 'tbl_company',
-  //           localField: 'id_company',
-  //           foreignField: '_id',
-  //           as: 'company',
-  //         },
-  //       },
-  //       {
-  //         $unwind: '$company',
-  //       },
-  //       {
-  //         $lookup: {
-  //           from: 'tbl_account',
-  //           localField: 'company._id',
-  //           foreignField: '_id',
-  //           as: 'account',
-  //         },
-  //       },
-  //       {
-  //         $unwind: '$account',
-  //       },
-  //       {
-  //         $match: {
-  //           'account.delete_date': null,
-  //           delete_date: null,
-  //           ...condition,
-  //         },
-  //       },
-  //       //add field
-  //       {
-  //         $lookup: {
-  //           from: 'tbl_field_recruit',
-  //           localField: '_id',
-  //           foreignField: 'id_recruit',
-  //           as: 'field_recruit',
-  //           pipeline: [
-  //             {
-  //               $group: {
-  //                 _id: '$id_recruit',
-  //                 id_fields: {
-  //                   $push: '$id_field',
-  //                 },
-  //               },
-  //             },
-  //           ],
-  //         },
-  //       },
-  //       {
-  //         $unwind: '$field_recruit',
-  //       },
-  //       {
-  //         $addFields: {
-  //           //search
-  //           result: {
-  //             $or: [
-  //               {
-  //                 $regexMatch: {
-  //                   input: '$level',
-  //                   regex: searchRgx,
-  //                   options: 'i',
-  //                 },
-  //               },
-  //               {
-  //                 $regexMatch: {
-  //                   input: '$way_working',
-  //                   regex: searchRgx,
-  //                   options: 'i',
-  //                 },
-  //               },
-  //               {
-  //                 $regexMatch: {
-  //                   input: '$title',
-  //                   regex: searchRgx,
-  //                   options: 'i',
-  //                 },
-  //               },
-  //             ],
-  //           },
-  //           id_fields: '$field_recruit.id_fields',
-  //         },
-  //       },
-  //       {
-  //         $addFields: {
-  //           isfields: field_condition,
-  //           isExperience: isExperience,
-  //         },
-  //       },
-  //       {
-  //         $match: {
-  //           result: true,
-  //           isfields: true,
-  //           isExperience: true,
-  //         },
-  //       },
-  //       {
-  //         $lookup: {
-  //           from: 'tbl_field',
-  //           localField: 'id_fields',
-  //           foreignField: '_id',
-  //           as: 'fields',
-  //         },
-  //       },
-  //       {
-  //         $count: 'total',
-  //       },
-  //     ]);
-  //     total = companyListTotal[0].total;
-  //   }
-  //   console.log(companyList);
-  //   return {
-  //     data: companyList,
-  //     pageSize: +pageIndex,
-  //     pageIndex: +pageSize,
-  //     total: total,
-  //   };
-  // }
+    let field_condition: any = true;
+    if (field && +field) {
+      field_condition = { $in: [+field, '$id_fields'] };
+    } else {
+      if (field && field.length) {
+        const field_array = field.split(',');
+        const conditionOr = field_array.map((item) => {
+          return { $in: [+item, '$id_fields'] };
+        });
+        field_condition = { $or: conditionOr };
+      }
+    }
+    console.log('field_condition', field_condition);
+    let limitSkip = [];
+    if (pageIndex && pageSize) {
+      limitSkip = [
+        {
+          $skip: (+pageIndex - 1) * +pageSize,
+        },
+        {
+          $limit: +pageSize,
+        },
+      ];
+    }
+    const studentList = await this.cvModel.aggregate([
+      //account not delete
+      {
+        $lookup: {
+          from: 'tbl_student',
+          localField: 'id_student',
+          foreignField: '_id',
+          as: 'student',
+        },
+      },
+      {
+        $unwind: '$student',
+      },
+      {
+        $lookup: {
+          from: 'tbl_account',
+          localField: 'student._id',
+          foreignField: '_id',
+          as: 'account',
+        },
+      },
+      {
+        $unwind: '$account',
+      },
+      {
+        $match: {
+          'account.delete_date': null,
+          delete_date: null,
+          ...condition,
+        },
+      },
+      //add field
+      {
+        $lookup: {
+          from: 'tbl_field_cv',
+          localField: '_id',
+          foreignField: 'id_cv',
+          as: 'field_cv',
+          pipeline: [
+            {
+              $group: {
+                _id: '$id_cv',
+                id_fields: {
+                  $push: '$id_field',
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$field_cv',
+      },
+      {
+        $addFields: {
+          //search
+          result: {
+            // $or: [
+            //   {
+            //     $regexMatch: {
+            //       input: '$',
+            //       regex: searchRgx,
+            //       options: 'i',
+            //     },
+            //   },
+            // {
+            $regexMatch: {
+              input: '$title',
+              regex: searchRgx,
+              options: 'i',
+            },
+            // },
+            // ],
+          },
+          id_fields: '$field_cv.id_fields',
+        },
+      },
+      {
+        $addFields: {
+          isfields: field_condition,
+        },
+      },
+      {
+        $match: {
+          result: true,
+          isfields: true,
+          isExperience: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'tbl_field',
+          localField: 'id_fields',
+          foreignField: '_id',
+          as: 'fields',
+        },
+      },
+      ...limitSkip,
+    ]);
+    let total = 0;
+    if (studentList.length) {
+      //calculate total
+      const studentListTotal = await this.cvModel.aggregate([
+        //account not delete
+        {
+          $lookup: {
+            from: 'tbl_student',
+            localField: 'id_student',
+            foreignField: '_id',
+            as: 'student',
+          },
+        },
+        {
+          $unwind: '$student',
+        },
+        {
+          $lookup: {
+            from: 'tbl_account',
+            localField: 'student._id',
+            foreignField: '_id',
+            as: 'account',
+          },
+        },
+        {
+          $unwind: '$account',
+        },
+        {
+          $match: {
+            'account.delete_date': null,
+            delete_date: null,
+            ...condition,
+          },
+        },
+        //add field
+        {
+          $lookup: {
+            from: 'tbl_field_cv',
+            localField: '_id',
+            foreignField: 'id_cv',
+            as: 'field_cv',
+            pipeline: [
+              {
+                $group: {
+                  _id: '$id_cv',
+                  id_fields: {
+                    $push: '$id_field',
+                  },
+                },
+              },
+            ],
+          },
+        },
+        {
+          $unwind: '$field_cv',
+        },
+        {
+          $addFields: {
+            //search
+            result: {
+              $or: [
+                {
+                  $regexMatch: {
+                    input: '$level',
+                    regex: searchRgx,
+                    options: 'i',
+                  },
+                },
+                {
+                  $regexMatch: {
+                    input: '$way_working',
+                    regex: searchRgx,
+                    options: 'i',
+                  },
+                },
+                {
+                  $regexMatch: {
+                    input: '$title',
+                    regex: searchRgx,
+                    options: 'i',
+                  },
+                },
+              ],
+            },
+            id_fields: '$field_cv.id_fields',
+          },
+        },
+        {
+          $addFields: {
+            isfields: field_condition,
+          },
+        },
+        {
+          $match: {
+            result: true,
+            isfields: true,
+            isExperience: true,
+          },
+        },
+        {
+          $lookup: {
+            from: 'tbl_field',
+            localField: 'id_fields',
+            foreignField: '_id',
+            as: 'fields',
+          },
+        },
+        {
+          $count: 'total',
+        },
+      ]);
+      total = studentListTotal[0].total;
+    }
+    console.log(studentList);
+    return {
+      data: studentList,
+      pageSize: +pageIndex,
+      pageIndex: +pageSize,
+      total: total,
+    };
+  }
 }

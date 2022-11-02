@@ -7,11 +7,13 @@ import {
   Param,
   UseInterceptors,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CvService } from './cv.service';
 import { CreateCvDto, FileCreateCVDto } from './dto/create-cv.dto';
+import { QueryParamCVDto } from './dto/query-param-cv.dto';
 import { UpdateCvDto } from './dto/update-cv.dto';
 
 @Controller({
@@ -37,8 +39,8 @@ export class CvController {
   }
 
   @Get()
-  findAll() {
-    return this.cvService.findAll();
+  findAll(@Query() query: QueryParamCVDto) {
+    return this.cvService.findAll(query);
   }
 
   @Get(':id')
