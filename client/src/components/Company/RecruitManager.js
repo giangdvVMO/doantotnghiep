@@ -7,15 +7,13 @@ import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
 import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
+import { DateToShortStringDate } from '../../common/service';
 
 const { Option } = Select;
 export const RecruitManager = () => {
     const { user, changeUser, token } = useContext(UserContext);
     const navigate = useNavigate();
-    if(!user||user.role!=='company'){
-        message.warn('Bạn ko có quyền xem trang này');
-        navigate('/home')
-    }
+    
     const [fields, setFields] = useState([]);
     const [field, setField] = useState([]);
     const [status, setStatus] = useState(-1);
@@ -109,12 +107,8 @@ export const RecruitManager = () => {
             }
     }
     useEffect(()=>{fetchUser()},[]);
-    useEffect(()=>{
-        fetchField();
-    },[]);
-    useEffect(()=>{
-        fetchListRecruit();
-    },[field, status, search])
+    useEffect(()=>{fetchField();},[]);
+    useEffect(()=>{fetchListRecruit();},[field, status, search, user])
     const columns = [
         {
             title: 'STT',
@@ -179,19 +173,17 @@ export const RecruitManager = () => {
         },
         {
             title: 'Ngày bắt đầu',
-            dataIndex: 'start_date',
             key: 'start_date',
-            // render: (_,record) =>{ 
-            //     return record.start_date? <>{DateToShortStringDate(record.start_date)}</>:''
-            // }
+            render: (_,record) =>{ 
+                return record.start_date? <>{DateToShortStringDate(record.start_date)}</>:''
+            }
         },
         {
             title: 'Ngày kết thúc',
-            dataIndex: 'end_date',
             key: 'end_date',
-            // render: (_,record) =>{ 
-            //     return record.end_date? <>{DateToShortStringDate(record.end_date)}</>:''
-            // }
+            render: (_,record) =>{ 
+                return record.end_date? <>{DateToShortStringDate(record.end_date)}</>:''
+            }
         },
         {
             title: 'Lĩnh vực',
@@ -265,24 +257,6 @@ export const RecruitManager = () => {
                         }
                     </Select>
                 </div>
-                {/* <div className='filter'>
-                    <label className='label-filter'>Địa điểm:</label>
-                    <Select
-                    mode='multiple'
-                        value={field}
-                        defaultValue='all'
-                        labelInValue='Địa điểm'
-                        className='filter-content'
-                        onChange={handleChangeField}
-                    >
-                        <Option value={-1}>all</Option>
-                        {
-                            fields.map((field)=>{
-                                return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
-                            })
-                        }
-                    </Select>
-                </div> */}
                 <div className='filter'>
                     <label className='label-filter'>Trạng thái:</label>
                     <Select

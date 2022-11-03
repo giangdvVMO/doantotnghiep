@@ -1,34 +1,61 @@
-import { Button, Input, message, Select, Table } from 'antd';
+import { Button, Input, message, Select, Table, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {decodeToken} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
-import { SearchOutlined } from '@ant-design/icons';
-import { majorList, universityList } from '../../data/list';
+import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
 
 const { Option } = Select;
-
-export const StudentList = () => {
-    const { user, changeUser, token } = useContext(UserContext);
+export const CVManagerAdmin = () => {
+    const { user,changeUser, token } = useContext(UserContext);
     const navigate = useNavigate();
     
-    const [university, setUniversity] = useState(-1);
-    const [major, setMajor] = useState(-1);
+    const [fields, setFields] = useState([]);
+    const [field, setField] = useState([]);
+    const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
-    const [listUser, setListUser] = useState([]);
-    async function fetchListStudent(){
-        if(!user||user.role!=='company'){
+    const [listCV, setListCV] = useState([]);
+
+    //fetch Fields
+    async function fetchField(){
+        const url = serverURL + 'field';
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            console.log(result);
+            if(response.status!==200){
+                message.error(result.message);
+            }else{
+                message.success("Load field thành công!");
+                console.log("fetchField", result.data);
+                setFields(result.data);
+            }
+        }
+        catch (err) {
+            console.log(err);
+            message.error("Đã có lỗi xảy ra!");
+        }
+}
+
+    async function fetchListCV(){
+        if(!user||user.role!=='admin'){
             message.warn('Bạn ko có quyền xem trang này');
             navigate('/home')
         }
-        let query = '?status=1';
-                query = major!==-1? query+'&major='+major:query;
-                query = university!==-1? query+'&university='+university:query;
+        let query = '?1=1';
+                query = status!==-1? query+'&status='+status:query;
+                query = field.length? query+'&field='+field:query;
                 query = search!==''? query+'&search='+search:query;
-                const url = serverURL + 'student'+ query;
+                const url = serverURL + 'cv'+ query;
                 console.log(query);
                 try {
                     const response = await fetch(url, {
@@ -42,8 +69,8 @@ export const StudentList = () => {
                     if(response.status!==200){
                         message.error("Lỗi hệ thống!");
                     }else{
-                        console.log(result)
-                        setListUser([...result.data]);
+                        console.log("result",result)
+                        setListCV(result.data);
                     }
                 }
                 catch (err) {
@@ -71,22 +98,20 @@ export const StudentList = () => {
                     message.error("Lỗi hệ thống load user!");
                 }else{
                   console.log("user fetch to set role", result)
-                  if(!result||result.role!=='company'){
+                  if(!result||result.role!=='admin'){
                       message.warn('Bạn ko có quyền xem trang này');
                       navigate('/')
                   }
                     changeUser({...result})
-
                 }
             }
             catch (err) {
                 console.log(err);
             }
     }
-
-    useEffect(()=>{fetchUser()}, []);
-    useEffect(()=>{fetchListStudent();},[university, major, search])
-    
+    useEffect(()=>{fetchUser()},[]);
+    useEffect(()=>{fetchField()},[]);
+    useEffect(()=>{fetchListCV()},[field, status, search])
     const columns = [
         {
             title: 'STT',
@@ -95,54 +120,35 @@ export const StudentList = () => {
             fixed: 'left',
         },
         {
-            title: 'Họ và tên',
-            dataIndex: 'fullname',
-            key: 'fullname',
+            title: 'Tiêu đề',
+            dataIndex: 'title',
+            key: 'title',
         },
         {
-            title: 'Ngày sinh',
-            dataIndex: 'birthday',
-            key: 'birthday',
+            title: 'Lĩnh vực',
+            key: 'fields',
+            render: (_,record) =>{ return (<>{
+                record.fields.map((manu) => {return(
+                    <Tag className="tag" color="cyan">{manu.nameField}</Tag>)
+                })
+            }</>)
+            }
         },
         {
-            title: 'Quê quán',
-            dataIndex: 'address',
-            key: 'address',
-        },
-        {
-            title: 'Số điện thoại',
-            dataIndex: 'phone',
-            key: 'phone',
-        },
-        {
-            title: 'CCCD',
-            dataIndex: 'cccd',
-            key: 'cccd',
-        },
-        {
-            title: 'Trường',
-            dataIndex: 'university',
-            key: 'university',
-        },
-        {
-            title: 'Khoa',
-            dataIndex: 'faculty',
-            key: 'faculty',
-        },
-        {
-            title: 'Chuyên ngành',
-            dataIndex: 'major',
-            key: 'major',
-        },
-        {
-            title: 'Khóa học',
-            dataIndex: 'course',
-            key: 'course',
-        },
-        {
-            title: 'GPA',
-            dataIndex: 'gpa',
-            key: 'gpa',
+            title: 'Trạng thái',
+            key: 'status',
+            render: (_, record) => (
+                     record.status?
+                        <Tag icon={<CheckCircleOutlined />} 
+                            color="success">
+                            public
+                        </Tag>
+                        :
+                        <Tag icon={<MinusCircleOutlined />} color="warning">
+                            private
+                        </Tag>
+            ),
+            fixed: 'right',
         },
         {
             title: 'Hành động',
@@ -153,58 +159,56 @@ export const StudentList = () => {
             fixed: 'right',
         },
     ];
-
-    const handleChangeUniversity = (e)=>{
-        setUniversity(e.value);
+    const handleChangeField = (e)=>{
+        console.log(e);
+        const value = e.map(item=>{
+            return item.value
+        })
+        setField([...value]);
     }
 
-    const handleChangeMajor = (e)=>{
-        setMajor(e.value);
+    const handleChangeSelect = (e)=>{
+        setStatus(e.value);
     }
-
     const handleChangeSearch = (e)=>{
         setSearch(e.target.value);
     }
 
     return (
         <>
-            <div className='banner-content'>Danh sách sinh viên</div>
+            <div className='banner-content'>Quản lý danh sách CV</div>
             <div className='container-filter'>
                 <div className='filter'>
-                    <label className='label-filter'>Trường:</label>
+                    <label className='label-filter'>Lĩnh vực CV:</label>
                     <Select
-                        value={university}
-                        defaultValue='all'
-                        labelInValue='Chuyên ngành'
+                    mode='multiple'
+                        value={field}
+                        labelInValue='Lĩnh vực bài đăng'
                         className='filter-content'
-                        onChange={handleChangeUniversity}
+                        onChange={handleChangeField}
                     >
-                        <Option value={-1}>all</Option>
                         {
-                            universityList.map((university)=>{
-                                return (<Option key={university} value={university}>{university}</Option>)
+                            fields.map((field)=>{
+                                return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
                             })
                         }
                     </Select>
                 </div>
                 <div className='filter'>
-                    <label className='label-filter'>Chuyên ngành:</label>
+                    <label className='label-filter'>Trạng thái:</label>
                     <Select
-                        value={major}
-                        defaultValue='all'
-                        labelInValue='Chuyên ngành'
+                        value={status}
+                        defaultValue='-1'
+                        labelInValue='Trạng thái'
                         className='filter-content'
-                        onChange={handleChangeMajor}
+                        onChange={handleChangeSelect}
+                        optionLabelProp='label'
                     >
-                        <Option value={-1}>all</Option>
-                        {
-                            majorList.map((major)=>{
-                                return (<Option key={major} value={major}>{major}</Option>)
-                            })
-                        }
+                        <Option value={-1} label='all'>all</Option>
+                        <Option value={1} label='public'>public</Option>
+                        <Option value={0} label='private'>private</Option>
                     </Select>
                 </div>
-                
                 <div className='filter'>
                     <label className='transparent'>Tìm kiếm</label>
                     <div className='search'>
@@ -217,10 +221,10 @@ export const StudentList = () => {
                 </div>
             </div>
             <Table 
-                dataSource={listUser} 
+                dataSource={listCV} 
                 columns={columns} 
                 scroll={{
-                    x: 800,
+                    x: 2000,
                     y: 800,
                 }}
             />;

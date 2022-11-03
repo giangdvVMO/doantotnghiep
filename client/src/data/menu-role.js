@@ -29,6 +29,11 @@ export const MenuRole = {
             key: 'studentmanagerment'
         },
         {
+            label: <Link to='cv-management'>Quản lý cv</Link>,
+            icon: <AlertOutlined />,
+            key: 'cvmanagerment'
+        },
+        {
             label: <Link to='company-management'>Quản lý doanh nghiệp</Link>,
             icon: <BankOutlined />,
             key: 'companymanagerment'
@@ -59,6 +64,11 @@ export const MenuRole = {
             label: <Link to='company/student-list'>Danh sách sinh viên</Link>,
             icon: <SnippetsOutlined />,
             key: 'studentlist'
+        },
+        {
+            label: <Link to='company/cv-list'>Danh sách CV</Link>,
+            icon: <AlertOutlined />,
+            key: 'cvlist'
         },
         {
             label: 'Quản lý bài đăng tuyển dụng',

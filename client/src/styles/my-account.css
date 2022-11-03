@@ -114,3 +114,13 @@
 .apply-container{
     position: relative;
 }
+
+.apply-container{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.apply-btn{
+    margin-top:5px;
+    margin-right: 20px;
+}

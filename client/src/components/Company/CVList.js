@@ -1,25 +1,22 @@
-import { Button, Card, Image, Input, message, Pagination, Select, Tag } from 'antd';
+import { Avatar, Button, Card, Image, Input, message, Pagination, Select, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {decodeToken} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
-import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import { SearchOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
 import '../../styles/list.css'
-import { DateToShortStringDate } from '../../common/service';
 
 const { Option } = Select;
-export const RecruitListStudent = () => {
+export const CVList = () => {
     const { user, changeUser, token } = useContext(UserContext);
     const navigate = useNavigate();
-    
     const [fields, setFields] = useState([]);
     const [field, setField] = useState([]);
-    const [experience, setExperience] = useState(-1);
     const [search, setSearch] = useState('');
-    const [listRecruit, setListRecruit] = useState([]);
+    const [listCV, setListCV] = useState([]);
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(5)
     const [total, setPageTotal] = useState(1);
@@ -51,12 +48,11 @@ export const RecruitListStudent = () => {
         }
     }
 
-    async function fetchListRecruit(){
-                let query = '?status=1&pageIndex='+pageIndex+'&pageSize='+pageSize;
+    async function fetchListCV(){
+                let query = '?pageIndex='+pageIndex+'&pageSize='+pageSize;
                 query = field.length? query+'&field='+field:query;
-                query = experience!==-1? query+'&experience='+experience:query;
                 query = search!==''? query+'&search='+search:query;
-                const url = serverURL + 'recruit'+ query;
+                const url = serverURL + 'CV'+ query;
                 console.log(query);
                 try {
                     const response = await fetch(url, {
@@ -72,7 +68,7 @@ export const RecruitListStudent = () => {
                     }else{
                         console.log("result",result)
                         setPageTotal(result.total);
-                        setListRecruit(result.data);
+                        setListCV(result.data);
                     }
                 }
                 catch (err) {
@@ -101,7 +97,7 @@ export const RecruitListStudent = () => {
                     message.error("Lỗi hệ thống load user!");
                 }else{
                   console.log("user fetch to set role", result)
-                  if(!result||result.role!=='student'){
+                  if(!result||result.role!=='company'){
                       message.warn('Bạn ko có quyền xem trang này');
                       navigate('/')
                   }
@@ -115,7 +111,7 @@ export const RecruitListStudent = () => {
 
     useEffect(()=>{fetchUser()}, []);
     useEffect(()=>{fetchField();},[]);
-    useEffect(()=>{fetchListRecruit();},[pageIndex, pageSize,field, experience, search, user])
+    useEffect(()=>{fetchListCV();},[pageIndex, pageSize,field, search, user])
     const handleChangeField = (e)=>{
         console.log(e);
         const value = e.map(item=>{
@@ -125,10 +121,6 @@ export const RecruitListStudent = () => {
         setPageIndex(1);
     }
 
-    const handleChangeSelect = (e)=>{
-        setExperience(e.value);
-        setPageIndex(1);
-    }
     const handleChangeSearch = (e)=>{
         setSearch(e.target.value);
         setPageIndex(1);
@@ -139,19 +131,18 @@ export const RecruitListStudent = () => {
     };
     return (
         <>
-            <div className='banner-content'>Quản lý danh sách bài đăng</div>
+            <div className='banner-content'>Quản lý danh sách CV</div>
             <div className='container-filter'>
                 <div className='filter'>
-                    <label className='label-filter'>Lĩnh vực bài đăng:</label>
+                    <label className='label-filter'>Lĩnh vực CV:</label>
                     <Select
                     mode='multiple'
                         value={field}
                         defaultValue='all'
-                        labelInValue='Lĩnh vực bài đăng'
+                        labelInValue='Lĩnh vực CV'
                         className='filter-content'
                         onChange={handleChangeField}
                     >
-                        {/* <Option>all</Option> */}
                         {
                             fields.map((field)=>{
                                 return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
@@ -159,39 +150,7 @@ export const RecruitListStudent = () => {
                         }
                     </Select>
                 </div>
-                {/* <div className='filter'>
-                    <label className='label-filter'>Địa điểm:</label>
-                    <Select
-                    mode='multiple'
-                        value={field}
-                        defaultValue='all'
-                        labelInValue='Địa điểm'
-                        className='filter-content'
-                        onChange={handleChangeField}
-                    >
-                        <Option value={-1}>all</Option>
-                        {
-                            fields.map((field)=>{
-                                return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
-                            })
-                        }
-                    </Select>
-                </div> */}
-                <div className='filter'>
-                    <label className='label-filter'>Kinh nghiệm:</label>
-                    <Select
-                        value={experience}
-                        defaultValue='all'
-                        labelInValue='Trạng thái'
-                        className='filter-content'
-                        onChange={handleChangeSelect}
-                    >
-                        <Option value={-1}>Tất cả</Option>
-                        <Option value={0}>Không yêu cầu</Option>
-                        <Option value={1}>Dưới 1 năm</Option>
-                        <Option value={2}>Từ 1 tới 5 năm</Option>
-                    </Select>
-                </div>
+                
                 <div className='filter'>
                     <label className='transparent'>Tìm kiếm</label>
                     <div className='search'>
@@ -204,58 +163,36 @@ export const RecruitListStudent = () => {
                 </div>
             </div>
 
-            <div className='list-container'>
+            <div class="flex-container-list">
                 {
-                    listRecruit.map((recruit)=>{
-                        return (
-                            <Card className='card-recruit'
-                                cover={
-                                    <div className='title-recruit'>
-                                        {recruit.title}
-                                    </div>
-                              }
-                                actions={[
-                                  ]}
-                                >
-                                <div className= 'grid-layout'>
-                                <div className='top-content'>
-                                    <Image
-                                        width={100}
-                                        src="https://i.ibb.co/4KBQVdk/Hiring-rafiki.png"
-                                        /> 
-                                        
-                                    <div className='com_name'>{recruit.company.com_name}</div>
-                                </div>
-                                <div className='middle-content'>
+                    listCV.map(
+                        (CV)=>{
+                            return (
+                                <div class="flex-item bg-one tilt">
+                                    
+                                    <Image className='background-image-cv' src={CV.file_cv} preview={false}/>
                                     <div className='content'>
-                                        Lĩnh vực:
+                                        <p className='title-cv'>{CV.title}</p>
+                                    </div>
+                                    <div className='author'>
+                                        <Avatar className='avatar-author' size= {30} icon={<UserOutlined />} />
+                                        <div className='name-author'>{user.fullname}</div>
+                                    </div>
+                                    <div className='field-list'>
                                         {
-                                            recruit.fields.map((field) => {
+                                            CV.fields.map((field)=>{
                                                 return(
-                                                <Tag color='purple'>{field.nameField}</Tag>
-                                            )})
+                                                    <Tag color="orange" className='tag-cv'>{field.nameField}</Tag>
+                                                )
+                                            })
                                         }
                                     </div>
-                                    <div className='content'>
-                                        Kinh nghiệm:
-                                        {
-                                            recruit.experience===0? <Tag color=''>Không yêu cầu</Tag>: 
-                                            recruit.experience>0&& recruit.experience<12?  <Tag color='volcano'>Dưới 1 năm</Tag>:
-                                            <Tag color='magenta'>Trên 1 năm</Tag>
-                                        }
-                                    </div>
-                                    <div className='content'>
-                                        Hạn chót: {DateToShortStringDate(recruit.end_date)}
-                                    </div>
-                                    <Link to={`../recruit/${recruit._id},${recruit.id_company}`}><SettingOutlined key="setting" /> Xem chi tiết...</Link>,
-                                </div>
                             </div>
-                            </Card>
-                        )
-                    })
+                            )
+                        }
+                    )
                 }
             </div>
-
             <div className='pagination'>
             <Pagination
                 showSizeChanger

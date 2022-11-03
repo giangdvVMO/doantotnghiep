@@ -50,9 +50,7 @@ export const RecruitDetailStudent = ()=>{
     const [isOpen, setOpen] = useState(false);
     const [reason, setReason] = useState('');
     const navigate = useNavigate();
-    if(!user||user.role!=="student"){
-        navigate('/sign-in');
-    }
+    
     const {id} = useParams();
     const ids = id.split(',');
     const [account, setAccount] = useState(user);
@@ -313,13 +311,14 @@ export const RecruitDetailStudent = ()=>{
         <div className='introduce-frame'>
             <div className='background-image center'>
                 <p className='title-account center '>Chi tiết bài đăng tuyển dụng</p>
-                <div className="apply-container">
-                    <Button className="apply-btn">Ứng tuyển ngay</Button>
-                </div>
             </div>
+            <div className="apply-container">
+                    <Button className="apply-btn" type="primary">Ứng tuyển ngay</Button>
+                </div>
         </div>
+                
         <div className='detail-swapper'>
-            <div className='underline'></div>
+            {/* <div className='underline'></div> */}
             <div className='body'>
             <Form
                     ref={ref}

@@ -200,7 +200,7 @@ export class CvService {
           ...condition,
         },
       },
-      //add field
+      // //add field
       {
         $lookup: {
           from: 'tbl_field_cv',
@@ -255,7 +255,7 @@ export class CvService {
         $match: {
           result: true,
           isfields: true,
-          isExperience: true,
+          // isExperience: true,
         },
       },
       {
@@ -328,29 +328,29 @@ export class CvService {
           $addFields: {
             //search
             result: {
-              $or: [
-                {
-                  $regexMatch: {
-                    input: '$level',
-                    regex: searchRgx,
-                    options: 'i',
-                  },
-                },
-                {
-                  $regexMatch: {
-                    input: '$way_working',
-                    regex: searchRgx,
-                    options: 'i',
-                  },
-                },
-                {
-                  $regexMatch: {
-                    input: '$title',
-                    regex: searchRgx,
-                    options: 'i',
-                  },
-                },
-              ],
+              // $or: [
+              //   {
+              //     $regexMatch: {
+              //       input: '$level',
+              //       regex: searchRgx,
+              //       options: 'i',
+              //     },
+              //   },
+              //   {
+              //   $regexMatch: {
+              //     input: '$way_working',
+              //     regex: searchRgx,
+              //     options: 'i',
+              //   },
+              // },
+              // {
+              $regexMatch: {
+                input: '$title',
+                regex: searchRgx,
+                options: 'i',
+              },
+              // },
+              // ],
             },
             id_fields: '$field_cv.id_fields',
           },
@@ -364,7 +364,7 @@ export class CvService {
           $match: {
             result: true,
             isfields: true,
-            isExperience: true,
+            // isExperience: true,
           },
         },
         {

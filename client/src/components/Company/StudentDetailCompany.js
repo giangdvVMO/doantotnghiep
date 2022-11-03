@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Form, message, Skeleton } from "antd";
+import { Avatar, Button, Card, Form, Image, message, Skeleton, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import {decodeToken} from 'react-jwt';
@@ -29,6 +29,7 @@ export const StudentDetailCompany = ()=>{
     const navigate = useNavigate();
     const [account, setAccount] = useState(user);
     const [student, setStudent] = useState(students);
+    const [CV, setCV] = useState(null);
 
     const {id} = useParams();
 
@@ -93,8 +94,36 @@ export const StudentDetailCompany = ()=>{
             }
     }
 
+    //FETCH CV
+    async function fetchCV(){
+        console.log('fetchCV')
+        const url = serverURL + 'cv/'+student._id;
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            console.log('CV',result);
+            if(response.status!==200){
+                message.error(result.message);
+            }else{
+                message.success("Load cv thành công!");
+                setCV({...result.data});
+            }
+        }
+        catch (err) {
+            console.log(err);
+            message.error("Đã có lỗi xảy ra!");
+        }
+    }
+
     useEffect(()=>{fetchUser()}, []);
     useEffect(()=>{fetchStudent();},[])
+    useEffect(()=>{fetchCV()},[student]);
     
     const ref = useRef();
     const refButtonSubmit = useRef();
@@ -243,7 +272,57 @@ export const StudentDetailCompany = ()=>{
                 </div>
             </div>
             <Card title='Thông tin CV'>
-
+                {
+                    CV?(
+                        <Form
+                            ref={ref}
+                            onKeyUp={handleKeyUp}
+                            className='form'
+                            name="basic"
+                            layout='vertical'
+                        >
+                            <div className='two-colums'>
+                            <Form.Item
+                                    label="Tiêu đề CV:"
+                                    name="title"
+                                    className='label'
+                                >
+                                    <p className="text-display">{CV.title}</p>
+                                </Form.Item>
+                                <Form.Item
+                                    label="Lĩnh vực:"
+                                    name="fields"
+                                    className='label'
+                                >
+                                {
+                                    
+                                        <div >
+                                        {
+                                            CV.fields.length?
+                                            CV.fields.map((field)=>{
+                                                return <Tag className="tag" color="cyan">{field.nameField}</Tag>
+                                            }):
+                                            <p className="text-display"></p>
+                                        }
+                                        </div>
+                                    }
+                                </Form.Item>
+                                <Form.Item 
+                                    label='FILE CV:'
+                                    className='label'
+                                    >
+                                    {
+                                        CV.file_cv?
+                                        <Image alt="file_cv" src={CV.file_cv} width={300} />
+                                        : <p>Chưa có ảnh</p>
+                                    }
+                                </Form.Item>
+                                </div>
+                        </Form>
+                        )
+                        :
+                        <p>Chưa có CV</p>
+                    }
             </Card>
         </div>
     )
