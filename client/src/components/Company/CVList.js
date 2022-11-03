@@ -1,11 +1,11 @@
-import { Avatar, Button, Card, Image, Input, message, Pagination, Select, Tag } from 'antd';
+import { Avatar, Button, Image, Input, message, Pagination, Select, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {decodeToken} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
-import { SearchOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
 import '../../styles/list.css'
 
@@ -169,7 +169,7 @@ export const CVList = () => {
                         (CV)=>{
                             return (
                                 <div class="flex-item bg-one tilt">
-                                    
+                                    <Link to={`../student/${CV._id}`} >
                                     <Image className='background-image-cv' src={CV.file_cv} preview={false}/>
                                     <div className='content'>
                                         <p className='title-cv'>{CV.title}</p>
@@ -187,6 +187,7 @@ export const CVList = () => {
                                             })
                                         }
                                     </div>
+                                    </Link>
                             </div>
                             )
                         }

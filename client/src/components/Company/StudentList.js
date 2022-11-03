@@ -20,10 +20,7 @@ export const StudentList = () => {
     const [search, setSearch] = useState('');
     const [listUser, setListUser] = useState([]);
     async function fetchListStudent(){
-        if(!user||user.role!=='company'){
-            message.warn('Bạn ko có quyền xem trang này');
-            navigate('/home')
-        }
+        
         let query = '?status=1';
                 query = major!==-1? query+'&major='+major:query;
                 query = university!==-1? query+'&university='+university:query;

@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Form, Image, message, Skeleton, Tag } from "antd";
+import { Avatar, Button, Card, Form, Image, message, Modal, Skeleton, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import {decodeToken} from 'react-jwt';
@@ -10,26 +10,27 @@ import '../../styles/my-account.css'
 import { DateToShortString } from "../../common/service";
 import { serverURL } from "../../configs/server.config";
 
-let students = {
+let initstudent = {
     _id:1,
-    cccd: "19378273828",
-    address: "HP",
-    university: "University",
-    faculty: "English",
-    course: "2012-2020",
-    gpa: 3.5,
+    cccd: "",
+    address: "",
+    university: "",
+    faculty: "",
+    course: "",
+    gpa: '',
     status: false,
     avatar: '',
-    card_student: '18A100100',
-    major: 'Công nghệ phần mềm'
+    card_student: '',
+    major: ''
 }
 
 export const StudentDetailCompany = ()=>{
     const {user, changeUser, token} = useContext(UserContext);
     const navigate = useNavigate();
     const [account, setAccount] = useState(user);
-    const [student, setStudent] = useState(students);
+    const [student, setStudent] = useState(initstudent);
     const [CV, setCV] = useState(null);
+    const [isOpenConfirm, setOpenConfirm] = useState(false);
 
     const {id} = useParams();
 
@@ -135,15 +136,22 @@ export const StudentDetailCompany = ()=>{
             refButtonSubmit.current.click();
         }
     }
-    const handleAccept = async ()=>{
-        return;
-    }
     const renderButtonGroup = ()=>{
         return (
-            <>
-                <Button type='submit' className='button save-btn' onClick={handleAccept}>Gửi thư mời phỏng vấn</Button>
-            </>
+            <div className="apply-container">
+                <Button type='primary' className="apply-btn" onClick={handleApply}>Gửi thư mời phỏng vấn</Button>
+            </div>
         )
+    }
+    const handleApply = ()=>{
+        setOpenConfirm(true);
+    }
+    const handleCancelConfirm = ()=>{
+        setOpenConfirm(false);
+    }
+
+    const handleOkConfirm = ()=>{
+        //gửi mail và noti
     }
     if(account){
     return (<div className='swapper-container'>
@@ -152,6 +160,9 @@ export const StudentDetailCompany = ()=>{
             <div className='introduce-bottom'>
                 <Avatar className='avatar' size= {120} icon={<UserOutlined />} />
                 <div className='introduce-fullname'>{account.fullname}</div>
+                {
+                    renderButtonGroup()
+                }
             </div>
         </div>
         <div className='detail-swapper'>
@@ -265,9 +276,7 @@ export const StudentDetailCompany = ()=>{
                         </Form.Item>
                     
                     </div>
-                    <Form.Item>
-                        {renderButtonGroup()}
-                    </Form.Item>
+                    
                 </Form>
                 </div>
             </div>
@@ -324,6 +333,9 @@ export const StudentDetailCompany = ()=>{
                         <p>Chưa có CV</p>
                     }
             </Card>
+            <Modal title="Xác nhận" open={isOpenConfirm} onOk={handleOkConfirm} onCancel={handleCancelConfirm}>
+                <p>Bạn có chắc chắn muốn gửi thư mời phỏng vấn sinh viên này!</p>
+            </Modal>
         </div>
     )
     }else{

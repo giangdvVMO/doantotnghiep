@@ -142,7 +142,7 @@ export const CompanyDetailStudent = ()=>{
             <div className='background-image'></div>
             <div className='introduce-bottom'>
                 <Avatar className='avatar' size= {120} icon={<UserOutlined />} />
-                <div className='introduce-ComName'>{company.com_name}</div>
+                <div className='introduce-fullname'>{company.com_name}</div>
             </div>
         </div>
         <div className='detail-swapper'>
@@ -244,7 +244,7 @@ export const CompanyDetailStudent = ()=>{
                             <TextArea rows={5} disabled value={company.introduction} defaultValue={company.introduction} />
                         </Form.Item>
                 </Form>
-                <Link to={`../recruit-list/company/${id}`}><Button>Xem các bài đăng tuyển dụng</Button></Link>
+                <Link to={`../recruit-list/company/${id}`}><Button type="primary">Xem các bài đăng tuyển dụng</Button></Link>
             </div>
         </div>
 

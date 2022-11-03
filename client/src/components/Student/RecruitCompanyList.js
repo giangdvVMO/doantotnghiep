@@ -1,11 +1,11 @@
-import { Button, Card, Image, Input, message, Pagination, Select, Table, Tag } from 'antd';
+import { Button, Card, Image, Input, message, Pagination, Select, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import {decodeToken , isExpired} from 'react-jwt';
+import {decodeToken} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
-import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
 import { DateToShortStringDate } from '../../common/service';
 
@@ -14,10 +14,7 @@ export const RecruitCompanyListStudent = () => {
     const { user, changeUser, token } = useContext(UserContext);
     const {id} = useParams();
     const navigate = useNavigate();
-    if(!user||user.role!=='student'){
-        message.warn('Bạn ko có quyền xem trang này');
-        navigate('/home')
-    }
+    
     const [fields, setFields] = useState([]);
     const [field, setField] = useState([]);
     const [experience, setExperience] = useState(-1);

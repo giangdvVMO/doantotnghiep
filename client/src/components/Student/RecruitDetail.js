@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input, message, Modal, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {decodeToken} from 'react-jwt';
 
 import { serverURL } from "../../configs/server.config";
@@ -47,8 +47,7 @@ let initialCompany = {
 export const RecruitDetailStudent = ()=>{
     const {user, changeUser, token} = useContext(UserContext);
     const [isOpenModal, setOpenModal] = useState(false);
-    const [isOpen, setOpen] = useState(false);
-    const [reason, setReason] = useState('');
+    const [isOpenConfirm, setOpenConfirm] = useState(false);
     const navigate = useNavigate();
     
     const {id} = useParams();
@@ -148,6 +147,38 @@ export const RecruitDetailStudent = ()=>{
             message.error("Đã có lỗi xảy ra!");
         }
     }
+
+    //fetchCV
+    async function fetchCV(){
+        console.log('fetchCV')
+        const url = serverURL + 'cv/'+account._id;
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            console.log('CV',result);
+            if(response.status!==200){
+                message.error(result.message);
+            }else{
+                if(result.data==={}||!result.data){
+                    setOpenModal(true);
+                }
+                else{
+                    setOpenConfirm(true);
+                }   
+            }
+        }
+        catch (err) {
+            console.log(err);
+            message.error("Đã có lỗi xảy ra!");
+        }
+    }
+
      //fetch user
      const fetchUser = async()=>{
         console.log('fetch user account')
@@ -200,110 +231,25 @@ export const RecruitDetailStudent = ()=>{
     }
 
     //handle action
-    async function confirmRecruit(){
-        try {
-            const url = serverURL + 'recruit/confirm/'+ ids[0];
-            const data = {
-                confirm_id: user._id
-            }
-            const response = await fetch(url, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            }
-            );
-            const result = await response.json();
-            if(response.status!==200){
-                message.error("Lỗi hệ thống!");
-            }else{
-                if(result.data===false){
-                    message.warning('Cập nhật không thành công, hãy kiểm tra lại!');
-                }else{
-                    message.success('Duyệt thành công!');
-                    fetchRecruit();
-                }
-            }
-        }
-        catch (err) {
-            console.log(err);
-        }
+
+    const handleApply = ()=>{
+        fetchCV();
     }
 
-    async function deleteRecruit(){
-        const url = serverURL + 'recruit/'+ids[0];
-        const data = {delete_id: user._id}
-            console.log("request", data)
-            try {
-                const response = await fetch(url, {
-                    method: 'DELETE',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
-                );
-                const result = await response.json();
-                console.log(result);
-                if(response.status!==200){
-                    message.error(result.message);
-                }else{
-                    message.success("Bạn đã xóa bài đăng tuyển dụng thành công!");
-                    navigate('/admin/recruit-list');
-                }
-            }
-            catch (err) {
-                console.log(err);
-                message.error("Đã có lỗi xảy ra!");
-            }
-    }
-
-    async function handleDelete(e){
-        setOpenModal(true);
-        return;
-    }
-    async function handleConfirmDelete(e) {
+    const handleCancel = ()=>{
         setOpenModal(false);
-        deleteRecruit();
-        return;
-    }
-    async function handleCancelDelete(e) {
-        setOpenModal(false);
-        message.info("Bạn xác nhận không xóa!");
-        return;
     }
 
-    async function handleAccept(e){
-        confirmRecruit();
+    const handleOk = ()=>{
+        navigate('/my-cv');
     }
-    async function handleReject(e){
-        setOpen(true);
-        return;
+
+    const handleCancelConfirm = ()=>{
+        setOpenConfirm(false);
     }
-    async function handleSubmitDeny(){
-        // set notification (later)
-        message.success('Đã gửi thông báo tới sinh viên!');
-        setOpen(false);
-    }
-    async function handleCancelDeny(){
-        setOpen(false);
-    }
-    async function handleChangeReason(e){
-        setReason(e.target.value);
-        return;
-    }
-    const renderButtonGroup = () => {
-            return (<>{
-                recruit.status?'':(<>
-                    <Button type='submit' className='button save-btn' onClick={handleAccept}>Duyệt</Button>
-                    <Button className='button reject-btn' onClick={handleReject}>Từ chối</Button>
-                </>
-                )
-            }
-                <Button type='submit' className='button delete-btn' onClick={handleDelete}>Xóa</Button>
-                </>
-            )
+
+    const handleOkConfirm = ()=>{
+        //gửi mail và noti
     }
     
     //render UI
@@ -313,12 +259,11 @@ export const RecruitDetailStudent = ()=>{
                 <p className='title-account center '>Chi tiết bài đăng tuyển dụng</p>
             </div>
             <div className="apply-container">
-                    <Button className="apply-btn" type="primary">Ứng tuyển ngay</Button>
+                    <Button className="apply-btn" type="primary" onClick={handleApply}>Ứng tuyển ngay</Button>
                 </div>
         </div>
                 
         <div className='detail-swapper'>
-            {/* <div className='underline'></div> */}
             <div className='body'>
             <Form
                     ref={ref}
@@ -338,7 +283,6 @@ export const RecruitDetailStudent = ()=>{
                     </div>
                     <Card title="Chi tiết bài đăng tuyển dụng">
                     <div className='two-colums'>
-                        
                         <Form.Item
                             label="Lương:"
                             name="salary"
@@ -551,36 +495,17 @@ export const RecruitDetailStudent = ()=>{
                             </div>
                             </div>
                         </Card>
-                        {/* <Form.Item>
-                            <div className='group-button'>
-                                {
-                                    renderButtonGroup()
-                                }
-                            </div>
-                        </Form.Item> */}
                 </Form>
             </div>
         </div>
-        <Modal  title="Xác nhận" open={isOpenModal} onOk={handleConfirmDelete} onCancel={handleCancelDelete}>
-            <p>Bạn có chắc chắn muốn ứng tuyển kèm theo CV!</p>
+        <Modal title="Thông báo" open={isOpenModal} onOk={handleOk} onCancel={handleCancel}>
+            <p>Bạn chưa cập nhật CV nên không thể ứng tuyển, hãy cập nhật!</p>
+            <Link to={`../../../my-cv`} ><Button type="primary">CV</Button></Link>
         </Modal>
-            <Modal title='Xác nhận từ chối' open={isOpen} footer={null}>
-                <label>Lý do từ chối</label>
-                <TextArea 
-                    className='input-login max-width'
-                    placeholder="Nhập lí do"
-                    autoFocus={true}
-                    rows={6}
-                    defaultValue={reason}
-                    value={reason}
-                    onChange={handleChangeReason}
-                />
-                <br/>
-                <div className='group-button'>
-                    <Button type='submit' className='button save-btn' onClick={handleSubmitDeny}>Từ chối</Button>
-                    <Button type='reset' className='button cancel-btn' onClick={handleCancelDeny}>Hủy</Button>
-                </div>
-            </Modal>
+        <Modal title="Xác nhận" open={isOpenConfirm} onOk={handleOkConfirm} onCancel={handleCancelConfirm}>
+            <p>Bạn có chắc chắn muốn ứng tuyển!</p>
+        </Modal>
+           
         </div>
     )
 }
