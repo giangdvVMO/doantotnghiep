@@ -6,9 +6,7 @@ import { Apply, ApplySchema } from './apply.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Apply.name, schema: ApplySchema },
-    ]),
+    MongooseModule.forFeature([{ name: Apply.name, schema: ApplySchema }]),
   ],
   controllers: [ApplyController],
   providers: [ApplyService],

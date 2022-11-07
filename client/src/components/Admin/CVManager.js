@@ -35,7 +35,6 @@ export const CVManagerAdmin = () => {
             if(response.status!==200){
                 message.error(result.message);
             }else{
-                message.success("Load field thành công!");
                 console.log("fetchField", result.data);
                 setFields(result.data);
             }

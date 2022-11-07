@@ -17,34 +17,40 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   @MaxLength(100)
-  username: string;
+  username?: string;
 
   @ApiPropertyOptional({
     description: 'email',
   })
   @IsOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
   @ApiPropertyOptional({
     description: 'fullname',
   })
   @IsOptional()
   @IsString()
-  fullname: string;
+  fullname?: string;
 
   @ApiPropertyOptional({
     description: 'birthday',
   })
   @IsOptional()
   @IsDateString()
-  birthday: string;
+  birthday?: string;
 
   @ApiPropertyOptional({
     description: 'phone',
   })
   @IsOptional()
-  phone: string;
+  phone?: string;
+
+  @ApiPropertyOptional({
+    description: 'socket_id',
+  })
+  @IsOptional()
+  socket_id?: string;
 }
 
 export class ChangeUserPasswordDto {

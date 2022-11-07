@@ -7,6 +7,7 @@ import { checkPassword, checkUsername } from '../../common/validation';
 import { serverURL } from '../../configs/server.config';
 import '../../styles/form.css';
 import { UserContext } from './UserProvider';
+import { socket } from '../../App';
 
 const SignIn = () => {
     const { changeUser, changeToken} = useContext(UserContext);
@@ -100,7 +101,9 @@ const SignIn = () => {
                 }else{
                     message.success("Bạn đã đăng nhập thành công");
                     const account = result.user;
+                    console.log('socket', socket.id);
                     changeUser(account);
+                    socket.emit('msgToSignin', {id:account._id})
                     window.localStorage.setItem('accessToken', result.accessToken)
                     changeToken(result.accessToken);
                     navigate('/');

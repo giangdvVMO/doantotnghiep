@@ -45,6 +45,9 @@ export class User {
 
   @Prop({ type: Date, default: null })
   delete_date: Date;
+
+  @Prop({ type: String, default: null })
+  socket_id: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

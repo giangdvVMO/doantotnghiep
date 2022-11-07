@@ -1,9 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AccountNotiService } from './account_noti.service';
 import { CreateAccountNotiDto } from './dto/create-account_noti.dto';
 import { UpdateAccountNotiDto } from './dto/update-account_noti.dto';
 
-@Controller('account-noti')
+@Controller({
+  version: ['1'],
+  path: 'account-noti',
+})
+@ApiTags('Account-Notification')
 export class AccountNotiController {
   constructor(private readonly accountNotiService: AccountNotiService) {}
 
@@ -23,7 +36,10 @@ export class AccountNotiController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAccountNotiDto: UpdateAccountNotiDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateAccountNotiDto: UpdateAccountNotiDto,
+  ) {
     return this.accountNotiService.update(+id, updateAccountNotiDto);
   }
 

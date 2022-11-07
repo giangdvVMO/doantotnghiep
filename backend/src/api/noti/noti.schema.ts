@@ -10,16 +10,16 @@ export class Noti {
   @Prop()
   _id: number;
 
-  @Prop({ type: String, maxlength: 50 , required: true})
+  @Prop({ type: String, maxlength: 50, required: true })
   title: string;
 
-  @Prop({ type: String, maxlength: 20 , required: true})
+  @Prop({ type: String, maxlength: 20, required: true })
   type: string;
 
-  @Prop({ type: String, maxlength: 1000 , required: true})
+  @Prop({ type: String, maxlength: 1000, required: true })
   content: string;
 
-  @Prop({ type: Boolean, default: false , required: true})
+  @Prop({ type: Boolean, default: false, required: true })
   status: boolean;
 
   @Prop({ type: Date, default: Date.now(), required: true })

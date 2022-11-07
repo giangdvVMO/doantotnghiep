@@ -33,9 +33,9 @@ export const CompanyProfile = ()=>{
     const [isOpenModal, setOpenModal] = useState(false);
     const [manufactures, setManufactures] = useState([{_id:'', name_manu: ''}]);
     const navigate = useNavigate();
-    if(!user||user.role!=="company"){
-        navigate('/sign-in');
-    }
+    // if(!user||user.role!=="company"){
+    //     navigate('/sign-in');
+    // }
     const [account, setAccount] = useState(user);
     const [company, setCompany] = useState(initialCompany);
     const defaultTrueStatus = {
@@ -59,7 +59,6 @@ export const CompanyProfile = ()=>{
             );
             const result = await response.json();
             if(response.status!==200){
-                console.log("Lỗi hệ thống!")
                 message.error("Lỗi hệ thống!");
             }else{
                 console.log("result",result);
@@ -82,6 +81,7 @@ export const CompanyProfile = ()=>{
     }
     async function fetchCompany(){
         try {
+            if(account){
             const _id = account._id;
             const url = serverURL + 'company/'+ _id;
             const response = await fetch(url, {
@@ -107,6 +107,7 @@ export const CompanyProfile = ()=>{
                 }
             }
         }
+    }
         catch (err) {
             console.log(err);
         }
@@ -127,7 +128,6 @@ export const CompanyProfile = ()=>{
                 if(response.status!==200){
                     message.error(result.message);
                 }else{
-                    message.success("Load manufacture thành công!");
                     setManufactures(result.data);
                 }
             }
@@ -185,6 +185,7 @@ export const CompanyProfile = ()=>{
                       navigate('/')
                   }
                     changeUser({...result})
+                    setAccount({...result});
                 }
             }
             catch (err) {
@@ -192,7 +193,7 @@ export const CompanyProfile = ()=>{
             }
     }
     useEffect(()=>{fetchUser()},[]);
-    useEffect(()=>{fetchCompany();},[]);
+    useEffect(()=>{fetchCompany();},[account]);
     useEffect(()=>{fetchManufacture()},[]);
 
     //initial Validate
@@ -504,7 +505,7 @@ export const CompanyProfile = ()=>{
             <div className='background-image'></div>
             <div className='introduce-bottom'>
                 <Avatar className='avatar' size= {120} icon={<UserOutlined />} />
-                <div className='introduce-ComName'>{company.com_name}</div>
+                <div className='introduce-fullname'>{company.com_name}</div>
             </div>
         </div>
         <div className='detail-swapper'>

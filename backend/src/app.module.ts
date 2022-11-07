@@ -20,6 +20,7 @@ import { FieldNewsModule } from './api/field_news/field_news.module';
 import { AccountNotiModule } from './api/account_noti/account_noti.module';
 import { LetterStudentModule } from './api/letter_student/letter_student.module';
 import { ApplyModule } from './api/apply/apply.module';
+import { GateGateway } from './gate.gateway';
 
 @Module({
   imports: [
@@ -44,5 +45,6 @@ import { ApplyModule } from './api/apply/apply.module';
     LetterStudentModule,
     ApplyModule,
   ],
+  providers: [GateGateway],
 })
 export class AppModule {}

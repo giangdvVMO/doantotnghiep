@@ -2,12 +2,13 @@ import { CheckCircleOutlined, MinusCircleOutlined, UserOutlined } from "@ant-des
 import { Avatar, Button, Form, Input, message, Modal, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
-import {decodeToken , isExpired} from 'react-jwt';
+import {decodeToken} from 'react-jwt';
 
 import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
+import {socket} from '../../App';
 const { TextArea } = Input;
 
 let initialCompany = {
@@ -36,30 +37,7 @@ export const CompanyDetailAdmin = ()=>{
     const [company, setCompany] = useState(initialCompany);
     
     const {id} = useParams();
-    console.log("company.manufacture",company.manufacture)
-    //fetch Account
-    async function fetchAccount(){
-        try {
-            const url = serverURL + 'account/'+ id;
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-            );
-            const result = await response.json();
-            if(response.status!==200){
-                message.error("Lỗi hệ thống!");
-            }else{
-                console.log("result",result)
-                setAccount(result);
-            }
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
+   
 
     //fetch manucomany and Company
     async function fetchManuCompany(){
@@ -151,7 +129,7 @@ export const CompanyDetailAdmin = ()=>{
                       navigate('/')
                   }
                     changeUser({...result})
-
+                    setAccount({...result});
                 }
             }
             catch (err) {
@@ -160,9 +138,7 @@ export const CompanyDetailAdmin = ()=>{
     }
 
     useEffect(()=>{fetchUser()}, []);
-    
     useEffect(()=>{fetchCompany();},[]);
-    useEffect(()=>{fetchAccount()},[]);
     async function confirmCompany(){
         try {
             const url = serverURL + 'company/confirm/'+ id;
@@ -184,7 +160,46 @@ export const CompanyDetailAdmin = ()=>{
                 if(result.data===false){
                     message.warning('Cập nhật không thành công, hãy kiểm tra lại!');
                 }else{
-                    message.success('Cập nhật thành công!');
+                    socket.emit('sendNoti', {receive: company._id});
+                    message.success('Gửi thông báo thành công!');
+                    fetchCompany();
+                }
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    const sendNoti = async()=>{
+        try {
+            const url = serverURL + 'noti';
+            const data = {
+                "title": "Từ chối duyệt thông tin doanh nghiệp",
+                "type": "infor",
+                "content": reason,
+                "send_id": account._id,
+                "receive_id": [
+                    company._id
+                ]
+            }
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }
+            );
+            const result = await response.json();
+            if(response.status!==201){
+                message.error("Lỗi hệ thống!");
+            }else{
+                if(!result){
+                    message.warning('Cập nhật không thành công, hãy kiểm tra lại!');
+                }else{
+                     socket.emit('sendNoti',{receive: company._id});
+                    // message.success('Cập nhật thành công!');
                     fetchCompany();
                 }
             }
@@ -195,7 +210,7 @@ export const CompanyDetailAdmin = ()=>{
     }
 
     const ref = useRef();
-
+    
     async function handleAccept(e){
         confirmCompany();
     }
@@ -205,6 +220,7 @@ export const CompanyDetailAdmin = ()=>{
     }
     async function handleSubmitDeny(){
         // set notification (later)
+        sendNoti();
         message.success('Đã gửi thông báo tới sinh viên!');
         setOpen(false);
     }
@@ -246,7 +262,7 @@ export const CompanyDetailAdmin = ()=>{
             <div className='background-image'></div>
             <div className='introduce-bottom'>
                 <Avatar className='avatar' size= {120} icon={<UserOutlined />} />
-                <div className='introduce-ComName'>{company.com_name}</div>
+                <div className='introduce-fullname'>{company.com_name}</div>
             </div>
         </div>
         <div className='detail-swapper'>

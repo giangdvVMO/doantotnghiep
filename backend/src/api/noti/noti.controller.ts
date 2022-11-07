@@ -1,11 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { NotiService } from './noti.service';
 import { CreateNotiDto } from './dto/create-noti.dto';
 import { UpdateNotiDto } from './dto/update-noti.dto';
+import { AccountNotiService } from '../account_noti/account_noti.service';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('noti')
+@Controller({
+  version: ['1'],
+  path: 'noti',
+})
+@ApiTags('Notifications')
 export class NotiController {
-  constructor(private readonly notiService: NotiService) {}
+  constructor(
+    private readonly notiService: NotiService,
+    private readonly accountNotiService: AccountNotiService,
+  ) {}
 
   @Post()
   create(@Body() createNotiDto: CreateNotiDto) {
@@ -17,9 +34,9 @@ export class NotiController {
     return this.notiService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.notiService.findOne(+id);
+  @Get(':count_id')
+  findAllAccount(@Param('count_id') count_id: number) {
+    return this.notiService.findAllAccount(count_id);
   }
 
   @Patch(':id')

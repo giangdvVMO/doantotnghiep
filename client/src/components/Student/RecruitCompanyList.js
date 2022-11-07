@@ -264,7 +264,6 @@ export const RecruitCompanyListStudent = () => {
             <Pagination
                 showSizeChanger
                 pageSize={pageSize}
-                // onShowSizeChange={onShowSizeChange}
                 onChange={onShowSizeChange}
                 defaultCurrent={pageIndex}
                 total={total}
