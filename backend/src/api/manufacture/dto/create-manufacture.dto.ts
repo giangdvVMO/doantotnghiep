@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsArray, IsNotEmpty, ValidateNested } from 'class-validator';
 
 export class CreateManufactureDto {
   @ApiProperty({
@@ -15,4 +15,11 @@ export class CreateManufactureDto {
   })
   @IsNotEmpty()
   name_manu: string;
+}
+
+export class CreateManufactureArrayDto {
+  @ApiProperty()
+  @IsArray()
+  @ValidateNested({ each: true })
+  array: CreateManufactureDto[];
 }

@@ -5,3 +5,8 @@
 .icon-bell{
     font-size: 24px;
 }
+
+.list-noti{
+    width: 200px;
+    max-height: 500px;
+}

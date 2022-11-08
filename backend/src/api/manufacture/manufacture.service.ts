@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateManufactureDto } from './dto/create-manufacture.dto';
+import {
+  CreateManufactureArrayDto,
+  CreateManufactureDto,
+} from './dto/create-manufacture.dto';
 import { Manufacture, ManufactureDocument } from './manufacture.schema';
 
 @Injectable()
@@ -12,6 +15,16 @@ export class ManufactureService {
   ) {}
   async create(createManufactureDto: CreateManufactureDto) {
     const result = await this.manufactureModel.create(createManufactureDto);
+    return {
+      data: result,
+    };
+  }
+
+  async createMany(createManufactureArrayDto: CreateManufactureArrayDto) {
+    console.log('createManufactureArrayDto', createManufactureArrayDto);
+    const result = await this.manufactureModel.insertMany(
+      createManufactureArrayDto.array,
+    );
     return {
       data: result,
     };

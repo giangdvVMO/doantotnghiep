@@ -1,6 +1,9 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ManufactureService } from './manufacture.service';
-import { CreateManufactureDto } from './dto/create-manufacture.dto';
+import {
+  CreateManufactureArrayDto,
+  CreateManufactureDto,
+} from './dto/create-manufacture.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller({
@@ -14,6 +17,12 @@ export class ManufactureController {
   @Post()
   create(@Body() createManufactureDto: CreateManufactureDto) {
     return this.manufactureService.create(createManufactureDto);
+  }
+
+  @Post('/list')
+  createMany(@Body() createManufactureArrayDto: CreateManufactureArrayDto) {
+    console.log('createManufactureArrayDto', createManufactureArrayDto);
+    return this.manufactureService.createMany(createManufactureArrayDto);
   }
 
   @Get()
