@@ -1,3 +1,6 @@
+import { message } from "antd";
+import {socket} from '../App';
+import { serverURL } from "../configs/server.config";
 export const DateToShortString = (dateString)=>{
     console.log(dateString);
     const date = new Date(dateString);
@@ -9,9 +12,39 @@ export const DateToShortStringDate = (dateString)=>{
     return date.getDate() +'/'+(date.getMonth()+1)+'/'+date.getFullYear();
 }
 
-export const createNoti = (id_send, id_account, title, type, content)=>{
-    
-}
+export const createNoti = async(id_send, id_receive, title, type, content)=>{
+        try {
+            const url = serverURL + 'noti';
+            const data = {
+                "title": title,
+                "type": type,
+                "content": content,
+                "send_id": id_send,
+                "receive_id":  id_receive
+            }
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }
+            );
+            const result = await response.json();
+            if(response.status!==201){
+                message.error("Lỗi hệ thống!");
+            }else{
+                if(!result){
+                    message.warning('Cập nhật không thành công, hãy kiểm tra lại!');
+                }else{
+                    socket.emit('sendNoti',{receive: id_receive[0]});
+                }
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
 
 export const formatDate = (date)=>{
     console.log('date', date);

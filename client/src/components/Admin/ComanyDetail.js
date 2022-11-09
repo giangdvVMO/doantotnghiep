@@ -9,6 +9,7 @@ import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
 import {socket} from '../../App';
+import { createNoti } from "../../common/service";
 const { TextArea } = Input;
 
 let initialCompany = {
@@ -160,46 +161,11 @@ export const CompanyDetailAdmin = ()=>{
                 if(result.data===false){
                     message.warning('Cập nhật không thành công, hãy kiểm tra lại!');
                 }else{
-                    socket.emit('sendNoti', {receive: company._id});
+                    const title = "Duyệt thông tin công ty";
+                    const type = "infor";
+                    const content = `Admin ${account.fullname} đã duyệt thông tin công ty bạn! Bạn có thể sử dụng các tính năng của trang web!Chúc bạn thành công!`
+                    createNoti(account._id,[company._id],title,type,content);
                     message.success('Gửi thông báo thành công!');
-                    fetchCompany();
-                }
-            }
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-
-    const sendNoti = async()=>{
-        try {
-            const url = serverURL + 'noti';
-            const data = {
-                "title": "Từ chối duyệt thông tin doanh nghiệp",
-                "type": "infor",
-                "content": reason,
-                "send_id": account._id,
-                "receive_id": [
-                    company._id
-                ]
-            }
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            }
-            );
-            const result = await response.json();
-            if(response.status!==201){
-                message.error("Lỗi hệ thống!");
-            }else{
-                if(!result){
-                    message.warning('Cập nhật không thành công, hãy kiểm tra lại!');
-                }else{
-                     socket.emit('sendNoti',{receive: company._id});
-                    // message.success('Cập nhật thành công!');
                     fetchCompany();
                 }
             }
@@ -219,9 +185,12 @@ export const CompanyDetailAdmin = ()=>{
         return;
     }
     async function handleSubmitDeny(){
-        // set notification (later)
-        sendNoti();
+        const title = "Từ chối duyệt thông tin doanh nghiệp";
+        const type = "infor";
+        const content = `Admin ${account.fullname} đã từ chối duyệt thông tin công ty bạn vì ${reason}! Bạn hãy cập nhật lại thông tin!`
+        createNoti(account._id,[company._id],title,type,content);
         message.success('Đã gửi thông báo tới sinh viên!');
+        fetchCompany();
         setOpen(false);
     }
     async function handleCancelDeny(){

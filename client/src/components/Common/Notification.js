@@ -2,11 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 
 import {
   BellTwoTone,
-  EditOutlined,
   IdcardTwoTone,
   MailTwoTone,
   ReconciliationTwoTone,
-  SnippetsOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Badge, message, Avatar, List, Dropdown, Menu } from "antd";
@@ -98,33 +96,33 @@ export const Notification = () => {
   const [account, setAccount] = useState(user);
   const navigate = useNavigate();
 
-  // const fetchNoti = async () => {
-  //   if (account) {
-  //     const url = serverURL + "noti/" + account._id;
-  //     try {
-  //       const response = await fetch(url, {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       });
-  //       const result = await response.json();
-  //       console.log(result);
-  //       if (response.status !== 200) {
-  //         message.error(result.message);
-  //       } else {
-  //         console.log("fetchField", result.data);
-  //         if (result.data.length) {
-  //           setNoti([...result.data]);
-  //         }
-  //         //   setNoti([]);
-  //       }
-  //     } catch (err) {
-  //       console.log(err);
-  //       message.error("Đã có lỗi xảy ra!");
-  //     }
-  //   }
-  // };
+  const fetchNoti = async () => {
+    if (account) {
+      const url = serverURL + "noti/" + account._id;
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        console.log(result);
+        if (response.status !== 200) {
+          message.error(result.message);
+        } else {
+          console.log("fetchField", result.data);
+          if (result.data.length) {
+            setNoti([...result.data]);
+          }
+            setNoti([]);
+        }
+      } catch (err) {
+        console.log(err);
+        message.error("Đã có lỗi xảy ra!");
+      }
+    }
+  };
   //fetch user
   const fetchUser = async () => {
     console.log("fetch user account");
@@ -159,9 +157,9 @@ export const Notification = () => {
   useEffect(() => {
     fetchUser();
   }, []);
-  //   useEffect(() => {
-  //     fetchNoti();
-  //   }, [account]);
+    useEffect(() => {
+      fetchNoti();
+    }, [account]);
   // const onScroll = (e) => {
   //     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop === ContainerHeight) {
   //       appendData();
