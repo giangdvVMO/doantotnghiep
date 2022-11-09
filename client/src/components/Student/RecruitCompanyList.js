@@ -1,13 +1,13 @@
-import { Button, Card, Image, Input, message, Pagination, Select, Tag } from 'antd';
+import { Button, Input, message, Pagination, Select } from 'antd';
 import { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {decodeToken} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
-import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
-import { DateToShortStringDate } from '../../common/service';
+import { CardList } from '../Common/Card';
 
 const { Option } = Select;
 export const RecruitCompanyListStudent = () => {
@@ -143,7 +143,7 @@ export const RecruitCompanyListStudent = () => {
     };
     return (
         <>
-            <div className='banner-content'>Danh sánh sách bài đăng tuyển dụng</div>
+            <div className='banner-content'>Danh sánh bài đăng tuyển dụng</div>
             <div className='container-filter'>
                 <div className='filter'>
                     <label className='label-filter'>Lĩnh vực bài đăng:</label>
@@ -155,7 +155,6 @@ export const RecruitCompanyListStudent = () => {
                         className='filter-content'
                         onChange={handleChangeField}
                     >
-                        {/* <Option>all</Option> */}
                         {
                             fields.map((field)=>{
                                 return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
@@ -163,24 +162,6 @@ export const RecruitCompanyListStudent = () => {
                         }
                     </Select>
                 </div>
-                {/* <div className='filter'>
-                    <label className='label-filter'>Địa điểm:</label>
-                    <Select
-                    mode='multiple'
-                        value={field}
-                        defaultValue='all'
-                        labelInValue='Địa điểm'
-                        className='filter-content'
-                        onChange={handleChangeField}
-                    >
-                        <Option value={-1}>all</Option>
-                        {
-                            fields.map((field)=>{
-                                return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
-                            })
-                        }
-                    </Select>
-                </div> */}
                 <div className='filter'>
                     <label className='label-filter'>Kinh nghiệm:</label>
                     <Select
@@ -207,62 +188,12 @@ export const RecruitCompanyListStudent = () => {
                     </div>
                 </div>
             </div>
-            
             <div className='list-container'>
-                {
-                    listRecruit.map((recruit)=>{
-                        return (
-                            <Card className='card-recruit'
-                                cover={
-                                    <div className='title-recruit'>
-                                        {recruit.title}
-                                    </div>
-                              }
-                                actions={[
-                                  ]}
-                                >
-                                <div className= 'grid-layout'>
-                                <div className='top-content'>
-                                    <Image
-                                        width={100}
-                                        src="https://i.ibb.co/4KBQVdk/Hiring-rafiki.png"
-                                        /> 
-                                        
-                                    <div className='com_name'>{recruit.company.com_name}</div>
-                                </div>
-                                <div className='middle-content'>
-                                    <div className='content'>
-                                        Lĩnh vực:
-                                        {
-                                            recruit.fields.map((field) => {
-                                                return(
-                                                <Tag color='purple'>{field.nameField}</Tag>
-                                            )})
-                                        }
-                                    </div>
-                                    <div className='content'>
-                                        Kinh nghiệm:
-                                        {
-                                            recruit.experience===0? <Tag color=''>Không yêu cầu</Tag>: 
-                                            recruit.experience>0&& recruit.experience<12?  <Tag color='volcano'>Dưới 1 năm</Tag>:
-                                            <Tag color='magenta'>Trên 1 năm</Tag>
-                                        }
-                                    </div>
-                                    <div className='content'>
-                                        Hạn chót: {DateToShortStringDate(recruit.end_date)}
-                                    </div>
-                                    <Link to={`../recruit/${recruit._id},${recruit.id_company}`}><SettingOutlined key="setting" /> Xem chi tiết...</Link>,
-                                </div>
-                            </div>
-                            </Card>
-                        )
-                    })
-                }
+                <CardList listRecruit={listRecruit} />
             </div>
-
             <div className='pagination'>
             <Pagination
-                showSizeChanger
+                showSizeChanger={false}
                 pageSize={pageSize}
                 onChange={onShowSizeChange}
                 defaultCurrent={pageIndex}

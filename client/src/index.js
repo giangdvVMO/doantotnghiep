@@ -35,7 +35,7 @@ import { RecruitDetailStudent } from './components/Student/RecruitDetail';
 import { MyCV } from './components/Student/MyCV';
 import { CVManagerAdmin } from './components/Admin/CVManager';
 import { CVList } from './components/Company/CVList';
-import { CardItem } from './components/Common/Card';
+// import { CardItem } from './components/Common/Card';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -43,7 +43,7 @@ root.render(
   <UserProvider>
     <BrowserRouter>
       <Routes>
-        <Route path='/card' element={<CardItem />}/>
+        {/* <Route path='/card' element={<CardItem />}/> */}
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/register' element={<SignUp />} />
         <Route path="/" element={<App />} >

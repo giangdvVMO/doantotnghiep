@@ -9,6 +9,7 @@ import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
 import '../../styles/list.css'
 import { DateToShortStringDate } from '../../common/service';
+import { CardList } from '../Common/Card';
 
 const { Option } = Select;
 export const RecruitListStudent = () => {
@@ -151,7 +152,6 @@ export const RecruitListStudent = () => {
                         className='filter-content'
                         onChange={handleChangeField}
                     >
-                        {/* <Option>all</Option> */}
                         {
                             fields.map((field)=>{
                                 return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
@@ -159,24 +159,6 @@ export const RecruitListStudent = () => {
                         }
                     </Select>
                 </div>
-                {/* <div className='filter'>
-                    <label className='label-filter'>Địa điểm:</label>
-                    <Select
-                    mode='multiple'
-                        value={field}
-                        defaultValue='all'
-                        labelInValue='Địa điểm'
-                        className='filter-content'
-                        onChange={handleChangeField}
-                    >
-                        <Option value={-1}>all</Option>
-                        {
-                            fields.map((field)=>{
-                                return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
-                            })
-                        }
-                    </Select>
-                </div> */}
                 <div className='filter'>
                     <label className='label-filter'>Kinh nghiệm:</label>
                     <Select
@@ -205,60 +187,11 @@ export const RecruitListStudent = () => {
             </div>
 
             <div className='list-container'>
-                {
-                    listRecruit.map((recruit)=>{
-                        return (
-                            <Card className='card-recruit'
-                                cover={
-                                    <div className='title-recruit'>
-                                        {recruit.title}
-                                    </div>
-                              }
-                                actions={[
-                                  ]}
-                                >
-                                <div className= 'grid-layout'>
-                                <div className='top-content'>
-                                    <Image
-                                        width={100}
-                                        src="https://i.ibb.co/4KBQVdk/Hiring-rafiki.png"
-                                        /> 
-                                        
-                                    <div className='com_name'>{recruit.company.com_name}</div>
-                                </div>
-                                <div className='middle-content'>
-                                    <div className='content'>
-                                        Lĩnh vực:
-                                        {
-                                            recruit.fields.map((field) => {
-                                                return(
-                                                <Tag color='purple'>{field.nameField}</Tag>
-                                            )})
-                                        }
-                                    </div>
-                                    <div className='content'>
-                                        Kinh nghiệm:
-                                        {
-                                            recruit.experience===0? <Tag color=''>Không yêu cầu</Tag>: 
-                                            recruit.experience>0&& recruit.experience<12?  <Tag color='volcano'>Dưới 1 năm</Tag>:
-                                            <Tag color='magenta'>Trên 1 năm</Tag>
-                                        }
-                                    </div>
-                                    <div className='content'>
-                                        Hạn chót: {DateToShortStringDate(recruit.end_date)}
-                                    </div>
-                                    <Link to={`../recruit/${recruit._id},${recruit.id_company}`}><SettingOutlined key="setting" /> Xem chi tiết...</Link>,
-                                </div>
-                            </div>
-                            </Card>
-                        )
-                    })
-                }
+                <CardList listRecruit={listRecruit} />
             </div>
 
             <div className='pagination'>
             <Pagination
-                showSizeChanger
                 pageSize={pageSize}
                 onChange={onShowSizeChange}
                 defaultCurrent={pageIndex}

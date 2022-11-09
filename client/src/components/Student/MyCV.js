@@ -119,7 +119,6 @@ export const MyCV = ()=>{
             if(response.status!==200){
                 message.error(result.message);
             }else{
-                message.success("Load cv thành công!");
                 setCV({...initialCV,...result.data});
             }
         }
@@ -395,13 +394,14 @@ export const MyCV = ()=>{
       );
     if(account&&student){
     //render UI
-    return (<div className='swapper-container'>
-        <div className='introduce-frame'>
-            <div className='background-image center'>
-                <p className='title-account center '>Thông tin CV</p>
-
-            </div>
+    return (<>
+        <div className="banner">
+        <div className='background-image cv center'>
+            <p className='title-account center'>Thông tin CV</p>
         </div>
+    </div>
+    <div className='swapper-container'>
+        
         <Card >
                         <div className='detail-swapper'>
                             <p className='title-account'>Thông tin sinh viên</p>
@@ -671,7 +671,9 @@ export const MyCV = ()=>{
             </div>
         </div>
         </div>
+        </>
     )}else{
         return <Skeleton active />;
     }
+    
 }

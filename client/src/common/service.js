@@ -9,7 +9,7 @@ export const DateToShortStringDate = (dateString)=>{
     return date.getDate() +'/'+(date.getMonth()+1)+'/'+date.getFullYear();
 }
 
-export const createNoti = (id_send, id_account, content)=>{
+export const createNoti = (id_send, id_account, title, type, content)=>{
     
 }
 
@@ -38,4 +38,17 @@ export const formatDate = (date)=>{
         return `${minutes} phút trước`
     }
     return `${seconds} giây trước`
+}
+
+export const changeExperience = (experience)=>{
+    if(experience===0){
+        return 'Không yêu cầu kinh nghiệm'
+    }
+    if(experience<12){
+        return 'Dưới 1 năm kinh nghiệm'
+    }
+    if(experience<12*2){
+        return 'Dưới 2 năm kinh nghiệm'
+    }
+    return 'Trên 2 năm kinh nghiệm'
 }

@@ -3,6 +3,9 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   BellTwoTone,
   EditOutlined,
+  IdcardTwoTone,
+  MailTwoTone,
+  ReconciliationTwoTone,
   SnippetsOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -62,11 +65,9 @@ export const Notification = () => {
                   avatar={
                     <Badge
                       count={
-                        item.type === "infor" ? (
-                          <SnippetsOutlined />
-                        ) : (
-                          <EditOutlined />
-                        )
+                        item.type === "infor" ? <IdcardTwoTone />
+                         :item.type === "mail"? 
+                         <MailTwoTone />:<ReconciliationTwoTone />
                       }
                     >
                       <Avatar shape="circle" icon={<UserOutlined />} />

@@ -1,11 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Abel');
 
-html, body {
-  background: #FCEEB5;
-  font-family: Abel, Arial, Verdana, sans-serif;
-}
 
-.center {
+.center-card {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -13,6 +8,7 @@ html, body {
 }
 
 .card {
+  min-width: 450px;
   width: 450px;
   height: 250px;
   background-color: #fff;
@@ -70,7 +66,7 @@ html, body {
   top: 15%;
   color: #fff;
   text-transform: uppercase;
-  font-size: 0.75em;
+  font-size: 0.6em;
   font-weight: bold;
   background: rgba(0,0,0,0.15);
   padding: 0.125rem 0.75rem;
@@ -78,12 +74,34 @@ html, body {
   white-space: nowrap;
 }
 
+.bottom-button .level {
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 0.35em;
+  font-weight: bold;
+  background: rgba(0,0,0,0.15);
+  padding: 0.125rem 0.75rem;
+  border-radius: 100px;
+}
+
 .card .additional .user-card .points {
+  font-size: 0.6em;
   top: 85%;
 }
 
-.card .additional .user-card svg {
+.card .additional .user-card .points + .points{
+  top: 75%;
+}
+
+.card .additional .user-card .points + .points +.points{
+  top: 95%;
+}
+
+.card .additional .user-card .avatar{
+  height: 80px;
+  width: 80px;
   top: 50%;
+  left: 5px;
 }
 
 .card .additional .more-info {
@@ -94,23 +112,29 @@ html, body {
   height: 100%;
 }
 
-.card .additional .more-info h1 {
+/* .card .additional .more-info h1 {
   color: #fff;
   margin-bottom: 0;
-}
+} */
 
-.card.green .additional .more-info h1 {
+.card.red .additional .more-info .titlecard {
+  color: #5c0800;
+}
+.card.green .additional .more-info .titlecard {
   color: #224C36;
 }
 
 .card .additional .coords {
-  margin: 0 1rem;
+  margin: 0rem 1rem;
   color: #fff;
   font-size: 1rem;
 }
 
 .card.green .additional .coords {
   color: #325C46;
+}
+.card.red .additional .coords {
+  color: #5c0800;
 }
 
 .card .additional .coords span + span {
@@ -149,34 +173,29 @@ html, body {
 .card.green .additional .stats {
   color: #325C46;
 }
-
+.card.red .additional .stats {
+  color: #5c0800;
+}
 .card .additional .stats > div {
   flex: 1;
   text-align: center;
 }
 
-.card .additional .stats i {
-  display: block;
-}
-
-.card .additional .stats div.title {
+.card .additional .stats div.titlecard {
   font-size: 0.75rem;
   font-weight: bold;
   text-transform: uppercase;
 }
 
 .card .additional .stats div.value {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  line-height: 1.5rem;
-}
-
-.card .additional .stats div.value.infinity {
-  font-size: 2.5rem;
+  line-height: 1.2rem;
 }
 
 .card .additional .stats div.tiny{
-    font-size: 1rem;
+  padding-top: 5px;
+    font-size: 0.8rem;
 }
 
 .card .general {
@@ -197,3 +216,7 @@ html, body {
   right: 1rem;
   font-size: 0.9em;
 }
+/* 
+.red{
+  color:#5c0800
+} */
