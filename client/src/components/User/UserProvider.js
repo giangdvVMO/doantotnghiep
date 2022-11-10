@@ -8,7 +8,7 @@ const UserContext = createContext();
 function UserProvider({ children }) {
     const [user, setUser] = useState(undefined);
     const [token, setToken] = useState(window.localStorage.getItem('accessToken'));
-    
+    const [change, setChange] = useState(false);
     const fetchUser = async()=>{
         console.log('fetch user account')
         const tokenx = token? token: window.localStorage.getItem('accessToken');
@@ -44,7 +44,7 @@ function UserProvider({ children }) {
         setToken(token);
     }
     return (
-        <UserContext.Provider value={{ user, changeUser, token, changeToken }}>
+        <UserContext.Provider value={{ user, changeUser, token, changeToken, change, setChange }}>
             {children}
         </UserContext.Provider>
     )

@@ -12,7 +12,7 @@ export const DateToShortStringDate = (dateString)=>{
     return date.getDate() +'/'+(date.getMonth()+1)+'/'+date.getFullYear();
 }
 
-export const createNoti = async(id_send, id_receive, title, type, content)=>{
+export const createNoti = async(id_send, id_receive, title, type, content, link)=>{
         try {
             const url = serverURL + 'noti';
             const data = {
@@ -20,7 +20,8 @@ export const createNoti = async(id_send, id_receive, title, type, content)=>{
                 "type": type,
                 "content": content,
                 "send_id": id_send,
-                "receive_id":  id_receive
+                "receive_id":  id_receive,
+                "link": link
             }
             const response = await fetch(url, {
                 method: 'POST',
@@ -45,6 +46,33 @@ export const createNoti = async(id_send, id_receive, title, type, content)=>{
             console.log(err);
         }
     }
+
+export const getUserAdmin = async()=>{
+    try {
+        const url = serverURL + 'account?role=admin';
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+        );
+        const result = await response.json();
+        if(response.status!==200){
+            message.error("Lỗi hệ thống!");
+        }else{
+            if(result.data.length){
+                return result.data.map((item)=>{
+                    return item._id;
+                });
+            }
+            return [];
+        }
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
 
 export const formatDate = (date)=>{
     console.log('date', date);

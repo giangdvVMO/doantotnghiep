@@ -11,7 +11,7 @@ import '../../styles/my-account.css'
 import { majorList, universityList } from "../../data/list";
 import { checkAddress, checkBirthday, checkCardStudent, checkCCCD, checkCourse, checkFaculty, checkFullName, checkGPA, checkMail, checkMajor, checkPhone, checkUniversity } from "../../common/validation";
 import { messageSignUpError, messageStudentError } from "../../common/error";
-import { DateToShortString } from "../../common/service";
+import { createNoti, DateToShortString, getUserAdmin } from "../../common/service";
 import * as moment from 'moment';
 const { Option } = Select;
 
@@ -379,9 +379,19 @@ export const StudentProfile = ()=>{
                 );
                 const result = await response.json();
                 console.log(result);
-                if(response.status!==200){
+                if(response.status!==201){
                     message.error(result.message);
                 }else{
+                    const title = "Yêu cầu duyệt thông tin sinh viên";
+                    const type = "infor";
+                    const content = `Sinh viên ${account.fullname} yêu cầu duyệt thông tin sinh viên.`;
+                    const listAdmin = await getUserAdmin();
+                    console.log("listAdmin",listAdmin);
+                    if(!listAdmin.length){
+                        message.info("Chưa có admin, hãy tạo tài khoản admin");
+                    }else{
+                        createNoti(account._id,listAdmin,title,type,content);
+                    }
                     message.success("Bạn đã cập nhật thành công! Hãy đợi admin duyệt!");
                     setIsEdit(false);
                 }

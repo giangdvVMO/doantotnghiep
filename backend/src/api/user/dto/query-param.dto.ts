@@ -37,6 +37,10 @@ export class QueryParamDto {
   @ApiPropertyOptional()
   @IsOptional()
   status: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  role: string;
 }
 
 export class ParamIdDto {

@@ -37,6 +37,7 @@ import {
   } from "../../common/validation";
   import { messageSignUpError, messageCompanyError } from "../../common/error";
   import { manufacturesList } from "../../data/list";
+import { createNoti } from "../../common/service";
   const { Option } = Select;
   const { TextArea } = Input;
   
@@ -236,15 +237,9 @@ import {
         console.log(err);
       }
     };
-    useEffect(() => {
-      fetchUser();
-    }, []);
-    useEffect(() => {
-      fetchCompany();
-    }, [account]);
-    useEffect(() => {
-      fetchManufacture();
-    }, []);
+    useEffect(() => {fetchUser();}, []);
+    useEffect(() => {fetchCompany();}, [account]);
+    useEffect(() => {fetchManufacture();}, []);
   
     //initial Validate
     const [validateComName, setValidateComName] = useState(defaultTrueStatus);
@@ -418,6 +413,11 @@ import {
           if (response.status !== 201) {
             message.error(result.message);
           } else {
+            const link = 'admin/company/'+company._id;
+            const title = "Yêu cầu duyệt thông tin doanh nghiệp";
+            const type = "infor";
+            const content = `Doanh nghiệp yêu cầu duyệt thông tin doanh nghiệp.`
+            createNoti(account._id,title,type,content, link);
             updateManuCompany();
           }
         } catch (err) {

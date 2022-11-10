@@ -26,7 +26,7 @@ import { GateGateway } from './gate.gateway';
   imports: [
     UserModule,
     AuthModule,
-    MongooseModule.forRoot('mongodb://localhost/assignment'),
+    MongooseModule.forRoot('mongodb://127.0.0.1/assignment'),
     StudentModule,
     CompanyModule,
     ManufactureModule,

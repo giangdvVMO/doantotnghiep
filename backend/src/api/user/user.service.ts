@@ -56,7 +56,7 @@ export class UserService {
   }
 
   async findAll(query) {
-    const { pageIndex = 1, pageSize = 5, status, search } = query;
+    const { pageIndex = 1, pageSize = 5, status, search, role } = query;
     console.log(status, search);
     const condition = {
       delete_date: null,
@@ -72,6 +72,9 @@ export class UserService {
     }
     if (status) {
       condition['status'] = status === '0' ? false : true;
+    }
+    if (role) {
+      condition['role'] = role;
     }
 
     const total = await this.userModel.find(condition).count();

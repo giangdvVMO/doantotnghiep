@@ -36,11 +36,13 @@ const initialNoti = [
 ];
 
 export const Notification = () => {
+  const {change, setChange} = useContext(UserContext);
   const [noti, setNoti] = useState(initialNoti);
 
   const setLabel = () => {
     if (noti.length) {
       //   return noti.length;
+      console.log("load", noti.length);
       return (
         <List className="list-noti">
           <VirtualList
@@ -111,7 +113,7 @@ export const Notification = () => {
         if (response.status !== 200) {
           message.error(result.message);
         } else {
-          console.log("fetchField", result.data);
+          console.log("fetchNoti", result.data);
           if (result.data.length) {
             setNoti([...result.data]);
           }
@@ -154,12 +156,8 @@ export const Notification = () => {
       console.log(err);
     }
   };
-  useEffect(() => {
-    fetchUser();
-  }, []);
-    useEffect(() => {
-      fetchNoti();
-    }, [account]);
+  useEffect(() => {fetchUser();}, []);
+  useEffect(() => {fetchNoti();}, [account, change]);
   // const onScroll = (e) => {
   //     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop === ContainerHeight) {
   //       appendData();

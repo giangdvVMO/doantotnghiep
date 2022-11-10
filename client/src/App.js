@@ -4,14 +4,14 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { UserContext } from './components/User/UserProvider';
 import { useContext, useEffect, useState } from 'react';
 import {decodeToken , isExpired} from 'react-jwt';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import { message } from 'antd';
 export let socket;
 
 socket = io('http://localhost:5000');
 function App() {
 
-  const { user, changeUser , token, changeToken} = useContext(UserContext)
+  const { user, changeUser , token, changeToken, change, setChange} = useContext(UserContext)
   console.log("accessTokenApp",token)
     const navigate = useNavigate();
     
@@ -38,9 +38,8 @@ function App() {
 
     socket.on('receiveNoti', ()=>{
       message.info("Bạn có thông báo");
+      setChange((value)=>!value);
     })
-
-    
   }, []);
   useEffect(()=>{checkToken()},[]);
   return (<div>
