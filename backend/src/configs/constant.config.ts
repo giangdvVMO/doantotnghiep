@@ -35,7 +35,8 @@ export const SEND_EMAIL_CONFIG = {
   sesSendFrom: process.env.SES_SEND_FROM,
   awsRegion: process.env.SES_REGION,
   forgotPasswordMemberSubject: 'Password Reset',
-  SendGridApiKey: process.env.SENDGRID_API_KEY,
+  sendGridApiKey: process.env.SENDGRID_API_KEY,
+  subjectMail: process.env.SUBJECTMAIL,
 };
 
 export const MEMBER_CONFIG = {

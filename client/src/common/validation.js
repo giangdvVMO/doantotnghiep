@@ -150,11 +150,8 @@ export const checkDate = (data)=>{
             return false
         }
         const date = new Date(data);
-
-        console.log('start 1');
         return true;
     }catch{
-        console.log('start 0');
         return false;
     }
 }
