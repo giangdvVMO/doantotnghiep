@@ -74,8 +74,8 @@ export const getUserAdmin = async()=>{
     }
 }
 
-export const formatDate = (date)=>{
-    console.log('date', date);
+export const formatDate = (datex)=>{
+    const date = new Date(datex)
     const currentDate = new Date();
     const year = currentDate.getFullYear()-date.getFullYear();
     const month = currentDate.getMonth()-date.getMonth();

@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateNotiDto {
   @ApiProperty({
@@ -19,6 +19,12 @@ export class CreateNotiDto {
   })
   @IsNotEmpty()
   content: string;
+
+  @ApiPropertyOptional({
+    description: 'content',
+  })
+  @IsOptional()
+  link: string;
 
   @ApiProperty({
     description: 'send_id',

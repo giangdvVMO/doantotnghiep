@@ -19,6 +19,9 @@ export class Noti {
   @Prop({ type: String, maxlength: 1000, required: true })
   content: string;
 
+  @Prop({ type: String })
+  link: string;
+
   @Prop({ type: Boolean, default: false, required: true })
   status: boolean;
 

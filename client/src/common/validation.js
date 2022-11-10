@@ -14,7 +14,7 @@ export const checkUsername = (username) => {
 }
 
 export const checkPassword = (password) => {
-    if (password.length < 8) {
+    if (password.length < 6) {
         return false;
     }
     return true;

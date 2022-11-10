@@ -80,6 +80,29 @@ export class NotiService {
       {
         $match: {
           'account_noti.id_account': +account_id,
+          'account_noti.position': 'receiver',
+        },
+      },
+    ]);
+    return { data: result };
+  }
+
+  async findAllAccountReceive(account_id: number) {
+    const result = await this.notiModel.aggregate([
+      {
+        $lookup: {
+          from: 'tbl_account_noti',
+          localField: '_id',
+          foreignField: 'id_noti',
+          as: 'account_noti',
+        },
+      },
+      {
+        $unwind: '$account_noti',
+      },
+      {
+        $match: {
+          'account_noti.id_account': +account_id,
         },
       },
     ]);

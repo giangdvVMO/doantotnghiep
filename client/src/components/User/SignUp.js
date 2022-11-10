@@ -48,7 +48,7 @@ const SignUp = () => {
     ];
 
     function handleChangeUserName(e) {
-        setAccount((preUser) => { return { ...preUser, username: e.target.value } });
+        setAccount((preUser) => { return { ...preUser, username: e.target.value.trim() } });
     }
 
     function handleChangePassword(e) {
@@ -56,7 +56,7 @@ const SignUp = () => {
     }
 
     function handleChangeFullName(e) {
-        setAccount((preUser) => { return { ...preUser, fullname: e.target.value } });
+        setAccount((preUser) => { return { ...preUser, fullname: e.target.value.trim() } });
     }
 
     function handleChangeBirthday(date, dateString) {
@@ -65,11 +65,11 @@ const SignUp = () => {
 
     function handleChangeEmail(e) {
         console.log(e.target.value);
-        setAccount((preUser) => { return { ...preUser, email: e.target.value } });
+        setAccount((preUser) => { return { ...preUser, email: e.target.value.trim() } });
     }
 
     function handleChangePhone(e) {
-        setAccount((preUser) => { return { ...preUser, phone: e.target.value } });
+        setAccount((preUser) => { return { ...preUser, phone: e.target.value.trim() } });
     }
 
     function handleChangeSelect(value) {

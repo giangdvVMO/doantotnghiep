@@ -2,7 +2,9 @@
 @import url('https://fonts.googleapis.com/css?family=Playfair+Display');
 
 html, body {
-  background: #FCEEB5;
+  /* background: #FCEEB5;
+   */
+   background: rgba(255, 245, 245, 0.5);
   font-family: Playfair Display, Arial, Verdana, sans-serif;
 }
 /* body {

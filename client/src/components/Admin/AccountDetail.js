@@ -1,5 +1,5 @@
 import { CheckCircleOutlined, InfoCircleOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, DatePicker, Form, Input, message, Modal, Tag, Tooltip } from 'antd';
+import { Avatar, Button, DatePicker, Form, Input, message, Modal, notification, Tag, Tooltip } from 'antd';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as moment from 'moment';
@@ -243,13 +243,21 @@ export const DetailAccountAdmin = () => {
                 if(response.status!==200){
                     message.error(result.message);
                 }else{
-                    message.success("Bạn đã sửa thành công!");
+                    notification['success']({
+                        message: 'Thành công',
+                        description:
+                          'Bạn đã sửa tài khoản thành công',
+                      });
                     setIsEdit(false);
                 }
             }
             catch (err) {
                 console.log(err);
-                message.error("Đã có lỗi xảy ra!");
+                notification['error']({
+                    message: 'Lỗi',
+                    description:
+                      'Đã có lỗi xảy ra',
+                  });
             }
             fetchAccount();
         }

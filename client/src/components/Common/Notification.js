@@ -7,7 +7,7 @@ import {
   ReconciliationTwoTone,
   UserOutlined,
 } from "@ant-design/icons";
-import { Badge, message, Avatar, List, Dropdown, Menu } from "antd";
+import { Badge, message, Avatar, List, Dropdown, Menu, Modal, notification } from "antd";
 import "../../styles/notification.css";
 import { serverURL } from "../../configs/server.config";
 import VirtualList from "rc-virtual-list";
@@ -38,28 +38,36 @@ const initialNoti = [
 export const Notification = () => {
   const {change, setChange} = useContext(UserContext);
   const [noti, setNoti] = useState(initialNoti);
+  const [isOpen, setOpen] = useState(false)
+  const [curNoti, setCurNoti] = useState(initialNoti[0]);
+
+  const handleClickNoti =(item)=>{
+    setOpen(true);
+    setCurNoti(item);
+  }
+
+  const onOk = ()=>{
+
+  }
+
+  const onCancel = ()=>{
+    setOpen(false);
+  }
 
   const setLabel = () => {
+    console.log("load", noti.length);
     if (noti.length) {
-      //   return noti.length;
-      console.log("load", noti.length);
       return (
         <List className="list-noti">
           <VirtualList
             data={noti}
             height={ContainerHeight}
             itemHeight={47}
-            // itemKey="email"
-            // onScroll={onScroll}
           >
             {(item) => (
               <List.Item
                 key={item._id || "empty"}
-                style={
-                  item.status
-                    ? { background: "gray" }
-                    : { background: "transparent" }
-                }
+                onClick={()=>{handleClickNoti(item)}}
               >
                 <List.Item.Meta
                   avatar={
@@ -76,7 +84,6 @@ export const Notification = () => {
                   title={item.title || "hi"}
                   description={formatDate(item.create_date)}
                 />
-                <div>{item.content}</div>
               </List.Item>
             )}
           </VirtualList>
@@ -93,7 +100,7 @@ export const Notification = () => {
     },
   ];
 
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(0);
   const { user, token, changeUser } = useContext(UserContext);
   const [account, setAccount] = useState(user);
   const navigate = useNavigate();
@@ -116,8 +123,11 @@ export const Notification = () => {
           console.log("fetchNoti", result.data);
           if (result.data.length) {
             setNoti([...result.data]);
-          }
+            setCount(result.data.length);
+          }else{
             setNoti([]);
+            setCount(0);
+          }
         }
       } catch (err) {
         console.log(err);
@@ -146,7 +156,11 @@ export const Notification = () => {
       } else {
         console.log("user fetch to set role", result);
         if (!result) {
-          message.warn("Bạn ko có quyền xem trang này");
+          notification['warning']({
+            message: 'Notification Title',
+            description:
+              'Bạn ko có quyền xem trang này',
+          });
           navigate("/");
         }
         changeUser({ ...result });
@@ -158,12 +172,7 @@ export const Notification = () => {
   };
   useEffect(() => {fetchUser();}, []);
   useEffect(() => {fetchNoti();}, [account, change]);
-  // const onScroll = (e) => {
-  //     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop === ContainerHeight) {
-  //       appendData();
-  //     }
-  //   };
-
+  
   const Notifications = <Menu className="menu-account" items={items} />;
   return (
     <>
@@ -180,6 +189,13 @@ export const Notification = () => {
           </Badge>
         </div>
       </Dropdown>
+      <Modal 
+        open={isOpen} 
+        onOk={onOk} 
+        onCancel={onCancel} 
+        title={curNoti.title}>
+          {curNoti.content}
+      </Modal>
     </>
   );
 };
