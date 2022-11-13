@@ -191,7 +191,6 @@ const SignUp = () => {
   }
 
   function checkRePasswordFunc(repassword, password) {
-    console.log(repassword, password, repassword !== password);
     if (repassword !== password) {
       setValidaterePassword({
         status: "error",
@@ -268,10 +267,8 @@ const SignUp = () => {
     count = checkRePasswordFunc(repassword, account.password)
       ? count
       : count + 1;
-    console.log(account);
 
     if (count === 0) {
-      console.log(account);
       const url = serverURL + "auth/register";
       try {
         const response = await fetch(url, {
@@ -282,7 +279,6 @@ const SignUp = () => {
           body: JSON.stringify(account),
         });
         //const response = await axios.post(url, JSON.stringify(account),{})
-        console.log("response", await response.json());
         if (response.status !== 201) {
           message.error("Đăng ký không thành công!");
         } else {
@@ -298,7 +294,6 @@ const SignUp = () => {
   const [form] = Form.useForm();
 
   function handleReset() {
-    console.log("reset");
     setAccount((preUser) => {
       return {
         ...preUser,

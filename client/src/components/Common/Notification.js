@@ -7,7 +7,17 @@ import {
   ReconciliationTwoTone,
   UserOutlined,
 } from "@ant-design/icons";
-import { Badge, message, Avatar, List, Dropdown, Menu, Modal, notification } from "antd";
+import {
+  Badge,
+  message,
+  Avatar,
+  List,
+  Dropdown,
+  Menu,
+  Modal,
+  notification,
+  Button,
+} from "antd";
 import "../../styles/notification.css";
 import { serverURL } from "../../configs/server.config";
 import VirtualList from "rc-virtual-list";
@@ -23,7 +33,8 @@ const initialNoti = [
     type: "infor",
     status: false,
     content: "content2",
-    create_date: new Date()
+    create_date: new Date(),
+    link: "",
   },
   {
     _id: 2,
@@ -31,51 +42,52 @@ const initialNoti = [
     type: "apply",
     status: false,
     content: "content2",
-    create_date: new Date()
+    create_date: new Date(),
+    link: "",
   },
 ];
 
 export const Notification = () => {
-  const {change, setChange} = useContext(UserContext);
+  const { change, setChange } = useContext(UserContext);
   const [noti, setNoti] = useState(initialNoti);
-  const [isOpen, setOpen] = useState(false)
+  const [isOpen, setOpen] = useState(false);
   const [curNoti, setCurNoti] = useState(initialNoti[0]);
 
-  const handleClickNoti =(item)=>{
+  const handleClickNoti = (item) => {
     setOpen(true);
     setCurNoti(item);
-  }
+  };
 
-  const onOk = ()=>{
+  const onOk = () => {};
 
-  }
-
-  const onCancel = ()=>{
+  const onCancel = () => {
     setOpen(false);
-  }
+  };
 
   const setLabel = () => {
     console.log("load", noti.length);
     if (noti.length) {
       return (
         <List className="list-noti">
-          <VirtualList
-            data={noti}
-            height={ContainerHeight}
-            itemHeight={47}
-          >
+          <VirtualList data={noti} height={ContainerHeight} itemHeight={47}>
             {(item) => (
               <List.Item
                 key={item._id || "empty"}
-                onClick={()=>{handleClickNoti(item)}}
+                onClick={() => {
+                  handleClickNoti(item);
+                }}
               >
                 <List.Item.Meta
                   avatar={
                     <Badge
                       count={
-                        item.type === "infor" ? <IdcardTwoTone />
-                         :item.type === "mail"? 
-                         <MailTwoTone />:<ReconciliationTwoTone />
+                        item.type === "infor" ? (
+                          <IdcardTwoTone />
+                        ) : item.type === "mail" ? (
+                          <MailTwoTone />
+                        ) : (
+                          <ReconciliationTwoTone />
+                        )
                       }
                     >
                       <Avatar shape="circle" icon={<UserOutlined />} />
@@ -124,7 +136,7 @@ export const Notification = () => {
           if (result.data.length) {
             setNoti([...result.data]);
             setCount(result.data.length);
-          }else{
+          } else {
             setNoti([]);
             setCount(0);
           }
@@ -156,10 +168,9 @@ export const Notification = () => {
       } else {
         console.log("user fetch to set role", result);
         if (!result) {
-          notification['warning']({
-            message: 'Notification Title',
-            description:
-              'Bạn ko có quyền xem trang này',
+          notification["warning"]({
+            message: "Notification Title",
+            description: "Bạn ko có quyền xem trang này",
           });
           navigate("/");
         }
@@ -170,9 +181,13 @@ export const Notification = () => {
       console.log(err);
     }
   };
-  useEffect(() => {fetchUser();}, []);
-  useEffect(() => {fetchNoti();}, [account, change]);
-  
+  useEffect(() => {
+    fetchUser();
+  }, []);
+  useEffect(() => {
+    fetchNoti();
+  }, [account, change]);
+
   const Notifications = <Menu className="menu-account" items={items} />;
   return (
     <>
@@ -189,12 +204,25 @@ export const Notification = () => {
           </Badge>
         </div>
       </Dropdown>
-      <Modal 
-        open={isOpen} 
-        onOk={onOk} 
-        onCancel={onCancel} 
-        title={curNoti.title}>
-          {curNoti.content}
+      <Modal
+        open={isOpen}
+        onOk={onOk}
+        onCancel={onCancel}
+        title={curNoti.title}
+      >
+        {curNoti.content}
+        {curNoti.link ? (
+          <Button
+            type="primary"
+            onClick={() => {
+              navigate(curNoti.link);
+            }}
+          >
+            Link truy cập
+          </Button>
+        ) : (
+          ""
+        )}
       </Modal>
     </>
   );

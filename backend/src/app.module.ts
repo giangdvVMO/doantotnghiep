@@ -28,10 +28,10 @@ import { CvViewModule } from './api/cv-view/cv-view.module';
   imports: [
     UserModule,
     AuthModule,
-    MongooseModule.forRoot('mongodb://127.0.0.1/assignment'),
-    // MongooseModule.forRoot(
-    //   'mongodb+srv://giang:2612000@cluster0.t5gyx.mongodb.net/assignment',
-    // ),
+    // MongooseModule.forRoot('mongodb://127.0.0.1/assignment'),
+    MongooseModule.forRoot(
+      'mongodb+srv://giang:2612000@cluster0.t5gyx.mongodb.net/assignment',
+    ),
     StudentModule,
     CompanyModule,
     ManufactureModule,

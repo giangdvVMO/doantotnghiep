@@ -32,6 +32,7 @@ export class NotiService {
       type: createNotiDto.type,
       title: createNotiDto.title,
       content: createNotiDto.content,
+      link: createNotiDto.link,
     });
     console.log('result', result);
     if (result) {
