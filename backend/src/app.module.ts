@@ -21,12 +21,17 @@ import { AccountNotiModule } from './api/account_noti/account_noti.module';
 import { LetterStudentModule } from './api/letter_student/letter_student.module';
 import { ApplyModule } from './api/apply/apply.module';
 import { GateGateway } from './gate.gateway';
+import { RecruitViewModule } from './api/recruit-view/recruit-view.module';
+import { CvViewModule } from './api/cv-view/cv-view.module';
 
 @Module({
   imports: [
     UserModule,
     AuthModule,
-    MongooseModule.forRoot('mongodb://127.0.0.1/assignment'),
+    // MongooseModule.forRoot('mongodb://127.0.0.1/assignment'),
+    MongooseModule.forRoot(
+      'mongodb+srv://giang:2612000@cluster0.t5gyx.mongodb.net/assignment',
+    ),
     StudentModule,
     CompanyModule,
     ManufactureModule,
@@ -44,6 +49,8 @@ import { GateGateway } from './gate.gateway';
     AccountNotiModule,
     LetterStudentModule,
     ApplyModule,
+    RecruitViewModule,
+    CvViewModule,
   ],
   providers: [GateGateway],
 })

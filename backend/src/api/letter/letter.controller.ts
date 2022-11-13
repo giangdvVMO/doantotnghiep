@@ -1,9 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { LetterService } from './letter.service';
 import { CreateLetterDto } from './dto/create-letter.dto';
 import { UpdateLetterDto } from './dto/update-letter.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('letter')
+@Controller({
+  version: ['1'],
+  path: 'letter',
+})
+@ApiTags('Letter')
 export class LetterController {
   constructor(private readonly letterService: LetterService) {}
 

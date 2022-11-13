@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ApplyService } from './apply.service';
 import { CreateApplyDto } from './dto/create-apply.dto';
 
@@ -9,8 +17,9 @@ export class ApplyController {
   @Post()
   create(@Body() createApplyDto: CreateApplyDto) {
     const apply = {
-      ...createApplyDto, apply_date: Date.now()
-    }
+      ...createApplyDto,
+      apply_date: Date.now(),
+    };
     return this.applyService.create(createApplyDto);
   }
 

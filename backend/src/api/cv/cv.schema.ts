@@ -16,9 +16,6 @@ export class CV {
   @Prop({ type: String, required: true })
   file_cv: string;
 
-  @Prop({ type: Number, default: 0 })
-  views: number;
-
   @Prop({ type: Boolean, default: false })
   status: boolean;
 

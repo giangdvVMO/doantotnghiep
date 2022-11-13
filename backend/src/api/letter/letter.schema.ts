@@ -10,10 +10,10 @@ export class Letter {
   @Prop()
   _id: number;
 
-  @Prop({ type: String, maxlength: 1000 , required: true})
+  @Prop({ type: String, maxlength: 1000, required: true })
   content: string;
 
-  @Prop({ type: String, maxlength: 50 , required: true})
+  @Prop({ type: String, maxlength: 50, required: true })
   title: string;
 
   @Prop({ type: Number, ref: 'tbl_account' })

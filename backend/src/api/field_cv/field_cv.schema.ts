@@ -15,4 +15,4 @@ export class FieldCV {
 }
 
 export const FieldCVSchema = SchemaFactory.createForClass(FieldCV);
-// UserSchema.index({ email: 1, username: 1 }, { unique: true });
+FieldCVSchema.index({ id_field: 1, id_cv: 1 }, { unique: true });
