@@ -296,11 +296,32 @@ const SignUp = () => {
     }
     return;
   }
+  const [form] = Form.useForm();
+
+  function handleReset() {
+    console.log("reset");
+    setAccount((preUser) => {
+      return {
+        ...preUser,
+        username: "",
+        password: "",
+        fullname: "",
+        email: "",
+        birthday: "",
+        phone: "",
+        role: "",
+      };
+    });
+    form.resetFields();
+    setRepassword("");
+  }
+  console.log("account", account);
 
   return (
     <div className="center-container">
       <div className="flex-container register">
         <Form
+          form={form}
           ref={ref}
           onKeyUp={handleKeyUp}
           className="form"
@@ -490,7 +511,7 @@ const SignUp = () => {
             >
               Submit
             </Button>
-            <Button type="reset" className="button reset">
+            <Button onClick={handleReset} className="button reset">
               Reset
             </Button>
           </Form.Item>
