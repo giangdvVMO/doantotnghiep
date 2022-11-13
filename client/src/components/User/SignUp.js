@@ -97,7 +97,6 @@ const SignUp = () => {
   }
 
   function handleChangeEmail(e) {
-    console.log(e.target.value);
     setAccount((preUser) => {
       return { ...preUser, email: e.target.value.trim() };
     });
@@ -315,7 +314,6 @@ const SignUp = () => {
     form.resetFields();
     setRepassword("");
   }
-  console.log("account", account);
 
   return (
     <div className="center-container">
