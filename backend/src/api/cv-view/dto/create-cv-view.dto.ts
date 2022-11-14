@@ -1,22 +1,22 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
-export class CreateLetterDto {
+export class CreateCvViewDto {
   @ApiProperty({
-    description: 'id_account',
+    description: 'id_company',
   })
   @IsNotEmpty()
-  id_account: number;
+  id_company: number;
 
   @ApiProperty({
-    description: 'content',
+    description: 'id_cv',
   })
   @IsNotEmpty()
-  content: string;
+  id_cv: number;
 
-  @ApiProperty({
-    description: 'title',
+  @ApiPropertyOptional({
+    description: 'views',
   })
-  @IsNotEmpty()
-  title: string;
+  @IsOptional()
+  views: number;
 }

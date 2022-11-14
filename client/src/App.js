@@ -1,53 +1,62 @@
-import './App.css';
-import Nav from './components/Common/Navigation';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { UserContext } from './components/User/UserProvider';
-import { useContext, useEffect, useState } from 'react';
-import {decodeToken , isExpired} from 'react-jwt';
-import io, { Socket } from 'socket.io-client';
-import { message } from 'antd';
+import "./App.css";
+import Nav from "./components/Common/Navigation";
+import { Outlet, useNavigate } from "react-router-dom";
+import { UserContext } from "./components/User/UserProvider";
+import { useContext, useEffect, useState } from "react";
+import { decodeToken, isExpired } from "react-jwt";
+import io, { Socket } from "socket.io-client";
+import { Alert, message } from "antd";
 export let socket;
 
-socket = io('http://localhost:5000');
+socket = io("http://localhost:5000");
 function App() {
+  const { user, changeUser, token, changeToken, change, setChange } =
+    useContext(UserContext);
+  console.log("accessTokenApp", token);
+  const navigate = useNavigate();
 
-  const { user, changeUser , token, changeToken, change, setChange} = useContext(UserContext)
-  console.log("accessTokenApp",token)
-    const navigate = useNavigate();
-    
-    const checkToken = async()=>{
-        if(isExpired(token)){
-            navigate('/sign-in');
-        }else{
-          const current = await decodeToken(token); 
-          socket.emit('resetSocket', {id:current.sub})
-        }
+  const checkToken = async () => {
+    if (isExpired(token)) {
+      navigate("/sign-in");
+    } else {
+      const current = await decodeToken(token);
+      socket.emit("resetSocket", { id: current.sub });
     }
-  
+  };
+
   const [isConnected, setIsConnected] = useState(socket.connected);
 
   useEffect(() => {
-    socket.on('connect', () => {
+    socket.on("connect", () => {
       setIsConnected(true);
-      console.log('connected')
+      console.log("connected");
     });
 
-    socket.on('disconnect', () => {
+    socket.on("disconnect", () => {
       setIsConnected(false);
     });
 
-    socket.on('receiveNoti', ()=>{
-      message.info("Bạn có thông báo");
-      setChange((value)=>!value);
-    })
+    socket.on("receiveNoti", () => {
+      // message.info("Bạn có thông báo");
+      <Alert
+        message="Informational Notes"
+        description="Bạn có thông báo mới."
+        type="info"
+        showIcon
+      />;
+      setChange((value) => !value);
+    });
   }, []);
-  useEffect(()=>{checkToken()},[]);
-  return (<div>
-    <div className='App'>
-      <Nav />
+  useEffect(() => {
+    checkToken();
+  }, []);
+  return (
+    <div>
+      <div className="App">
+        <Nav />
+      </div>
+      <Outlet />
     </div>
-    <Outlet />
-  </div>
   );
 }
 
