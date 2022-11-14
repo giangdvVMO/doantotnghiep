@@ -6,7 +6,7 @@ export class CreateFieldCvDto {
     description: 'id_field',
   })
   @IsNotEmpty()
-  id_field_array: number[];
+  fields: number[];
 
   @ApiProperty({
     description: 'id_cv',

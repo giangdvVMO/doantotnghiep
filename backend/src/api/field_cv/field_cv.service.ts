@@ -16,7 +16,7 @@ export class FieldCvService {
       id_cv: data.id_cv,
     });
     //map array
-    const dataArray = data.id_field_array.map((id_field) => {
+    const dataArray = data.fields.map((id_field) => {
       return { id_cv: data.id_cv, id_field };
     });
     //insert

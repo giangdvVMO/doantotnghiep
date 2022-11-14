@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateCvDto {
   @ApiProperty({
@@ -15,11 +15,18 @@ export class CreateCvDto {
   @IsNotEmpty()
   id_student: number;
 
+  @ApiPropertyOptional({
+    description: 'status',
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  status: boolean;
+
   @ApiProperty({
-    description: 'id_field_array',
+    description: 'fields',
   })
   @IsNotEmpty()
-  id_field_array: number[];
+  fields: number[];
 
   @ApiProperty({
     description: 'file_cv',

@@ -14,7 +14,7 @@ import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CvService } from './cv.service';
 import { CreateCvDto, FileCreateCVDto } from './dto/create-cv.dto';
 import { QueryParamCVDto } from './dto/query-param-cv.dto';
-import { UpdateCvDto } from './dto/update-cv.dto';
+import { UpdateCvDto, UpdateFullCVDto } from './dto/update-cv.dto';
 
 @Controller({
   version: ['1'],
@@ -50,7 +50,7 @@ export class CvController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCvDto: UpdateCvDto) {
-    return this.cvService.update(+id, updateCvDto);
+  update(@Param('id') id: string, @Body() updateCvDto: UpdateFullCVDto) {
+    return this.cvService.updateOne(+id, updateCvDto);
   }
 }

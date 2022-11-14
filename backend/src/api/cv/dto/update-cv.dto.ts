@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateCvDto {
   @ApiPropertyOptional({
@@ -10,9 +10,39 @@ export class UpdateCvDto {
   @IsString()
   title: string;
 
-  @ApiProperty({
-    description: 'id_sv',
+  @ApiPropertyOptional({
+    description: 'status',
   })
+  @IsOptional()
+  @IsNotEmpty()
+  status: boolean;
+
+  @ApiPropertyOptional({
+    description: 'fields',
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  @IsArray()
+  fields: number[];
+
+  @ApiPropertyOptional({
+    description: 'id_student',
+  })
+  @IsOptional()
   @IsNotEmpty()
   id_student: number;
+
+  @ApiProperty({
+    description: 'update_id',
+  })
+  @IsNotEmpty()
+  update_id: number;
+
+  @ApiProperty({
+    description: 'file_cv',
+  })
+  @IsNotEmpty()
+  file_cv: string;
 }
+
+export class UpdateFullCVDto extends UpdateCvDto {}

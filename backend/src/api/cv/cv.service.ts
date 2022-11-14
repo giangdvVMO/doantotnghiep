@@ -8,7 +8,7 @@ import {
 import { FieldCvService } from '../field_cv/field_cv.service';
 import { CV, CVDocument } from './cv.schema';
 import { CreateCvDto } from './dto/create-cv.dto';
-import { UpdateCvDto } from './dto/update-cv.dto';
+import { UpdateCvDto, UpdateFullCVDto } from './dto/update-cv.dto';
 // import { imgbbUploader } from 'imgbb-uploader';
 import { QueryParamCVDto } from './dto/query-param-cv.dto';
 
@@ -20,11 +20,12 @@ export class CvService {
     private readonly fileUploadService: FileUploadService,
   ) {}
   async create(createCvDto: CreateCvDto, file_cv: string) {
-    const { title, id_student, id_field_array } = createCvDto;
+    const { title, id_student, status, fields } = createCvDto;
     const dataCreate: any = {
       title,
       id_student,
       file_cv,
+      status: status ? false : status,
       _id: createCvDto.id_student,
       create_date: Date.now(),
     };
@@ -45,9 +46,23 @@ export class CvService {
     // }
     const resultCreate = await this.cvModel.create(dataCreate);
     console.log(resultCreate);
-    const dataCreateFieldCV = { id_cv: id_student, id_field_array };
+    const dataCreateFieldCV = { id_cv: id_student, fields };
     const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
     return resultCreate;
+  }
+
+  async updateOne(id: number, updateCvDto: UpdateFullCVDto) {
+    const { fields, ...data } = updateCvDto;
+    const dataUpdate: any = {
+      ...data,
+      update_date: new Date(),
+    };
+    const resultUpdate = await this.cvModel.updateOne({ _id: id }, dataUpdate);
+
+    const dataCreateFieldCV = { id_cv: id, fields };
+    const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
+
+    return resultUpdate;
   }
 
   async findOne(id: number) {
