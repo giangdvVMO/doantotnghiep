@@ -8,6 +8,7 @@ import "../../styles/manager-page.css";
 import { SearchOutlined } from "@ant-design/icons";
 import { majorList, universityList } from "../../data/list";
 import { serverURL } from "../../configs/server.config";
+import { openNotificationWithIcon } from "../../common/service";
 
 const { Option } = Select;
 
@@ -115,6 +116,29 @@ export const StudentList = () => {
     }
   }
 
+  const handleViewCV = async (id_cv, id_company) => {
+    const url = serverURL + "cv-view";
+    const data = { id_cv, id_company };
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      console.log(result);
+      if (response.status !== 201 && response.status !== 200) {
+        openNotificationWithIcon(
+          "error",
+          "Lỗi",
+          "Lỗi thêm bản ghi lượt xem CV!"
+        );
+      }
+    } catch (err) {}
+  };
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -186,7 +210,14 @@ export const StudentList = () => {
       title: "Hành động",
       key: "action",
       render: (_, record) => (
-        <Link to={`../student/${record._id}`}>Xem chi tiết</Link>
+        <Link
+          to={`../student/${record._id}`}
+          onCLick={() => {
+            handleViewCV(record._id, user._id);
+          }}
+        >
+          Xem chi tiết
+        </Link>
       ),
       fixed: "right",
     },

@@ -11,6 +11,8 @@ export class RecruitViewService {
     @InjectModel(RecruitView.name)
     private readonly recruitViewModel: Model<RecruitViewDocument>,
   ) {}
+
+  // create if new and update if exist
   async create(createRecruitViewDto: CreateRecruitViewDto) {
     const { id_student, id_recruit } = createRecruitViewDto;
     const currentView = await this.findOneCondition(id_student, id_recruit);
@@ -39,6 +41,7 @@ export class RecruitViewService {
     return `This action returns all recruitView`;
   }
 
+  //thống kê lượt xem và người xem bài đăng
   async findAllByRecruit(id_recruit: number) {
     console.log('id', id_recruit);
     const result = await this.recruitViewModel.aggregate([

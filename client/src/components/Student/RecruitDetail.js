@@ -7,7 +7,11 @@ import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider";
 import "../../styles/form.css";
 import "../../styles/my-account.css";
-import { createNoti, DateToShortString, openNotificationWithIcon } from "../../common/service";
+import {
+  createNoti,
+  DateToShortString,
+  openNotificationWithIcon,
+} from "../../common/service";
 const { TextArea } = Input;
 
 let initialRecruit = {
@@ -145,29 +149,32 @@ export const RecruitDetailStudent = () => {
 
   //fetchCV
   async function fetchCV() {
-    console.log("fetchCV");
-    const url = serverURL + "cv/" + account._id;
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result = await response.json();
-      console.log("CV", result);
-      if (response.status !== 200) {
-        message.error(result.message);
-      } else {
-        if (result.data === {} || !result.data) {
-          setOpenModal(true);
+    console.log("user", user);
+    if (user) {
+      console.log("fetchCV");
+      const url = serverURL + "cv/" + account._id;
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        console.log("CV", result);
+        if (response.status !== 200) {
+          message.error(result.message);
         } else {
-          setOpenConfirm(true);
+          if (result.data === {} || !result.data) {
+            setOpenModal(true);
+          } else {
+            setOpenConfirm(true);
+          }
         }
+      } catch (err) {
+        console.log(err);
+        message.error("Đã có lỗi xảy ra cv!");
       }
-    } catch (err) {
-      console.log(err);
-      message.error("Đã có lỗi xảy ra cv!");
     }
   }
 
@@ -195,7 +202,7 @@ export const RecruitDetailStudent = () => {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
         }
-        setAccount({...result});
+        setAccount({ ...result });
         changeUser({ ...result });
       }
     } catch (err) {
@@ -205,39 +212,43 @@ export const RecruitDetailStudent = () => {
 
   //fetchCondition
   async function fetchCondition() {
-    if(account&&recruit._id!==-1){
-    const url = serverURL + `apply/?id_student=${account._id}&id_recruit=${recruit._id}`;
-    const data = {
-      id_student: account._id,
-      id_recruit: recruit._id,
-    }
-    console.log("fetchCondition", data);
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result = await response.json();
-      console.log("condition", result);
-      if (response.status !== 200) {
-        message.error(result.message);
-      } else {
-        if (result.data.length) {
-          openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn đã apply bài đăng này rồi!')
-          setDisabled(true);
-          setOpenModal(true);
+    if (account && recruit._id !== -1) {
+      const url =
+        serverURL +
+        `apply/?id_student=${account._id}&id_recruit=${recruit._id}`;
+      const data = {
+        id_student: account._id,
+        id_recruit: recruit._id,
+      };
+      console.log("fetchCondition", data);
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        console.log("condition", result);
+        if (response.status !== 200) {
+          message.error(result.message);
         } else {
-          setDisabled(false)
-          // setOpenConfirm(true);
+          if (result.data.length) {
+            openNotificationWithIcon(
+              "warning",
+              "Cảnh báo",
+              "Bạn đã apply bài đăng này rồi!"
+            );
+            setDisabled(true);
+          } else {
+            setDisabled(false);
+          }
         }
+      } catch (err) {
+        console.log(err);
+        message.error("Đã có lỗi xảy ra condition!");
       }
-    } catch (err) {
-      console.log(err);
-      message.error("Đã có lỗi xảy ra condition!");
     }
-  }
   }
 
   //fetchCondition
@@ -246,14 +257,14 @@ export const RecruitDetailStudent = () => {
     const data = {
       id_student: account._id,
       id_recruit: recruit._id,
-    }
+    };
     try {
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       const result = await response.json();
       console.log("condition", result);
@@ -261,10 +272,14 @@ export const RecruitDetailStudent = () => {
         message.error(result.message);
       } else {
         if (!result.data) {
-          message.error('lỗi tạo apply')
+          message.error("lỗi tạo apply");
         } else {
-          openNotificationWithIcon('success', 'Thông báo', 'Bạn đã ứng tuyển thành công, hãy đợi phản hồi từ nhà tuyển dụng.')
-          setDisabled(true)
+          openNotificationWithIcon(
+            "success",
+            "Thông báo",
+            "Bạn đã ứng tuyển thành công, hãy đợi phản hồi từ nhà tuyển dụng."
+          );
+          setDisabled(true);
           setOpenConfirm(false);
         }
       }
@@ -273,7 +288,6 @@ export const RecruitDetailStudent = () => {
       message.error("Đã có lỗi xảy ra create apply!");
     }
   }
-  
 
   useEffect(() => {
     fetchUser();
@@ -285,7 +299,9 @@ export const RecruitDetailStudent = () => {
     fetchCompany();
   }, [recruit]);
 
-  useEffect(()=>{fetchCondition()}, [account, recruit])
+  useEffect(() => {
+    fetchCondition();
+  }, [account, recruit]);
 
   //initial Validate
 
@@ -318,7 +334,7 @@ export const RecruitDetailStudent = () => {
     setOpenConfirm(false);
   };
 
-  const handleOkConfirm = async() => {
+  const handleOkConfirm = async () => {
     createApply();
     //gửi mail và noti
     const link = "company/student/" + account._id;
@@ -336,7 +352,12 @@ export const RecruitDetailStudent = () => {
           <p className="title-account center ">Chi tiết bài đăng tuyển dụng</p>
         </div>
         <div className="apply-container">
-          <Button className="apply-btn" type="primary" disabled={disabled} onClick={handleApply}>
+          <Button
+            className="apply-btn"
+            type="primary"
+            disabled={disabled}
+            onClick={handleApply}
+          >
             Ứng tuyển ngay
           </Button>
         </div>
