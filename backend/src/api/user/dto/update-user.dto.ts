@@ -17,7 +17,7 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @IsString()
-  @Matches(/^[a-zA-Z0-9\s]{1-50}$/, {
+  @Matches(/^[a-zA-Z0-9\s]{1,50}$/, {
     message: 'username không chứa kí tự đặc biệt',
   })
   username?: string;
@@ -27,6 +27,9 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @IsEmail()
+  @Matches(/^[a-zA-Z0-9\s\@\.\_]{1,50}$/, {
+    message: 'email không có dấu',
+  })
   email?: string;
 
   @ApiPropertyOptional({
@@ -34,7 +37,7 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @IsString()
-  @Matches(/^[a-zA-Z\s]{1-50}$/, {
+  @Matches(/^[a-zA-Z\s]{1,50}$/, {
     message: 'fullname không chứa kí tự đặc biệt',
   })
   fullname?: string;
@@ -51,7 +54,7 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @Matches(/^0{1}[1-9]{1}[0-9]{8}$/, {
-    message: 'Chưa đúng định dạng số điện thoại',
+    message: 'Chưa đúng định dạng số điện thoại: 10 kí tự số',
   })
   phone?: string;
 
@@ -76,7 +79,7 @@ export class ChangeUserPasswordDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z0-9]{6-50}$/, {
+  @Matches(/^[a-zA-Z0-9]{6,50}$/, {
     message: 'password chỉ chứa kí tự chữ và số và tối thiểu 6 kí tự',
   })
   oldPassword: string;
@@ -87,7 +90,7 @@ export class ChangeUserPasswordDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z0-9]{6-50}$/, {
+  @Matches(/^[a-zA-Z0-9]{6,50}$/, {
     message: 'newpassword chỉ chứa kí tự chữ và số và tối thiểu 6 kí tự',
   })
   newPassword: string;
@@ -98,7 +101,7 @@ export class ChangeUserPasswordDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z0-9]{6-50}$/, {
+  @Matches(/^[a-zA-Z0-9]{6,50}$/, {
     message: 'confirmpassword chỉ chứa kí tự chữ và số và tối thiểu 6 kí tự',
   })
   confirmPassword: string;

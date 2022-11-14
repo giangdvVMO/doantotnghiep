@@ -3,15 +3,11 @@ import {
   IsEmail,
   IsNotEmpty,
   IsString,
-  MaxLength,
   IsDateString,
   IsEnum,
-  IsPhoneNumber,
-  maxLength,
   Length,
   Matches,
 } from 'class-validator';
-import { maxLengthPhone } from 'src/share/common/constanst';
 import { RoleEnum } from 'src/share/common/enum';
 
 export class RegisterDto {
@@ -20,8 +16,8 @@ export class RegisterDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z0-9\ \,]{1}$/, {
-    message: 'username không chứa kí tự đặc biệt',
+  @Matches(/^[a-zA-Z0-9]{1,50}$/, {
+    message: 'username không chứa kí tự đặc biệt và khoảng trống',
   })
   username: string;
 
@@ -30,8 +26,8 @@ export class RegisterDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z0-9]{1}$/, {
-    message: 'password ',
+  @Matches(/^[a-zA-Z0-9]{1,100}$/, {
+    message: 'password không chỉ chứa kí tự chữ và số',
   })
   password: string;
 
@@ -48,6 +44,9 @@ export class RegisterDto {
   })
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[a-zA-Z\s]{1,50}$/, {
+    message: 'fullname không chứa kí tự đặc biệt',
+  })
   fullname: string;
 
   @ApiProperty({
@@ -63,7 +62,9 @@ export class RegisterDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Length(10)
+  @Matches(/^0{1}[1-9]{1}[0-9]{8}$/, {
+    message: 'Chưa đúng định dạng số điện thoại: 10 kí tự số',
+  })
   phone: string;
 
   @ApiProperty({

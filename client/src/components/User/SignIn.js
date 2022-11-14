@@ -8,6 +8,7 @@ import { serverURL } from '../../configs/server.config';
 import '../../styles/form.css';
 import { UserContext } from './UserProvider';
 import { socket } from '../../App';
+import { openNotificationWithIcon } from '../../common/service';
 
 const SignIn = () => {
     const { changeUser, changeToken} = useContext(UserContext);
@@ -76,6 +77,8 @@ const SignIn = () => {
         }
     }
 
+    
+
     const navigate = useNavigate();
     async function handleSubmit(e) {
         // ref.current.submit();
@@ -97,9 +100,12 @@ const SignIn = () => {
                 );
                 const result = await response.json();
                 if(response.status!==201){
-                    message.error("Đăng nhập không thành công!");
+                    if(response.status===400){
+                        openNotificationWithIcon('error', 'Thông báo', response.message)
+                    }
+                    // message.error("Đăng nhập không thành công!");
                 }else{
-                    message.success("Bạn đã đăng nhập thành công");
+                    openNotificationWithIcon('success', 'Thông báo', 'Bạn đã đăng nhập thành công')
                     const account = result.user;
                     console.log('socket', socket.id);
                     changeUser(account);
@@ -115,11 +121,18 @@ const SignIn = () => {
         }
         return;
     }
+
+    const [form] = Form.useForm();
+    function handleReset(){
+        setUser((preUser)=>{return {...preUser, username: '', password: ''}})
+        form.resetFields();
+    }
     return (
         <div className='grid-container'>
             <div className='img-side' ></div>
             <div className='flex-container'>
                 <Form
+                    form={form}
                     ref={ref}
                     onKeyUp={handleKeyUp}
                     className='form'
@@ -169,16 +182,16 @@ const SignIn = () => {
                             onChange={handleChangePassword}
                         />
                     </Form.Item>
-                    <Form.Item name="remember">
+                    {/* <Form.Item name="remember">
                         <Checkbox>Remember me</Checkbox>
                         <Link to='/forgot-password'>Quên mật khẩu</Link>
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item name="register">
                         Bạn chưa có tài khoản? <Link to='/register'>Đăng ký</Link>
                     </Form.Item>
                     <Form.Item>
                         <Button type='submit' ref={refButtonSubmit} name='button-submit' className='button submit' onSubmit={handleSubmit} onClick={handleSubmit} onKeyUp={handleKeyUp}>Submit</Button>
-                        <Button type='reset' className='button reset'>Reset</Button>
+                        <Button type='reset' onClick={handleReset} className='button reset'>Reset</Button>
                     </Form.Item>
                 </Form>
             </div>
