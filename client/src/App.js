@@ -5,7 +5,7 @@ import { UserContext } from "./components/User/UserProvider";
 import { useContext, useEffect, useState } from "react";
 import { decodeToken, isExpired } from "react-jwt";
 import io, { Socket } from "socket.io-client";
-import { Alert, message } from "antd";
+import { openNotificationWithIcon } from "./common/service";
 export let socket;
 
 socket = io("http://localhost:5000");
@@ -37,13 +37,8 @@ function App() {
     });
 
     socket.on("receiveNoti", () => {
-      // message.info("Bạn có thông báo");
-      <Alert
-        message="Informational Notes"
-        description="Bạn có thông báo mới."
-        type="info"
-        showIcon
-      />;
+      openNotificationWithIcon('info','Thông báo', 'Bạn có thông báo mới')
+
       setChange((value) => !value);
     });
   }, []);

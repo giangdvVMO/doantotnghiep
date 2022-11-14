@@ -58,7 +58,9 @@ export const Notification = () => {
     setCurNoti(item);
   };
 
-  const onOk = () => {};
+  const onOk = () => {
+    setOpen(false)
+  };
 
   const onCancel = () => {
     setOpen(false);
@@ -215,6 +217,7 @@ export const Notification = () => {
           <Button
             type="primary"
             onClick={() => {
+              setOpen(false);
               navigate(curNoti.link);
             }}
           >

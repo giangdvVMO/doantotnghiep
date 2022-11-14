@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Apply, ApplyDocument } from './apply.schema';
@@ -11,27 +11,31 @@ export class ApplyService {
     private readonly applyModel: Model<ApplyDocument>,
   ) {}
   async create(apply: any) {
+    const exist = await (await this.findOne(apply)).data.length;
+    if (exist) {
+      throw new BadRequestException('Đã có bản ghi');
+    }
     const result = await this.applyModel.create(apply);
-    return result;
+    return { data: result };
   }
 
   async findOne(createApplyDto: CreateApplyDto) {
     const result = await this.applyModel.aggregate([
       {
         $match: {
-          id_student: createApplyDto.id_student,
-          id_recruit: createApplyDto.id_recruit,
+          id_student: +createApplyDto.id_student,
+          id_recruit: +createApplyDto.id_recruit,
         },
       },
     ]);
-    return result;
+    return { data: result };
   }
 
   async findCondition(conditionDto: ConditionDto) {
     const result = await this.applyModel.aggregate([
       {
         $match: {
-          id_student: conditionDto.id_student,
+          id_student: +conditionDto.id_student,
         },
       },
       {
@@ -47,7 +51,7 @@ export class ApplyService {
       },
       {
         $match: {
-          'recruit.id_company': conditionDto.id_company,
+          'recruit.id_company': +conditionDto.id_company,
         },
       },
     ]);
@@ -57,10 +61,6 @@ export class ApplyService {
   findAll() {
     return `This action returns all apply`;
   }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} apply`;
-  // }
 
   remove(id: number) {
     return `This action removes a #${id} apply`;

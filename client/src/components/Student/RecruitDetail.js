@@ -7,7 +7,7 @@ import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider";
 import "../../styles/form.css";
 import "../../styles/my-account.css";
-import { DateToShortString } from "../../common/service";
+import { createNoti, DateToShortString, openNotificationWithIcon } from "../../common/service";
 const { TextArea } = Input;
 
 let initialRecruit = {
@@ -48,6 +48,7 @@ export const RecruitDetailStudent = () => {
   const { user, changeUser, token } = useContext(UserContext);
   const [isOpenModal, setOpenModal] = useState(false);
   const [isOpenConfirm, setOpenConfirm] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -72,11 +73,10 @@ export const RecruitDetailStudent = () => {
         const result = await response.json();
         if (response.status !== 200) {
           console.log("Lỗi hệ thống!");
-          message.error("Lỗi hệ thống!");
+          message.error("Lỗi fetch manu!");
         } else {
           console.log("result", result);
           if (result.data === "empty") {
-            // setOpenModal(true);
             setCompany({ ...initialCompany });
           } else {
             console.log("fetch Manu Company", result.data);
@@ -103,7 +103,7 @@ export const RecruitDetailStudent = () => {
         const result = await response.json();
         if (response.status !== 200) {
           console.log("Lỗi hệ thống!");
-          message.error("Lỗi hệ thống!");
+          message.error("Lỗi fetch company!");
         } else {
           console.log("result", result);
           if (result.data === "empty") {
@@ -134,13 +134,12 @@ export const RecruitDetailStudent = () => {
       if (response.status !== 200) {
         message.error(result.message);
       } else {
-        message.success("Load recruit thành công!");
         setRecruit({ ...result.data });
         // setCompany({...recruit.data.company});
       }
     } catch (err) {
       console.log(err);
-      message.error("Đã có lỗi xảy ra!");
+      message.error("Đã có lỗi xảy ra fetchRecruit!");
     }
   }
 
@@ -168,7 +167,7 @@ export const RecruitDetailStudent = () => {
       }
     } catch (err) {
       console.log(err);
-      message.error("Đã có lỗi xảy ra!");
+      message.error("Đã có lỗi xảy ra cv!");
     }
   }
 
@@ -196,12 +195,85 @@ export const RecruitDetailStudent = () => {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
         }
+        setAccount({...result});
         changeUser({ ...result });
       }
     } catch (err) {
       console.log(err);
     }
   };
+
+  //fetchCondition
+  async function fetchCondition() {
+    if(account&&recruit._id!==-1){
+    const url = serverURL + `apply/?id_student=${account._id}&id_recruit=${recruit._id}`;
+    const data = {
+      id_student: account._id,
+      id_recruit: recruit._id,
+    }
+    console.log("fetchCondition", data);
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      console.log("condition", result);
+      if (response.status !== 200) {
+        message.error(result.message);
+      } else {
+        if (result.data.length) {
+          openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn đã apply bài đăng này rồi!')
+          setDisabled(true);
+          setOpenModal(true);
+        } else {
+          setDisabled(false)
+          // setOpenConfirm(true);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      message.error("Đã có lỗi xảy ra condition!");
+    }
+  }
+  }
+
+  //fetchCondition
+  async function createApply() {
+    const url = serverURL + "apply";
+    const data = {
+      id_student: account._id,
+      id_recruit: recruit._id,
+    }
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      console.log("condition", result);
+      if (response.status !== 201) {
+        message.error(result.message);
+      } else {
+        if (!result.data) {
+          message.error('lỗi tạo apply')
+        } else {
+          openNotificationWithIcon('success', 'Thông báo', 'Bạn đã ứng tuyển thành công, hãy đợi phản hồi từ nhà tuyển dụng.')
+          setDisabled(true)
+          setOpenConfirm(false);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      message.error("Đã có lỗi xảy ra create apply!");
+    }
+  }
+  
 
   useEffect(() => {
     fetchUser();
@@ -212,6 +284,8 @@ export const RecruitDetailStudent = () => {
   useEffect(() => {
     fetchCompany();
   }, [recruit]);
+
+  useEffect(()=>{fetchCondition()}, [account, recruit])
 
   //initial Validate
 
@@ -228,7 +302,6 @@ export const RecruitDetailStudent = () => {
   }
 
   //handle action
-
   const handleApply = () => {
     fetchCV();
   };
@@ -245,8 +318,14 @@ export const RecruitDetailStudent = () => {
     setOpenConfirm(false);
   };
 
-  const handleOkConfirm = () => {
+  const handleOkConfirm = async() => {
+    createApply();
     //gửi mail và noti
+    const link = "company/student/" + account._id;
+    const title = "Ứng tuyển";
+    const type = "apply";
+    const content = `Sinh viên ${account.fullname} ứng tuyển bài đăng tuyển dụng ${recruit.title}.`;
+    createNoti(account._id, [company._id], title, type, content, link);
   };
 
   //render UI
@@ -257,7 +336,7 @@ export const RecruitDetailStudent = () => {
           <p className="title-account center ">Chi tiết bài đăng tuyển dụng</p>
         </div>
         <div className="apply-container">
-          <Button className="apply-btn" type="primary" onClick={handleApply}>
+          <Button className="apply-btn" type="primary" disabled={disabled} onClick={handleApply}>
             Ứng tuyển ngay
           </Button>
         </div>

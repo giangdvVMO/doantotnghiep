@@ -1,5 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Matches,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class CreateStudentDto {
   @ApiProperty({
@@ -8,11 +16,14 @@ export class CreateStudentDto {
   @IsOptional()
   _id: number;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'cccd',
   })
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[0-9]{9}|[0-9]{12}$/, {
+    message: 'cccd chỉ chứa 9 hoặc 12 kí tự số',
+  })
   cccd: string;
 
   @ApiProperty({
@@ -20,6 +31,9 @@ export class CreateStudentDto {
   })
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[a-zA-Z0-9\s]{1,50}$/, {
+    message: 'university không chứa các kí tự đặc biệt',
+  })
   university: string;
 
   @ApiProperty({
@@ -27,6 +41,9 @@ export class CreateStudentDto {
   })
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[a-zA-Z0-9\s]{1,50}$/, {
+    message: 'falculty không chứa các ký tự đặc biệt',
+  })
   faculty: string;
 
   @ApiProperty({
@@ -34,6 +51,9 @@ export class CreateStudentDto {
   })
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[a-zA-Z0-9\s]{1,50}$/, {
+    message: 'major không chứa các ký tự đặc biệt',
+  })
   major: string;
 
   @ApiPropertyOptional({
@@ -41,12 +61,17 @@ export class CreateStudentDto {
   })
   @IsOptional()
   @IsString()
+  @Matches(/^[1-9]{1}[0-9]{3}\-[1-9]{1}[0-9]{3}$/, {
+    message: 'Định dạng của course năm-năm',
+  })
   course: string;
 
   @ApiProperty({
     description: 'gpa',
   })
   @IsNotEmpty()
+  @Min(0.0)
+  @Max(4.0)
   gpa: number;
 
   @ApiProperty({
@@ -54,11 +79,16 @@ export class CreateStudentDto {
   })
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[a-zA-Z0-9]{1,50}$/, {
+    message:
+      'mã số thẻ sinh viên không chứa các ký tự đặc biệt hoặc khoảng trống',
+  })
   card_student: string;
 
   @ApiProperty({
     description: 'id_account',
   })
   @IsOptional()
+  @IsNumber()
   id_account: number;
 }

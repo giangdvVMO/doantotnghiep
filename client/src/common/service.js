@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { message, notification } from "antd";
 import {socket} from '../App';
 import { serverURL } from "../configs/server.config";
 export const DateToShortString = (dateString)=>{
@@ -33,7 +33,7 @@ export const createNoti = async(id_send, id_receive, title, type, content, link)
             );
             const result = await response.json();
             if(response.status!==201){
-                message.error("Lỗi hệ thống!");
+                message.error("Lỗi hệ thống noti!");
             }else{
                 if(!result){
                     message.warning('Cập nhật không thành công, hãy kiểm tra lại!');
@@ -113,3 +113,9 @@ export const changeExperience = (experience)=>{
     }
     return 'Trên 2 năm kinh nghiệm'
 }
+export const openNotificationWithIcon = (type, message, description) => {
+    notification[type]({
+      message: message,
+      description: description,
+    });
+  };

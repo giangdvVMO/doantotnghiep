@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DateToShortString } from 'src/share/external-services/parseDateToString';
@@ -15,6 +15,10 @@ export class StudentService {
     private readonly studentModel: Model<StudentDocument>,
   ) {}
   async create(createStudentDto: CreateStudentDto) {
+    const exist = await this.findOne(createStudentDto._id);
+    if (exist.data !== 'empty') {
+      throw new BadRequestException('Đã tồn tại sinh viên');
+    }
     const result = await this.studentModel.create(createStudentDto);
     return result;
   }

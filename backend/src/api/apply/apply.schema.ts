@@ -13,7 +13,7 @@ export class Apply {
   @Prop({ type: Number, ref: 'tbl_recruit', required: true })
   id_recruit: number;
 
-  @Prop({ type: Date, required: true })
+  @Prop({ type: Date, default: new Date(), required: true })
   apply_date: Date;
 }
 

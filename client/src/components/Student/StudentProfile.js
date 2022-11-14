@@ -428,7 +428,7 @@ export const StudentProfile = () => {
           if (!listAdmin.length) {
             message.info("Chưa có admin, hãy tạo tài khoản admin");
           } else {
-            createNoti(account._id, listAdmin, title, type, content);
+            createNoti(account._id, listAdmin, title, type, content, link);
           }
           message.success("Bạn đã cập nhật thành công! Hãy đợi admin duyệt!");
           setIsEdit(false);

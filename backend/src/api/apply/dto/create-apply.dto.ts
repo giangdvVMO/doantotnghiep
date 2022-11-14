@@ -7,7 +7,7 @@ export class CreateApplyDto {
     example: 1,
   })
   @IsNotEmpty()
-  @IsNumber()
+  // @IsNumber()
   id_student: number;
 
   @ApiProperty({
@@ -15,7 +15,7 @@ export class CreateApplyDto {
     example: 1,
   })
   @IsNotEmpty()
-  @IsNumber()
+  // @IsNumber()
   id_recruit: number;
 }
 
@@ -25,7 +25,7 @@ export class ConditionDto {
     example: 1,
   })
   @IsOptional()
-  @IsNumber()
+  // @IsNumber()
   id_student: number;
 
   @ApiPropertyOptional({
@@ -33,7 +33,7 @@ export class ConditionDto {
     example: 1,
   })
   @IsOptional()
-  @IsNumber()
+  // @IsNumber()
   id_company: number;
 }
 

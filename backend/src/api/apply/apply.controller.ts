@@ -6,30 +6,32 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ApplyService } from './apply.service';
 import { ConditionDto, CreateApplyDto } from './dto/create-apply.dto';
 
-@Controller('apply')
+@Controller({
+  version: ['1'],
+  path: 'apply',
+})
+@ApiTags('Apply')
 export class ApplyController {
   constructor(private readonly applyService: ApplyService) {}
 
   @Post()
   create(@Body() createApplyDto: CreateApplyDto) {
-    const apply = {
-      ...createApplyDto,
-      apply_date: Date.now(),
-    };
-    return this.applyService.create(apply);
+    return this.applyService.create(createApplyDto);
+  }
+
+  @Get('')
+  findOne(@Query() createApplyDto: CreateApplyDto) {
+    return this.applyService.findOne(createApplyDto);
   }
 
   @Get('condition')
-  findAll() {
-    return this.applyService.findAll();
-  }
-
-  @Get()
-  findCondition(conditionDto: ConditionDto) {
+  findCondition(@Query() conditionDto: ConditionDto) {
     return this.applyService.findCondition(conditionDto);
   }
 
