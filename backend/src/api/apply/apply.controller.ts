@@ -1,6 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ApplyService } from './apply.service';
-import { CreateApplyDto } from './dto/create-apply.dto';
+import { ConditionDto, CreateApplyDto } from './dto/create-apply.dto';
 
 @Controller('apply')
 export class ApplyController {
@@ -9,20 +17,26 @@ export class ApplyController {
   @Post()
   create(@Body() createApplyDto: CreateApplyDto) {
     const apply = {
-      ...createApplyDto, apply_date: Date.now()
-    }
-    return this.applyService.create(createApplyDto);
+      ...createApplyDto,
+      apply_date: Date.now(),
+    };
+    return this.applyService.create(apply);
   }
 
-  @Get()
+  @Get('condition')
   findAll() {
     return this.applyService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.applyService.findOne(+id);
+  @Get()
+  findCondition(conditionDto: ConditionDto) {
+    return this.applyService.findCondition(conditionDto);
   }
+
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.applyService.findOne(+id);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
