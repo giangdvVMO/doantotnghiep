@@ -126,6 +126,14 @@ const SignIn = () => {
     function handleReset(){
         setUser((preUser)=>{return {...preUser, username: '', password: ''}})
         form.resetFields();
+        setValidateUsername({
+            status: 'success',
+            errorMsg: null
+        });
+        setValidatePassword({
+            status: 'success',
+            errorMsg: null
+        })
     }
     return (
         <div className='grid-container'>

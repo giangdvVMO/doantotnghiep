@@ -7,11 +7,11 @@ import {decodeToken} from 'react-jwt';
 import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
-import { DateToShortString } from "../../common/service";
+import { DateToShortString, openNotificationWithIcon } from "../../common/service";
 import { serverURL } from "../../configs/server.config";
 
 let initstudent = {
-    _id:1,
+    _id:-1,
     cccd: "",
     address: "",
     university: "",
@@ -31,6 +31,7 @@ export const StudentDetailCompany = ()=>{
     const [student, setStudent] = useState(initstudent);
     const [CV, setCV] = useState(null);
     const [isOpenConfirm, setOpenConfirm] = useState(false);
+    const [disabled, setDisabled] = useState(false);
 
     const {id} = useParams();
 
@@ -97,8 +98,8 @@ export const StudentDetailCompany = ()=>{
 
     //FETCH CV
     async function fetchCV(){
-        console.log('fetchCV')
-        const url = serverURL + 'cv/'+student._id;
+        if(student._id!==-1){
+        const url = serverURL + 'letter/'+student._id;
         try {
             const response = await fetch(url, {
                 method: 'GET',
@@ -112,8 +113,11 @@ export const StudentDetailCompany = ()=>{
             if(response.status!==200){
                 message.error(result.message);
             }else{
-                message.success("Load cv thành công!");
-                setCV({...result.data});
+                if(!result.data.status){
+                    openNotificationWithIcon('warning', 'Thông báo', 'CV của sinh viên đã private vì đã được tuyển dụng hoặc vì một số lý do khác!')
+                }else{
+                    setCV({...result.data});
+                }
             }
         }
         catch (err) {
@@ -121,10 +125,70 @@ export const StudentDetailCompany = ()=>{
             message.error("Đã có lỗi xảy ra!");
         }
     }
+    }
+
+    async function fetchApply(){
+        if(account&&student){
+        const url = serverURL + `apply/condition?id_student=${student._id}&id_company=${account._id}`;
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            if(response.status!==200){
+                message.error(result.message);
+            }else{
+                if(result.data.length){
+                    openNotificationWithIcon('info', 'Thông báo', 'Sinh viên đã ứng tuyển công ty bạn, hãy gửi thư phỏng vấn nếu phù hợp!')
+                }
+            }
+        }
+        catch (err) {
+            console.log(err);
+            message.error("Đã có lỗi xảy ra!");
+        }
+    }
+    }
+
+    async function fetchLetter(){
+        if(account&&student){
+        const url = serverURL + `letter/condition?id_student=${student._id}&id_company=${account._id}`;
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
+            const result = await response.json();
+            if(response.status!==200){
+                message.error(result.message);
+            }else{
+                if(result.data.length){
+                    openNotificationWithIcon('info', 'Thông báo', 'Bạn đã gửi thư mời phỏng vấn rồi!')
+                    setDisabled(true);
+                }
+                setDisabled(false);
+            }
+        }
+        catch (err) {
+            console.log(err);
+            message.error("Đã có lỗi xảy ra!");
+        }
+    }
+    }
+    
 
     useEffect(()=>{fetchUser()}, []);
-    useEffect(()=>{fetchStudent();},[])
+    useEffect(()=>{fetchStudent();},[]);
     useEffect(()=>{fetchCV()},[student]);
+    useEffect(()=>{fetchLetter()}, [student, account]);
+    useEffect(()=>{fetchApply()},[student, account]);
     
     const ref = useRef();
     const refButtonSubmit = useRef();
@@ -137,11 +201,13 @@ export const StudentDetailCompany = ()=>{
         }
     }
     const renderButtonGroup = ()=>{
+        if(CV)
         return (
             <div className="apply-container">
-                <Button type='primary' className="apply-btn" onClick={handleApply}>Gửi thư mời phỏng vấn</Button>
+                <Button type='primary' className="apply-btn" disabled={disabled} onClick={handleApply}>Gửi thư mời phỏng vấn</Button>
             </div>
         )
+        return ''
     }
     const handleApply = ()=>{
         setOpenConfirm(true);
@@ -330,7 +396,7 @@ export const StudentDetailCompany = ()=>{
                         </Form>
                         )
                         :
-                        <p>Chưa có CV</p>
+                        <p>Chưa có CV hoặc CV ở trạng thái private</p>
                     }
             </Card>
             <Modal title="Xác nhận" open={isOpenConfirm} onOk={handleOkConfirm} onCancel={handleCancelConfirm}>

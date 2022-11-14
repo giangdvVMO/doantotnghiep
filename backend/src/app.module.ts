@@ -18,11 +18,11 @@ import { RateModule } from './api/rate/rate.module';
 import { FieldCvModule } from './api/field_cv/field_cv.module';
 import { FieldNewsModule } from './api/field_news/field_news.module';
 import { AccountNotiModule } from './api/account_noti/account_noti.module';
-import { LetterStudentModule } from './api/letter_student/letter_student.module';
 import { ApplyModule } from './api/apply/apply.module';
 import { GateGateway } from './gate.gateway';
 import { RecruitViewModule } from './api/recruit-view/recruit-view.module';
 import { CvViewModule } from './api/cv-view/cv-view.module';
+import { LetterStudentModule } from './api/letter_student/letter_student.module';
 
 @Module({
   imports: [
