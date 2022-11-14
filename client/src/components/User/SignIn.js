@@ -101,7 +101,7 @@ const SignIn = () => {
                 const result = await response.json();
                 if(response.status!==201){
                     if(response.status===400){
-                        openNotificationWithIcon('error', 'Thông báo', response.message)
+                        openNotificationWithIcon('error', 'Thông báo', result.message)
                     }
                     // message.error("Đăng nhập không thành công!");
                 }else{
