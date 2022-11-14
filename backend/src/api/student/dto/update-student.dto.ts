@@ -15,7 +15,7 @@ export class UpdateStudentDto {
   @IsOptional()
   @IsString()
   @Matches(/^[a-zA-Z0-9\s\,]{1,50}$/, {
-    message: 'university không chứa các kí tự đặc biệt',
+    message: 'địa chỉ không chứa các kí tự đặc biệt, không vượt quá 50 kí tự',
   })
   address: string;
 

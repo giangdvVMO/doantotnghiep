@@ -21,13 +21,16 @@ export class AuthService {
     });
     console.log('user', user);
     if (!user) {
-      throw new BadRequestException('User not found, disabled or locked');
+      throw new BadRequestException(
+        'Không tồn tại tài khoản có tên đăng nhập như trên',
+      );
     }
     const comparePassword = bcrypt.compareSync(password, user.password);
     if (user && comparePassword) {
       console.log(user);
       return user;
     }
+    throw new BadRequestException('Sai mật khẩu');
     return null;
   }
 

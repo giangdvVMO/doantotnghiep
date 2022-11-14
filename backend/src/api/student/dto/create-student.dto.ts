@@ -16,6 +16,16 @@ export class CreateStudentDto {
   @IsOptional()
   _id: number;
 
+  @ApiPropertyOptional({
+    description: 'address',
+  })
+  @IsOptional()
+  @IsString()
+  @Matches(/^[a-zA-Z0-9\s\,]{1,50}$/, {
+    message: 'địa chỉ không chứa các kí tự đặc biệt, không vượt quá 50 kí tự',
+  })
+  address: string;
+
   @ApiProperty({
     description: 'cccd',
   })
