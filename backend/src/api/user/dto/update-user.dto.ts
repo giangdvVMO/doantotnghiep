@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -16,7 +17,9 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @IsString()
-  @MaxLength(100)
+  @Matches(/^[a-zA-Z0-9\s]{1-50}$/, {
+    message: 'username không chứa kí tự đặc biệt',
+  })
   username?: string;
 
   @ApiPropertyOptional({
@@ -31,6 +34,9 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @IsString()
+  @Matches(/^[a-zA-Z\s]{1-50}$/, {
+    message: 'fullname không chứa kí tự đặc biệt',
+  })
   fullname?: string;
 
   @ApiPropertyOptional({
@@ -44,6 +50,9 @@ export class UpdateUserDto {
     description: 'phone',
   })
   @IsOptional()
+  @Matches(/^0{1}[1-9]{1}[0-9]{8}$/, {
+    message: 'Chưa đúng định dạng số điện thoại',
+  })
   phone?: string;
 
   @ApiPropertyOptional({
@@ -67,6 +76,9 @@ export class ChangeUserPasswordDto {
   })
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[a-zA-Z0-9]{6-50}$/, {
+    message: 'password chỉ chứa kí tự chữ và số và tối thiểu 6 kí tự',
+  })
   oldPassword: string;
 
   @ApiProperty({
@@ -75,7 +87,9 @@ export class ChangeUserPasswordDto {
   })
   @IsNotEmpty()
   @IsString()
-  @MinLength(8)
+  @Matches(/^[a-zA-Z0-9]{6-50}$/, {
+    message: 'newpassword chỉ chứa kí tự chữ và số và tối thiểu 6 kí tự',
+  })
   newPassword: string;
 
   @ApiProperty({
@@ -84,7 +98,9 @@ export class ChangeUserPasswordDto {
   })
   @IsNotEmpty()
   @IsString()
-  @MinLength(8)
+  @Matches(/^[a-zA-Z0-9]{6-50}$/, {
+    message: 'confirmpassword chỉ chứa kí tự chữ và số và tối thiểu 6 kí tự',
+  })
   confirmPassword: string;
 }
 
