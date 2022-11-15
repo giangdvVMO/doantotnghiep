@@ -21,9 +21,12 @@ export class CreateStudentDto {
   })
   @IsOptional()
   @IsString()
-  @Matches(/^[a-zA-Z0-9\s\,]{1,50}$/, {
-    message: 'địa chỉ không chứa các kí tự đặc biệt, không vượt quá 50 kí tự',
-  })
+  @Matches(
+    /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s\,]{1,50}$/,
+    {
+      message: 'địa chỉ không chứa các kí tự đặc biệt, không vượt quá 50 kí tự',
+    },
+  )
   address: string;
 
   @ApiProperty({
@@ -41,9 +44,12 @@ export class CreateStudentDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z0-9\s]{1,50}$/, {
-    message: 'university không chứa các kí tự đặc biệt',
-  })
+  @Matches(
+    /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s]{1,50}$/,
+    {
+      message: 'university không chứa các kí tự đặc biệt',
+    },
+  )
   university: string;
 
   @ApiProperty({
@@ -51,9 +57,12 @@ export class CreateStudentDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z0-9\s]{1,50}$/, {
-    message: 'falculty không chứa các ký tự đặc biệt',
-  })
+  @Matches(
+    /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s]{1,50}$/,
+    {
+      message: 'falculty không chứa các ký tự đặc biệt',
+    },
+  )
   faculty: string;
 
   @ApiProperty({
@@ -61,9 +70,12 @@ export class CreateStudentDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z0-9\s]{1,50}$/, {
-    message: 'major không chứa các ký tự đặc biệt',
-  })
+  @Matches(
+    /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s]{1,50}$/,
+    {
+      message: 'major không chứa các ký tự đặc biệt',
+    },
+  )
   major: string;
 
   @ApiPropertyOptional({
