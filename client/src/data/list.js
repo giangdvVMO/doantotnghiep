@@ -52,15 +52,15 @@ export const universityList = [
   
   export const experienceList = [
     {
-      id: -1,
+      id: 0,
       label: "Không yêu cầu",
     },
     {
-      id: 0,
+      id: 1,
       label: "Dưới 1 năm",
     },
     {
-      id: 1,
+      id: 2,
       label: "1-5 năm",
     },
   ];

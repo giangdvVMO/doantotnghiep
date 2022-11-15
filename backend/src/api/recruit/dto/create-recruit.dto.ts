@@ -1,5 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Matches,
+} from 'class-validator';
 
 export class CreateRecruitDto {
   @ApiProperty({
@@ -7,6 +14,12 @@ export class CreateRecruitDto {
   })
   @IsNotEmpty()
   @IsString()
+  @Matches(
+    /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s]{1,50}$/,
+    {
+      message: 'title không chứa các ký tự đặc biệt',
+    },
+  )
   title: string;
 
   @ApiProperty({
@@ -32,6 +45,7 @@ export class CreateRecruitDto {
     description: 'level',
   })
   @IsNotEmpty()
+  @IsEnum(['all', 'Fresher', 'Junior', 'Pre-Senior', 'Senior', 'PM'])
   level: string;
 
   @ApiPropertyOptional({

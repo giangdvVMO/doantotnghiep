@@ -5,16 +5,13 @@ import {
   Body,
   Patch,
   Param,
-  UseInterceptors,
-  UploadedFile,
   Query,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { CvService } from './cv.service';
-import { CreateCvDto, FileCreateCVDto } from './dto/create-cv.dto';
+import { CreateCvDto } from './dto/create-cv.dto';
 import { QueryParamCVDto } from './dto/query-param-cv.dto';
-import { UpdateCvDto, UpdateFullCVDto } from './dto/update-cv.dto';
+import { UpdateFullCVDto } from './dto/update-cv.dto';
 
 @Controller({
   version: ['1'],
