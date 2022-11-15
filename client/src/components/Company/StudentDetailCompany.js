@@ -181,13 +181,11 @@ export const StudentDetailCompany = () => {
             "Content-Type": "application/json",
           },
         });
-        console.log(1, await response.json());
         const result = await response.json();
         console.log("result letter", result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
-          console.log(2);
           if (result.data.length) {
             openNotificationWithIcon(
               "info",
@@ -198,7 +196,6 @@ export const StudentDetailCompany = () => {
           } else {
             setDisabled(false);
           }
-          console.log(3);
         }
       } catch (err) {
         console.log(err);

@@ -6,9 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { LetterService } from './letter.service';
-import { CreateLetterDto } from './dto/create-letter.dto';
+import { ConditionLetterDto, CreateLetterDto } from './dto/create-letter.dto';
 import { UpdateLetterDto } from './dto/update-letter.dto';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -28,6 +29,11 @@ export class LetterController {
   @Get()
   findAll() {
     return this.letterService.findAll();
+  }
+
+  @Get('condition')
+  findCondition(@Query() conditionLetterDto: ConditionLetterDto) {
+    return this.letterService.findCondition(conditionLetterDto);
   }
 
   @Get(':id')

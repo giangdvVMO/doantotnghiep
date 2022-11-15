@@ -5,7 +5,7 @@ import { sendEmail } from 'src/share/external-services/send-mail.service';
 import { CompanyService } from '../company/company.service';
 import { LetterStudentService } from '../letter_student/letter_student.service';
 import { UserService } from '../user/user.service';
-import { CreateLetterDto } from './dto/create-letter.dto';
+import { ConditionLetterDto, CreateLetterDto } from './dto/create-letter.dto';
 import { UpdateLetterDto } from './dto/update-letter.dto';
 import { Letter, LetterDocument } from './letter.schema';
 
@@ -33,6 +33,34 @@ export class LetterService {
     console.log(count);
     return count.length ? count[0].max + 1 : 1;
   }
+
+  async findCondition(conditionLetterDto: ConditionLetterDto) {
+    const result = await this.letterModel.aggregate([
+      {
+        $match: {
+          id_account: +conditionLetterDto.id_company,
+        },
+      },
+      {
+        $lookup: {
+          from: 'tbl_letter_student',
+          localField: 'id_letter_student',
+          foreignField: '_id',
+          as: 'letter_student',
+        },
+      },
+      {
+        $unwind: '$letter_student',
+      },
+      {
+        $match: {
+          'letter_student.id_student': +conditionLetterDto.id_student,
+        },
+      },
+    ]);
+    return { data: result };
+  }
+
   async create(createLetterDto: CreateLetterDto) {
     const _id = await this.calculateId();
     console.log('_id', _id);

@@ -47,6 +47,7 @@ export class CvViewService {
           id_cv: +id_cv,
         },
       },
+      { $sort: { views: -1 } },
       {
         $lookup: {
           from: 'tbl_company',
@@ -81,7 +82,7 @@ export class CvViewService {
         },
       },
     ]);
-    return { data: result };
+    return { data: result[0] };
   }
 
   async findOneCondition(id_company: number, id_cv: number) {

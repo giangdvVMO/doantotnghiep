@@ -1,0 +1,21 @@
+.segment{
+    width: 100%;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.segment-content{
+    width: 500px;
+}
+
+.container-image{
+    display: grid;
+    grid-template-columns: 40% 60%;
+}
+
+.table-statistic{
+    margin: 0 10px
+}

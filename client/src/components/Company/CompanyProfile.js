@@ -830,7 +830,15 @@ export const CompanyProfile = () => {
                   onChange={handleChangeIntroduction}
                 />
               ) : (
-                <p className="text-display">{company.introduction}</p>
+                <>
+                <TextArea
+                        rows={5}
+                        disabled
+                        value={company.introduction}
+                        defaultValue={company.introduction}
+                      />
+                      {console.log(company.introduction)}
+                      </>
               )}
             </Form.Item>
             <Form.Item name="status" label="Trạng thái">

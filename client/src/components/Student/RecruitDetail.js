@@ -476,7 +476,7 @@ export const RecruitDetailStudent = () => {
                   value={recruit.requirement}
                   defaultValue={recruit.requirement}
                 />
-                {console.log(recruit.welfare)}
+                {console.log(recruit.requirement)}
               </Form.Item>
               <Form.Item
                 label="Thông tin quyền lợi:"

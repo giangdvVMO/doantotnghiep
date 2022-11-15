@@ -1,25 +1,21 @@
 import {
   Button,
-  Card,
-  Image,
   Input,
   message,
   Pagination,
   Select,
-  Skeleton,
   Spin,
-  Tag,
 } from "antd";
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
 import { UserContext } from "../User/UserProvider";
 import "../../styles/manager-page.css";
-import { SearchOutlined, SettingOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
 import "../../styles/list.css";
-import { DateToShortStringDate, postFields } from "../../common/service";
+import { postFields } from "../../common/service";
 import { CardList } from "../Common/Card";
 
 const { Option } = Select;

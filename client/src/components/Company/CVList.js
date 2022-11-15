@@ -1,24 +1,22 @@
 import {
-  Avatar,
   Button,
-  Image,
   Input,
   message,
   Pagination,
   Select,
   Skeleton,
-  Tag,
+  Spin,
 } from "antd";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
 import { UserContext } from "../User/UserProvider";
 import "../../styles/manager-page.css";
-import { SearchOutlined, UserOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
 import "../../styles/list.css";
-import { openNotificationWithIcon, postFields } from "../../common/service";
+import { postFields } from "../../common/service";
 import { CardListCV } from "../Common/CardCV";
 
 const { Option } = Select;
@@ -143,7 +141,7 @@ export const CVList = () => {
     console.log(current, pageSize);
     setPageIndex(current);
   };
-  
+  if(fields&&user){
   return (
     <>
       <div className="banner-content">Quản lý danh sách CV</div>
@@ -183,7 +181,7 @@ export const CVList = () => {
           </div>
         </div>
       </div>
-      {user ? (
+      
         <>
           {/* <div class="flex-container-list">
             {listCV.map((CV) => {
@@ -237,9 +235,10 @@ export const CVList = () => {
             />
           </div>
         </>
-      ) : (
-        <Skeleton active />
-      )}
     </>
-  );
+  );}else {
+    return <div className="spin-container">
+            <Spin size={200} />
+          </div>;
+}
 };

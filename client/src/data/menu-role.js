@@ -1,4 +1,4 @@
-import { AlertOutlined, BankOutlined, BookOutlined, ContactsOutlined, ContainerOutlined, CopyOutlined, HomeOutlined, SnippetsOutlined, UsergroupAddOutlined } from "@ant-design/icons";
+import { AlertOutlined, BankOutlined, BookOutlined, ContactsOutlined, ContainerOutlined, CopyOutlined, HomeOutlined, SnippetsOutlined, StarOutlined, UsergroupAddOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 export const MenuRole = {
@@ -116,6 +116,11 @@ export const MenuRole = {
             label: <Link to='student/recruit-list'>Bài đăng tuyển dụng</Link>,
             icon: <ContainerOutlined />,
             key: 'recruitlist'
+        },
+        {
+            label: <Link to='student/statistic'>Thống kê</Link>,
+            icon: <StarOutlined />,
+            key: 'statistic'
         },
         {
             label: <Link to='news'>Tin tức</Link>,

@@ -16,9 +16,12 @@ export class RegisterDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z0-9]{1,50}$/, {
-    message: 'username không chứa kí tự đặc biệt và khoảng trống',
-  })
+  @Matches(
+    /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s]{1,50}$/,
+    {
+      message: 'username không chứa các ký tự đặc biệt',
+    },
+  )
   username: string;
 
   @ApiProperty({
@@ -27,7 +30,7 @@ export class RegisterDto {
   @IsNotEmpty()
   @IsString()
   @Matches(/^[a-zA-Z0-9]{1,100}$/, {
-    message: 'password không chỉ chứa kí tự chữ và số',
+    message: 'password chỉ chứa kí tự chữ và số',
   })
   password: string;
 
@@ -44,9 +47,12 @@ export class RegisterDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z\s]{1,50}$/, {
-    message: 'fullname không chứa kí tự đặc biệt',
-  })
+  @Matches(
+    /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s]{1,100}$/,
+    {
+      message: 'fullname không chứa các ký tự đặc biệt',
+    },
+  )
   fullname: string;
 
   @ApiProperty({

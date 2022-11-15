@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, Matches } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsArray, IsNotEmpty, IsOptional, Matches } from 'class-validator';
 
 const VIETNAMESE =
   'aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ';
@@ -42,4 +42,22 @@ export class CreateLetterDto {
   @IsNotEmpty()
   @IsArray()
   students: number[];
+}
+
+export class ConditionLetterDto {
+  @ApiPropertyOptional({
+    description: 'id_student',
+    example: 1,
+  })
+  @IsOptional()
+  // @IsNumber()
+  id_student: number;
+
+  @ApiPropertyOptional({
+    description: 'id_company',
+    example: 1,
+  })
+  @IsOptional()
+  // @IsNumber()
+  id_company: number;
 }

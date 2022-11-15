@@ -17,9 +17,12 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @IsString()
-  @Matches(/^[a-zA-Z0-9\s]{1,50}$/, {
-    message: 'username không chứa kí tự đặc biệt',
-  })
+  @Matches(
+    /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s]{1,50}$/,
+    {
+      message: 'username không chứa các ký tự đặc biệt',
+    },
+  )
   username?: string;
 
   @ApiPropertyOptional({
@@ -37,9 +40,12 @@ export class UpdateUserDto {
   })
   @IsOptional()
   @IsString()
-  @Matches(/^[a-zA-Z\s]{1,50}$/, {
-    message: 'fullname không chứa kí tự đặc biệt',
-  })
+  @Matches(
+    /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s]{1,100}$/,
+    {
+      message: 'fullname không chứa các ký tự đặc biệt',
+    },
+  )
   fullname?: string;
 
   @ApiPropertyOptional({

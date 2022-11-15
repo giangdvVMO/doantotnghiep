@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/charts": "^1.4.2",
     "@ant-design/icons": "^4.7.0",
+    "@ant-design/plots": "^1.2.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -19,6 +20,7 @@
     "react-jwt": "^1.1.7",
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
+    "recharts": "^2.1.16",
     "socket.io-client": "^4.5.3",
     "typeface-josefin-sans": "^1.1.13",
     "typeface-roboto": "^1.1.13",
