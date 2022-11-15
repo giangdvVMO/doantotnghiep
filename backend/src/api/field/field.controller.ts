@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { FieldService } from './field.service';
-import { CreateFieldDto } from './dto/create-field.dto';
+import { CreateFieldArrayDto, CreateFieldDto } from './dto/create-field.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('field')
@@ -11,6 +11,12 @@ export class FieldController {
   @Post()
   create(@Body() createFieldDto: CreateFieldDto) {
     return this.fieldService.create(createFieldDto);
+  }
+
+  @Post('list')
+  createMany(@Body() createFieldArrayDto: CreateFieldArrayDto) {
+    console.log(createFieldArrayDto);
+    return this.fieldService.createMany(createFieldArrayDto);
   }
 
   @Get()

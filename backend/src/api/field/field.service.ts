@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateFieldDto } from './dto/create-field.dto';
+import { CreateFieldArrayDto, CreateFieldDto } from './dto/create-field.dto';
 import { Field, FieldDocument } from './field.schema';
 
 @Injectable()
@@ -13,6 +13,15 @@ export class FieldService {
 
   async create(createFieldDto: CreateFieldDto) {
     const result = await this.fieldModel.create(createFieldDto);
+    return {
+      data: result,
+    };
+  }
+
+  async createMany(createFieldArrayDto: CreateFieldArrayDto) {
+    const result = await this.fieldModel.insertMany(
+      createFieldArrayDto.field_array,
+    );
     return {
       data: result,
     };

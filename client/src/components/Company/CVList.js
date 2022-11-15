@@ -18,7 +18,7 @@ import "../../styles/manager-page.css";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
 import "../../styles/list.css";
-import { openNotificationWithIcon } from "../../common/service";
+import { openNotificationWithIcon, postFields } from "../../common/service";
 
 const { Option } = Select;
 export const CVList = () => {
@@ -47,9 +47,11 @@ export const CVList = () => {
       if (response.status !== 200) {
         message.error(result.message);
       } else {
-        message.success("Load field thành công!");
-        console.log("fetchField", result.data);
-        setFields(result.data);
+        if (result.data === "empty") {
+          const manuList = postFields();
+          setFields(manuList);
+        }
+      setFields(result.data);
       }
     } catch (err) {
       console.log(err);

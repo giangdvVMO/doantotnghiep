@@ -1,6 +1,7 @@
 import { message, notification } from "antd";
 import {socket} from '../App';
 import { serverURL } from "../configs/server.config";
+import { fieldList, manufacturesList } from "../data/list";
 export const DateToShortString = (dateString)=>{
     console.log(dateString);
     const date = new Date(dateString);
@@ -119,3 +120,49 @@ export const openNotificationWithIcon = (type, message, description) => {
       description: description,
     });
   };
+
+  export const postManufactures = async()=> {
+    const url = serverURL + "manufacture/list";
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ array: manufacturesList }),
+      });
+      const result = await response.json();
+      console.log(result);
+      if (response.status !== 201) {
+        message.error(result.message);
+      } else {
+        return manufacturesList;
+      }
+    } catch (err) {
+      console.log(err);
+      message.error("Đã có lỗi xảy ra!");
+    }
+  }
+
+  export const postFields = async()=> {
+    const url = serverURL + "field/list";
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ field_array: fieldList }),
+      });
+      const result = await response.json();
+      console.log(result);
+      if (response.status !== 201) {
+        message.error(result.message);
+      } else {
+        return fieldList;
+      }
+    } catch (err) {
+      console.log(err);
+      message.error("Đã có lỗi xảy ra!");
+    }
+  }

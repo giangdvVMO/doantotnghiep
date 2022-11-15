@@ -37,7 +37,7 @@ import {
 } from "../../common/validation";
 import { messageSignUpError, messageCompanyError } from "../../common/error";
 import { manufacturesList } from "../../data/list";
-import { createNoti, getUserAdmin } from "../../common/service";
+import { createNoti, getUserAdmin, postManufactures } from "../../common/service";
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -134,30 +134,7 @@ export const CompanyProfile = () => {
       console.log(err);
     }
   }
-  //post manufactures
-  async function postManufactures() {
-    const url = serverURL + "manufacture/list";
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ array: manufacturesList }),
-      });
-      const result = await response.json();
-      console.log(result);
-      if (response.status !== 201) {
-        message.error(result.message);
-      } else {
-        setManufactures(manufacturesList);
-      }
-    } catch (err) {
-      console.log(err);
-      message.error("Đã có lỗi xảy ra!");
-    }
-  }
-
+  
   //fetch Manufacture
   async function fetchManufacture() {
     const url = serverURL + "manufacture";
@@ -174,7 +151,8 @@ export const CompanyProfile = () => {
         message.error(result.message);
       } else {
         if (result.data === "empty") {
-          postManufactures();
+          const manuList = postManufactures();
+          setManufactures(manuList);
         }
         setManufactures(result.data);
       }

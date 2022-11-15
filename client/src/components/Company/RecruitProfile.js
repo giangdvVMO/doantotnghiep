@@ -10,7 +10,7 @@ import '../../styles/my-account.css'
 import { checkString, checkNumber, checkDate, checkArray } from "../../common/validation";
 import { messageRecruitError } from "../../common/error";
 import { genderList, levelList, wayWorkingList } from "../../data/list";
-import { DateToShortString } from "../../common/service";
+import { DateToShortString, postFields } from "../../common/service";
 import { CheckCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import moment from "moment";
 const { Option } = Select;
@@ -138,7 +138,10 @@ export const RecruitProfile = ()=>{
                 if(response.status!==200){
                     message.error(result.message);
                 }else{
-                    message.success("Load field thành công!");
+                    if (result.data === "empty") {
+                        const manuList = postFields();
+                        setFields(manuList);
+                      }
                     setFields(result.data);
                 }
             }

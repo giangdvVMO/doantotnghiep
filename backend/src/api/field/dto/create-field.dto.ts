@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsArray, IsNotEmpty } from 'class-validator';
 
 export class CreateFieldDto {
   @ApiProperty({
@@ -13,4 +13,13 @@ export class CreateFieldDto {
   })
   @IsNotEmpty()
   nameField: string;
+}
+
+export class CreateFieldArrayDto {
+  @ApiProperty({
+    description: 'field_array',
+  })
+  @IsNotEmpty()
+  @IsArray()
+  field_array: CreateFieldDto[];
 }

@@ -7,7 +7,7 @@ import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
 import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
-import { DateToShortStringDate } from '../../common/service';
+import { DateToShortStringDate, postFields } from '../../common/service';
 
 const { Option } = Select;
 export const RecruitManager = () => {
@@ -36,8 +36,10 @@ export const RecruitManager = () => {
             if(response.status!==200){
                 message.error(result.message);
             }else{
-                message.success("Load field thành công!");
-                console.log("fetchField", result.data);
+                if (result.data === "empty") {
+                    const manuList = postFields();
+                    setFields(manuList);
+                  }
                 setFields(result.data);
             }
         }

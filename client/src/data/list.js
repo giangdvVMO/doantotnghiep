@@ -79,4 +79,19 @@ export const universityList = [
       name_manu: "Công nghệ đa phương tiện",
     },
   ];
+
+  export const fieldList = [
+    {
+      _id: 1,
+      nameField: "Công nghệ phần mềm",
+    },
+    {
+      _id: 2,
+      nameField: "An toàn thông tin",
+    },
+    {
+      _id: 3,
+      nameField: "Công nghệ đa phương tiện",
+    },
+  ];
   

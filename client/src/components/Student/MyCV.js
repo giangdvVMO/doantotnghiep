@@ -591,8 +591,8 @@ export const MyCV = () => {
                     >
                       {isEdit ? (
                         <Input
-                          className="input-login max-width"
-                          placeholder="Nhập tiêu CV"
+                          className="max-width"
+                          placeholder="Nhập tiêu đề CV"
                           defaultValue={CV.title}
                           value={CV.title}
                           onChange={handleChangeTitle}

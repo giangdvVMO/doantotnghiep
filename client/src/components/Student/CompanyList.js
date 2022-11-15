@@ -8,6 +8,7 @@ import '../../styles/manager-page.css'
 import { SearchOutlined } from '@ant-design/icons';
 import { scaleList } from '../../data/list';
 import { serverURL } from '../../configs/server.config';
+import { postManufactures } from '../../common/service';
 
 const { Option } = Select;
 export const CompanyList = () => {
@@ -38,8 +39,11 @@ export const CompanyList = () => {
             if(response.status!==200){
                 message.error(result.message);
             }else{
-                message.success("Load manufacture thành công!");
-                setManufactures(result.data);
+                if (result.data === "empty") {
+                    const manuList = postManufactures();
+                    setManufactures(manuList);
+                  }
+                  setManufactures(result.data);
             }
         }
         catch (err) {

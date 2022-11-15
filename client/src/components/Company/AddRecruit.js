@@ -26,7 +26,7 @@ import {
 } from "../../common/validation";
 import { messageRecruitError } from "../../common/error";
 import { genderList, levelList, wayWorkingList } from "../../data/list";
-import { createNoti, getUserAdmin } from "../../common/service";
+import { createNoti, getUserAdmin, postFields } from "../../common/service";
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -144,8 +144,11 @@ export const AddRecruit = () => {
       if (response.status !== 200) {
         message.error(result.message);
       } else {
-        message.success("Load field thành công!");
-        setFields(result.data);
+        if (result.data === "empty") {
+          const manuList = postFields();
+          setFields(manuList);
+        }
+      setFields(result.data);
       }
     } catch (err) {
       console.log(err);
