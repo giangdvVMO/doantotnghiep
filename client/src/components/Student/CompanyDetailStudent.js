@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Form, Input, message, Tag } from "antd";
+import { Avatar, Button, Card, Form, Input, message, Spin, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {decodeToken} from 'react-jwt';
@@ -135,7 +135,7 @@ export const CompanyDetailStudent = ()=>{
     useEffect(()=>{fetchCompany();},[]);
 
     const ref = useRef();
-
+    if(company){
     //render UI
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
@@ -254,5 +254,9 @@ export const CompanyDetailStudent = ()=>{
             </Card>
         </div>
         </div>
-    )
+    )}else{
+        return <div className="spin-container">
+        <Spin />
+      </div>;
+    }
 }

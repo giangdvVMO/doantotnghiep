@@ -1,4 +1,4 @@
-import { Button, Input, message, Select, Table, Tag } from 'antd';
+import { Button, Input, message, Select, Spin, Table, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {decodeToken} from 'react-jwt';
@@ -176,7 +176,7 @@ export const CVManagerAdmin = () => {
     const handleChangeSearch = (e)=>{
         setSearch(e.target.value);
     }
-
+    if(fields){
     return (
         <>
             <div className='banner-content'>Quản lý danh sách CV</div>
@@ -232,5 +232,9 @@ export const CVManagerAdmin = () => {
                 }}
             />;
         </>
-    )
+    )}else{
+        return <div className="spin-container">
+        <Spin />
+      </div>;
+    }
 }

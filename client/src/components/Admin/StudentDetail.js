@@ -1,5 +1,5 @@
 import { CheckCircleOutlined, MinusCircleOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Form, message, Modal, Tag } from "antd";
+import { Avatar, Button, Form, message, Modal, Spin, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import {decodeToken , isExpired} from 'react-jwt';
@@ -191,7 +191,7 @@ export const StudentDetailAdmin = ()=>{
             )
         }
     }
-
+    if(student){
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
             <div className='background-image'></div>
@@ -347,5 +347,9 @@ export const StudentDetailAdmin = ()=>{
                     </div>
             </Modal>
         </div>
-    )
+    )}else{
+        return <div className="spin-container">
+        <Spin />
+      </div>;
+    }
 }

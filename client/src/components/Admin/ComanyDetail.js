@@ -3,7 +3,7 @@ import {
   MinusCircleOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Form, Input, message, Modal, Tag } from "antd";
+import { Avatar, Button, Form, Input, message, Modal, Spin, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { decodeToken } from "react-jwt";
@@ -227,6 +227,7 @@ export const CompanyDetailAdmin = () => {
     }
   };
 
+  if(company){
   //render UI
   return (
     <div className="swapper-container">
@@ -386,5 +387,10 @@ export const CompanyDetailAdmin = () => {
         </div>
       </Modal>
     </div>
-  );
+  )
+}else{
+    return <div className="spin-container">
+    <Spin />
+  </div>;
+}
 };

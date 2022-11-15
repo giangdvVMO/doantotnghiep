@@ -7,6 +7,7 @@ import {
   Pagination,
   Select,
   Skeleton,
+  Spin,
   Tag,
 } from "antd";
 import { useContext, useEffect, useState } from "react";
@@ -51,7 +52,7 @@ export const RecruitListStudent = () => {
         message.error(result.message);
       } else {
         if (result.data === "empty") {
-          const manuList = postFields();
+          const manuList = await postFields();
           setFields(manuList);
         }
       setFields(result.data);
@@ -150,7 +151,7 @@ export const RecruitListStudent = () => {
     console.log(current, pageSize);
     setPageIndex(current);
   };
-  if (user) {
+  if (user&&fields.length) {
     return (
       <>
         <div className="banner-content">Quản lý danh sách bài đăng</div>
@@ -220,6 +221,8 @@ export const RecruitListStudent = () => {
       </>
     );
   } else {
-    return <Skeleton active />;
+      return <div className="spin-container">
+              <Spin size={200} />
+            </div>;
   }
 };

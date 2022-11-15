@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, message, Modal, Tag } from "antd";
+import { Button, Card, Form, Input, message, Modal, Spin, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { decodeToken } from "react-jwt";
@@ -338,6 +338,7 @@ export const RecruitDetailAdmin = () => {
     }
   };
 
+  if(recruit&&company){
   //render UI
   return (
     <div className="swapper-container">
@@ -599,6 +600,7 @@ export const RecruitDetailAdmin = () => {
           </Form>
         </div>
       </div>
+      
       <Modal
         title="Xác nhận"
         open={isOpenModal}
@@ -637,5 +639,9 @@ export const RecruitDetailAdmin = () => {
         </div>
       </Modal>
     </div>
-  );
+  )}else{
+    return <div className="spin-container">
+    <Spin />
+  </div>;
+}
 };

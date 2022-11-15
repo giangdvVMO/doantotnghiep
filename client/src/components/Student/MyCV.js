@@ -7,6 +7,7 @@ import {
   message,
   Select,
   Skeleton,
+  Spin,
   Tag,
   Upload,
 } from "antd";
@@ -84,6 +85,7 @@ export const MyCV = () => {
         } else {
           console.log("result", result);
           if (result.data === "empty") {
+            openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn phải cập nhật thông tin sinh viên!')
             navigate("/student-profile");
           } else {
             console.log("fetch Student", result.data);
@@ -444,7 +446,7 @@ export const MyCV = () => {
       </div>
     </div>
   );
-  if (account && student) {
+  if (account && student&& fields) {
     //render UI
     return (
       <>
@@ -718,7 +720,9 @@ export const MyCV = () => {
         </div>
       </>
     );
-  } else {
-    return <Skeleton active />;
-  }
+  }else{
+    return <div className="spin-container">
+    <Spin />
+  </div>;
+}
 };

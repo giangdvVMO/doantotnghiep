@@ -1,4 +1,4 @@
-import { Button, Input, message, Pagination, Select } from 'antd';
+import { Button, Input, message, Pagination, Select, Spin } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {decodeToken} from 'react-jwt';
@@ -144,6 +144,7 @@ export const RecruitCompanyListStudent = () => {
         console.log(current, pageSize);
         setPageIndex(current);
     };
+    if(user&&fields){
     return (
         <>
             <div className='banner-content'>Danh sánh bài đăng tuyển dụng</div>
@@ -205,4 +206,9 @@ export const RecruitCompanyListStudent = () => {
             </div>
         </>
     )
+                    }else{
+                        return <div className="spin-container">
+                        <Spin />
+                      </div>;
+                    }
 }
