@@ -19,6 +19,7 @@ import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
 import "../../styles/list.css";
 import { openNotificationWithIcon, postFields } from "../../common/service";
+import { CardListCV } from "../Common/CardCV";
 
 const { Option } = Select;
 export const CVList = () => {
@@ -142,28 +143,7 @@ export const CVList = () => {
     console.log(current, pageSize);
     setPageIndex(current);
   };
-  const handleViewCV = async (id_cv, id_company) => {
-    const url = serverURL + "cv-view";
-    const data = { id_cv, id_company };
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      console.log(result);
-      if (response.status !== 201 && response.status !== 200) {
-        openNotificationWithIcon(
-          "error",
-          "Lỗi",
-          "Lỗi thêm bản ghi lượt xem CV!"
-        );
-      }
-    } catch (err) {}
-  };
+  
   return (
     <>
       <div className="banner-content">Quản lý danh sách CV</div>
@@ -205,7 +185,7 @@ export const CVList = () => {
       </div>
       {user ? (
         <>
-          <div class="flex-container-list">
+          {/* <div class="flex-container-list">
             {listCV.map((CV) => {
               return (
                 <div class="flex-item bg-one tilt">
@@ -244,10 +224,12 @@ export const CVList = () => {
                 </div>
               );
             })}
+          </div> */}
+          <div className="list-container">
+            <CardListCV listCV={listCV} id_company={user._id} />
           </div>
           <div className="pagination">
             <Pagination
-              showSizeChanger
               pageSize={pageSize}
               onChange={onShowSizeChange}
               defaultCurrent={pageIndex}

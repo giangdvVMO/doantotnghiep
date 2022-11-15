@@ -42,12 +42,9 @@ export class QueryParamRecruitDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @Matches(
-    /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s]{1,50}$/,
-    {
-      message: 'field không chứa các ký tự đặc biệt',
-    },
-  )
+  @Matches(/^[0-9\s\,]{1,50}$/, {
+    message: 'field là mã ngành 1,2 không chứa các ký tự đặc biệt',
+  })
   field: string;
 
   @ApiPropertyOptional()
