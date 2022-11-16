@@ -7,18 +7,31 @@ import {
   Param,
   Delete,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { RateService } from './rate.service';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-rate.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { QueryDto } from './dto/query.dto';
 
-@Controller('rate')
+@Controller({
+  version: ['1'],
+  path: 'rate',
+})
+@ApiTags('Rate')
 export class RateController {
   constructor(private readonly rateService: RateService) {}
 
   @Post()
   create(@Body() createRateDto: CreateRateDto) {
     return this.rateService.create(createRateDto);
+  }
+
+  @Get('precondition')
+  findPreCondition(@Query() query: QueryDto) {
+    const { id_student, id_company } = query;
+    return this.rateService.findPreCondition(+id_student, +id_company);
   }
 
   @Get()

@@ -10,13 +10,13 @@ export class Rate {
   @Prop()
   _id: number;
 
-  @Prop({ type: String, maxlength: 50 , required: true})
+  @Prop({ type: String, maxlength: 50, required: true })
   title: string;
 
-  @Prop({ type: String, maxlength: 1000 , required: true})
+  @Prop({ type: String, maxlength: 1000, required: true })
   content: string;
 
-  @Prop({ type: String, maxlength: 20 , required: true})
+  @Prop({ type: String, maxlength: 20, required: true })
   type_rate: string;
 
   @Prop({ type: Number, required: true })

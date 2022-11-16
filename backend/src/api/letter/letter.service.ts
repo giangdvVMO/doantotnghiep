@@ -44,8 +44,8 @@ export class LetterService {
       {
         $lookup: {
           from: 'tbl_letter_student',
-          localField: 'id_letter_student',
-          foreignField: '_id',
+          localField: '_id',
+          foreignField: 'id_letter',
           as: 'letter_student',
         },
       },
