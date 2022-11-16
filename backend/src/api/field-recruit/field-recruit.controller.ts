@@ -3,16 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { FieldRecruitService } from './field-recruit.service';
-import {
-  CreateFieldRecruitArrayDto,
-  CreateFieldRecruitDto,
-} from './dto/create-field-recruit.dto';
-import { UpdateFieldRecruitDto } from './dto/update-field-recruit.dto';
+import { CreateFieldRecruitArrayDto } from './dto/create-field-recruit.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('field-recruit')
@@ -32,11 +28,17 @@ export class FieldRecruitController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.fieldRecruitService.findOne(+id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.fieldRecruitService.remove(+id);
   }
 }

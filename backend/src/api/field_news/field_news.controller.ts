@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  BadRequestException,
+} from '@nestjs/common';
 import { FieldNewsService } from './field_news.service';
 import { CreateFieldNewDto } from './dto/create-field_new.dto';
 import { UpdateFieldNewDto } from './dto/update-field_new.dto';
@@ -19,16 +28,28 @@ export class FieldNewsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.fieldNewsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFieldNewDto: UpdateFieldNewDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateFieldNewDto: UpdateFieldNewDto,
+  ) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.fieldNewsService.update(+id, updateFieldNewDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.fieldNewsService.remove(+id);
   }
 }

@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  BadRequestException,
+} from '@nestjs/common';
 import { FieldService } from './field.service';
 import { CreateFieldArrayDto, CreateFieldDto } from './dto/create-field.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -26,6 +33,9 @@ export class FieldController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.fieldService.findOne(+id);
   }
 }

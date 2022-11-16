@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { RecruitViewService } from './recruit-view.service';
 import { CreateRecruitViewDto } from './dto/create-recruit-view.dto';
@@ -31,12 +32,18 @@ export class RecruitViewController {
   }
 
   @Get('list/:id')
-  findAllByRecruit(@Param('id') id: number) {
-    return this.recruitViewService.findAllByRecruit(id);
+  findAllByRecruit(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
+    return this.recruitViewService.findAllByRecruit(+id);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.recruitViewService.findOne(+id);
   }
 
@@ -47,6 +54,9 @@ export class RecruitViewController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.recruitViewService.remove(+id);
   }
 }

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { LetterStudentService } from './letter_student.service';
 import { CreateLetterStudentDto } from './dto/create-letter_student.dto';
@@ -27,6 +28,9 @@ export class LetterStudentController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.letterStudentService.findOne(+id);
   }
 
@@ -35,11 +39,17 @@ export class LetterStudentController {
     @Param('id') id: string,
     @Body() updateLetterStudentDto: UpdateLetterStudentDto,
   ) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.letterStudentService.update(+id, updateLetterStudentDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.letterStudentService.remove(+id);
   }
 }

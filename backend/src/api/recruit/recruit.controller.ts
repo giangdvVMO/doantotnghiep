@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { RecruitService } from './recruit.service';
 import { CreateRecruitDto } from './dto/create-recruit.dto';
@@ -33,6 +34,9 @@ export class RecruitController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.recruitService.findOne(+id);
   }
 
@@ -41,16 +45,25 @@ export class RecruitController {
     @Param('id') id: string,
     @Body() confirmRecruitDto: ConfirmRecruitDto,
   ) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.recruitService.confirm(+id, confirmRecruitDto);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRecruitDto: UpdateRecruitDto) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.recruitService.update(+id, updateRecruitDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string, @Body() data: DeleteDto) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.recruitService.remove(+id, +data.delete_id);
   }
 }

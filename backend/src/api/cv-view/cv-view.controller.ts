@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CvViewService } from './cv-view.service';
@@ -31,8 +32,11 @@ export class CvViewController {
   }
 
   @Get('list/:id')
-  findAllByRecruit(@Param('id') id: number) {
-    return this.cvViewService.findAllByCv(id);
+  findAllByRecruit(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
+    return this.cvViewService.findAllByCv(+id);
   }
 
   // @Get(':id')
@@ -42,11 +46,17 @@ export class CvViewController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCvViewDto: UpdateCvViewDto) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.cvViewService.update(+id, updateCvViewDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
     return this.cvViewService.remove(+id);
   }
 }
