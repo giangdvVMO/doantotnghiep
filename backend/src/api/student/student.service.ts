@@ -134,9 +134,10 @@ export class StudentService {
         data: fullStudent,
       };
     }
-    return {
-      data: 'empty',
-    };
+    throw new BadRequestException('không tồn tại sinh viên có id trên');
+    // return {
+    //   data: 'empty',
+    // };
   }
 
   async findOne(id: number) {
@@ -147,13 +148,14 @@ export class StudentService {
     return { data: student };
   }
 
-  async findOneAndAccount(id: number) {
-    const student = await this.studentModel.findOne({ id_account: id });
-    if (!student) {
-      return { data: 'empty' };
-    }
-    return student;
-  }
+  // async findOneAndAccount(id: number) {
+  //   const student = await this.studentModel.findOne({ id_account: id });
+  //   if (!student) {
+  //     return { data: 'empty' };
+  //   }
+  //   return student;
+  // }
+
   async update(id: number, updateStudentDto: UpdateStudentDto) {
     const result = await this.studentModel.updateOne(
       { _id: id },

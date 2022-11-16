@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
@@ -35,16 +36,28 @@ export class StudentController {
 
   @Get('admin/:id')
   findOneAdmin(@Param('id') id: string) {
+    if (!id || !parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+      return;
+    }
     return this.studentService.findOneAdmin(+id);
   }
 
   @Get('company/:id')
   findOneAndAccount(@Param('id') id: string) {
-    return this.studentService.findOneAndAccount(+id);
+    if (!id || !parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+      return;
+    }
+    return this.studentService.findOneAdmin(+id);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+      return;
+    }
     return this.studentService.findOne(+id);
   }
 
