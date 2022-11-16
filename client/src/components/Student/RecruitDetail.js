@@ -336,7 +336,7 @@ export const RecruitDetailStudent = () => {
 
   const handleOkConfirm = async () => {
     createApply();
-    //gửi mail và noti
+    //gửi  noti
     const link = "company/student/" + account._id;
     const title = "Ứng tuyển";
     const type = "apply";

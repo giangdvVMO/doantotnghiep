@@ -129,7 +129,6 @@ export const Statistic = () => {
                 }}
               />
             </div>
-            
             </div>
         </div>
         :

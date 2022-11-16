@@ -7,6 +7,7 @@ import {
   Image,
   message,
   Modal,
+  Rate,
   Skeleton,
   Tag,
 } from "antd";
@@ -18,10 +19,12 @@ import { UserContext } from "../User/UserProvider";
 import "../../styles/form.css";
 import "../../styles/my-account.css";
 import {
+  createNoti,
   DateToShortString,
   openNotificationWithIcon,
 } from "../../common/service";
 import { serverURL } from "../../configs/server.config";
+import { Email } from "./Email";
 
 let initstudent = {
   _id: -1,
@@ -45,6 +48,10 @@ export const StudentDetailCompany = () => {
   const [CV, setCV] = useState(null);
   const [isOpenConfirm, setOpenConfirm] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [rate, setRate] = useState(false);
+  const [rateList, setRateList] = useState([]);
+  const [isOpenRate, setOpenRate] = useState(false);
+  const [isOpenEmail, setOpenEmail] = useState(false);
 
   const { id } = useParams();
 
@@ -139,7 +146,7 @@ export const StudentDetailCompany = () => {
   }
 
   async function fetchApply() {
-    if (account && student) {
+    if (account && student &&!rate) {
       const url =
         serverURL +
         `apply/condition?id_student=${student._id}&id_company=${account._id}`;
@@ -170,7 +177,7 @@ export const StudentDetailCompany = () => {
   }
 
   async function fetchLetter() {
-    if (account && student._id !== -1) {
+    if (account && student._id !== -1&&!rate) {
       const url =
         serverURL +
         `letter/condition?id_student=${student._id}&id_company=${account._id}`;
@@ -204,6 +211,41 @@ export const StudentDetailCompany = () => {
     }
   }
 
+  async function fetchConditionRate() {
+    if (account && student._id !== -1) {
+      const url =
+        serverURL +
+        `rate/precondition?id_student=${student._id}&id_company=${account._id}`;
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        console.log("result letter", result);
+        if (response.status !== 200) {
+          message.error(result.message);
+        } else {
+          if (result.data===true) {
+            openNotificationWithIcon(
+              "info",
+              "Thông báo",
+              "Bạn có thể thực hiện đánh giá sinh viên!"
+            );
+            setRate(true);
+          } else {
+            setRate(false);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        message.error("Đã có lỗi xảy ra!");
+      }
+    }
+  }
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -214,11 +256,15 @@ export const StudentDetailCompany = () => {
     fetchCV();
   }, [student]);
   useEffect(() => {
+    fetchConditionRate();
+  }, [student, account]);
+  useEffect(() => {
     fetchLetter();
   }, [student, account]);
   useEffect(() => {
     fetchApply();
   }, [student, account]);
+  
 
   const ref = useRef();
   const refButtonSubmit = useRef();
@@ -231,7 +277,8 @@ export const StudentDetailCompany = () => {
     }
   }
   const renderButtonGroup = () => {
-    if (CV)
+    if (CV){
+      if(!rate){
       return (
         <div className="apply-container">
           <Button
@@ -243,9 +290,26 @@ export const StudentDetailCompany = () => {
             Gửi thư mời phỏng vấn
           </Button>
         </div>
+      );}
+      return (
+        <div className="apply-container">
+          <Button
+            type="primary"
+            className="apply-btn"
+            onClick={handleRate}
+          >
+            Thêm đánh giá
+          </Button>
+        </div>
       );
+    }
     return "";
   };
+
+  const handleRate = () => {
+    setOpenRate(true);
+  };
+
   const handleApply = () => {
     setOpenConfirm(true);
   };
@@ -253,8 +317,44 @@ export const StudentDetailCompany = () => {
     setOpenConfirm(false);
   };
 
+  const handleChangeStatus = async()=>{
+    const url = serverURL + 'cv/' + CV._id;
+    const data = {
+        status: false, update_id: account._id
+    };
+    try {
+        const response = await fetch(url, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+        );
+        const result = await response.json();
+        if(response.status!==200){
+            message.error("Không thành công!");
+        }else{
+            openNotificationWithIcon('success', 'Thông báo', 'Bạn đã đóng CV của sinh viên về trạng thái private!')
+        }
+        //send noti
+        const link = "student/company/" + student._id;
+        const title = "Thay đổi trạng thái CV";
+        const type = "infor";
+        const content = `Doanh nghiệp vừa đóng trạng thái CV của bạn.`;
+        createNoti(account._id, [student._id], title, type, content, link);
+        //
+        fetchCV();
+    }
+    catch (err) {
+        console.log(err);
+    }
+  }
+
   const handleOkConfirm = () => {
     //gửi mail và noti
+    setOpenConfirm(false);
+    setOpenEmail(true);
   };
   if (account) {
     return (
@@ -415,19 +515,50 @@ export const StudentDetailCompany = () => {
                     <p>Chưa có ảnh</p>
                   )}
                 </Form.Item>
+                <Form.Item>
+
+                </Form.Item>
+                {rate?
+                  <Form.Item label="Bạn đã tuyển sinh viên này, bạn có thể đổi trạng thái CV thành private!" className="label">
+                    <Button type="primary" onClick={handleChangeStatus}>Đổi trạng thái</Button>
+                  </Form.Item>:''
+                }
               </div>
             </Form>
           ) : (
             <p>Chưa có CV hoặc CV ở trạng thái private</p>
           )}
         </Card>
+          {/* xác nhận */}
         <Modal
+          closable={true}
           title="Xác nhận"
           open={isOpenConfirm}
+          okText='Xác nhận'
+          cancelText='Hủy'
           onOk={handleOkConfirm}
           onCancel={handleCancelConfirm}
         >
           <p>Bạn có chắc chắn muốn gửi thư mời phỏng vấn sinh viên này!</p>
+        </Modal>
+        {/* soạn thư */}
+        <Modal
+          title="Thông tin thư mời phỏng vấn"
+          open={isOpenEmail}
+          footer={null}
+          destroyOnClose={()=>{setOpenEmail(false)}}
+        >
+          <Email id_student={student._id} id_company={account._id} setOpenEmail={setOpenEmail}/>
+        </Modal>
+
+      {/* đánh giá */}
+        <Modal
+          title="Thông tin đánh giá"
+          open={isOpenRate}
+          footer={null}
+          destroyOnClose={()=>{setOpenRate(false)}}
+        >
+          <Rate id_student={student._id} id_company={account._id} setOpenRate={setOpenRate}/>
         </Modal>
       </div>
     );

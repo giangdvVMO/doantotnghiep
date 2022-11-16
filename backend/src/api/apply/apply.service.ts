@@ -11,7 +11,7 @@ export class ApplyService {
     private readonly applyModel: Model<ApplyDocument>,
   ) {}
   async create(apply: any) {
-    const exist = await (await this.findOne(apply)).data.length;
+    const exist = (await this.findOne(apply)).data.length;
     if (exist) {
       throw new BadRequestException('Đã có bản ghi');
     }

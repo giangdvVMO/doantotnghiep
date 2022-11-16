@@ -56,3 +56,8 @@ export const messageCVError = {
   fileCV: "Định dạng CV chưa đúng",
   field: "Chưa chọn lĩnh vực",
 };
+
+export const messageEmail = {
+  title: "Tiêu đề không quá 50 kí tự, không chứa các kí tự đặc biệt!",
+  content: "Nội dung không chứa các kí tự đặc biệt",
+};

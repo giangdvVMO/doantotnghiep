@@ -47,12 +47,14 @@ export class UpdateCvDto {
   @ApiProperty({
     description: 'update_id',
   })
+  @IsOptional()
   @IsNotEmpty()
   update_id: number;
 
   @ApiProperty({
     description: 'file_cv',
   })
+  @IsOptional()
   @IsNotEmpty()
   file_cv: string;
 }
