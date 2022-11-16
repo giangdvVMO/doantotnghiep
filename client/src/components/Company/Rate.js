@@ -1,13 +1,13 @@
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input, message, Rate } from 'antd';
 import React, { useRef, useState } from 'react';
 import { checkContent, checkTitle } from '../../common/validation';
 import { serverURL } from '../../configs/server.config';
 import '../../styles/form.css';
 import { createNoti, getUserAdmin, openNotificationWithIcon } from '../../common/service';
-import { messageEmail } from '../../common/error';
+import { messageRate } from '../../common/error';
 import TextArea from 'antd/lib/input/TextArea';
 
-export const Rate = ({id_student, id_company, setOpenRate}) => {
+export const RateModal = ({id_student, id_company, setOpenRate}) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [score, setScore] = useState(0);
@@ -23,12 +23,17 @@ export const Rate = ({id_student, id_company, setOpenRate}) => {
         status: 'success',
         errorMsg: null
     });
+    const [validateScore, setValidateScore] = useState({
+        status: 'success',
+        errorMsg: null
+    });
+    
 
     function checkTitleFunc(Title) {
         if (!checkTitle(Title)) {
             setValidateTitle({
                 status: 'error',
-                errorMsg: messageEmail.title
+                errorMsg: messageRate.title
             })
             return false;
         } else {
@@ -44,11 +49,27 @@ export const Rate = ({id_student, id_company, setOpenRate}) => {
         if (!checkContent(Content)) {
             setValidateContent({
                 status: 'error',
-                errorMsg: messageEmail.content
+                errorMsg: messageRate.content
             })
             return false;
         } else {
             setValidateContent({
+                status: 'success',
+                errorMsg: null
+            })
+            return true;
+        }
+    }
+
+    function checkScoreFunc(score) {
+        if (score===0) {
+            setValidateScore({
+                status: 'error',
+                errorMsg: messageRate.score
+            })
+            return false;
+        } else {
+            setValidateScore({
                 status: 'success',
                 errorMsg: null
             })
@@ -63,6 +84,10 @@ export const Rate = ({id_student, id_company, setOpenRate}) => {
     function handleChangeContent(e) {
         setContent(e.target.value);
     }
+    function handleChangeScore(value) {
+        console.log(value)
+        setScore(value);
+    }
 
     function handleKeyUp(e) {
         if (e.keyCode === 13) {
@@ -76,6 +101,7 @@ export const Rate = ({id_student, id_company, setOpenRate}) => {
         let count = 0;
         count = checkTitleFunc(title) ? count : count + 1;
         count = checkContentFunc(content) ? count : count + 1;
+        count = checkScoreFunc(score)? count : count + 1;
         console.log(count);
         if (count === 0) {
             const url = serverURL + 'rate';
@@ -117,6 +143,8 @@ export const Rate = ({id_student, id_company, setOpenRate}) => {
             catch (err) {
                 console.log(err);
             }
+        }else{
+            openNotificationWithIcon('error','Lỗi',"Thông tin chưa đúng");
         }
         return;
     }
@@ -148,7 +176,7 @@ export const Rate = ({id_student, id_company, setOpenRate}) => {
 
                 >
                     <Form.Item
-                        label="Tiêu đề"
+                        label="Tiêu đề:"
                         name="title"
                         validateStatus={validateTitle.status}
                         help={validateTitle.errorMsg}
@@ -161,7 +189,7 @@ export const Rate = ({id_student, id_company, setOpenRate}) => {
                         />
                     </Form.Item>
                     <Form.Item
-                        label="Content"
+                        label="Nội dung đánh giá:"
                         name="content"
                         validateStatus={validateContent.status}
                         help={validateContent.errorMsg}
@@ -171,6 +199,15 @@ export const Rate = ({id_student, id_company, setOpenRate}) => {
                                 defaultValue={content} 
                                 onChange= {handleChangeContent}
                             />
+                    </Form.Item>
+                    <Form.Item
+                        label="Số điểm:"
+                        name="score"
+                        validateStatus={validateScore.status}
+                        help={validateScore.errorMsg}
+                        rules={[{ required: true, message: 'Hãy đánh giá ít nhất 1*!' }]}
+                    >
+                        <Rate onChange={handleChangeScore} value={score} count={10} />
                     </Form.Item>
                     <Form.Item>
                         <Button type='submit' ref={refButtonSubmit} name='button-submit' className='button submit' onSubmit={handleSubmit} onClick={handleSubmit} onKeyUp={handleKeyUp}>Submit</Button>

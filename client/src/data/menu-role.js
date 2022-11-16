@@ -44,6 +44,11 @@ export const MenuRole = {
             key: 'hiremanagerment'
         },
         {
+            label: <Link to='admin/rate-list'>Quản lý đánh giá</Link>,
+            icon: <CopyOutlined />,
+            key: 'ratemanagerment'
+        },
+        {
             label: <Link to='news-management'>Quản lý bài đăng tin tức</Link>,
             icon: <BookOutlined />,
             key: 'newsmanagerment'

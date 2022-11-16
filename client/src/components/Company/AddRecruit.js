@@ -521,7 +521,18 @@ export const AddRecruit = () => {
       return { ...preRecruit, gender: value };
     });
   }
+  const handleOk = ()=>{
+    setOpenModal(false)
+    navigate('/../../company-profile');
+  }
 
+  const handleCancel = ()=>{
+    setOpenModal(false)
+    navigate('/../../company-profile');
+  }
+
+
+  if(company){
   //render UI
   return (
     <div className="swapper-container">
@@ -831,11 +842,11 @@ export const AddRecruit = () => {
       <Modal
         title="Xác nhận"
         open={isOpenModal}
-        onOk={() => setOpenModal(false)}
-        onCancel={() => setOpenModal(false)}
+        onOk={handleOk}
+        onCancel={handleCancel}
       >
         <p>Bạn hãy cập nhật thông tin để sử dụng các chức năng website!</p>
       </Modal>
     </div>
-  );
+  );}
 };

@@ -141,6 +141,45 @@ export class RateService {
       {
         $unwind: '$company',
       },
+      {
+        $lookup: {
+          from: 'tbl_account',
+          localField: 'student._id',
+          foreignField: '_id',
+          as: 'account',
+        },
+      },
+      {
+        $unwind: '$account',
+      },
+      {
+        $addFields: {
+          //search
+          result: {
+            $or: [
+              {
+                $regexMatch: {
+                  input: '$title',
+                  regex: searchRgx,
+                  options: 'i',
+                },
+              },
+              {
+                $regexMatch: {
+                  input: '$content',
+                  regex: searchRgx,
+                  options: 'i',
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        $match: {
+          result: true,
+        },
+      },
       ...limitSkip,
     ]);
     return { data: rateList };

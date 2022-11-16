@@ -11,55 +11,21 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
-import { DateToShortStringDate, postFields } from "../../common/service";
 
 const { Option } = Select;
-export const RecruitManagerAdmin = () => {
+export const RateManagerAdmin = () => {
   const { user, changeUser, token } = useContext(UserContext);
   const navigate = useNavigate();
-  // if (!user || user.role !== "admin") {
-  //   message.warn("Bạn ko có quyền xem trang này");
-  //   navigate("/home");
-  // }
-  const [fields, setFields] = useState([]);
-  const [field, setField] = useState([]);
   const [status, setStatus] = useState(-1);
   const [search, setSearch] = useState("");
-  const [listRecruit, setListRecruit] = useState([]);
+  const [listRate, setListRate] = useState([]);
 
-  //fetch Fields
-  async function fetchField() {
-    const url = serverURL + "field";
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result = await response.json();
-      console.log(result);
-      if (response.status !== 200) {
-        message.error(result.message);
-      } else {
-        if (result.data === "empty") {
-          const manuList = postFields();
-          setFields(manuList);
-        }
-      setFields(result.data);
-      }
-    } catch (err) {
-      console.log(err);
-      message.error("Đã có lỗi xảy ra!");
-    }
-  }
-
-  async function fetchListRecruit() {
+  async function fetchListRate() {
+    if(user){
     let query = "?1=1";
     query = status !== -1 ? query + "&status=" + status : query;
-    query = field.length ? query + "&field=" + field : query;
     query = search !== "" ? query + "&search=" + search : query;
-    const url = serverURL + "recruit" + query;
+    const url = serverURL + "rate" + query;
     console.log(query);
     try {
       const response = await fetch(url, {
@@ -72,13 +38,13 @@ export const RecruitManagerAdmin = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống!");
       } else {
-        console.log("result", result);
-        setListRecruit(result.data);
+        setListRate(result.data);
       }
     } catch (err) {
       console.log(err);
     }
   }
+}
   //fetch user
   const fetchUser = async () => {
     console.log("fetch user account");
@@ -113,11 +79,8 @@ export const RecruitManagerAdmin = () => {
     fetchUser();
   }, []);
   useEffect(() => {
-    fetchField();
-  }, []);
-  useEffect(() => {
-    fetchListRecruit();
-  }, [field, status, search]);
+    fetchListRate();
+  }, [user, status, search]);
   const columns = [
     {
       title: "STT",
@@ -131,92 +94,31 @@ export const RecruitManagerAdmin = () => {
       key: "title",
     },
     {
-      title: "Phương thức làm việc",
-      dataIndex: "way_working",
-      key: "way_working",
+      title: "Nội dung đánh giá",
+      dataIndex: "content",
+      key: "content",
     },
     {
-      title: "Lương",
-      dataIndex: "salary",
-      key: "salary",
-    },
-    {
-      title: "Số lượng tuyển",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Cấp bậc",
-      dataIndex: "level",
-      key: "level",
-    },
-    {
-      title: "Giới tính",
-      dataIndex: "gender",
-      key: "gender",
-    },
-    {
-      title: "Địa chỉ làm việc",
-      dataIndex: "address_working",
-      key: "address_working",
-    },
-    {
-      title: "Kinh nghiệm",
-      dataIndex: "experience",
-      key: "experience",
-    },
-    {
-      title: "Mô tả công việc",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Yêu cầu",
-      dataIndex: "requirement",
-      key: "requirement",
-    },
-    {
-      title: "Quyền lợi",
-      dataIndex: "welfare",
-      key: "welfare",
-    },
-    {
-      title: "Ngày bắt đầu",
-      key: "start_date",
+      title: "Sinh viên",
+      key: "fullname",
       render: (_, record) => {
-        return record.start_date ? (
-          <>{DateToShortStringDate(record.start_date)}</>
-        ) : (
-          ""
-        );
+        return <div>{record.account.fullname}</div>
       },
     },
     {
-      title: "Ngày kết thúc",
-      key: "end_date",
-      render: (_, record) => {
-        return record.end_date ? (
-          <>{DateToShortStringDate(record.end_date)}</>
-        ) : (
-          ""
-        );
+        title: "Doanh nghiệp",
+        key: "company",
+        render: (_, record) => {
+          return <div>{record.company.com_name}</div>
+        },
       },
-    },
     {
-      title: "Lĩnh vực",
-      key: "fields",
+      title: "Loại đánh giá",
+      key: "type",
       render: (_, record) => {
-        return (
-          <>
-            {record.fields.map((manu) => {
-              return (
-                <Tag className="tag" color="cyan">
-                  {manu.nameField}
-                </Tag>
-              );
-            })}
-          </>
-        );
+        return (record.type_rate==='student'?
+        <Tag color="#87d068">record.type_rate</Tag>:<Tag color="#2db7f5">record.type_rate</Tag>
+        )
       },
     },
     {
@@ -238,20 +140,13 @@ export const RecruitManagerAdmin = () => {
       title: "Hành động",
       key: "action",
       render: (_, record) => (
-        <Link to={`../recruit/${record._id},${record.id_company}`}>
+        <Link to={`../rate/${record._id}`}>
           Xem chi tiết
         </Link>
       ),
       fixed: "right",
     },
   ];
-  const handleChangeField = (e) => {
-    console.log(e);
-    const value = e.map((item) => {
-      return item.value;
-    });
-    setField([...value]);
-  };
 
   const handleChangeSelect = (e) => {
     setStatus(e.value);
@@ -259,31 +154,11 @@ export const RecruitManagerAdmin = () => {
   const handleChangeSearch = (e) => {
     setSearch(e.target.value);
   };
-if(fields){
+if(user){
   return (
     <>
-      <div className="banner-content">Quản lý danh sách bài đăng</div>
+      <div className="banner-content">Quản lý danh sách đánh giá</div>
       <div className="container-filter">
-        <div className="filter">
-          <label className="label-filter">Lĩnh vực bài đăng:</label>
-          <Select
-            mode="multiple"
-            value={field}
-            defaultValue="all"
-            labelInValue="Lĩnh vực bài đăng"
-            className="filter-content"
-            onChange={handleChangeField}
-          >
-            <Option value={-1}>all</Option>
-            {fields.map((field) => {
-              return (
-                <Option key={field._id} value={field._id}>
-                  {field.nameField}
-                </Option>
-              );
-            })}
-          </Select>
-        </div>
         {/* <div className='filter'>
                     <label className='label-filter'>Địa điểm:</label>
                     <Select
@@ -332,10 +207,10 @@ if(fields){
         </div>
       </div>
       <Table
-        dataSource={listRecruit}
+        dataSource={listRate}
         columns={columns}
         scroll={{
-          x: 2000,
+          x: 1000,
           y: 800,
         }}
       />

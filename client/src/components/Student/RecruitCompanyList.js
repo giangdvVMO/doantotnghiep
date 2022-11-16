@@ -207,9 +207,9 @@ export const RecruitCompanyListStudent = () => {
             </div>
         </>
     )
-                    }else{
-                        return <div className="spin-container">
-                        <Spin />
-                      </div>;
-                    }
+    }else{
+        return <div className="spin-container">
+            <Spin />
+        </div>;
+    }
 }

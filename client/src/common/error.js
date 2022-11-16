@@ -61,3 +61,9 @@ export const messageEmail = {
   title: "Tiêu đề không quá 50 kí tự, không chứa các kí tự đặc biệt!",
   content: "Nội dung không chứa các kí tự đặc biệt",
 };
+
+export const messageRate = {
+  title: "Tiêu đề không quá 50 kí tự, không chứa các kí tự đặc biệt!",
+  content: "Nội dung không chứa các kí tự đặc biệt",
+  score: 'Điểm đánh giá không được bỏ trống'
+};

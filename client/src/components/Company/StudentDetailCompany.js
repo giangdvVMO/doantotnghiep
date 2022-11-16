@@ -25,6 +25,7 @@ import {
 } from "../../common/service";
 import { serverURL } from "../../configs/server.config";
 import { Email } from "./Email";
+import { RateModal } from "./Rate";
 
 let initstudent = {
   _id: -1,
@@ -560,7 +561,7 @@ export const StudentDetailCompany = () => {
           footer={null}
           destroyOnClose={()=>{setOpenRate(false)}}
         >
-          <Rate id_student={student._id} id_company={account._id} setOpenRate={setOpenRate}/>
+          <RateModal id_student={student._id} id_company={account._id} setOpenRate={setOpenRate}/>
         </Modal>
       </div>
     );

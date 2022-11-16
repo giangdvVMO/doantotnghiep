@@ -84,6 +84,11 @@ export class NotiService {
           'account_noti.position': 'receiver',
         },
       },
+      {
+        $sort: {
+          create_date: -1,
+        },
+      },
     ]);
     return { data: result };
   }
