@@ -50,10 +50,10 @@ export const CVManagerAdmin = () => {
 }
 
     async function fetchListCV(){
-        if(!user||user.role!=='admin'){
-            message.warn('Bạn ko có quyền xem trang này');
-            navigate('/home')
-        }
+        // if(!user||user.role!=='admin'){
+        //     message.warn('Bạn ko có quyền xem trang này');
+        //     navigate('/home')
+        // }
         let query = '?1=1';
                 query = status!==-1? query+'&status='+status:query;
                 query = field.length? query+'&field='+field:query;
@@ -157,7 +157,7 @@ export const CVManagerAdmin = () => {
             title: 'Hành động',
             key: 'action',
             render: (_, record) => (
-                <Link to={`../student/${record._id}`}>Xem chi tiết</Link>
+                <Link to={`../admin/student/${record._id}`}>Xem chi tiết</Link>
             ),
             fixed: 'right',
         },
@@ -227,7 +227,7 @@ export const CVManagerAdmin = () => {
                 dataSource={listCV} 
                 columns={columns} 
                 scroll={{
-                    x: 2000,
+                    x: 1000,
                     y: 800,
                 }}
             />;

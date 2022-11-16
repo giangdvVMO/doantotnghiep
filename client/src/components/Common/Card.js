@@ -23,14 +23,17 @@ export const CardList = ({ listRecruit, id_student }) => {
       });
       const result = await response.json();
       console.log(result);
-      if (response.status !== 201 && response.status !== 200) {
+      console.log("status", response.status);
+      if (response.status !== 201) {
         openNotificationWithIcon(
           "error",
           "Lỗi",
           "Lỗi thêm bản ghi xem bài đăng!"
         );
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(err)
+    }
   };
   return listRecruit.map((item) => {
     const classCss = item._id % 2 === 0 ? "card red" : "card green";

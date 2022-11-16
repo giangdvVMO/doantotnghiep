@@ -3,13 +3,14 @@ import React, { useRef, useState } from 'react';
 import { checkContent, checkTitle } from '../../common/validation';
 import { serverURL } from '../../configs/server.config';
 import '../../styles/form.css';
-import { openNotificationWithIcon } from '../../common/service';
+import { createNoti, getUserAdmin, openNotificationWithIcon } from '../../common/service';
 import { messageEmail } from '../../common/error';
 import TextArea from 'antd/lib/input/TextArea';
 
 export const Rate = ({id_student, id_company, setOpenRate}) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [score, setScore] = useState(0);
 
     const ref = useRef();
     const refButtonSubmit = useRef();
@@ -77,9 +78,9 @@ export const Rate = ({id_student, id_company, setOpenRate}) => {
         count = checkContentFunc(content) ? count : count + 1;
         console.log(count);
         if (count === 0) {
-            const url = serverURL + 'letter';
+            const url = serverURL + 'rate';
             const data = {
-                title, content, id_account:id_company,students:[id_student]
+                title, content, id_company,id_student, type_rate: 'student', score
             };
             try {
                 const response = await fetch(url, {
@@ -97,9 +98,20 @@ export const Rate = ({id_student, id_company, setOpenRate}) => {
                     // }
                     message.error("Không thành công!");
                 }else{
-                    openNotificationWithIcon('success', 'Thông báo', 'Bạn đã gửi thư tới sinh viên')
+                    const idRate = result.data._id;
+                    const link = "admin/rate/" + idRate;
+                    const title = "Yêu cầu duyệt thông tin đánh giá";
+                    const type = "infor";
+                    const content = `Doanh nghiệp yêu cầu duyệt thông tin đánh giá.`;
+                    const listAdmin = await getUserAdmin();
+                    console.log("listAdmin", listAdmin);
+                    if (!listAdmin.length) {
+                        openNotificationWithIcon('warning','Cảnh báo',"Chưa có admin, hãy yêu cầu tạo tài khoản admin");
+                    } else {
+                        createNoti(id_company, listAdmin, title, type, content, link);
+                        openNotificationWithIcon('success', 'Thông báo', 'Bạn đã gửi đánh giá sinh viên, hãy chờ admin duyệt!')
+                    }
                 }
-                
                 setOpenRate(false);
             }
             catch (err) {

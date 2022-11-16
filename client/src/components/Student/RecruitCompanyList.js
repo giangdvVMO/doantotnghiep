@@ -193,7 +193,8 @@ export const RecruitCompanyListStudent = () => {
                 </div>
             </div>
             <div className='list-container'>
-                <CardList listRecruit={listRecruit} />
+                <CardList listRecruit={listRecruit} id_student={user._id}/>
+
             </div>
             <div className='pagination'>
             <Pagination

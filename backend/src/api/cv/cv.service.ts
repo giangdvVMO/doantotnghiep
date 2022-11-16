@@ -157,9 +157,6 @@ export class CvService {
       condition['id_student'] = +id_student;
     }
 
-    if (pageIndex && pageSize) {
-    }
-
     let field_condition: any = true;
     if (field && +field) {
       field_condition = { $in: [+field, '$id_fields'] };
@@ -184,7 +181,7 @@ export class CvService {
         },
       ];
     }
-    const studentList = await this.cvModel.aggregate([
+    const cvList = await this.cvModel.aggregate([
       //account not delete
       {
         $lookup: {
@@ -284,7 +281,7 @@ export class CvService {
       ...limitSkip,
     ]);
     let total = 0;
-    if (studentList.length) {
+    if (cvList.length) {
       //calculate total
       const studentListTotal = await this.cvModel.aggregate([
         //account not delete
@@ -396,9 +393,9 @@ export class CvService {
       ]);
       total = studentListTotal[0].total;
     }
-    console.log(studentList);
+    console.log(cvList);
     return {
-      data: studentList,
+      data: cvList,
       pageSize: +pageIndex,
       pageIndex: +pageSize,
       total: total,

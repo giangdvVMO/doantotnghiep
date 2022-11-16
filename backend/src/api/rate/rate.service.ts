@@ -119,6 +119,28 @@ export class RateService {
           ...condition,
         },
       },
+      {
+        $lookup: {
+          from: 'tbl_student',
+          localField: 'id_student',
+          foreignField: '_id',
+          as: 'student',
+        },
+      },
+      {
+        $unwind: '$student',
+      },
+      {
+        $lookup: {
+          from: 'tbl_company',
+          localField: 'id_company',
+          foreignField: '_id',
+          as: 'company',
+        },
+      },
+      {
+        $unwind: '$company',
+      },
       ...limitSkip,
     ]);
     return { data: rateList };
