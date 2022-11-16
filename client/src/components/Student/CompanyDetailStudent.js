@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Form, Input, message, Spin, Tag } from "antd";
+import { Avatar, Button, Card, Comment, Form, Input, message, Spin, Tag, Tooltip } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {decodeToken} from 'react-jwt';
@@ -8,6 +8,7 @@ import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
+import { DateToShortStringDate, formatDate } from "../../common/service";
 const { TextArea } = Input;
 
 let initialCompany = {
@@ -31,6 +32,7 @@ export const CompanyDetailStudent = ()=>{
         navigate('/sign-in');
     }
     const [company, setCompany] = useState(initialCompany);
+    const [rateList, setRateList] = useState([]);
 
     const {id} = useParams();
     console.log("company.manufacture",company.manufacture)
@@ -131,8 +133,34 @@ export const CompanyDetailStudent = ()=>{
             }
     }
 
+    //fetchh rateList
+    async function fetchListRate() {
+        if(user&&company){
+        let query = `?type_rate=company&id_company=${company._id}&status=1`;
+        const url = serverURL + "rate" + query;
+        console.log(query);
+        try {
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const result = await response.json();
+          if (response.status !== 200) {
+            message.error("Lỗi hệ thống!");
+          } else {
+            setRateList(result.data);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
+
     useEffect(()=>{fetchUser()}, []);
     useEffect(()=>{fetchCompany();},[]);
+    useEffect(()=>{fetchListRate();},[user, company]);
 
     const ref = useRef();
     if(company){
@@ -250,7 +278,28 @@ export const CompanyDetailStudent = ()=>{
 
         <div>
             <Card title='Đánh giá của các sinh viên'>
-                
+                {
+                    rateList?(
+                        rateList.map(rate=>{
+                            return (
+                                <Comment
+                                    author={rate.account.fullname}
+                                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
+                                    content={
+                                        <div>
+                                       {rate.content}
+                                        </div>
+                                    }
+                                    datetime={
+                                        <Tooltip title={DateToShortStringDate(rate.create_date)}>
+                                        <span>{formatDate(rate.create_date)}</span>
+                                        </Tooltip>
+                                    }
+                                    />
+                            )
+                        })
+                    ):''
+                }
             </Card>
         </div>
         </div>

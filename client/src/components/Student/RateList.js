@@ -177,6 +177,7 @@ export const RateListStudent = () => {
       if (response.status !== 200) {
         message.error(result.message);
       } else {
+        openNotificationWithIcon('success', 'Thông báo', 'Bạn đã xóa đánh giá thành công')
         fetchListRate();
         setOpenDelete(false);
       }

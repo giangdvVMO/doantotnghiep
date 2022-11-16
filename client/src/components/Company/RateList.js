@@ -12,6 +12,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
+import { openNotificationWithIcon } from "../../common/service";
 
 const { Option } = Select;
 export const RateListCompany = () => {
@@ -176,6 +177,7 @@ export const RateListCompany = () => {
       if (response.status !== 200) {
         message.error(result.message);
       } else {
+        openNotificationWithIcon('success', 'Thông báo', 'Bạn đã xóa đánh giá thành công')
         fetchListRate();
         setOpenDelete(false);
       }
