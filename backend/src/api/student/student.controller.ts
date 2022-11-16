@@ -63,12 +63,20 @@ export class StudentController {
 
   @Patch('confirm/:id')
   confirm(@Param('id') id: string, @Body() confirmDto: ConfirmStudentDto) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+      return;
+    }
     console.log('confirmDto', confirmDto);
     return this.studentService.confirm(+id, confirmDto);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+      return;
+    }
     console.log('id', id);
     console.log('updateStudentDto', updateStudentDto);
     return this.studentService.update(+id, updateStudentDto);
@@ -76,6 +84,10 @@ export class StudentController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+      return;
+    }
     return this.studentService.remove(+id);
   }
 }
