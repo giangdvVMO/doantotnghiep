@@ -8,7 +8,7 @@ import { createNoti, openNotificationWithIcon } from '../../common/service';
 import { messageEmail } from '../../common/error';
 import TextArea from 'antd/lib/input/TextArea';
 
-export const Email = ({id_student, id_company, setOpenEmail}) => {
+export const Email = ({id_student, id_company, setOpenEmail, setRate}) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
@@ -92,7 +92,6 @@ export const Email = ({id_student, id_company, setOpenEmail}) => {
                     message.error("Không thành công!");
                 }else{
                     openNotificationWithIcon('success', 'Thông báo', 'Bạn đã gửi thư tới sinh viên')
-                }
                 //send noti
                 const link = "student/company/" + id_company;
                 const title = "Thư mời ứng tuyển";
@@ -100,6 +99,9 @@ export const Email = ({id_student, id_company, setOpenEmail}) => {
                 const content = `Doanh nghiệp vừa gửi thư tuyển dụng cho bạn.`;
                 createNoti(id_company, [id_student], title, type, content, link);
                 //
+                setRate(true);
+            }
+
                 setOpenEmail(false);
             }
             catch (err) {

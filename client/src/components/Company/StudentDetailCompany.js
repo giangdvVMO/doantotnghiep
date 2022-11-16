@@ -550,7 +550,7 @@ export const StudentDetailCompany = () => {
           footer={null}
           destroyOnClose={()=>{setOpenEmail(false)}}
         >
-          <Email id_student={student._id} id_company={account._id} setOpenEmail={setOpenEmail}/>
+          <Email id_student={student._id} id_company={account._id} setOpenEmail={setOpenEmail} setRate={setRate}/>
         </Modal>
 
       {/* đánh giá */}
