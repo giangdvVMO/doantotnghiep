@@ -28,10 +28,6 @@ let students = {
 export const StudentDetailAdmin = ()=>{
     const {user,changeUser, token} = useContext(UserContext);
     const navigate = useNavigate();
-    if(!user||user.role!=='admin'){
-        message.warn('Bạn ko có quyền xem trang này');
-        navigate('/home')
-    }
     const [isOpen, setOpen] = useState(false);
     const [student, setStudent] = useState(students);
     const [reason, setReason] = useState('');

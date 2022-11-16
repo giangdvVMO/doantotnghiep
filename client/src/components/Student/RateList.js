@@ -1,6 +1,6 @@
 import { Button, Input, message, Modal, Select, Spin, Table, Tag } from "antd";
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
 import { UserContext } from "../User/UserProvider";
@@ -9,27 +9,24 @@ import {
   CheckCircleOutlined,
   DeleteTwoTone,
   MinusCircleOutlined,
-  SafetyCertificateTwoTone,
   SearchOutlined,
 } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
 import { createNoti, openNotificationWithIcon } from "../../common/service";
 
 const { Option } = Select;
-export const RateManagerAdmin = () => {
+export const RateListStudent = () => {
   const { user, changeUser, token } = useContext(UserContext);
   const navigate = useNavigate();
   const [status, setStatus] = useState(-1);
   const [search, setSearch] = useState("");
   const [listRate, setListRate] = useState([]);
   const [currentId, setCurrentId] = useState('');
-  const [isOpenConfirm, setOpenConfirm] = useState(false);
   const [isOpenDelete, setOpenDelete] = useState(false);
-  const [currentCompany, setCurrentCompany] = useState({});
   
   async function fetchListRate() {
     if(user){
-    let query = "?1=1";
+    let query = `?type_rate=company&id_student=${user._id}`;
     query = status !== -1 ? query + "&status=" + status : query;
     query = search !== "" ? query + "&search=" + search : query;
     const url = serverURL + "rate" + query;
@@ -72,7 +69,7 @@ export const RateManagerAdmin = () => {
         message.error("Lỗi hệ thống load user!");
       } else {
         console.log("user fetch to set role", result);
-        if (!result || result.role !== "admin") {
+        if (!result || result.role !== "student") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
         }
@@ -147,8 +144,7 @@ export const RateManagerAdmin = () => {
       title: "Hành động",
       key: "action",
       render: (_, record) => (<>
-         {!record.status?<Button type="text" onClick={()=>handleConfirm(record._id, record.company)}><SafetyCertificateTwoTone size={100} /></Button>:''}
-       <Button type="text" onClick={()=>handleDelete(record._id,record.company)}><DeleteTwoTone /></Button>
+       <Button type="text" onClick={()=>handleDelete(record._id)}><DeleteTwoTone /></Button>
         </>
       ),
       fixed: "right",
@@ -161,17 +157,9 @@ export const RateManagerAdmin = () => {
   const handleChangeSearch = (e) => {
     setSearch(e.target.value);
   };
-  const handleConfirm = (id, company)=>{
-    console.log('id', id);
-    setCurrentId(id);
-    console.log('currentId', currentId);
-    setCurrentCompany({...company})
-    setOpenConfirm(true);
-  }
 
-  const handleDelete =(id, company)=>{
+  const handleDelete =(id)=>{
     setCurrentId(id);
-    setCurrentCompany({...company})
     setOpenDelete(true);
   }
   const handleConfirmDelete = async ()=>{
@@ -189,12 +177,7 @@ export const RateManagerAdmin = () => {
       if (response.status !== 200) {
         message.error(result.message);
       } else {
-        const title = "Xóa đánh giá";
-          const type = "infor";
-          const content = `Admin ${user.fullname} đã xóa đánh giá của bạn.`;
-          createNoti(user._id, [currentCompany._id], title, type, content);
-          openNotificationWithIcon('success','Thông báo',"Bạn đã xóa bài đăng tuyển dụng thành công, thông báo đã gửi tới công ty!");
-          fetchListRate();
+        fetchListRate();
         setOpenDelete(false);
       }
     } catch (err) {
@@ -205,64 +188,12 @@ export const RateManagerAdmin = () => {
   const handleCancelDelete = ()=>{
     setOpenDelete(false);
   }
-  const handleConfirmConfirm = async()=>{
-    const url = serverURL + "rate/confirm/" + currentId;
-    const data = { confirm_id: user._id };
-    console.log("request", data);
-    try {
-      const response = await fetch(url, {
-        method: "PATCH",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result = await response.json();
-      console.log(result);
-      if (response.status !== 200) {
-        message.error(result.message);
-      } else {
-        const title = "Duyệt đánh giá";
-          const type = "infor";
-          const content = `Admin ${user.fullname} đã duyệt đánh giá của bạn.`;
-          createNoti(user._id, [currentCompany._id], title, type, content);
-          openNotificationWithIcon('success','Thông báo',"Bạn đã duyệt đánh giá thành công, thông báo đã gửi tới công ty!");
-          fetchListRate();
-        setOpenConfirm(false);
-      }
-    } catch (err) {
-      console.log(err);
-      message.error("Đã có lỗi xảy ra!");
-    }
-  }
-  const handleCancelConfirm = ()=>{
-    console.log('currentId', currentId);
-
-    setOpenConfirm(false);
-  }
+ 
 if(user){
   return (
     <>
-      <div className="banner-content">Quản lý danh sách đánh giá</div>
+      <div className="banner-content">Danh sách đánh giá</div>
       <div className="container-filter">
-        {/* <div className='filter'>
-                    <label className='label-filter'>Địa điểm:</label>
-                    <Select
-                    mode='multiple'
-                        value={field}
-                        defaultValue='all'
-                        labelInValue='Địa điểm'
-                        className='filter-content'
-                        onChange={handleChangeField}
-                    >
-                        <Option value={-1}>all</Option>
-                        {
-                            fields.map((field)=>{
-                                return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
-                            })
-                        }
-                    </Select>
-                </div> */}
         <div className="filter">
           <label className="label-filter">Trạng thái:</label>
           <Select
@@ -300,14 +231,7 @@ if(user){
       >
         <p>Bạn có chắc chắn muốn xóa!</p>
       </Modal> 
-      <Modal
-        title="Xác nhận duyệt"
-        open={isOpenConfirm}
-        onOk={handleConfirmConfirm}
-        onCancel={handleCancelConfirm}
-      >
-        <p>Bạn có chắc chắn muốn duyệt!</p>
-      </Modal>           
+                
       <Table
         dataSource={listRate}
         columns={columns}

@@ -37,6 +37,8 @@ import { CVManagerAdmin } from "./components/Admin/CVManager";
 import { CVList } from "./components/Company/CVList";
 import { Statistic } from "./components/Student/Statistic";
 import { RateManagerAdmin } from "./components/Admin/RateManager";
+import { RateListStudent } from "./components/Student/RateList";
+import { RateListCompany } from "./components/Company/RateList";
 // import { CardItem } from './components/Common/Card';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -74,6 +76,7 @@ root.render(
             <Route path="recruit-list" element={<RecruitManager />} />
             <Route path="student-list" element={<StudentList />} />
             <Route path="cv-list" element={<CVList />} />
+            <Route path="rate-list" element={<RateListCompany />} />
           </Route>
           <Route path="student">
             <Route path="company/:id" element={<CompanyDetailStudent />} />
@@ -85,6 +88,7 @@ root.render(
             />
             <Route path="recruit-list" element={<RecruitListStudent />} />
             <Route path="recruit/:id" element={<RecruitDetailStudent />} />
+            <Route path="rate-list" element={<RateListStudent />} />
           </Route>
           <Route path="recruit">
             <Route path="add" element={<AddRecruit />} />

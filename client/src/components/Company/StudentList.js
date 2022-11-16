@@ -73,7 +73,7 @@ export const StudentList = () => {
             showIcon
             closable
           />;
-          navigate("/");
+          navigate("/home");
         }
         changeUser({ ...result });
       }

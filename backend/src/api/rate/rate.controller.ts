@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { RateService } from './rate.service';
-import { CreateRateDto } from './dto/create-rate.dto';
+import { ConfirmDto, CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-rate.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { QueryDto } from './dto/query.dto';
@@ -37,6 +37,14 @@ export class RateController {
   @Get()
   findAll(@Query() query: QueryDto) {
     return this.rateService.findAll(query);
+  }
+
+  @Patch('confirm/:id')
+  confirm(@Param('id') id: string, @Body() confirmDto: ConfirmDto) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
+    return this.rateService.confirm(+id, confirmDto);
   }
 
   @Get(':id')

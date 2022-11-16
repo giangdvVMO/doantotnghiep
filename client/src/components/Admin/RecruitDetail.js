@@ -7,7 +7,7 @@ import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider";
 import "../../styles/form.css";
 import "../../styles/my-account.css";
-import { createNoti, DateToShortString } from "../../common/service";
+import { createNoti, DateToShortString, openNotificationWithIcon } from "../../common/service";
 import { CheckCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 const { TextArea } = Input;
 
@@ -51,9 +51,6 @@ export const RecruitDetailAdmin = () => {
   const [isOpen, setOpen] = useState(false);
   const [reason, setReason] = useState("");
   const navigate = useNavigate();
-  if (!user || user.role !== "admin") {
-    navigate("/sign-in");
-  }
   const { id } = useParams();
   const ids = id.split(",");
   const [company, setCompany] = useState(initialCompany);
@@ -250,8 +247,12 @@ export const RecruitDetailAdmin = () => {
       if (response.status !== 200) {
         message.error(result.message);
       } else {
-        message.success("Bạn đã xóa bài đăng tuyển dụng thành công!");
-        navigate("/admin/recruit-list");
+          const title = "Xóa bài đăng tuyển dụng";
+          const type = "infor";
+          const content = `Admin ${user.fullname} đã xóa bài đăng tuyển dụng của bạn.`;
+          createNoti(user._id, [company._id], title, type, content);
+          openNotificationWithIcon('success','Thông báo',"Bạn đã xóa bài đăng tuyển dụng thành công, thông báo đã gửi tới công ty!");
+          navigate("/admin/recruit-list");
       }
     } catch (err) {
       console.log(err);

@@ -49,6 +49,11 @@ export const MenuRole = {
             key: 'ratemanagerment'
         },
         {
+            label: <Link to='admin/statistic'>Thống kê</Link>,
+            icon: <StarOutlined />,
+            key: 'statistic-admin'
+        },
+        {
             label: <Link to='news-management'>Quản lý bài đăng tin tức</Link>,
             icon: <BookOutlined />,
             key: 'newsmanagerment'
@@ -91,6 +96,16 @@ export const MenuRole = {
             ],
         },
         {
+            label: <Link to='company/rate-list'>Quản lý đánh giá</Link>,
+            icon: <CopyOutlined />,
+            key: 'ratemanagerment-company'
+        },
+        {
+            label: <Link to='company/statistic'>Thống kê</Link>,
+            icon: <StarOutlined />,
+            key: 'statistic-company'
+        },
+        {
             label: <Link to='news'>Tin tức</Link>,
             icon: <BookOutlined />,
             key: 'news'
@@ -121,6 +136,11 @@ export const MenuRole = {
             label: <Link to='student/recruit-list'>Bài đăng tuyển dụng</Link>,
             icon: <ContainerOutlined />,
             key: 'recruitlist'
+        },
+        {
+            label: <Link to='student/rate-list'>Quản lý đánh giá</Link>,
+            icon: <CopyOutlined />,
+            key: 'ratemanagerment-student'
         },
         {
             label: <Link to='student/statistic'>Thống kê</Link>,
