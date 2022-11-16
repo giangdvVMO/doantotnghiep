@@ -58,10 +58,10 @@ export class CvService {
       update_date: new Date(),
     };
     const resultUpdate = await this.cvModel.updateOne({ _id: id }, dataUpdate);
-
-    const dataCreateFieldCV = { id_cv: id, fields };
-    const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
-
+    if (fields) {
+      const dataCreateFieldCV = { id_cv: id, fields };
+      const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
+    }
     return resultUpdate;
   }
 

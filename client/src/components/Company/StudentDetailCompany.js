@@ -134,6 +134,7 @@ export const StudentDetailCompany = () => {
               "Thông báo",
               "CV của sinh viên đã private vì đã được tuyển dụng hoặc vì một số lý do khác!"
             );
+            setCV();
           } else {
             setCV({ ...result.data });
           }
@@ -277,7 +278,7 @@ export const StudentDetailCompany = () => {
     }
   }
   const renderButtonGroup = () => {
-    if (CV){
+    if (CV||rate){
       if(!rate){
       return (
         <div className="apply-container">
@@ -332,11 +333,11 @@ export const StudentDetailCompany = () => {
         }
         );
         const result = await response.json();
+        console.log(result);
         if(response.status!==200){
             message.error("Không thành công!");
         }else{
             openNotificationWithIcon('success', 'Thông báo', 'Bạn đã đóng CV của sinh viên về trạng thái private!')
-        }
         //send noti
         const link = "student/company/" + student._id;
         const title = "Thay đổi trạng thái CV";
@@ -345,6 +346,7 @@ export const StudentDetailCompany = () => {
         createNoti(account._id, [student._id], title, type, content, link);
         //
         fetchCV();
+      }
     }
     catch (err) {
         console.log(err);
@@ -520,7 +522,7 @@ export const StudentDetailCompany = () => {
                 </Form.Item>
                 {rate?
                   <Form.Item label="Bạn đã tuyển sinh viên này, bạn có thể đổi trạng thái CV thành private!" className="label">
-                    <Button type="primary" onClick={handleChangeStatus}>Đổi trạng thái</Button>
+                    <Button type="primary" onClick={async()=>{await handleChangeStatus()}}>Đổi trạng thái</Button>
                   </Form.Item>:''
                 }
               </div>
