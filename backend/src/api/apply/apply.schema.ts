@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 export type ApplyDocument = Apply & Document;
 
 @Schema({
-  collection: 'tbl_appy',
+  collection: 'tbl_apply',
 })
 export class Apply {
   @Prop({ type: Number, ref: 'tbl_student', required: true })

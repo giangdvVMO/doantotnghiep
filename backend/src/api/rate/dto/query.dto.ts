@@ -48,14 +48,14 @@ export class QueryDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @Matches(/^[0-9]$/, {
+  @Matches(/^[0-9]{1,}$/, {
     message: 'id_student không đúng định dạng',
   })
   id_student: string;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @Matches(/^[0-9]$/, {
+  @Matches(/^[0-9]{1,}$/, {
     message: 'id_comnpany không đúng định dạng',
   })
   id_company: string;

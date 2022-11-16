@@ -35,8 +35,8 @@ export class RateController {
   }
 
   @Get()
-  findAll() {
-    return this.rateService.findAll();
+  findAll(@Query() query: QueryDto) {
+    return this.rateService.findAll(query);
   }
 
   @Get(':id')

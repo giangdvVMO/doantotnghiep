@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ApplyService } from '../apply/apply.service';
 import { LetterService } from '../letter/letter.service';
-import { CreateRateDto } from './dto/create-rate.dto';
+import { ConfirmDto, CreateRateDto } from './dto/create-rate.dto';
+import { QueryDto } from './dto/query.dto';
 import { UpdateRateDto } from './dto/update-rate.dto';
 import { Rate, RateDocument } from './rate.schema';
 
@@ -14,8 +15,29 @@ export class RateService {
     private readonly applyService: ApplyService,
     private readonly letterService: LetterService,
   ) {}
-  create(createRateDto: CreateRateDto) {
-    return 'This action adds a new rate';
+
+  async calculateId() {
+    //create id
+    const count: any = await this.rateModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          max: {
+            $max: '$_id',
+          },
+        },
+      },
+    ]);
+    return count.length ? count[0].max + 1 : 1;
+  }
+
+  async create(createRateDto: CreateRateDto) {
+    const _id = await this.calculateId();
+    const result = await this.rateModel.create({
+      ...createRateDto,
+      _id,
+    });
+    return { data: result };
   }
 
   async findPreCondition(id_student: number, id_company: number) {
@@ -33,8 +55,73 @@ export class RateService {
     return { data: false };
   }
 
-  findAll() {
-    return `This action returns all rate`;
+  async confirm(id: number, confirmDto: ConfirmDto) {
+    const result = await this.rateModel.updateOne(
+      { _id: id },
+      { ...confirmDto, confirm_date: new Date(), status: true },
+    );
+    if (result.modifiedCount) {
+      return {
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+      };
+    }
+  }
+
+  async findAll(query: QueryDto) {
+    const {
+      pageIndex,
+      pageSize,
+      sortBy,
+      sortOrder,
+      search,
+      status,
+      id_student,
+      id_company,
+    } = query;
+    const condition = {};
+
+    const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
+    const searchRgx = rgx(search ? search : '');
+
+    if (status === '1') {
+      condition['status'] = true;
+    }
+    if (status === '0') {
+      condition['status'] = false;
+    }
+
+    if (id_company) {
+      condition['id_company'] = +id_company;
+    }
+    if (id_student) {
+      condition['id_student'] = +id_student;
+    }
+    let limitSkip = [];
+    if (pageIndex && pageSize) {
+      limitSkip = [
+        {
+          $skip: (+pageIndex - 1) * +pageSize,
+        },
+        {
+          $limit: +pageSize,
+        },
+      ];
+    }
+
+    const rateList = await this.rateModel.aggregate([
+      //account not delete
+      {
+        $match: {
+          ...condition,
+        },
+      },
+      ...limitSkip,
+    ]);
+    return { data: rateList };
   }
 
   findOne(id: number) {
@@ -45,7 +132,8 @@ export class RateService {
     return `This action updates a #${id} rate`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} rate`;
+  async remove(id: number) {
+    const result = await this.rateModel.deleteOne({ _id: id });
+    return result;
   }
 }

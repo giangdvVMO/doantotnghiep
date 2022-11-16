@@ -1,6 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, Matches, Max, Min } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  Matches,
+  Max,
+  Min,
+} from 'class-validator';
 
+const VIETNAMESE =
+  'aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ';
 export class CreateRateDto {
   @ApiProperty({
     description: 'id_student',
@@ -56,4 +66,30 @@ export class CreateRateDto {
   @Min(1)
   @Max(10)
   score: number;
+}
+
+export class RemoveDto {
+  @ApiPropertyOptional({
+    description: 'id_student',
+    example: 1,
+  })
+  @IsOptional()
+  // @IsNumber()
+  id_student: number;
+
+  @ApiPropertyOptional({
+    description: 'id_company',
+    example: 1,
+  })
+  @IsOptional()
+  // @IsNumber()
+  id_company: number;
+}
+
+export class ConfirmDto {
+  @ApiProperty({
+    description: 'confirm_id',
+  })
+  @IsNotEmpty()
+  confirm_id: number;
 }
