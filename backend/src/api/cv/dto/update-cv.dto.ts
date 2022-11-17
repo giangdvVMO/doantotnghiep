@@ -27,36 +27,33 @@ export class UpdateCvDto {
   })
   @IsOptional()
   @IsNotEmpty()
-  status: boolean;
+  status: string;
 
   @ApiPropertyOptional({
     description: 'fields',
   })
   @IsOptional()
   @IsNotEmpty()
-  @IsArray()
-  fields: number[];
+  // @IsArray()
+  fields: string;
 
   @ApiPropertyOptional({
     description: 'id_student',
   })
   @IsOptional()
   @IsNotEmpty()
-  id_student: number;
+  id_student: string;
 
   @ApiProperty({
     description: 'update_id',
   })
   @IsOptional()
   @IsNotEmpty()
-  update_id: number;
-
-  @ApiProperty({
-    description: 'file_cv',
-  })
-  @IsOptional()
-  @IsNotEmpty()
-  file_cv: string;
+  update_id: string;
 }
 
-export class UpdateFullCVDto extends UpdateCvDto {}
+export class FileUpdateCVDto extends UpdateCvDto {
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  @IsOptional()
+  file_cv: any;
+}

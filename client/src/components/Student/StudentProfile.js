@@ -903,7 +903,7 @@ export const StudentProfile = () => {
                   help={validateBirthday.errorMsg}
                   className="label"
                 >
-                  {isEdit ? (
+                  {/* {isEdit ? (
                     <DatePicker
                       className="birthday-input"
                       autoFocus={true}
@@ -914,11 +914,11 @@ export const StudentProfile = () => {
                       value={account.birthday}
                       onChange={handleChangeBirthday}
                     />
-                  ) : (
+                  ) : ( */}
                     <p className="text-display">
                       {DateToShortString(account.birthday)}
                     </p>
-                  )}
+                  {/* )} */}
                 </Form.Item>
                 <Form.Item
                   label="GPA"

@@ -23,9 +23,14 @@ import { GateGateway } from './gate.gateway';
 import { RecruitViewModule } from './api/recruit-view/recruit-view.module';
 import { CvViewModule } from './api/cv-view/cv-view.module';
 import { LetterStudentModule } from './api/letter_student/letter_student.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     UserModule,
     AuthModule,
     MongooseModule.forRoot('mongodb://127.0.0.1/assignment'),

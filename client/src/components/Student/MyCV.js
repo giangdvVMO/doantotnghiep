@@ -61,6 +61,7 @@ export const MyCV = () => {
   const [student, setStudent] = useState(initialStudent);
   const [CV, setCV] = useState(initialCV);
   const [fields, setFields] = useState([]);
+  const [file, setFile] = useState('');
   const defaultTrueStatus = {
     status: "success",
     errorMsg: null,
@@ -244,19 +245,26 @@ export const MyCV = () => {
   //handle action
   async function createCV() {
     const url = serverURL + "cv";
-    const data = { ...CV, id_student: student._id, fields: CV.fields };
-    console.log("request", data);
+    let formData = new FormData();
+    formData.append('id_student',student._id);
+    formData.append('fields',CV.fields);
+    formData.append('file_cv',file);
+    formData.append('title',CV.title);
+    formData.append('status',CV.status);
+    // const data = { ...CV, id_student: student._id, fields: CV.fields };
+    console.log("request", formData);
     try {
       const response = await fetch(url, {
         method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: formData,
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        // },
       });
       const result = await response.json();
       console.log(result);
       if (response.status !== 201) {
+        openNotificationWithIcon('error','Thông báo', 'Lỗi')
         message.error(result.message);
       } else {
         openNotificationWithIcon(
@@ -275,15 +283,23 @@ export const MyCV = () => {
 
   async function updateCV() {
     const url = serverURL + "cv/" + CV._id;
-    const data = { ...CV, update_id: student._id };
-    console.log("request", data);
+    let formData = new FormData();
+    console.log('FIELDS',CV.fields)
+    formData.append('fields',CV.fields);
+    console.log("file", file)
+    if(file){formData.append('file_cv',file)};
+    formData.append('title',CV.title);
+    formData.append('status',CV.status);
+    formData.append('update_id',student._id);
+    // const data = { ...CV, update_id:  };
+    console.log("request", formData);
     try {
       const response = await fetch(url, {
         method: "PATCH",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        // },
+        body: formData,
       });
       const result = await response.json();
       console.log(result);
@@ -311,7 +327,8 @@ export const MyCV = () => {
     console.log("account", account);
     console.log("student", student);
     count = checkTitleFunc(CV.title) ? count : count + 1;
-    count = checkFileFunc(CV.file_cv) ? count : count + 1;
+    count = file? count: count+1;
+    // count = checkFileFunc(CV.file_cv) ? count : count + 1;
     count = checkFieldFunc(CV.fields) ? count : count + 1;
     console.log("count", count);
     console.log(CV);
@@ -403,31 +420,33 @@ export const MyCV = () => {
       return { ...preCV, status: value };
     });
   }
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
-  const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
-    }
-    return isJpgOrPng && isLt2M;
-  };
+  // const getBase64 = (img, callback) => {
+  //   const reader = new FileReader();
+  //   reader.addEventListener("load", () => callback(reader.result));
+  //   reader.readAsDataURL(img);
+  // };
+  // const beforeUpload = (file) => {
+  //   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  //   if (!isJpgOrPng) {
+  //     message.error("You can only upload JPG/PNG file!");
+  //   }
+  //   const isLt2M = file.size / 1024 / 1024 < 2;
+  //   if (!isLt2M) {
+  //     message.error("Image must smaller than 2MB!");
+  //   }
+  //   return isJpgOrPng && isLt2M;
+  // };
   const handleChange = (info) => {
     // if (info.file.status === 'done') {
     //   Get this url from response in real world.
-    getBase64(info.file.originFileObj, (url) => {
-      setCV((preCV) => {
-        return { ...preCV, file_cv: url };
-      });
-    });
-    console.log("info", info);
+    // getBase64(info.file.originFileObj, (url) => {
+    //   setCV((preCV) => {
+    //     return { ...preCV, file_cv: url };
+    //   });
+    // });
+    console.log("info", info.target.files[0]);
+    setFile(info.target.files[0]);
+    // https://freeimage.host/api/1/upload
 
     console.log(CV);
     // setCV((preCV)=>{return{...preCV, file_cv: info.file.thumbUrl}})
@@ -654,22 +673,27 @@ export const MyCV = () => {
                     <Form.Item label="FILE CV:" className="label" required>
                       {isEdit ? (
                         <>
-                          <Upload.Dragger
+                        <input type='file' onChange={handleChange}>
+                        {/* {uploadButton} */}
+                        </input>
+                          {/* <Upload.Dragger
                             name="file_cv"
                             // listType="picture"
                             showUploadList={false}
                             className="avatar-uploader"
-                            beforeUpload={(file) => {
-                              console.log(file);
-                            }}
+                            // beforeUpload={(file) => {
+                            //   console.log(file);
+                            // }}
                             onChange={handleChange}
                             accept="image/*,.pdf"
                           >
                             {uploadButton}
-                          </Upload.Dragger>
-                          {CV.file_cv ? (
+                          </Upload.Dragger> */}
+                          {file?
+                            ''
+                            :(CV.file_cv ? (
                             <Image
-                              src={CV.file_cv}
+                            src={'http://localhost:5000/'+CV.file_cv}
                               alt="avatar"
                               style={{
                                 width: "200px",
@@ -677,10 +701,13 @@ export const MyCV = () => {
                             />
                           ) : (
                             ""
-                          )}
+                          ))}
                         </>
                       ) : CV.file_cv ? (
-                        <Image alt="file_cv" src={CV.file_cv} width={300} />
+                        <Image alt="file_cv"
+                        src={'http://localhost:5000/'+CV.file_cv}
+                        //  src={`http://localhost:5000/${CV.file_cv}`} 
+                         width={300} />
                       ) : (
                         <p>Chưa có ảnh</p>
                       )}

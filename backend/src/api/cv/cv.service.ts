@@ -8,9 +8,10 @@ import {
 import { FieldCvService } from '../field_cv/field_cv.service';
 import { CV, CVDocument } from './cv.schema';
 import { CreateCvDto } from './dto/create-cv.dto';
-import { UpdateCvDto, UpdateFullCVDto } from './dto/update-cv.dto';
+import { UpdateCvDto } from './dto/update-cv.dto';
 // import { imgbbUploader } from 'imgbb-uploader';
 import { QueryParamCVDto } from './dto/query-param-cv.dto';
+import { title } from 'process';
 
 @Injectable()
 export class CvService {
@@ -19,51 +20,46 @@ export class CvService {
     private readonly fieldCvService: FieldCvService,
     private readonly fileUploadService: FileUploadService,
   ) {}
-  async create(createCvDto: CreateCvDto, file_cv: string) {
+  async create(createCvDto: CreateCvDto, file_cv: Express.Multer.File) {
     const { title, id_student, status, fields } = createCvDto;
     const dataCreate: any = {
       title,
-      id_student,
+      id_student: +id_student,
       file_cv,
-      status: status ? false : status,
+      status: status === 'false' ? false : true,
       _id: createCvDto.id_student,
       create_date: Date.now(),
     };
-    // if (file_cv) {
-    //   console.log('file_cv', file_cv);
-    //   let upload: any;
-    //   imgbbUploader({
-    //     apiKey: 'cd489a5bb5a10aa299d991a4e20599ea',
-    //     base64string: file_cv.buffer,
-    //   })
-    //     .then((response) => {
-    //       upload = response;
-    //       console.log('response', response);
-    //     })
-    //     .catch((error) => console.log(error));
-    //   console.log('upload', upload);
-    //   dataCreate.file_cv = upload.image.url;
-    // }
+    if (file_cv) {
+      console.log('file_cv', file_cv);
+      const path = file_cv.path.split('\\');
+      dataCreate.file_cv = `${path[1]}/${path[2]}`;
+    }
+    // return;
     const resultCreate = await this.cvModel.create(dataCreate);
     console.log(resultCreate);
-    const dataCreateFieldCV = { id_cv: id_student, fields };
+    const fieldsArray = fields.split(',');
+    const fieldsNumber = fieldsArray.map((field) => {
+      return +field;
+    });
+    const dataCreateFieldCV = { id_cv: id_student, fields: fieldsNumber };
     const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
     return resultCreate;
   }
 
-  async updateOne(id: number, updateCvDto: UpdateFullCVDto) {
-    const { fields, ...data } = updateCvDto;
-    const dataUpdate: any = {
-      ...data,
-      update_date: new Date(),
-    };
-    const resultUpdate = await this.cvModel.updateOne({ _id: id }, dataUpdate);
-    if (fields) {
-      const dataCreateFieldCV = { id_cv: id, fields };
-      const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
-    }
-    return resultUpdate;
-  }
+  // async updateOne(id: number, updateCvDto: UpdateFullCVDto) {
+  //   const { fields, ...data } = updateCvDto;
+  //   const dataUpdate: any = {
+  //     ...data,
+  //     update_date: new Date(),
+  //   };
+  //   const resultUpdate = await this.cvModel.updateOne({ _id: id }, dataUpdate);
+  //   if (fields) {
+  //     const dataCreateFieldCV = { id_cv: id, fields };
+  //     const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
+  //   }
+  //   return resultUpdate;
+  // }
 
   async findOne(id: number) {
     const data = await this.cvModel.aggregate([
@@ -117,16 +113,33 @@ export class CvService {
   async update(
     id: number,
     updateCvDto: UpdateCvDto,
-    image?: Express.Multer.File,
+    file_cv?: Express.Multer.File,
   ) {
-    const dataUpdate: any = { ...updateCvDto };
-    if (image) {
-      const upload = (await this.fileUploadService.uploadS3(
-        image,
-        bucketName,
-        Date.now() + image.originalname,
-      )) as string;
-      dataUpdate.cv = upload;
+    const { fields, title, status, update_id } = updateCvDto;
+    const dataUpdate: any = {
+      title,
+      status: status === 'true' ? true : false,
+      update_id: +update_id,
+      update_date: new Date(),
+    };
+    if (file_cv) {
+      console.log('file_cv', file_cv);
+      const path = file_cv.path.split('\\');
+      dataUpdate.file_cv = `${path[1]}/${path[2]}`;
+      // const upload = (await this.fileUploadService.uploadS3(
+      //   image,
+      //   bucketName,
+      //   Date.now() + image.originalname,
+      // )) as string;
+      // dataUpdate.cv = upload;
+    }
+    if (fields) {
+      const fieldsArray = fields.split(',');
+      const fieldsNumber = fieldsArray.map((field) => {
+        return +field;
+      });
+      const dataCreateFieldCV = { id_cv: id, fields: fieldsNumber };
+      const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
     }
     const resultUpdate = await this.cvModel.updateOne({ _id: id }, dataUpdate);
     console.log(resultUpdate);

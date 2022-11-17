@@ -75,8 +75,8 @@ export class UpdateStudentDto {
     description: 'status',
   })
   @IsOptional()
-  @IsString()
-  status: string;
+  // @IsString()
+  status: boolean;
 
   @ApiPropertyOptional({
     description: 'course',

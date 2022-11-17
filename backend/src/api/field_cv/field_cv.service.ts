@@ -15,6 +15,7 @@ export class FieldCvService {
     await this.fieldCVModel.deleteMany({
       id_cv: data.id_cv,
     });
+    console.log('data', data.fields);
     //map array
     const dataArray = data.fields.map((id_field) => {
       return { id_cv: data.id_cv, id_field };
