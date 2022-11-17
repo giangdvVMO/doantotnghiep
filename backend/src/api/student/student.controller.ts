@@ -52,6 +52,11 @@ export class StudentController {
     return this.studentService.findOneAdmin(+id);
   }
 
+  @Get('statistic')
+  statistic() {
+    return this.studentService.statistic();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     if (!parseInt(id)) {

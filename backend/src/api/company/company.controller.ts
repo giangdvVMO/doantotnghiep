@@ -33,6 +33,11 @@ export class CompanyController {
     return this.companyService.findAll(query);
   }
 
+  @Get('statistic')
+  statistic() {
+    return this.companyService.statistic();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.companyService.findOne(+id);

@@ -138,6 +138,31 @@ export class RecruitService {
     }
   }
 
+  async statistic() {
+    const accept = await this.recruitModel.aggregate([
+      {
+        $match: {
+          status: true,
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+
+    const unaccept = await this.recruitModel.aggregate([
+      {
+        $match: {
+          status: false,
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+    return { data: { accept: accept[0].total, unaccept: unaccept[0].total } };
+  }
+
   async findAll(query: QueryParamRecruitDto) {
     const {
       field,

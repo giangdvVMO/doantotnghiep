@@ -32,6 +32,11 @@ export class RecruitController {
     return this.recruitService.findAll(query);
   }
 
+  @Get('statistic')
+  statistic() {
+    return this.recruitService.statistic();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     if (!parseInt(id)) {

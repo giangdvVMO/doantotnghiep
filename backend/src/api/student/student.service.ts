@@ -23,6 +23,32 @@ export class StudentService {
     return result;
   }
 
+  async statistic() {
+    const accept = await this.studentModel.aggregate([
+      {
+        $match: {
+          status: true,
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+
+    const unaccept = await this.studentModel.aggregate([
+      {
+        $match: {
+          status: false,
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+
+    return { data: { accept: accept[0].total, unaccept: unaccept[0].total } };
+  }
+
   async findAll(query: QueryParamStudentDto) {
     const { university, major, status, search } = query;
     const condition = {};

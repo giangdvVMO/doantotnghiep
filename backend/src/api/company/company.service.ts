@@ -200,6 +200,31 @@ export class CompanyService {
     };
   }
 
+  async statistic() {
+    const accept = await this.companyModel.aggregate([
+      {
+        $match: {
+          status: true,
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+
+    const unaccept = await this.companyModel.aggregate([
+      {
+        $match: {
+          status: false,
+        },
+      },
+      {
+        $count: 'total',
+      },
+    ]);
+    return { data: { accept: accept[0].total, unaccept: unaccept[0].total } };
+  }
+
   async findOne(id: number) {
     const company = await this.companyModel.findOne({ id_account: id });
     if (!company) {
