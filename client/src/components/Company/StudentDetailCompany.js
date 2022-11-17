@@ -251,7 +251,7 @@ export const StudentDetailCompany = () => {
 
   //fetch rateList
   async function fetchListRate() {
-    if(user&&student){
+    if(user&&student._id!==-1){
     let query = `?type_rate=student&id_student=${student._id}&status=1`;
     const url = serverURL + "rate" + query;
     console.log(query);
