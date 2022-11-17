@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import {decodeToken , isExpired} from 'react-jwt';
 
 import { messageSignUpError } from '../../common/error';
-import { DateToShortString } from '../../common/service';
+import { DateToShortString, openNotificationWithIcon } from '../../common/service';
 import { checkBirthday, checkFullName, checkMail, checkPassword, checkPhone, checkRole, checkUsername } from '../../common/validation';
 import { serverURL } from '../../configs/server.config';
 import '../../styles/form.css'
@@ -187,12 +187,23 @@ export const DetailAccount = () => {
         }
     }
 
+    function resetError(){
+        setValidateEmail(defaultTrueStatus);
+        setValidatePhone(defaultTrueStatus);
+        setValidateUsername(defaultTrueStatus);
+        setValidatePassword(defaultTrueStatus);
+        setValidateRole(defaultTrueStatus);
+        setValidateFullname(defaultTrueStatus);
+        setValidateBirthday(defaultTrueStatus);
+    }
+
     async function handleEdit(e) {
         setIsEdit(true);
         return;
     }
 
     async function handleCancel(e) {
+        resetError();
         setAccount({...user});
         setIsEdit(false);
         return;
@@ -228,10 +239,15 @@ export const DetailAccount = () => {
                 const result = await response.json();
                 console.log(result);
                 if(response.status!==200){
+                    // message.error(result.message);
+                    if(response.status===400){
+                        openNotificationWithIcon('error', 'Thông báo', result.message)
+                    }else{
                     message.error(result.message);
+                    }
                     setAccount({...user});
                 }else{
-                    message.success("Bạn đã sửa thành công!");
+                    openNotificationWithIcon('success', 'Thông báo', 'Bạn đã sửa thành công!')
                     changeUser({...account})
                     setIsEdit(false);
                 }
@@ -317,7 +333,7 @@ export const DetailAccount = () => {
                                 isEdit?
                                 <Input
                                     ref={refUserName}
-                                    disabled={!isEdit}
+                                    disabled={true}
                                     className='input-login max-width'
                                     placeholder="Nhập tên đăng nhập"
                                     autoFocus={true}

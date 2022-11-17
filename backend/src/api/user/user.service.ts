@@ -96,6 +96,21 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
+    const { email } = updateUserDto;
+    if (email) {
+      const result = await this.userModel.aggregate([
+        {
+          $match: {
+            _id: { $ne: id },
+            email: email,
+          },
+        },
+      ]);
+      if (result[0]) {
+        throw new BadRequestException('Email đã tồn tại');
+        return;
+      }
+    }
     const updateUser = await this.userModel.updateOne(
       { _id: id },
       updateUserDto,

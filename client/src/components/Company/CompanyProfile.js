@@ -37,7 +37,7 @@ import {
 } from "../../common/validation";
 import { messageSignUpError, messageCompanyError } from "../../common/error";
 import { manufacturesList } from "../../data/list";
-import { createNoti, getUserAdmin, postManufactures } from "../../common/service";
+import { createNoti, getUserAdmin, openNotificationWithIcon, postManufactures } from "../../common/service";
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -369,7 +369,17 @@ export const CompanyProfile = () => {
       if (response.status !== 201) {
         message.error(result.message);
       } else {
-        message.success("Bạn đã cập nhật thành công! Hãy đợi admin duyệt!");
+        const link = "admin/company/" + company._id;
+          const title = "Yêu cầu duyệt thông tin doanh nghiệp";
+          const type = "infor";
+          const content = `Doanh nghiệp ${company.com_name} yêu cầu duyệt thông tin doanh nghiệp.`;
+          const listAdmin = await getUserAdmin();
+          if (!listAdmin.length) {
+            message.info("Chưa có admin, hãy tạo tài khoản admin");
+          } else {
+            createNoti(account._id, listAdmin, title, type, content, link);
+          }
+        openNotificationWithIcon('success', 'Thông báo', 'Bạn đã cập nhật thành công! Hãy đợi admin duyệt!')
         fetchCompany();
         setIsEdit(false);
       }
@@ -396,17 +406,7 @@ export const CompanyProfile = () => {
         if (response.status !== 201) {
           message.error(result.message);
         } else {
-          const link = "admin/company/" + company._id;
-          const title = "Yêu cầu duyệt thông tin doanh nghiệp";
-          const type = "infor";
-          const content = `Doanh nghiệp yêu cầu duyệt thông tin doanh nghiệp.`;
-          const listAdmin = await getUserAdmin();
-          console.log("listAdmin", listAdmin);
-          if (!listAdmin.length) {
-            message.info("Chưa có admin, hãy tạo tài khoản admin");
-          } else {
-            createNoti(account._id, listAdmin, title, type, content, link);
-          }
+          
           updateManuCompany();
         }
       } catch (err) {
@@ -426,6 +426,7 @@ export const CompanyProfile = () => {
         introduction: company.introduction,
         manufacture: company.manufacture,
         update_id: account._id,
+        status: false,
       };
       try {
         const response = await fetch(url, {

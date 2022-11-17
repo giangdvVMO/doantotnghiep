@@ -220,6 +220,7 @@ export class CompanyService {
       introduction,
       manufacture,
       update_id,
+      status,
     } = { ...updateCompanyDto };
     const updateCompany = await this.companyModel.updateOne(
       { _id: id },
@@ -233,6 +234,7 @@ export class CompanyService {
         scale,
         introduction,
         update_id,
+        status,
         update_date: new Date(),
       },
     );

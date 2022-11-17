@@ -5,10 +5,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as moment from 'moment';
 
 import { messageSignUpError } from '../../common/error';
-import { DateToShortString } from '../../common/service';
+import { DateToShortString, openNotificationWithIcon } from '../../common/service';
 import { checkBirthday, checkFullName, checkMail, checkPhone, checkRole, checkUsername } from '../../common/validation';
 import { serverURL } from '../../configs/server.config';
-import {decodeToken , isExpired} from 'react-jwt';
 
 import '../../styles/form.css'
 import '../../styles/my-account.css'
@@ -241,7 +240,11 @@ export const DetailAccountAdmin = () => {
                 const result = await response.json();
                 console.log(result);
                 if(response.status!==200){
+                    if(response.status===400){
+                        openNotificationWithIcon('error', 'Thông báo', result.message)
+                    }else{
                     message.error(result.message);
+                    }
                 }else{
                     notification['success']({
                         message: 'Thành công',

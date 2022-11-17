@@ -64,4 +64,10 @@ export class UpdateCompanyDto {
   })
   @IsOptional()
   update_id: number;
+
+  @ApiPropertyOptional({
+    description: 'status',
+  })
+  @IsOptional()
+  status: boolean;
 }

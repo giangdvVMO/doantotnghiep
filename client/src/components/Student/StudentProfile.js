@@ -47,6 +47,7 @@ import {
   createNoti,
   DateToShortString,
   getUserAdmin,
+  openNotificationWithIcon,
 } from "../../common/service";
 import * as moment from "moment";
 const { Option } = Select;
@@ -424,13 +425,12 @@ export const StudentProfile = () => {
           const type = "infor";
           const content = `Sinh viên ${account.fullname} yêu cầu duyệt thông tin sinh viên.`;
           const listAdmin = await getUserAdmin();
-          console.log("listAdmin", listAdmin);
           if (!listAdmin.length) {
             message.info("Chưa có admin, hãy tạo tài khoản admin");
           } else {
             createNoti(account._id, listAdmin, title, type, content, link);
           }
-          message.success("Bạn đã cập nhật thành công! Hãy đợi admin duyệt!");
+          openNotificationWithIcon('success', 'Thông báo', 'Bạn đã cập nhật thành công! Hãy đợi admin duyệt!')
           setIsEdit(false);
         }
       } catch (err) {
@@ -449,6 +449,7 @@ export const StudentProfile = () => {
         gpa: student.gpa,
         card_student: student.card_student,
         update_id: account._id,
+        status: false,
       };
       console.log("update", data);
       try {
@@ -464,7 +465,18 @@ export const StudentProfile = () => {
         if (response.status !== 200) {
           message.error(result.message);
         } else {
-          message.success("Bạn đã sửa thành công!");
+          const link = "admin/student/" + student._id;
+          const title = "Yêu cầu duyệt thông tin sinh viên";
+          const type = "infor";
+          const content = `Sinh viên ${account.fullname} yêu cầu duyệt thông tin sinh viên.`;
+          const listAdmin = await getUserAdmin();
+          console.log("listAdmin", listAdmin);
+          if (!listAdmin.length) {
+            message.info("Chưa có admin, hãy tạo tài khoản admin");
+          } else {
+            createNoti(account._id, listAdmin, title, type, content, link);
+          }
+          openNotificationWithIcon('success', 'Thông báo', 'Bạn đã sửa thành công! Hãy đợi admin duyệt!')
           setIsEdit(false);
         }
       } catch (err) {
