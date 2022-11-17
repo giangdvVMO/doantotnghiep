@@ -19,3 +19,44 @@
 .table-statistic{
     margin: 0 10px
 }
+
+.view-count_container{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.chart, .table-statistic{
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.statistic-number{
+    text-align: center;
+    margin: 10px;
+    height: 100px;
+    width: 100px;
+    background-color: white;
+    border-radius: 20px;
+    font-size: 55px;
+    font-weight: bold;
+}
+
+.no-comment{
+    text-align: center;
+    
+}
+
+.list-rate-container{
+    display: flex;
+    /* justify-content: center; */
+    /* align-items: center; */
+    background-color: white;
+    width: 1000px;
+    margin: 10px;
+    padding: 10px;
+}

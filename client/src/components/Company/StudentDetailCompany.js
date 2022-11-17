@@ -26,6 +26,7 @@ import {
 import { serverURL } from "../../configs/server.config";
 import { Email } from "./Email";
 import { RateModal } from "./Rate";
+import { RateCommentList } from "../Common/RateCommentList";
 
 let initstudent = {
   _id: -1,
@@ -248,6 +249,31 @@ export const StudentDetailCompany = () => {
     }
   }
 
+  //fetch rateList
+  async function fetchListRate() {
+    if(user&&student){
+    let query = `?type_rate=student&id_student=${student._id}&status=1`;
+    const url = serverURL + "rate" + query;
+    console.log(query);
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      if (response.status !== 200) {
+        message.error("Lỗi hệ thống!");
+      } else {
+        setRateList(result.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -265,6 +291,9 @@ export const StudentDetailCompany = () => {
   }, [student, account]);
   useEffect(() => {
     fetchApply();
+  }, [student, account]);
+  useEffect(() => {
+    fetchListRate();
   }, [student, account]);
   
 
@@ -532,6 +561,10 @@ export const StudentDetailCompany = () => {
             <p>Chưa có CV hoặc CV ở trạng thái private</p>
           )}
         </Card>
+        <Card title="Các đánh giá sinh viên">
+            {rateList?<RateCommentList list={rateList}/>:<div>Chưa có đánh giá nào</div>}
+        </Card>
+
           {/* xác nhận */}
         <Modal
           closable={true}

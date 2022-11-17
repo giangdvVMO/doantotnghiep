@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { message, Segmented, Spin, Table } from 'antd';
+import { message, Segmented, Spin } from 'antd';
 import { serverURL } from '../../configs/server.config';
 import { UserContext } from '../User/UserProvider';
 import { decodeToken } from "react-jwt";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { openNotificationWithIcon } from '../../common/service';
 import '../../styles/statistic.css'
-import { ChartCV } from './ChartCV';
-
+import { CvStatistic } from './CVStatistic';
 
 export const Statistic = () => {
     const {user, changeUser, token} = useContext(UserContext); 
@@ -72,35 +71,7 @@ export const Statistic = () => {
   }
   useEffect(()=>{fetchUser()},[])
   useEffect(()=>{fetchCV()},[value, user]);
-  const columns = [
-    {
-      title: "Tên công ty",
-      key: "com_name",
-      render: (_, record) => (
-        <p>{record.company.com_name}</p>
-      ),
-    },
-    {
-      title: "Địa chỉ",
-      key: "address",
-      render: (_, record) => (
-        <p>{record.company.address}</p>
-      ),
-    },
-    {
-      title: "Số lượt xem",
-      dataIndex: "views",
-      key: "views",
-    },
-    {
-      title: "Hành động",
-      key: "action",
-      render: (_, record) => (
-        <Link to={`../company/${record.company._id}`}>Xem chi tiết</Link>
-      ),
-      fixed: "right",
-    },
-  ];
+  
   return (
     <>
     <div className='segment'>
@@ -108,29 +79,7 @@ export const Statistic = () => {
     </div>
         {
         value==='CV'&&CV?
-            
-        <div className='statistic_container'>
-            <div className='view-count_container'>
-                <h1>Số lượt xem</h1>
-                <p>{CV.count}</p>
-            </div>
-            <div className='container-image'>
-            <div className='chart'>
-              <ChartCV CV={CV}/>
-            </div>
-            <div className='table-statistic'>
-              <Table
-              pagination={false}
-                dataSource={CV.views}
-                columns={columns}
-                scroll={{
-                  x: 400,
-                  y: 400,
-                }}
-              />
-            </div>
-            </div>
-        </div>
+            <CvStatistic CV={CV} />
         :
         value==='Apply'?
             'Apply'

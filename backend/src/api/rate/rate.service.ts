@@ -81,6 +81,7 @@ export class RateService {
       status,
       id_student,
       id_company,
+      type_rate,
     } = query;
     const condition = {};
 
@@ -99,6 +100,9 @@ export class RateService {
     }
     if (id_student) {
       condition['id_student'] = +id_student;
+    }
+    if (type_rate) {
+      condition['type_rate'] = type_rate;
     }
     let limitSkip = [];
     if (pageIndex && pageSize) {

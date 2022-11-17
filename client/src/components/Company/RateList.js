@@ -1,4 +1,4 @@
-import { Button, Input, message, Modal, Select, Spin, Table, Tag } from "antd";
+import { Button, Input, message, Modal, Segmented, Select, Spin, Table, Tag } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
 import { openNotificationWithIcon } from "../../common/service";
+import { RateCommentList } from "../Common/RateCommentList";
 
 const { Option } = Select;
 export const RateListCompany = () => {
@@ -23,9 +24,11 @@ export const RateListCompany = () => {
   const [listRate, setListRate] = useState([]);
   const [currentId, setCurrentId] = useState('');
   const [isOpenDelete, setOpenDelete] = useState(false);
+  const [value, setValue] = useState('Đánh giá của bạn');
+  const [listYourRate, setListYourRate] = useState([]);
   
   async function fetchListRate() {
-    if(user){
+    if(user&&value==="Đánh giá của bạn"){
     let query = `?type_rate=student&id_company=${user._id}`;
     query = status !== -1 ? query + "&status=" + status : query;
     query = search !== "" ? query + "&search=" + search : query;
@@ -49,6 +52,31 @@ export const RateListCompany = () => {
     }
   }
 }
+
+async function fetchListYourRate() {
+  if(user&&value==="Đánh giá về bạn"){
+    let query = `?type_rate=company&id_company=${user._id}&status=1`;
+    query = search !== "" ? query + "&search=" + search : query;
+    const url = serverURL + "rate" + query;
+    console.log(query);
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      if (response.status !== 200) {
+        message.error("Lỗi hệ thống!");
+      } else {
+        setListYourRate(result.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    }
+  }
   //fetch user
   const fetchUser = async () => {
     console.log("fetch user account");
@@ -84,7 +112,11 @@ export const RateListCompany = () => {
   }, []);
   useEffect(() => {
     fetchListRate();
-  }, [user, status, search]);
+  }, [user, status, search, value]);
+
+  useEffect(() => {
+    fetchListYourRate();
+  }, [user, search, value]);
   const columns = [
     {
       title: "STT",
@@ -194,6 +226,11 @@ if(user){
   return (
     <>
       <div className="banner-content">Danh sách đánh giá</div>
+      <div className='segment'>
+      <Segmented className='segment-content' block options={['Đánh giá của bạn', 'Đánh giá về bạn']} value={value} onChange={setValue} />
+    </div>
+    {value==='Đánh giá của bạn'?(
+      <>
       <div className="container-filter">
         <div className="filter">
           <label className="label-filter">Trạng thái:</label>
@@ -224,6 +261,24 @@ if(user){
           </div>
         </div>
       </div>
+      <Table
+      dataSource={listRate}
+      columns={columns}
+      scroll={{
+        x: 1000,
+        y: 800,
+      }}
+    />
+    </>
+    )
+    :
+      listYourRate.length?
+      <div className="list-rate-container">
+        <RateCommentList list={listYourRate}/>
+      </div>
+      :
+      <div className="no-comment">Chưa có đánh giá nào về bạn</div>
+  }
       <Modal
         title="Xác nhận xóa"
         open={isOpenDelete}
@@ -233,15 +288,7 @@ if(user){
         <p>Bạn có chắc chắn muốn xóa!</p>
       </Modal> 
                 
-      <Table
-        dataSource={listRate}
-        columns={columns}
-        scroll={{
-          x: 1000,
-          y: 800,
-        }}
-      />
-      ;
+      
     </>
   );}else{
     return <div className="spin-container">

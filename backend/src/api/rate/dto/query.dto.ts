@@ -59,4 +59,11 @@ export class QueryDto {
     message: 'id_comnpany không đúng định dạng',
   })
   id_company: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsEnum(['student', 'company'], {
+    message: 'type_rate là student hoặc company',
+  })
+  type_rate: string;
 }

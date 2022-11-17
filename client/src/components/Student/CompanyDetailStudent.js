@@ -9,6 +9,7 @@ import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
 import { DateToShortStringDate, formatDate } from "../../common/service";
+import { RateCommentList } from "../Common/RateCommentList";
 const { TextArea } = Input;
 
 let initialCompany = {
@@ -133,7 +134,7 @@ export const CompanyDetailStudent = ()=>{
             }
     }
 
-    //fetchh rateList
+    //fetch rateList
     async function fetchListRate() {
         if(user&&company){
         let query = `?type_rate=company&id_company=${company._id}&status=1`;
@@ -280,25 +281,8 @@ export const CompanyDetailStudent = ()=>{
             <Card title='Đánh giá của các sinh viên'>
                 {
                     rateList?(
-                        rateList.map(rate=>{
-                            return (
-                                <Comment
-                                    author={rate.account.fullname}
-                                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-                                    content={
-                                        <div>
-                                       {rate.content}
-                                        </div>
-                                    }
-                                    datetime={
-                                        <Tooltip title={DateToShortStringDate(rate.create_date)}>
-                                        <span>{formatDate(rate.create_date)}</span>
-                                        </Tooltip>
-                                    }
-                                    />
-                            )
-                        })
-                    ):''
+                        <RateCommentList list={rateList}/>
+                    ):'Chưa có đánh giá nào'
                 }
             </Card>
         </div>

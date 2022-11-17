@@ -82,7 +82,8 @@ export class CvViewService {
         },
       },
     ]);
-    return { data: result[0] };
+    console.log(result[0]);
+    return { data: !result.length ? { views: [], count: 0 } : result[0] };
   }
 
   async findOneCondition(id_company: number, id_cv: number) {
