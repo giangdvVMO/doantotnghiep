@@ -112,7 +112,7 @@ const SignIn = () => {
                     socket.emit('msgToSignin', {id:account._id})
                     window.localStorage.setItem('accessToken', result.accessToken)
                     changeToken(result.accessToken);
-                    navigate('/');
+                    navigate('/home');
                 }
             }
             catch (err) {
