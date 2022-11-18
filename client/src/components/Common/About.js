@@ -20,7 +20,8 @@ export const About = () => {
                 <div className='title-about'>Sinh viên thực hiện</div>
                 <div className='card-about-container'>
                 <div className='card-about'>
-                        <Avatar className='image-about' src='https://i.ibb.co/W6PSySS/Image-20221118-162717.jpg'/>
+                <Avatar className='image-about' src='https://i.ibb.co/QfHgrNn/Image-20221118-162809.jpg'/>
+                        {/* <Avatar className='image-about' src='https://i.ibb.co/W6PSySS/Image-20221118-162717.jpg'/> */}
                         <div className='fullname-about'>Đỗ Minh Hằng</div>
                         <div className='position-about'>Tester, QA</div>
                     </div>

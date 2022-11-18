@@ -171,15 +171,15 @@ export const AccountManager = () => {
                     x: 800,
                     y: 800,
                 }}
-                pagination={false}
+                pagination={true}
             />;
-            <Pagination 
+            {/* <Pagination 
                 pageSize= {1}
                 current = {current}
                     // defaultCurrent: 1,
                 onChange= {handleChangePage}
                 total={totalPage}
-                />
+                /> */}
         </>
     )
 }
