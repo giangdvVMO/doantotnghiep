@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Comment, Form, Input, message, Spin, Tag, Tooltip } from "antd";
+import { Avatar, Button, Card, Comment, Form, Input, message, Modal, Spin, Tag, Tooltip } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {decodeToken} from 'react-jwt';
@@ -8,8 +8,9 @@ import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
-import { DateToShortStringDate, formatDate } from "../../common/service";
+import { DateToShortStringDate, formatDate, openNotificationWithIcon } from "../../common/service";
 import { RateCommentList } from "../Common/RateCommentList";
+import { RateModal } from "../Company/Rate";
 const { TextArea } = Input;
 
 let initialCompany = {
@@ -29,14 +30,16 @@ let initialCompany = {
 export const CompanyDetailStudent = ()=>{
     const {user, changeUser, token} = useContext(UserContext);
     const navigate = useNavigate();
-    if(!user||user.role!=="student"){
-        navigate('/sign-in');
-    }
+    // if(!user||user.role!=="student"){
+    //     navigate('/sign-in');
+    // }
     const [company, setCompany] = useState(initialCompany);
     const [rateList, setRateList] = useState([]);
+    const [rate, setRate] = useState(false);
+    const [isOpenRate, setOpenRate] = useState(false);
 
     const {id} = useParams();
-    console.log("company.manufacture",company.manufacture)
+    // console.log("company.manufacture",company.manufacture)
 
     //fetch manucomany and Company
     async function fetchManuCompany(){
@@ -159,9 +162,63 @@ export const CompanyDetailStudent = ()=>{
       }
     }
 
+    async function fetchConditionRate() {
+        if (user && company._id !== -1) {
+          const url =
+            serverURL +
+            `rate/precondition?id_student=${user._id}&id_company=${company._id}`;
+          try {
+            const response = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            const result = await response.json();
+            console.log("result letter", result);
+            if (response.status !== 200) {
+              message.error(result.message);
+            } else {
+              if (result.data===true) {
+                openNotificationWithIcon(
+                  "info",
+                  "Thông báo",
+                  "Bạn có thể thực hiện đánh giá doanh nghiệp!"
+                );
+                setRate(true);
+              } else {
+                setRate(false);
+              }
+            }
+          } catch (err) {
+            console.log(err);
+            message.error("Đã có lỗi xảy ra!");
+          }
+        }
+      }
+
     useEffect(()=>{fetchUser()}, []);
     useEffect(()=>{fetchCompany();},[]);
     useEffect(()=>{fetchListRate();},[user, company]);
+    useEffect(() => {fetchConditionRate();}, [company, user]);
+
+    const handleRate = ()=>{
+        setOpenRate(true);
+    }
+    const renderButtonGroup = () => {
+          if(rate){
+          return (
+            <div className="apply-container">
+              <Button
+                type="primary"
+                className="apply-btn"
+                onClick={handleRate}
+              >
+                Đánh giá
+              </Button>
+            </div>
+          );}
+      };
 
     const ref = useRef();
     if(company){
@@ -172,6 +229,7 @@ export const CompanyDetailStudent = ()=>{
             <div className='introduce-bottom'>
                 <Avatar className='avatar' size= {120} icon={<UserOutlined />} />
                 <div className='introduce-fullname'>{company.com_name}</div>
+                {renderButtonGroup()}
             </div>
         </div>
         <div className='detail-swapper'>
@@ -286,6 +344,15 @@ export const CompanyDetailStudent = ()=>{
                 }
             </Card>
         </div>
+        {/* đánh giá */}
+        <Modal
+          title="Thông tin đánh giá"
+          open={isOpenRate}
+          footer={null}
+          destroyOnClose={()=>{setOpenRate(false)}}
+        >
+          <RateModal id_student={user._id} id_company={company._id} type_rate={'company'} setOpenRate={setOpenRate}/>
+        </Modal>
         </div>
     )}else{
         return <div className="spin-container">

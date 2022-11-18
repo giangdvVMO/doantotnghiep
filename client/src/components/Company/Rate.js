@@ -7,7 +7,7 @@ import { createNoti, getUserAdmin, openNotificationWithIcon } from '../../common
 import { messageRate } from '../../common/error';
 import TextArea from 'antd/lib/input/TextArea';
 
-export const RateModal = ({id_student, id_company, setOpenRate}) => {
+export const RateModal = ({id_student, id_company, type_rate, setOpenRate}) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [score, setScore] = useState(0);
@@ -89,15 +89,7 @@ export const RateModal = ({id_student, id_company, setOpenRate}) => {
         setScore(value);
     }
 
-    function handleKeyUp(e) {
-        if (e.keyCode === 13) {
-            console.log('enter');
-            refButtonSubmit.current.focus();
-            refButtonSubmit.current.click();
-        }
-    }
     async function handleSubmit(e) {
-        // ref.current.submit();
         let count = 0;
         count = checkTitleFunc(title) ? count : count + 1;
         count = checkContentFunc(content) ? count : count + 1;
@@ -106,7 +98,7 @@ export const RateModal = ({id_student, id_company, setOpenRate}) => {
         if (count === 0) {
             const url = serverURL + 'rate';
             const data = {
-                title, content, id_company,id_student, type_rate: 'student', score
+                title, content, id_company,id_student, type_rate, score
             };
             try {
                 const response = await fetch(url, {
@@ -128,14 +120,14 @@ export const RateModal = ({id_student, id_company, setOpenRate}) => {
                     const link = "admin/rate/" + idRate;
                     const title = "Yêu cầu duyệt thông tin đánh giá";
                     const type = "infor";
-                    const content = `Doanh nghiệp yêu cầu duyệt thông tin đánh giá.`;
+                    const content = `${type_rate==='student'?'Sinh viên':'Doanh nghiệp'} yêu cầu duyệt thông tin đánh giá.`;
                     const listAdmin = await getUserAdmin();
                     console.log("listAdmin", listAdmin);
                     if (!listAdmin.length) {
                         openNotificationWithIcon('warning','Cảnh báo',"Chưa có admin, hãy yêu cầu tạo tài khoản admin");
                     } else {
                         createNoti(id_company, listAdmin, title, type, content, link);
-                        openNotificationWithIcon('success', 'Thông báo', 'Bạn đã gửi đánh giá sinh viên, hãy chờ admin duyệt!')
+                        openNotificationWithIcon('success', 'Thông báo', `Bạn đã gửi đánh giá ${type_rate==='student'?'doanh nghiệp':'sinh viên'}, hãy chờ admin duyệt!`)
                     }
                 }
                 setOpenRate(false);
@@ -167,7 +159,7 @@ export const RateModal = ({id_student, id_company, setOpenRate}) => {
                 <Form
                     form={form}
                     ref={ref}
-                    onKeyUp={handleKeyUp}
+                    // onKeyUp={handleKeyUp}
                     className='form'
                     name="basic"
                     layout='vertical'
@@ -210,8 +202,7 @@ export const RateModal = ({id_student, id_company, setOpenRate}) => {
                         <Rate onChange={handleChangeScore} value={score} count={10} />
                     </Form.Item>
                     <Form.Item>
-                        <Button type='submit' ref={refButtonSubmit} name='button-submit' className='button submit' onSubmit={handleSubmit} onClick={handleSubmit} onKeyUp={handleKeyUp}>Submit</Button>
-                        {/* <Button type='reset' onClick={handleReset} className='button reset'>Reset</Button> */}
+                        <Button type='submit' ref={refButtonSubmit} name='button-submit' className='button submit' onSubmit={handleSubmit} onClick={handleSubmit} >Submit</Button>
                     </Form.Item>
                 </Form>
             </div>

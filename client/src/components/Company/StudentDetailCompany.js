@@ -594,7 +594,7 @@ export const StudentDetailCompany = () => {
           footer={null}
           destroyOnClose={()=>{setOpenRate(false)}}
         >
-          <RateModal id_student={student._id} id_company={account._id} setOpenRate={setOpenRate}/>
+          <RateModal id_student={student._id} id_company={account._id} type_rate={'student'} setOpenRate={setOpenRate}/>
         </Modal>
       </div>
     );
