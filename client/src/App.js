@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { decodeToken, isExpired } from "react-jwt";
 import io, { Socket } from "socket.io-client";
 import { openNotificationWithIcon } from "./common/service";
+import { Footer } from "./components/Common/Footer";
 export let socket;
 
 socket = io("http://localhost:5000");
@@ -50,7 +51,12 @@ function App() {
       <div className="App">
         <Nav />
       </div>
+      <div className="content-app">
       <Outlet />
+      </div>
+      <div className="footer">
+      <Footer />
+      </div>
     </div>
   );
 }

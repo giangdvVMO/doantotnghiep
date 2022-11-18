@@ -198,8 +198,8 @@ const SignIn = () => {
                         Bạn chưa có tài khoản? <Link to='/register'>Đăng ký</Link>
                     </Form.Item>
                     <Form.Item>
-                        <Button type='submit' ref={refButtonSubmit} name='button-submit' className='button submit' onSubmit={handleSubmit} onClick={handleSubmit} onKeyUp={handleKeyUp}>Submit</Button>
-                        <Button type='reset' onClick={handleReset} className='button reset'>Reset</Button>
+                        <Button type='submit' ref={refButtonSubmit} name='button-submit' className='button submit' onSubmit={handleSubmit} onClick={handleSubmit} onKeyUp={handleKeyUp}>Đăng nhập</Button>
+                        <Button type='reset' onClick={handleReset} className='button reset'>Hủy</Button>
                     </Form.Item>
                 </Form>
             </div>

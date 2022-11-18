@@ -275,6 +275,7 @@ export class RecruitService {
       },
       {
         $match: {
+          'company.status': true,
           'account.delete_date': null,
           delete_date: null,
           ...condition,
