@@ -182,7 +182,15 @@ export class StudentService {
   //   return student;
   // }
 
+  async checkId(id: number) {
+    const result = await this.studentModel.findOne({ _id: id });
+    if (!result) {
+      return new BadRequestException('id không tồn tại');
+    }
+  }
+
   async update(id: number, updateStudentDto: UpdateStudentDto) {
+    this.checkId(id);
     const result = await this.studentModel.updateOne(
       { _id: id },
       { ...updateStudentDto, status: false, update_date: new Date() },
@@ -199,6 +207,7 @@ export class StudentService {
   }
 
   async confirm(id: number, confirmDto: ConfirmStudentDto) {
+    this.checkId(id);
     const result = await this.studentModel.updateOne(
       { _id: id },
       { ...confirmDto, confirm_date: new Date(), status: true },
