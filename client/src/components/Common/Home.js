@@ -18,8 +18,10 @@ export const Home = () => {
                 <div className='title-content'>Giới thiệu</div>
                 <div className='underline-home'></div>
                 <div className='paragraph'>
-                    <p>Website được tạo ra với đề tài: 'Kết nối doanh nghiệp với sinh viên'
+                    <p>Website được tạo ra với đề tài: 'Xây dựng hệ thống Kết nối doanh nghiệp với sinh viên'
                     </p>
+                    <p>Website có các chức năng:</p>
+                    <p>Quản lý tài khoản, Quản lý sinh viên, Quản lý doanh nghiệp, Quản lý tuyển dụng, Quản lý đánh giá, Quản lý thống kê, Quản lý tin tức</p>
                     <Button className='btn-home' onClick={()=>{navigate('/about')}}>Về chúng tôi</Button>
                     </div>
             </div>
