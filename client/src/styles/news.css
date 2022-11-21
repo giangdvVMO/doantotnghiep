@@ -1,0 +1,22 @@
+.news-add-container{
+    /* display: flex; */
+    max-width: 1200px;
+    /* display: flex; */
+
+    /* grid-template-columns: 50% 50%; */
+}
+
+.title-container-news{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+    line-height: 100px;
+    font-size: xx-large;
+}
+
+.form-news{
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+}

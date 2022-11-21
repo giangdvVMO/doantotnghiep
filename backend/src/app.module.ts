@@ -25,6 +25,7 @@ import { CvViewModule } from './api/cv-view/cv-view.module';
 import { LetterStudentModule } from './api/letter_student/letter_student.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { GalleryModule } from './gallery/gallery.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { join } from 'path';
     ApplyModule,
     RecruitViewModule,
     CvViewModule,
+    GalleryModule,
   ],
   providers: [GateGateway],
 })

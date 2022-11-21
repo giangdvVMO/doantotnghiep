@@ -57,6 +57,14 @@ export const messageCVError = {
   field: "Chưa chọn lĩnh vực",
 };
 
+export const messageNewsError = {
+  title: "Tiêu đề không được bỏ trống",
+  image: "Định dạng ảnh chưa đúng",
+  field: "Chưa chọn lĩnh vực",
+  content: "Nội dung không được bỏ trống"
+};
+
+
 export const messageEmail = {
   title: "Tiêu đề không quá 50 kí tự, không chứa các kí tự đặc biệt!",
   content: "Nội dung không chứa các kí tự đặc biệt",

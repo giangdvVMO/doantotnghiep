@@ -175,7 +175,7 @@ const SignIn = () => {
                         />
                     </Form.Item>
                     <Form.Item
-                        label="Password"
+                        label="Mật khẩu"
                         name="password"
                         validateStatus={validatePassword.status}
                         help={validatePassword.errorMsg}

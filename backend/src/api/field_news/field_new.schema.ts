@@ -10,8 +10,8 @@ export class FieldNews {
   @Prop({ type: Number, ref: 'tbl_field' })
   id_field: number;
 
-  @Prop({ type: Number, ref: 'tbl_cv' })
-  id_cv: number;
+  @Prop({ type: Number, ref: 'tbl_news' })
+  id_news: number;
 }
 
 export const FieldNewsSchema = SchemaFactory.createForClass(FieldNews);

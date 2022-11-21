@@ -40,7 +40,9 @@ import { RateManagerAdmin } from "./components/Admin/RateManager";
 import { RateListStudent } from "./components/Student/RateList";
 import { RateListCompany } from "./components/Company/RateList";
 import { StatisticAdmin } from "./components/Admin/Statistic";
-// import { CardItem } from './components/Common/Card';
+import { EditorConvertToHTML } from "./components/Common/EditorNews";
+import { AddNews } from "./components/Common/AddNews";
+import { MyNews } from "./components/Common/MyNews";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -64,6 +66,9 @@ root.render(
           <Route path="company-management" element={<CompanyManager />} />
           <Route path="cv-management" element={<CVManagerAdmin />} />
           <Route path="my-cv" element={<MyCV />} />
+          <Route path="edit" element={<EditorConvertToHTML />} />
+          <Route path="news/add" element={<AddNews />} />
+          <Route path="my-news" element={<MyNews />} />
           <Route path="admin">
             <Route path="student/:id" element={<StudentDetailAdmin />} />
             <Route path="company/:id" element={<CompanyDetailAdmin />} />

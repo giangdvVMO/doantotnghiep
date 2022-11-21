@@ -11,8 +11,13 @@ import {
 import { FieldNewsService } from './field_news.service';
 import { CreateFieldNewDto } from './dto/create-field_new.dto';
 import { UpdateFieldNewDto } from './dto/update-field_new.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('field-news')
+@Controller({
+  version: ['1'],
+  path: 'fieldnews',
+})
+@ApiTags('Field News')
 export class FieldNewsController {
   constructor(private readonly fieldNewsService: FieldNewsService) {}
 

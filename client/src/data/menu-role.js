@@ -54,9 +54,24 @@ export const MenuRole = {
             key: 'statistic-admin'
         },
         {
-            label: <Link to='news-management'>Quản lý bài đăng tin tức</Link>,
+            label: <Link to='news-management'>Tin tức</Link>,
             icon: <BookOutlined />,
-            key: 'newsmanagerment'
+            key: 'submenu-news',
+            children: [
+                { 
+                    label: <Link to='news'>Danh sách bài đăng tin tức</Link>,
+                    key: 'submenu-item-2-news' 
+                },
+                { 
+                    label: <Link to='news/add'>Thêm bài đăng tin tức</Link>,
+                    key: 'submenu-item-1-news' 
+                },
+                { 
+                    label: <Link to='news-management'>Quản lý bài đăng tin tức</Link>,
+                    key: 'submenu-item-3-news' 
+                },
+                
+            ],
         },
         {
             label: <Link to='about'>Về chúng tôi</Link>,
@@ -108,7 +123,22 @@ export const MenuRole = {
         {
             label: <Link to='news'>Tin tức</Link>,
             icon: <BookOutlined />,
-            key: 'news'
+            key: 'submenu-news',
+            children: [
+                { 
+                    label: <Link to='news'>Danh sách bài đăng tin tức</Link>,
+                    key: 'submenu-item-2-news' 
+                },
+                { 
+                    label: <Link to='news/add'>Thêm bài đăng tin tức</Link>,
+                    key: 'submenu-item-1-news' 
+                },
+                { 
+                    label: <Link to='my-news'>Quản lý bài đăng của bạn</Link>,
+                    key: 'submenu-item-3-news' 
+                },
+                
+            ],
         },
         {
             label: <Link to='about'>Về chúng tôi</Link>,
@@ -150,7 +180,22 @@ export const MenuRole = {
         {
             label: <Link to='news'>Tin tức</Link>,
             icon: <BookOutlined />,
-            key: 'news'
+            key: 'submenu-news',
+            children: [
+                { 
+                    label: <Link to='news'>Danh sách bài đăng tin tức</Link>,
+                    key: 'submenu-item-2-news' 
+                },
+                { 
+                    label: <Link to='news/add'>Thêm bài đăng tin tức</Link>,
+                    key: 'submenu-item-1-news' 
+                },
+                { 
+                    label: <Link to='my-news'>Quản lý bài đăng của bạn</Link>,
+                    key: 'submenu-item-3-news' 
+                },
+                
+            ],
         },
         {
             label: <Link to='about'>Về chúng tôi</Link>,

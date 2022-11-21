@@ -120,6 +120,7 @@ export const MyCV = () => {
       message.error("Đã có lỗi xảy ra!");
     }
   }
+  
   async function fetchCV() {
     console.log("fetchCV");
     const url = serverURL + "cv/" + student._id;
@@ -437,20 +438,9 @@ export const MyCV = () => {
   //   return isJpgOrPng && isLt2M;
   // };
   const handleChange = (info) => {
-    // if (info.file.status === 'done') {
-    //   Get this url from response in real world.
-    // getBase64(info.file.originFileObj, (url) => {
-    //   setCV((preCV) => {
-    //     return { ...preCV, file_cv: url };
-    //   });
-    // });
     console.log("info", info.target.files[0]);
     setFile(info.target.files[0]);
-    // https://freeimage.host/api/1/upload
-
     console.log(CV);
-    // setCV((preCV)=>{return{...preCV, file_cv: info.file.thumbUrl}})
-    // console.log('thumbUrl',info.file.thumbUrl);
   };
   const uploadButton = (
     <div>

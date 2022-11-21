@@ -6,12 +6,19 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { NewsService } from './news.service';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { QueryParamNewsDto } from './dto/query.dto';
 
-@Controller('news')
+@Controller({
+  version: ['1'],
+  path: 'news',
+})
+@ApiTags('News')
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
@@ -21,8 +28,8 @@ export class NewsController {
   }
 
   @Get()
-  findAll() {
-    return this.newsService.findAll();
+  findAll(@Query() query: QueryParamNewsDto) {
+    return this.newsService.findAll(query);
   }
 
   @Get(':id')

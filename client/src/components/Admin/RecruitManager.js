@@ -17,10 +17,6 @@ const { Option } = Select;
 export const RecruitManagerAdmin = () => {
   const { user, changeUser, token } = useContext(UserContext);
   const navigate = useNavigate();
-  // if (!user || user.role !== "admin") {
-  //   message.warn("Bạn ko có quyền xem trang này");
-  //   navigate("/home");
-  // }
   const [fields, setFields] = useState([]);
   const [field, setField] = useState([]);
   const [status, setStatus] = useState(-1);
