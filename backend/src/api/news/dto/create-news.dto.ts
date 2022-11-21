@@ -53,3 +53,11 @@ export class CreateNewsDto {
   @IsNotEmpty()
   id_account: number;
 }
+
+export class ConfirmNewsDto {
+  @ApiProperty({
+    description: 'confirm_id',
+  })
+  @IsNotEmpty()
+  confirm_id: number;
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { FieldNewsService } from '../field_news/field_news.service';
-import { CreateNewsDto } from './dto/create-news.dto';
+import { ConfirmNewsDto, CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { News, NewsDocument } from './news.schema';
 
@@ -52,10 +52,26 @@ export class NewsService {
     return resultCreate;
   }
 
+  async confirm(id: number, confirmDto: ConfirmNewsDto) {
+    const result = await this.newsModel.updateOne(
+      { _id: id },
+      { ...confirmDto, confirm_date: new Date(), status: true },
+    );
+    if (result.modifiedCount) {
+      return {
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+      };
+    }
+  }
+
   async findAll(query) {
     const { field, status, search, id_account, pageIndex, pageSize } = query;
 
-    console.log(field, field);
+    console.log('field', field);
     const condition = {};
     const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
     const searchRgx = rgx(search ? search : '');
@@ -181,7 +197,20 @@ export class NewsService {
     return `This action updates a #${id} news`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} news`;
+  async remove(id: number, data: number) {
+    const delete_date = new Date();
+    const result = await this.newsModel.updateOne(
+      { _id: id },
+      { delete_date, delete_id: data },
+    );
+    if (result.modifiedCount) {
+      return {
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+      };
+    }
   }
 }

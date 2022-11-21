@@ -7,12 +7,14 @@ import {
   Param,
   Delete,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { NewsService } from './news.service';
-import { CreateNewsDto } from './dto/create-news.dto';
+import { ConfirmNewsDto, CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { QueryParamNewsDto } from './dto/query.dto';
+import { DeleteDto } from './dto/delete.dto';
 
 @Controller({
   version: ['1'],
@@ -37,13 +39,24 @@ export class NewsController {
     return this.newsService.findOne(+id);
   }
 
+  @Patch('confirm/:id')
+  confirm(@Param('id') id: string, @Body() confirmNewsDto: ConfirmNewsDto) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
+    return this.newsService.confirm(+id, confirmNewsDto);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateNewsDto: UpdateNewsDto) {
     return this.newsService.update(+id, updateNewsDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.newsService.remove(+id);
+  remove(@Param('id') id: string, @Body() data: DeleteDto) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
+    return this.newsService.remove(+id, +data.delete_id);
   }
 }

@@ -43,6 +43,7 @@ import { StatisticAdmin } from "./components/Admin/Statistic";
 import { EditorConvertToHTML } from "./components/Common/EditorNews";
 import { AddNews } from "./components/Common/AddNews";
 import { MyNews } from "./components/Common/MyNews";
+import { NewsManagement } from "./components/Admin/NewsManagement";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -69,6 +70,7 @@ root.render(
           <Route path="edit" element={<EditorConvertToHTML />} />
           <Route path="news/add" element={<AddNews />} />
           <Route path="my-news" element={<MyNews />} />
+          <Route path="news-management" element={<NewsManagement />} />
           <Route path="admin">
             <Route path="student/:id" element={<StudentDetailAdmin />} />
             <Route path="company/:id" element={<CompanyDetailAdmin />} />

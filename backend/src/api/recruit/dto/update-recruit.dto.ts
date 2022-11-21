@@ -97,7 +97,7 @@ export class UpdateRecruitDto {
 
 export class DeleteDto {
   @ApiProperty({
-    description: 'title',
+    description: 'delete_id',
   })
   delete_id: number;
 }

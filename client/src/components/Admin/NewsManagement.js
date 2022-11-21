@@ -9,13 +9,14 @@ import {
   CheckCircleOutlined,
   DeleteTwoTone,
   MinusCircleOutlined,
+  SafetyCertificateTwoTone,
   SearchOutlined,
 } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
-import { DateToShortStringDate, openNotificationWithIcon, postFields } from "../../common/service";
+import { createNoti, DateToShortStringDate, openNotificationWithIcon, postFields } from "../../common/service";
 
 const { Option } = Select;
-export const MyNews = () => {
+export const NewsManagement = () => {
   const { user, changeUser, token } = useContext(UserContext);
   const navigate = useNavigate();
   const [status, setStatus] = useState(-1);
@@ -25,6 +26,8 @@ export const MyNews = () => {
   const [field, setField] = useState([]);
   const [currentId, setCurrentId] = useState('');
   const [isOpenDelete, setOpenDelete] = useState(false);
+  const [isOpenConfirm, setOpenConfirm] = useState(false);
+  const [currentAccount, setCurrentAccount] = useState({});
 
   //fetch Fields
   async function fetchField() {
@@ -55,7 +58,7 @@ export const MyNews = () => {
 
   async function fetchListNews() {
     if(user){
-        let query = "?id_account="+user._id;
+        let query = "?1=1";
         query = status !== -1 ? query + "&status=" + status : query;
         query = search !== "" ? query + "&search=" + search : query;
         query = field.length ? query + "&field=" + field : query;
@@ -156,6 +159,42 @@ export const MyNews = () => {
     }
   }
 
+  const handleCancelConfirm = ()=>{
+    console.log('currentId', currentId);
+    setOpenConfirm(false);
+  }
+
+  const handleConfirmConfirm = async()=>{
+    const url = serverURL + "news/confirm/" + currentId;
+    const data = { confirm_id: user._id };
+    console.log("request", data);
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      console.log(result);
+      if (response.status !== 200) {
+        message.error(result.message);
+      } else {
+        const title = "Duyệt bài đăng tin tức";
+          const type = "infor";
+          const content = `Admin ${user.fullname} đã duyệt bài đăng tin tức của bạn.`;
+          createNoti(user._id, [currentAccount._id], title, type, content);
+          openNotificationWithIcon('success','Thông báo',"Bạn đã duyệt đánh giá thành công, thông báo đã gửi tới người đăng bài!");
+          fetchListNews();
+        setOpenConfirm(false);
+      }
+    } catch (err) {
+      console.log(err);
+      message.error("Đã có lỗi xảy ra!");
+    }
+  }
+
   useEffect(() => {
     fetchUser();
   }, [user]);
@@ -224,12 +263,22 @@ export const MyNews = () => {
       title: "Hành động",
       key: "action",
       render: (_, record) => (
+        <>
+        {!record.status?<Button type="text" onClick={()=>handleConfirm(record._id, record.account)}><SafetyCertificateTwoTone size={100} /></Button>:''}
         <Button type="text" onClick={()=>handleDelete(record._id)}><DeleteTwoTone /></Button>
+
+        </>
         // <Link to={`../admin/company/${record._id}`}></Link>
       ),
       fixed: "right",
     },
   ];
+
+  const handleConfirm = (id, account)=>{
+    setCurrentId(id);
+    setCurrentAccount({...account})
+    setOpenConfirm(true);
+  }
 
   const handleDelete =(id)=>{
     setCurrentId(id);
@@ -313,6 +362,14 @@ export const MyNews = () => {
       >
         <p>Bạn có chắc chắn muốn xóa!</p>
       </Modal> 
+      <Modal
+        title="Xác nhận duyệt"
+        open={isOpenConfirm}
+        onOk={handleConfirmConfirm}
+        onCancel={handleCancelConfirm}
+      >
+        <p>Bạn có chắc chắn muốn duyệt!</p>
+      </Modal>      
     </>
   );
 };
