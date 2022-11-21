@@ -46,7 +46,12 @@ export class StudentService {
       },
     ]);
 
-    return { data: { accept: accept[0].total, unaccept: unaccept[0].total } };
+    return {
+      data: {
+        accept: accept[0] ? accept[0].total : 0,
+        unaccept: unaccept[0] ? unaccept[0].total : 0,
+      },
+    };
   }
 
   async findAll(query: QueryParamStudentDto) {

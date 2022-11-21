@@ -47,6 +47,37 @@
   align-items: center;
 }
 
+.header-admin{
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.logo-container{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.logo-image{
+  margin: 10px 5px;
+}
+
+.name-logo{
+  line-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: x-large;
+  color: white;
+}
+
+.log-out{
+  color:white;
+  margin: 0px 5px;
+  cursor: pointer;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

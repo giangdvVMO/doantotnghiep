@@ -666,7 +666,7 @@ export const StudentProfile = () => {
                   help={validateFullname.errorMsg}
                   className="label"
                 >
-                  {isEdit ? (
+                  {/* {isEdit ? (
                     <Input
                       disabled={!isEdit}
                       className="input-login max-width"
@@ -675,9 +675,9 @@ export const StudentProfile = () => {
                       value={account.fullname}
                       onChange={handleChangeFullName}
                     />
-                  ) : (
+                  ) : ( */}
                     <p className="text-display">{account.fullname}</p>
-                  )}
+                  {/* )} */}
                 </Form.Item>
                 <Form.Item
                   label="Email"
@@ -687,7 +687,7 @@ export const StudentProfile = () => {
                   help={validateEmail.errorMsg}
                   className="label"
                 >
-                  {isEdit ? (
+                  {/* {isEdit ? (
                     <Input
                       className="input-login max-width"
                       placeholder="Nhập Email"
@@ -698,9 +698,9 @@ export const StudentProfile = () => {
                       value={account.email}
                       onChange={handleChangeEmail}
                     />
-                  ) : (
+                  ) : ( */}
                     <p className="text-display">{account.email}</p>
-                  )}
+                  {/* )} */}
                 </Form.Item>
 
                 <Form.Item
@@ -711,7 +711,7 @@ export const StudentProfile = () => {
                   help={validatePhone.errorMsg}
                   className="label"
                 >
-                  {isEdit ? (
+                  {/* {isEdit ? (
                     <Input
                       className="input-login max-width"
                       placeholder="Nhập Số điện thoại"
@@ -725,9 +725,9 @@ export const StudentProfile = () => {
                       value={account.phone}
                       onChange={handleChangePhone}
                     />
-                  ) : (
+                  ) : ( */}
                     <p className="text-display">{account.phone}</p>
-                  )}
+                  {/* )} */}
                 </Form.Item>
                 <Form.Item
                   label="Trường"
