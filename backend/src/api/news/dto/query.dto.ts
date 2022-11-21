@@ -21,13 +21,7 @@ export class QueryParamNewsDto {
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  sortBy: string;
-
-  @ApiPropertyOptional()
-  @IsString()
-  @IsOptional()
-  @IsEnum(['desc', 'asc'])
-  sortOrder: string;
+  sort: string;
 
   @ApiPropertyOptional()
   @IsString()

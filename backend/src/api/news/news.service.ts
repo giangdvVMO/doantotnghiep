@@ -40,6 +40,7 @@ export class NewsService {
       content,
       _id: await this.calculateId(),
       create_date: new Date(),
+      views: 0,
     };
 
     const resultCreate = await this.newsModel.create(dataCreate);
@@ -69,7 +70,8 @@ export class NewsService {
   }
 
   async findAll(query) {
-    const { field, status, search, id_account, pageIndex, pageSize } = query;
+    const { field, status, search, id_account, sort, pageIndex, pageSize } =
+      query;
 
     console.log('field', field);
     const condition = {};
@@ -84,7 +86,16 @@ export class NewsService {
     if (id_account) {
       condition['id_account'] = +id_account;
     }
+    let sort_order: any = { $sort: { create_date: -1 } };
 
+    if (sort) {
+      const name_sort = sort.split(',');
+      const object = {};
+      name_sort.forEach((order) => {
+        object[order] = -1;
+      });
+      sort_order = { $sort: object };
+    }
     let field_condition: any = true;
     if (field && +field) {
       field_condition = { $in: [+field, '$id_fields'] };
@@ -182,6 +193,9 @@ export class NewsService {
           foreignField: '_id',
           as: 'fields',
         },
+      },
+      {
+        ...sort_order,
       },
       ...limitSkip,
     ]);
