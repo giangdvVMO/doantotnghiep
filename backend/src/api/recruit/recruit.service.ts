@@ -177,6 +177,7 @@ export class RecruitService {
       experience,
       pageIndex,
       pageSize,
+      date,
     } = query;
     console.log('field', field);
     console.log('status', status);
@@ -185,6 +186,8 @@ export class RecruitService {
     console.log('pageSize', pageSize);
     console.log('id_company', id_company);
     console.log('experience', experience);
+    console.log('date', date);
+    console.log('parseDate', new Date());
     const condition = {};
 
     const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
@@ -227,9 +230,6 @@ export class RecruitService {
       }
     }
 
-    if (pageIndex && pageSize) {
-    }
-
     let field_condition: any = true;
     if (field && +field) {
       field_condition = { $in: [+field, '$id_fields'] };
@@ -254,7 +254,7 @@ export class RecruitService {
         },
       ];
     }
-    const companyList = await this.recruitModel.aggregate([
+    const recruitList = await this.recruitModel.aggregate([
       //account not delete
       {
         $lookup: {
@@ -283,10 +283,10 @@ export class RecruitService {
           'company.status': true,
           'account.delete_date': null,
           delete_date: null,
-          ...condition,
+          // ...condition,
         },
       },
-      //add field
+      // add field
       {
         $lookup: {
           from: 'tbl_field_recruit',
@@ -363,9 +363,9 @@ export class RecruitService {
       ...limitSkip,
     ]);
     let total = 0;
-    if (companyList.length) {
+    if (recruitList.length) {
       //calculate total
-      const companyListTotal = await this.recruitModel.aggregate([
+      const recruitListTotal = await this.recruitModel.aggregate([
         //account not delete
         {
           $lookup: {
@@ -474,11 +474,11 @@ export class RecruitService {
           $count: 'total',
         },
       ]);
-      total = companyListTotal[0].total;
+      total = recruitListTotal[0].total;
     }
-    console.log(companyList);
+    console.log(recruitList);
     return {
-      data: companyList,
+      data: recruitList,
       pageSize: +pageIndex,
       pageIndex: +pageSize,
       total: total,

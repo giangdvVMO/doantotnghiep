@@ -64,4 +64,8 @@ export class QueryParamRecruitDto {
       'experience phải thuộc các giá trị là 0 (Không yêu cầu) hoặc 1 (Dưới 1 năm) hoặc 2(Trên 1 năm)',
   })
   experience: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  date: string;
 }
