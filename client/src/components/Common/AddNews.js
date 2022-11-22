@@ -1,4 +1,4 @@
-import { Button, Form, Image, Input, Modal, Select } from "antd"
+import { Button, Form, Image, Input, Select } from "antd"
 import { useContext, useEffect, useRef, useState } from "react";
 import { openNotificationWithIcon } from "../../common/service";
 import { serverURL } from "../../configs/server.config";
@@ -174,7 +174,6 @@ export const AddNews = ()=>{
   async function createNews() {
     const url = serverURL + "news";
     const html = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-
     const data = {title, fields, id_account: user._id, thumnail, status:user.role==='admin'?true:false, content: html}
     let formData = new FormData();
     console.log('fields',fields)
@@ -261,8 +260,6 @@ export const AddNews = ()=>{
                           onChange={handleChangeTitle}
                         />
                 </Form.Item>
-                
-                
                 <Form.Item
                       label="Lĩnh vực:"
                       name="fields"
@@ -306,7 +303,8 @@ export const AddNews = ()=>{
                             wrapperClassName="demo-wrapper"
                             editorClassName="demo-editor"
                             onEditorStateChange={onEditorStateChange}
-                            />
+                            >
+                        </Editor>
                     </Form.Item>
                     <Form.Item
                       label="Thumnail (chọn từ gallery):"

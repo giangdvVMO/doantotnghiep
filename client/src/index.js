@@ -9,7 +9,6 @@ import { UserProvider } from "./components/User/UserProvider";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PageNotFound from "./components/Common/PageNotFound";
 import { Home } from "./components/Common/Home";
-import { News } from "./components/Common/News";
 import { About } from "./components/Common/About";
 import { DetailAccount } from "./components/User/DetailAccount";
 import { StudentProfile } from "./components/Student/StudentProfile";
@@ -44,6 +43,8 @@ import { EditorConvertToHTML } from "./components/Common/EditorNews";
 import { AddNews } from "./components/Common/AddNews";
 import { MyNews } from "./components/Common/MyNews";
 import { NewsManagement } from "./components/Admin/NewsManagement";
+import { NewsView } from "./components/Common/NewsView";
+import { ViewDetail } from "./components/Common/ViewDetail";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -56,7 +57,6 @@ root.render(
         <Route path="/register" element={<SignUp />} />
         <Route path="/" element={<App />}>
           <Route path="home" element={<Home />} />
-          <Route path="news" element={<News />} />
           <Route path="about" element={<About />} />
           <Route path="myaccount" element={<DetailAccount />} />
           <Route path="student-profile" element={<StudentProfile />} />
@@ -71,6 +71,8 @@ root.render(
           <Route path="news/add" element={<AddNews />} />
           <Route path="my-news" element={<MyNews />} />
           <Route path="news-management" element={<NewsManagement />} />
+          <Route path="news" element={<NewsView />} />
+          <Route path="news-detail/:id" element={<ViewDetail />} />
           <Route path="admin">
             <Route path="student/:id" element={<StudentDetailAdmin />} />
             <Route path="company/:id" element={<CompanyDetailAdmin />} />

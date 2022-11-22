@@ -203,8 +203,64 @@ export class NewsService {
     return { data: newsList };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} news`;
+  async findOne(id: number) {
+    const result = await this.newsModel.aggregate([
+      {
+        $lookup: {
+          from: 'tbl_account',
+          localField: 'id_account',
+          foreignField: '_id',
+          as: 'account',
+        },
+      },
+      {
+        $unwind: '$account',
+      },
+      {
+        $match: {
+          'account.delete_date': null,
+          delete_date: null,
+          _id: id,
+        },
+      },
+      // //add field
+      {
+        $lookup: {
+          from: 'tbl_field_news',
+          localField: '_id',
+          foreignField: 'id_news',
+          as: 'field_news',
+          pipeline: [
+            {
+              $group: {
+                _id: '$id_news',
+                id_fields: {
+                  $push: '$id_field',
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$field_news',
+      },
+      {
+        $addFields: {
+          id_fields: '$field_news.id_fields',
+        },
+      },
+      {
+        $lookup: {
+          from: 'tbl_field',
+          localField: 'id_fields',
+          foreignField: '_id',
+          as: 'fields',
+        },
+      },
+    ]);
+
+    return { data: result[0] };
   }
 
   update(id: number, updateNewsDto: UpdateNewsDto) {

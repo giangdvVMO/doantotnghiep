@@ -45,6 +45,13 @@ export const Gallery = ({user})=>{
     }
 
     const handleAddGallery = async ()=>{
+        if(!image){
+            openNotificationWithIcon(
+                "error",
+                "Thất bại",
+                "Bạn chưa chọn file ảnh!"
+                );
+        }
         const url = serverURL + "gallery"
         let formData = new FormData();
         formData.append('id_account', user._id)
@@ -66,7 +73,9 @@ export const Gallery = ({user})=>{
             "Thông báo",
             "Bạn đã thêm ảnh vào gallery thành công!"
             );
-            setOpenAddImage(false)
+            fetchGallery();
+            setOpenAddImage(false);
+            setImage('');
             // fetchCV();
             // setIsEdit(false);
             // fetchCompany();
@@ -100,7 +109,7 @@ export const Gallery = ({user})=>{
             console.log("user fetch to set role", result);
             if (!result) {
             // message.warn("Bạn ko có quyền xem trang này");
-            navigate("/");
+            // navigate("/");
             }
             changeUser({ ...result });
         }
@@ -123,7 +132,6 @@ export const Gallery = ({user})=>{
 
     return (
         <>
-            
             <p className="gallery-title">Gallery</p>
             <div className="button-gallery-container"><Button type="primary" onClick={handleAddImage}>Thêm ảnh mới</Button></div>
             <div className="gallery-container">

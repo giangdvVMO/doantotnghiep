@@ -390,7 +390,7 @@ export const CompanyDetailAdmin = () => {
   )
 }else{
     return <div className="spin-container">
-    <Spin />
-  </div>;
+            <Spin />
+          </div>;
 }
 };

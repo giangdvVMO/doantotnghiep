@@ -1,15 +1,17 @@
-import { Button, Image, Input, message, Select } from "antd";
+import { Button, Image, Input, message, Select, Spin } from "antd";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
 import { UserContext } from "../User/UserProvider";
 import "../../styles/manager-page.css";
 import {
+  EyeOutlined,
+  FieldTimeOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
-import { postFields } from "../../common/service";
+import { DateToShortStringDate, postFields } from "../../common/service";
 import '../../styles/news.css'
 
 const { Option } = Select;
@@ -59,7 +61,7 @@ export const NewsView = () => {
         let query = "?1=1"
         query = status !== -1 ? query + "&status=" + status : query;
         query = search !== "" ? query + "&search=" + search : query;
-        query = field.length ? query + "&field=" + field : query;
+        query = field.length&&!field.contain(-1) ? query + "&field=" + field : query;
         console.log('field', field)
         message.success('field', field)
         const url = serverURL + "news" + query;
@@ -195,8 +197,9 @@ export const NewsView = () => {
   const handleChangeSearch = (e) => {
     setSearch(e.target.value);
   };
-
+  if(user&&fields){
   return (
+    
     <>
       <div className="banner-content">Danh sách tin tức</div>
       <div className="view-news-container">
@@ -211,8 +214,11 @@ export const NewsView = () => {
                         return (
                             <div className="news-detail-container">
                                 <Image className="thumnail" src={item.thumnail}/>
-                                <div className="title-thumnail">{item.title}</div>
-                                <div className="views-thumnail">Số lượt xem: {item.views}</div>
+                                <Link to={`../news-detail/${item._id}`}><div className="title-thumnail">{item.title}</div></Link>
+                                <div className="view-detail">
+                                  <div className="view-count"><EyeOutlined className="icon-view-news"/>{item.views?item.views: 0}</div>
+                                  <div className="view-date"><FieldTimeOutlined className="icon-view-news" />{DateToShortStringDate(item.create_date)}</div>
+                                </div>
                             </div>
                         )
                     })
@@ -224,6 +230,22 @@ export const NewsView = () => {
                 Tin mới nhất
             </div>
             <div className="underline-news"></div>
+            <div className="news-cate-container">
+                {
+                    listFresh.map((item)=>{
+                        return (
+                            <div className="news-detail-container">
+                                <Image className="thumnail" src={item.thumnail}/>
+                                <Link to={`../news-detail/${item._id}`}><div className="title-thumnail">{item.title}</div></Link>
+                                <div className="view-detail">
+                                  <div className="view-count"><EyeOutlined className="icon-view-news"/>{item.views?item.views: 0}</div>
+                                  <div className="view-date"><FieldTimeOutlined className="icon-view-news" />{DateToShortStringDate(item.create_date)}</div>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+            </div>
         </div>
      </div>
      <div className="title-find">Tìm kiếm bài đăng</div>
@@ -233,7 +255,7 @@ export const NewsView = () => {
           <Select
             mode="multiple"
             value={field}
-            defaultValue="all"
+            defaultValue={-1}
             labelInValue="Lĩnh vực bài đăng"
             className="filter-content"
             onChange={handleChangeField}
@@ -265,5 +287,10 @@ export const NewsView = () => {
       </div>
      
     </>
-  );
+  )}
+  else{
+    return <div className="spin-container">
+    <Spin />
+  </div>;
+  }
 };
