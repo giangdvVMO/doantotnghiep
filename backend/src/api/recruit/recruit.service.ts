@@ -484,4 +484,94 @@ export class RecruitService {
       total: total,
     };
   }
+
+  async statisticCompany(id_company: number) {
+    const companyListTotal = await this.recruitModel.aggregate([
+      //account not delete
+      {
+        $match: {
+          id_company: id_company,
+        },
+      },
+      {
+        $lookup: {
+          from: 'tbl_company',
+          localField: 'id_company',
+          foreignField: '_id',
+          as: 'company',
+        },
+      },
+      {
+        $unwind: '$company',
+      },
+      {
+        $lookup: {
+          from: 'tbl_apply',
+          localField: '_id',
+          foreignField: 'id_recruit',
+          as: 'apply',
+          pipeline: [
+            {
+              $lookup: {
+                from: 'tbl_student',
+                localField: 'id_student',
+                foreignField: '_id',
+                as: 'student',
+              },
+            },
+            {
+              $unwind: '$student',
+            },
+            {
+              $lookup: {
+                from: 'tbl_account',
+                localField: 'student._id',
+                foreignField: '_id',
+                as: 'account',
+              },
+            },
+            {
+              $unwind: '$account',
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: 'tbl_recruit_view',
+          localField: '_id',
+          foreignField: 'id_recruit',
+          as: 'views',
+          pipeline: [
+            {
+              $lookup: {
+                from: 'tbl_student',
+                localField: 'id_student',
+                foreignField: '_id',
+                as: 'student',
+              },
+            },
+            {
+              $unwind: '$student',
+            },
+            {
+              $lookup: {
+                from: 'tbl_account',
+                localField: 'student._id',
+                foreignField: '_id',
+                as: 'account',
+              },
+            },
+            {
+              $unwind: '$account',
+            },
+          ],
+        },
+      },
+      // {
+      //   $unwind: '$a',
+      // },
+    ]);
+    return { data: companyListTotal };
+  }
 }

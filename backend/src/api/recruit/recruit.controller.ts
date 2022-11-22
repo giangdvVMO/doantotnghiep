@@ -37,6 +37,14 @@ export class RecruitController {
     return this.recruitService.statistic();
   }
 
+  @Get('statistic/:id_company')
+  statisticCompany(@Param('id_company') id_company: string) {
+    if (!parseInt(id_company)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
+    return this.recruitService.statisticCompany(+id_company);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     if (!parseInt(id)) {

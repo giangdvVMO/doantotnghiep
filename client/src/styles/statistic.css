@@ -86,3 +86,19 @@
     background-color: white;
     border-radius: 20px;
 }
+
+.statistic-company-container{
+    margin: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.title-statistic-company{
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: xx-large;
+    font-weight: 800;
+}

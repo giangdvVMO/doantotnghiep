@@ -9,7 +9,7 @@ import '../../styles/statistic.css'
 import { CvStatistic } from './CVStatistic';
 
 export const Statistic = () => {
-    const {user, changeUser, token} = useContext(UserContext); 
+  const {user, changeUser, token} = useContext(UserContext); 
   const [value, setValue] = useState('CV');
   const [CV, setCV] = useState();
   const navigate = useNavigate();

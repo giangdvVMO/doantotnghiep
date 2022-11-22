@@ -13,7 +13,6 @@ import {
   FieldTimeOutlined,
 } from "@ant-design/icons";
 
-
 export const ViewDetail = () => {
   const { user, changeUser, token } = useContext(UserContext);
   const navigate = useNavigate();

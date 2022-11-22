@@ -204,6 +204,7 @@ export const AddNews = ()=>{
           "Thông báo",
           "Bạn đã tạo  thành công!"
         );
+        navigate('../../my-news')
         // navigate('/list-news')
       }
     } catch (err) {

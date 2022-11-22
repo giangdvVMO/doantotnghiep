@@ -58,7 +58,7 @@ export class ApplyService {
     return { data: result };
   }
 
-  findAll() {
+  findAll(id: number) {
     return `This action returns all apply`;
   }
 
