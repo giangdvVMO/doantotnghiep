@@ -139,7 +139,7 @@ export const CompanyDetailStudent = ()=>{
 
     //fetch rateList
     async function fetchListRate() {
-        if(user&&company){
+        if(user&&company&&company._id !== -1){
         let query = `?type_rate=company&id_company=${company._id}&status=1`;
         const url = serverURL + "rate" + query;
         console.log(query);
@@ -221,7 +221,7 @@ export const CompanyDetailStudent = ()=>{
       };
 
     const ref = useRef();
-    if(company){
+    if(company&&company._id!==-1){
     //render UI
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
