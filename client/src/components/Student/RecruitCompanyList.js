@@ -8,7 +8,7 @@ import '../../styles/manager-page.css'
 import { SearchOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
 import { CardList } from '../Common/Card';
-import { postFields } from '../../common/service';
+import { DateToShortStringDate, postFields } from '../../common/service';
 
 const { Option } = Select;
 export const RecruitCompanyListStudent = () => {
@@ -55,7 +55,11 @@ export const RecruitCompanyListStudent = () => {
     }
 
     async function fetchListRecruit(){
-                let query = '?id_company='+id+'&status=1&pageIndex='+pageIndex+'&pageSize='+pageSize;
+        const date = DateToShortStringDate(new Date());
+        const expired = date.split('/');
+        const test = `${expired[1]}/${expired[0]}/${expired[2]}`
+                let query = '?id_company='+id+'&status=1&pageIndex='+pageIndex+'&pageSize='+pageSize
+                +'&date='+test;
                 query = field.length? query+'&field='+field:query;
                 query = experience!==-1? query+'&experience='+experience:query;
                 query = search!==''? query+'&search='+search:query;

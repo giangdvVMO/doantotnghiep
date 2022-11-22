@@ -53,8 +53,6 @@
 
 .list-rate-container{
     display: flex;
-    /* justify-content: center; */
-    /* align-items: center; */
     background-color: white;
     width: 1000px;
     margin: 10px;

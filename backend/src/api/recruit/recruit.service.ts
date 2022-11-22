@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { FieldRecruitService } from '../field-recruit/field-recruit.service';
@@ -186,8 +186,8 @@ export class RecruitService {
     console.log('pageSize', pageSize);
     console.log('id_company', id_company);
     console.log('experience', experience);
-    console.log('date', date);
-    console.log('parseDate', new Date());
+    // console.log('date', date);
+
     const condition = {};
 
     const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
@@ -202,6 +202,17 @@ export class RecruitService {
 
     if (id_company) {
       condition['id_company'] = +id_company;
+    }
+    let isExpired: any = true;
+    try {
+      if (date) {
+        const expired = new Date(date);
+        isExpired = {
+          $gte: ['$end_date', expired],
+        };
+      }
+    } catch (error) {
+      throw new BadRequestException('Ngày không hợp lệ (MM/DD/YYYY)');
     }
 
     let isExperience = {};
@@ -283,7 +294,7 @@ export class RecruitService {
           'company.status': true,
           'account.delete_date': null,
           delete_date: null,
-          // ...condition,
+          ...condition,
         },
       },
       // add field
@@ -343,6 +354,7 @@ export class RecruitService {
         $addFields: {
           isfields: field_condition,
           isExperience: isExperience,
+          isExpired: isExpired,
         },
       },
       {
@@ -350,6 +362,7 @@ export class RecruitService {
           result: true,
           isfields: true,
           isExperience: true,
+          isExpired: true,
         },
       },
       {
@@ -453,6 +466,7 @@ export class RecruitService {
           $addFields: {
             isfields: field_condition,
             isExperience: isExperience,
+            isExpired: isExpired,
           },
         },
         {
@@ -460,6 +474,7 @@ export class RecruitService {
             result: true,
             isfields: true,
             isExperience: true,
+            isExpired: true,
           },
         },
         {
