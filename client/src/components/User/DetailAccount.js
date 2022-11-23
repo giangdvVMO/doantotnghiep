@@ -1,4 +1,4 @@
-import { CheckCircleOutlined, InfoCircleOutlined, KeyOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, EditOutlined, InfoCircleOutlined, KeyOutlined, MailOutlined, MinusCircleOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, DatePicker, Form, Input, message, Modal, Tag, Tooltip } from 'antd';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,9 @@ export const DetailAccount = () => {
     const { user, changeUser, token } = useContext(UserContext);
     const [isEdit, setIsEdit] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenModalSelectImage, setIsOpenModalSelectImage] = useState(false);
+    const [avatar, setAvatar] = useState('');
+    const [image, setImage] = useState('');
     const fetchUser = async()=>{
         const tokenx = token?token:window.localStorage.getItem('accessToken');
         console.log('tokenx', tokenx);
@@ -86,6 +89,59 @@ export const DetailAccount = () => {
 
     function handleChangePhone(e) {
         setAccount((preUser) => { return { ...preUser, phone: e.target.value } });
+    }
+
+    const handleAddGallery = async ()=>{
+        if(!image){
+            openNotificationWithIcon(
+                "error",
+                "Thất bại",
+                "Bạn chưa chọn file ảnh!"
+                );
+        }
+        const url = serverURL + "gallery"
+        let formData = new FormData();
+        formData.append('id_account', user._id)
+        if(image){formData.append('image',image)};
+        // const data = { ...CV, update_id:  };
+        console.log("request", formData);
+        try {
+        const response = await fetch(url, {
+            method: "POST",
+            body: formData,
+        });
+        const result = await response.json();
+        console.log(result);
+        if (response.status !== 201) {
+            // message.error(result.message);
+        } else {
+            openNotificationWithIcon(
+            "success",
+            "Thông báo",
+            "Bạn đã thêm ảnh vào gallery thành công!"
+            );
+            console.log('ơ',result.data);
+            // fetchGallery();
+            // setOpenAddImage(false);
+            // setImage('');
+            // fetchCV();
+            // setIsEdit(false);
+            // fetchCompany();
+        }
+        } catch (err) {
+        console.log(err);
+        // message.error("Đã có lỗi xảy ra!");
+        }
+    }
+
+    const handleClickFile = (info) => {
+            console.log("info", info.target.files[0]);
+            setImage(info.target.files[0]);
+            console.log(image);
+          };
+
+    const handleChangeAvatar = ()=>{
+        handleAddGallery();
     }
 
     function handleKeyUp(e) {
@@ -203,6 +259,7 @@ export const DetailAccount = () => {
     }
 
     async function handleCancel(e) {
+        setAvatar('');
         resetError();
         setAccount({...user});
         setIsEdit(false);
@@ -212,6 +269,10 @@ export const DetailAccount = () => {
     async function handleChange(e) {
         setIsOpenModal(true);
         return;
+    }
+
+    const handleCancelImage = ()=>{
+        setIsOpenModalSelectImage(false);
     }
 
     async function handleSave(e) {
@@ -224,8 +285,12 @@ export const DetailAccount = () => {
         count = checkRoleFunc(account.role) ? count : count + 1;
         count = checkUserNameFunc(account.username) ? count : count + 1;
         count = checkBirthdayFunc(account.birthday) ? count : count + 1;
+        
         console.log(count);
         if (count === 0) {
+            if(avatar){
+                account.avatar = avatar;
+            }
             const url = serverURL + 'account/'+user._id;
             try {
                 const response = await fetch(url, {
@@ -299,11 +364,22 @@ export const DetailAccount = () => {
         }
     }
 
+    const handleOpenChangeAvatar = ()=>{
+        setIsOpenModalSelectImage(true)
+    }
+
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
             <div className='background-image'></div>
             <div className='introduce-bottom'>
-                <Avatar className='avatar' size={120} icon={<UserOutlined />} />
+                <div className='avatar-container'>
+                    <Avatar className='avatar' size={120} src={account.avatar?account.avatar:"https://joeschmoe.io/api/v1/random"} />
+                </div>
+                {
+                    isEdit?<div className='edit-avatar' onClick={handleOpenChangeAvatar}>
+                    <EditOutlined />
+                </div>:''
+                }
                 <div className='introduce-fullname'>{account.fullname}</div>
             </div>
         </div>
@@ -489,6 +565,9 @@ export const DetailAccount = () => {
         </div>
         <Modal title='Đổi mật khẩu' open={isOpenModal} footer={null}>
             <ChangePassword setIsOpenModal={setIsOpenModal} />
+        </Modal>
+        <Modal title='Chọn ảnh' open={isOpenModalSelectImage} onOk={handleChangeAvatar} onCancel={handleCancelImage}>
+                    <input id='file-upload'  type='file' onChange={handleClickFile} />
         </Modal>
     </div>
     )

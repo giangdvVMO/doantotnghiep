@@ -23,9 +23,6 @@ export const NewsView = () => {
   const [listNews, setListNews] = useState([]);
   const [fields, setFields] = useState([]);
   const [field, setField] = useState([]);
-  const [currentId, setCurrentId] = useState('');
-  const [isOpenDelete, setOpenDelete] = useState(false);
-  const [sort, setSort] = useState('');
   const [listHot, setListHot] = useState([]);
   const [listFresh, setListFresh] = useState([]);
 

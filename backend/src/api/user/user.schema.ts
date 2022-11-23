@@ -25,6 +25,9 @@ export class User {
   @Prop({ type: String, required: true })
   fullname: string;
 
+  @Prop({ type: String })
+  avatar: string;
+
   @Prop({ type: String, required: true })
   birthday: Date;
 

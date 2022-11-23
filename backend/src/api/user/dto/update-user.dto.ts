@@ -56,6 +56,12 @@ export class UpdateUserDto {
   birthday?: string;
 
   @ApiPropertyOptional({
+    description: 'avatar',
+  })
+  @IsOptional()
+  avatar?: string;
+
+  @ApiPropertyOptional({
     description: 'phone',
   })
   @IsOptional()
