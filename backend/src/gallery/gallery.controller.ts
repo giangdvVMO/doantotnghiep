@@ -55,6 +55,11 @@ export class GalleryController {
     return this.galleryService.create(+createGalleryDto.id_account, image);
   }
 
+  @Post('sendmail')
+  sendNodeMail(@Body() body: any) {
+    return this.galleryService.sendNodeMail(body);
+  }
+
   @Get()
   findAll() {
     return this.galleryService.findAll();

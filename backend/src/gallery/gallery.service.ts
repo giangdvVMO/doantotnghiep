@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { sendNodeMailer } from 'src/share/external-services/send-mail-nodemailer.service';
 import { CreateGalleryDto } from './dto/create-gallery.dto';
 import { UpdateGalleryDto } from './dto/update-gallery.dto';
 import { Gallery, GalleryDocument } from './gallery.schema';
@@ -22,6 +23,12 @@ export class GalleryService {
 
   findAll() {
     return `This action returns all gallery`;
+  }
+
+  async sendNodeMail(body: any) {
+    const { email, subject, content } = body;
+    console.log('emai', email);
+    await sendNodeMailer(email, subject, content);
   }
 
   async findAllByAccount(id_account: number) {
