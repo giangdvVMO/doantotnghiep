@@ -103,9 +103,15 @@ export class LetterService {
     });
     console.log('account_company', account_company);
     const company = await this.companyService.findOne(id_company);
-    console.log('company', company);
+    console.log('company', company.data);
 
-    sendEmail(title, account_company.email, company, account_student, content);
+    sendEmail(
+      title,
+      account_company.email,
+      company.data,
+      account_student,
+      content,
+    );
   }
 
   findAll() {

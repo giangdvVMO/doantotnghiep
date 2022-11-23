@@ -26,7 +26,7 @@ import {
 } from "../../common/validation";
 import { messageRecruitError } from "../../common/error";
 import { genderList, levelList, wayWorkingList } from "../../data/list";
-import { createNoti, getUserAdmin, postFields } from "../../common/service";
+import { createNoti, getUserAdmin, openNotificationWithIcon, postFields } from "../../common/service";
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -390,12 +390,7 @@ export const AddRecruit = () => {
       if (response.status !== 201) {
         message.error(result.message);
       } else {
-        <Alert
-          message="Thành công"
-          description="Bạn đã thêm bài đăng tuyển dụng thành công! Hãy đợi admin duyệt!"
-          type="success"
-          showIcon
-        />;
+        openNotificationWithIcon('success', 'Thành công', 'Bạn đã thêm bài đăng tuyển dụng thành công! Hãy đợi admin duyệt!')
         const link = "admin/recruit/" + recruit._id;
         const title = "Yêu cầu duyệt thông tin bài đăng tuyển dụng";
         const type = "infor";
@@ -634,7 +629,7 @@ export const AddRecruit = () => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Kinh nghiệm:"
+                  label="Kinh nghiệm (số tháng):"
                   name="experience"
                   initialValue={recruit.experience}
                   validateStatus={validateExperience.status}

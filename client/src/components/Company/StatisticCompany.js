@@ -15,6 +15,8 @@ export const StatisticCompany = () => {
   const [count, setCount] = useState(0);
   const [recruit, setRecruit] = useState([]);
   const navigate = useNavigate();
+  const now = new Date();
+  console.log(now);
 
   //fetch user
   const fetchUser = async () => {
@@ -102,15 +104,16 @@ export const StatisticCompany = () => {
     {
       title: "Trạng thái",
       key: "address",
-      render: (_, record) => (
-        record.end_date < new Date()? 
+      render: (_, record) => {
+        return (new Date(record.end_date) < now? 
         <Tag icon={<ClockCircleOutlined />} color="default">Hết hạn</Tag>
         :
         record.status? 
         <Tag icon={<CheckCircleOutlined />} color="success">Đã duyệt</Tag>
         :
         <Tag icon={<ExclamationCircleOutlined />} color="warning">Chưa duyệt</Tag>
-      ),
+      )
+      }
     },
     {
       title: "Số lượt xem",

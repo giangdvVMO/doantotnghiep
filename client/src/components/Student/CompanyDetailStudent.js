@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Comment, Form, Input, message, Modal, Spin, Tag, Tooltip } from "antd";
+import { Avatar, Button, Card, Form, Input, message, Modal, Spin, Tag } from "antd";
 import { useContext, useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {decodeToken} from 'react-jwt';
@@ -8,7 +8,7 @@ import { serverURL } from "../../configs/server.config";
 import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
-import { DateToShortStringDate, formatDate, openNotificationWithIcon } from "../../common/service";
+import { openNotificationWithIcon } from "../../common/service";
 import { RateCommentList } from "../Common/RateCommentList";
 import { RateModal } from "../Company/Rate";
 const { TextArea } = Input;

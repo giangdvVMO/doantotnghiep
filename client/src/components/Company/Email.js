@@ -78,6 +78,7 @@ export const Email = ({id_student, id_company, setOpenEmail, setRate}) => {
             const data = {
                 title, content, id_account:id_company,students:[id_student]
             };
+            console.log('send data', data)
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -92,14 +93,15 @@ export const Email = ({id_student, id_company, setOpenEmail, setRate}) => {
                     message.error("Không thành công!");
                 }else{
                     openNotificationWithIcon('success', 'Thông báo', 'Bạn đã gửi thư tới sinh viên')
-                //send noti
-                const link = "student/company/" + id_company;
-                const title = "Thư mời ứng tuyển";
-                const type = "apply";
-                const content = `Doanh nghiệp vừa gửi thư tuyển dụng cho bạn.`;
-                createNoti(id_company, [id_student], title, type, content, link);
-                //
-                setRate(true);
+                    //send noti
+                    const link = "student/company/" + id_company;
+                    const title = "Thư mời ứng tuyển";
+                    const type = "apply";
+                    const content = `Doanh nghiệp vừa gửi thư tuyển dụng cho bạn.`;
+                    createNoti(id_company, [id_student], title, type, content, link);
+                    //send mail
+                    
+                    setRate(true);
             }
 
                 setOpenEmail(false);

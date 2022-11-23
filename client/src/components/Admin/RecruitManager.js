@@ -7,6 +7,8 @@ import { UserContext } from "../User/UserProvider";
 import "../../styles/manager-page.css";
 import {
   CheckCircleOutlined,
+  ClockCircleOutlined,
+  ExclamationCircleOutlined,
   MinusCircleOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
@@ -218,16 +220,16 @@ export const RecruitManagerAdmin = () => {
     {
       title: "Trạng thái",
       key: "status",
-      render: (_, record) =>
-        record.status ? (
-          <Tag icon={<CheckCircleOutlined />} color="success">
-            duyệt
-          </Tag>
-        ) : (
-          <Tag icon={<MinusCircleOutlined />} color="warning">
-            chưa duyệt
-          </Tag>
-        ),
+      render: (_, record) =>{
+        return (new Date(record.end_date) < new Date()? 
+        <Tag icon={<ClockCircleOutlined />} color="default">Hết hạn</Tag>
+        :
+        record.status? 
+        <Tag icon={<CheckCircleOutlined />} color="success">Đã duyệt</Tag>
+        :
+        <Tag icon={<ExclamationCircleOutlined />} color="warning">Chưa duyệt</Tag>
+      )
+      },
       fixed: "right",
     },
     {

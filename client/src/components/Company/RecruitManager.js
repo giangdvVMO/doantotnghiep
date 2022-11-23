@@ -5,7 +5,7 @@ import {decodeToken} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
-import { CheckCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
 import { DateToShortStringDate, postFields } from '../../common/service';
 
@@ -50,7 +50,8 @@ export const RecruitManager = () => {
 }
 
     async function fetchListRecruit(){
-        let query = '?1=1';
+        if(user){
+        let query = '?id_company='+ user._id;
                 query = status!==-1? query+'&status='+status:query;
                 query = field.length && !field.includes(-1)? query+'&field='+field:query;
                 query = search!==''? query+'&search='+search:query;
@@ -75,6 +76,7 @@ export const RecruitManager = () => {
                 catch (err) {
                     console.log(err);
                 }
+            }
     }
     //fetch user
     const fetchUser = async()=>{
@@ -173,13 +175,13 @@ export const RecruitManager = () => {
             dataIndex: 'welfare',
             key: 'welfare',
         },
-        {
-            title: 'Ngày bắt đầu',
-            key: 'start_date',
-            render: (_,record) =>{ 
-                return record.start_date? <>{DateToShortStringDate(record.start_date)}</>:''
-            }
-        },
+        // {
+        //     title: 'Ngày bắt đầu',
+        //     key: 'start_date',
+        //     render: (_,record) =>{ 
+        //         return record.start_date? <>{DateToShortStringDate(record.start_date)}</>:''
+        //     }
+        // },
         {
             title: 'Ngày kết thúc',
             key: 'end_date',
@@ -200,17 +202,16 @@ export const RecruitManager = () => {
         {
             title: 'Trạng thái',
             key: 'status',
-            render: (_, record) => (
-                     record.status?
-                        <Tag icon={<CheckCircleOutlined />} 
-                            color="success">
-                            duyệt
-                        </Tag>
-                        :
-                        <Tag icon={<MinusCircleOutlined />} color="warning">
-                            chưa duyệt
-                        </Tag>
-            ),
+            render: (_, record) => {
+                return (new Date(record.end_date) < new Date()? 
+                <Tag icon={<ClockCircleOutlined />} color="default">Hết hạn</Tag>
+                :
+                record.status? 
+                <Tag icon={<CheckCircleOutlined />} color="success">Đã duyệt</Tag>
+                :
+                <Tag icon={<ExclamationCircleOutlined />} color="warning">Chưa duyệt</Tag>
+              )
+              },
             fixed: 'right',
         },
         {

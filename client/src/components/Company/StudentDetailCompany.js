@@ -388,7 +388,7 @@ export const StudentDetailCompany = () => {
     setOpenConfirm(false);
     setOpenEmail(true);
   };
-  if (account) {
+  if (account&&student._id!==-1) {
     return (
       <div className="swapper-container">
         <div className="introduce-frame">
