@@ -26,9 +26,20 @@ import { LetterStudentModule } from './api/letter_student/letter_student.module'
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { GalleryModule } from './gallery/gallery.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { EmailController } from './email.controller';
 
 @Module({
   imports: [
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.sendgrid.net',
+        auth: {
+          user: 'apikey',
+          pass: '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',
+        },
+      },
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
@@ -60,5 +71,6 @@ import { GalleryModule } from './gallery/gallery.module';
     GalleryModule,
   ],
   providers: [GateGateway],
+  controllers: [EmailController],
 })
 export class AppModule {}

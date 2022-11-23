@@ -35,42 +35,47 @@ export const sendNodeMailer = async (
   content: string,
 ) => {
   try {
-    const client = new MessageClient({
-      username: '602b2f948c506dea',
-      apiKey: 'H7uNhTV8XczgQ4Co1i1PVBQ2',
-    });
-    const response = await client.sendMessage({
-      from: 'giangdv@vmodev.com',
-      to: email,
-      plain: 'test message',
-      html: `<h1>${content}</h1>`,
-      subject: subject,
-    });
-    return response;
-    // if (!email || !subject || !content)
-    //   throw new Error('Please provide email, subject and content!');
-    // const transport = nodemailer.createTransport({
-    //   service: 'gmail',
-    //   auth: {
-    //     user: 'giangdv@vmodev.com',
-    //     pass: 'iapbeokyymjkjpqz',
-    //     // type: 'OAuth2',
-    //     // user: ADMIN_EMAIL_ADDRESS,
-    //     // clientId: GOOGLE_MAILER_CLIENT_ID,
-    //     // clientSecret: GOOGLE_MAILER_CLIENT_SECRET,
-    //     // refresh_token: GOOGLE_MAILER_REFRESH_TOKEN,
-    //     // accessToken: myAccessToken || '',
-    //   },
+    // const client = new MessageClient({
+    //   username: '602b2f948c506dea',
+    //   apiKey: 'H7uNhTV8XczgQ4Co1i1PVBQ2',
     // });
-    // // mailOption là những thông tin gửi từ phía client lên thông qua API
-    // const mailOptions = {
+    // const response = await client.sendMessage({
     //   from: 'giangdv@vmodev.com',
-    //   to: email, // Gửi đến ai?
-    //   subject: subject, // Tiêu đề email
-    //   html: `<h3>${content}</h3>`, // Nội dung email
-    // };
-    // // Gọi hành động gửi email
-    // await transport.sendMail(mailOptions);
+    //   to: email,
+    //   plain: 'test message',
+    //   html: `<h1>${content}</h1>`,
+    //   subject: subject,
+    // });
+    // return response;
+    if (!email || !subject || !content)
+      throw new Error('Please provide email, subject and content!');
+    const transport = nodemailer.createTransport({
+      service: 'gmail',
+      secure: false,
+      auth: {
+        user: 'giangdv@vmodev.com',
+        pass: 'iapbeokyymjkjpqz',
+        // type: 'OAuth2',
+        // user: ADMIN_EMAIL_ADDRESS,
+        // clientId: GOOGLE_MAILER_CLIENT_ID,
+        // clientSecret: GOOGLE_MAILER_CLIENT_SECRET,
+        // refresh_token: GOOGLE_MAILER_REFRESH_TOKEN,
+        // accessToken: myAccessToken || '',
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+    // mailOption là những thông tin gửi từ phía client lên thông qua API
+    const mailOptions = {
+      from: 'giangdv@vmodev.com',
+      to: email, // Gửi đến ai?
+      subject: subject, // Tiêu đề email
+      html: `<h3>${content}</h3>`, // Nội dung email
+    };
+    // Gọi hành động gửi email
+    const result = await transport.sendMail(mailOptions);
+    return result;
   } catch (error) {
     console.log(error);
     // throw new (error.message);
