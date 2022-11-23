@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { openNotificationWithIcon } from '../../common/service';
 import '../../styles/statistic.css'
 import { CvStatistic } from './CVStatistic';
+import { ApplyStatistic } from './ApplyStatistic';
 
 export const Statistic = () => {
   const {user, changeUser, token} = useContext(UserContext); 
@@ -71,21 +72,18 @@ export const Statistic = () => {
   }
   useEffect(()=>{fetchUser()},[])
   useEffect(()=>{fetchCV()},[value, user]);
-  
+  if(CV&&user)
   return (
     <>
     <div className='segment'>
-      <Segmented className='segment-content' block options={['CV', 'Apply', 'Thư mời']} value={value} onChange={setValue} />
+      <Segmented className='segment-content' block options={['CV', 'Tuyển dụng']} value={value} onChange={setValue} />
     </div>
         {
         value==='CV'&&CV?
             <CvStatistic CV={CV} />
         :
-        value==='Apply'?
-            'Apply'
-        :
-        value==='Thư mời'?
-        'Thư mời'
+        value==='Tuyển dụng'?
+            <ApplyStatistic user={user} />
         :
         <div className="spin-container">
             <Spin size={200} />
@@ -93,4 +91,8 @@ export const Statistic = () => {
         }
     </>
   )
+  else
+    return <div className="spin-container">
+              <Spin size={200} />
+            </div>
 };

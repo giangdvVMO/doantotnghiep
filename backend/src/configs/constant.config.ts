@@ -30,13 +30,6 @@ export const DEFAULT_ADMIN_USER = {
 };
 
 export const SEND_EMAIL_CONFIG = {
-  // sesAccessKey: process.env.SES_ACCESS_KEY,
-  // sesSecretKey: process.env.SES_SECRET_KEY,
-  // sesSendFrom: process.env.SES_SEND_FROM,
-  // awsRegion: process.env.SES_REGION,
-  // forgotPasswordMemberSubject: 'Password Reset',
-  // sendGridApiKey: process.env.SENDGRID_API_KEY,
-  // subjectMail: process.env.SUBJECTMAIL,
   adminMail: process.env.ADMIN_MAIL,
   pass: process.env.PASSWORD,
 };

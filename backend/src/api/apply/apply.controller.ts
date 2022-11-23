@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApplyService } from './apply.service';
-import { ConditionDto, CreateApplyDto } from './dto/create-apply.dto';
+import { ConditionDto, CreateApplyDto, QueryDto } from './dto/create-apply.dto';
 
 @Controller({
   version: ['1'],
@@ -34,10 +34,11 @@ export class ApplyController {
     return this.applyService.findCondition(conditionDto);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.applyService.findOne(+id);
-  // }
+  @Get('statistic')
+  statistic(@Query() query: QueryDto) {
+    const { id_student, month, year } = query;
+    return this.applyService.statistic(+id_student, +month, +year);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

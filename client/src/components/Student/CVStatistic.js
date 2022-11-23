@@ -33,7 +33,7 @@ export const CvStatistic = ({CV})=>{
         },
       ];
     return (
-        <div className='statistic_container'>
+        <div className='statistic_container-cv'>
             <div className='view-count_container'>
                 <div>SỐ LƯỢT XEM</div>
               </div>

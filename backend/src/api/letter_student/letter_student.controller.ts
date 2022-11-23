@@ -7,9 +7,13 @@ import {
   Param,
   Delete,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { LetterStudentService } from './letter_student.service';
-import { CreateLetterStudentDto } from './dto/create-letter_student.dto';
+import {
+  CreateLetterStudentDto,
+  QueryLetterStudentDto,
+} from './dto/create-letter_student.dto';
 import { UpdateLetterStudentDto } from './dto/update-letter_student.dto';
 
 @Controller('letter-student')
@@ -24,6 +28,12 @@ export class LetterStudentController {
   @Get()
   findAll() {
     return this.letterStudentService.findAll();
+  }
+
+  @Get('statistic')
+  statistic(@Query() query: QueryLetterStudentDto) {
+    const { id_student, month, year } = query;
+    return this.letterStudentService.statistic(+id_student, +month, +year);
   }
 
   @Get(':id')

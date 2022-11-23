@@ -154,7 +154,7 @@ export const StatisticCompany = () => {
                     </div>
                 </div>
             </div>
-            <div className='statistic_container'>
+            <div className='statistic_container-company'>
                 <div className='view-count_container'>
                     <div>TỔNG SỐ LƯỢT XEM</div>
                 </div>
@@ -166,7 +166,7 @@ export const StatisticCompany = () => {
                     </div>
                 </div>
             </div>
-            <div className='statistic_container'>
+            <div className='statistic_container-company'>
                 <div className='view-count_container'>
                     <div>TỔNG SỐ ỨNG TUYỂN</div>
                 </div>
@@ -179,7 +179,7 @@ export const StatisticCompany = () => {
                 </div>
             </div>
         </div>
-        <div className='table-statistic-container'>
+        <div className='table-statistic-container-company'>
             <div className='title-statistic-company'>Chi tiết thống kê</div>
             <Table
                 pagination={false}

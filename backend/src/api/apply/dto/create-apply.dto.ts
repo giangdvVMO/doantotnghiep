@@ -43,14 +43,30 @@ export class QueryDto {
     example: 1,
   })
   @IsOptional()
-  @IsNumber()
+  // @IsNumber()
   id_student: number;
 
   @ApiPropertyOptional({
-    description: 'id_recruit',
+    description: 'id_company',
     example: 1,
   })
   @IsOptional()
-  @IsNumber()
+  // @IsNumber()
   id_company: number;
+
+  @ApiPropertyOptional({
+    description: 'month',
+    example: 1,
+  })
+  @IsOptional()
+  // @IsNumber()
+  month: number;
+
+  @ApiPropertyOptional({
+    description: 'year',
+    example: 1,
+  })
+  @IsOptional()
+  // @IsNumber()
+  year: number;
 }

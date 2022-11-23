@@ -19,6 +19,40 @@ export class ApplyService {
     return { data: result };
   }
 
+  async statistic(id_student: number, month: number, year: number) {
+    const result = await this.applyModel.aggregate([
+      {
+        $match: {
+          id_student: id_student,
+        },
+      },
+      {
+        $lookup: {
+          from: 'tbl_recruit',
+          localField: 'id_recruit',
+          foreignField: '_id',
+          as: 'recruit',
+        },
+      },
+      {
+        $unwind: '$recruit',
+      },
+      {
+        $lookup: {
+          from: 'tbl_company',
+          localField: 'recruit.id_company',
+          foreignField: '_id',
+          as: 'company',
+        },
+      },
+      {
+        $unwind: '$company',
+      },
+    ]);
+
+    return { data: result };
+  }
+
   async findOne(createApplyDto: CreateApplyDto) {
     const result = await this.applyModel.aggregate([
       {
