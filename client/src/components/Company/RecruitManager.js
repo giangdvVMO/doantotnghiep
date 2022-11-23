@@ -52,7 +52,7 @@ export const RecruitManager = () => {
     async function fetchListRecruit(){
         let query = '?1=1';
                 query = status!==-1? query+'&status='+status:query;
-                query = field.length? query+'&field='+field:query;
+                query = field.length && !field.includes(-1)? query+'&field='+field:query;
                 query = search!==''? query+'&search='+search:query;
                 const url = serverURL + 'recruit'+ query;
                 console.log(query);

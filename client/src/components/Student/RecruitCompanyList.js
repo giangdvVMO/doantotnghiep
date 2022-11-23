@@ -60,7 +60,7 @@ export const RecruitCompanyListStudent = () => {
         const test = `${expired[1]}/${expired[0]}/${expired[2]}`
                 let query = '?id_company='+id+'&status=1&pageIndex='+pageIndex+'&pageSize='+pageSize
                 +'&date='+test;
-                query = field.length? query+'&field='+field:query;
+                query = field.length && !field.includes(-1)? query+'&field='+field:query;
                 query = experience!==-1? query+'&experience='+experience:query;
                 query = search!==''? query+'&search='+search:query;
                 const url = serverURL + 'recruit'+ query;
