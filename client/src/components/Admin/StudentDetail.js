@@ -10,6 +10,7 @@ import '../../styles/my-account.css'
 import { DateToShortString } from "../../common/service";
 import TextArea from "antd/lib/input/TextArea";
 import { serverURL } from "../../configs/server.config";
+import { domain } from "../../data/default-image";
 
 let students = {
     _id:-1,
@@ -187,12 +188,19 @@ export const StudentDetailAdmin = ()=>{
             )
         }
     }
-    if(student){
+    if(student._id!==-1&&user){
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
             <div className='background-image'></div>
             <div className='introduce-bottom'>
-                <Avatar className='avatar' size= {120} icon={<UserOutlined />} />
+            <div className='avatar-container'>
+                {
+                student.account.avatar?
+                <Avatar className="avatar" size={120} src={domain+student.account.avatar} />
+                :
+                <Avatar className="avatar" size={120} icon={<UserOutlined />} />
+                }
+            </div>
                 <div className='introduce-fullname'>{student.fullname}</div>
             </div>
         </div>

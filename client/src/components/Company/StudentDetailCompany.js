@@ -27,6 +27,7 @@ import { serverURL } from "../../configs/server.config";
 import { Email } from "./Email";
 import { RateModal } from "./Rate";
 import { RateCommentList } from "../Common/RateCommentList";
+import { domain } from "../../data/default-image";
 
 let initstudent = {
   _id: -1,
@@ -40,6 +41,9 @@ let initstudent = {
   avatar: "",
   card_student: "",
   major: "",
+  account: {
+    avatar: ''
+  }
 };
 
 export const StudentDetailCompany = () => {
@@ -394,8 +398,17 @@ export const StudentDetailCompany = () => {
         <div className="introduce-frame">
           <div className="background-image"></div>
           <div className="introduce-bottom">
-            <Avatar className="avatar" size={120} icon={<UserOutlined />} />
-            <div className="introduce-fullname">{account.fullname}</div>
+          <div className='avatar-container'>
+            {
+              student.account.avatar?
+              <Avatar className="avatar" size={120} src={domain+student.account.avatar} />
+              :
+              <Avatar className="avatar" size={120} icon={<UserOutlined />} />
+            }
+          </div>
+
+            <div className="introduce-fullname">{student.account.fullname}</div>
+            
             {renderButtonGroup()}
           </div>
         </div>

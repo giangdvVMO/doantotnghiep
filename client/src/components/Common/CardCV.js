@@ -5,7 +5,15 @@ import {
   openNotificationWithIcon,
 } from "../../common/service";
 import { serverURL } from "../../configs/server.config";
+import { avatarImage, domain } from "../../data/default-image";
 import "../../styles/card.css";
+
+const formatMajor = (major)=>{
+  if(major.length>18){
+    return major.slice(0,15)+'...';
+  }
+  return major;
+}
 
 export const CardListCV = ({ listCV, id_company }) => {
 
@@ -43,10 +51,22 @@ export const CardListCV = ({ listCV, id_company }) => {
               {/* <div class="level center-card">
                 {changeExperience(item.experience)}
               </div> */}
-              <Avatar
-                className="avatar"
+              {/* <Avatar
+                className="avatar-cv"
                 src="https://joeschmoe.io/api/v1/random"
+              /> */}
+              {
+                item.account.avatar?
+                <Avatar
+                className="avatar-cv"
+                src={domain+item.account.avatar}
               />
+                :
+                <Avatar
+                  className="avatar-cv"
+                  src={domain+avatarImage}
+                />
+              }
               {/* {item.fields.map((field, index) => {
                 if (index < 2) {
                   return (
@@ -71,7 +91,7 @@ export const CardListCV = ({ listCV, id_company }) => {
               </div>
               <div class="coords">
                 <span>Chuyên ngành</span>
-                <span>{item.student.major}</span>
+                <span>{formatMajor(item.student.major)}</span>
               </div>
               <div class="stats">
                 <div>

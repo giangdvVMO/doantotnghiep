@@ -67,7 +67,7 @@ function App() {
           bottom: 0,
         }}
       >
-        <div className="logo" >
+        <div className="logo">
           <div className="logo-container">
             {
               user.avatar?

@@ -97,11 +97,12 @@
   top: 95%;
 }
 
-.card .additional .user-card .avatar{
-  height: 80px;
-  width: 80px;
-  top: 50%;
-  left: 5px;
+.card .additional .user-card .avatar-cv{
+  height: 100px;
+  width: 100px;
+  top: 30%;
+  left: 25px;
+  box-shadow: 0 0 0 3px white;
 }
 
 .card .additional .more-info {
