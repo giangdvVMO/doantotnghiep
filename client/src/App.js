@@ -11,6 +11,7 @@ import { Avatar, Button, Layout, Menu } from "antd";
 import { MenuRole } from "./data/menu-role";
 import { Notification } from "./components/Common/Notification";
 import { UserOutlined } from "@ant-design/icons";
+import { domain } from "./data/default-image";
 export let socket;
 
 const { Header, Content, Sider } = Layout;
@@ -68,7 +69,12 @@ function App() {
       >
         <div className="logo" >
           <div className="logo-container">
-            <Avatar size={60} icon={<UserOutlined />} className='logo-image'/>
+            {
+              user.avatar?
+                <Avatar size={60} src={domain+user.avatar} className='logo-image'/>
+              :
+                <Avatar size={60} icon={<UserOutlined />} className='logo-image'/>
+            }
             <div className="name-logo">{user.fullname}</div>
           </div>
         </div>

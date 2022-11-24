@@ -5,6 +5,7 @@ import {decodeToken , isExpired} from 'react-jwt';
 
 import { UserContext } from "../User/UserProvider";
 import '../../styles/account.css';
+import { domain } from "../../data/default-image";
 
 const Account = () => {
     const { user, changeUser, token, changeToken } = useContext(UserContext)
@@ -75,7 +76,7 @@ const Account = () => {
                             <Avatar
                                 src={
                                     <Image
-                                        src="https://joeschmoe.io/api/v1/random"
+                                        src={domain+user.avatar}
                                         style={{
                                             width: 32,
                                         }}

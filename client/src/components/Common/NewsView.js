@@ -196,7 +196,6 @@ export const NewsView = () => {
   };
   if(user&&fields){
   return (
-    
     <>
       <div className="banner-content">Danh sách tin tức</div>
       <div className="view-news-container">
@@ -282,7 +281,6 @@ export const NewsView = () => {
           </div>
         </div>
       </div>
-     
     </>
   )}
   else{

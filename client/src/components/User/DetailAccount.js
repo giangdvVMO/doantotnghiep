@@ -13,6 +13,7 @@ import '../../styles/form.css'
 import '../../styles/my-account.css'
 import { ChangePassword } from './ChangePassword';
 import { UserContext } from './UserProvider';
+import { avatarImage, domain } from '../../data/default-image';
 
 export const DetailAccount = () => {
     const { user, changeUser, token } = useContext(UserContext);
@@ -98,40 +99,37 @@ export const DetailAccount = () => {
                 "Thất bại",
                 "Bạn chưa chọn file ảnh!"
                 );
-        }
-        const url = serverURL + "gallery"
-        let formData = new FormData();
-        formData.append('id_account', user._id)
-        if(image){formData.append('image',image)};
-        // const data = { ...CV, update_id:  };
-        console.log("request", formData);
-        try {
-        const response = await fetch(url, {
-            method: "POST",
-            body: formData,
-        });
-        const result = await response.json();
-        console.log(result);
-        if (response.status !== 201) {
-            // message.error(result.message);
-        } else {
-            openNotificationWithIcon(
-            "success",
-            "Thông báo",
-            "Bạn đã thêm ảnh vào gallery thành công!"
-            );
-            console.log('ơ',result.data);
-            // fetchGallery();
-            // setOpenAddImage(false);
-            // setImage('');
-            // fetchCV();
-            // setIsEdit(false);
-            // fetchCompany();
-        }
-        } catch (err) {
-        console.log(err);
-        // message.error("Đã có lỗi xảy ra!");
-        }
+        }else{
+            const url = serverURL + "gallery"
+            let formData = new FormData();
+            formData.append('id_account', user._id)
+            if(image){formData.append('image',image)};
+            // const data = { ...CV, update_id:  };
+            console.log("request", formData);
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    body: formData,
+                });
+                const result = await response.json();
+                console.log(result);
+                if (response.status !== 201) {
+                    // message.error(result.message);
+                } else {
+                    openNotificationWithIcon(
+                    "success",
+                    "Thông báo",
+                    "Bạn đã thêm ảnh thành công!"
+                    );
+                    // console.log('ơ',result.data);
+                    setAvatar(result.data.link);
+                    setIsOpenModalSelectImage(false);
+                }
+            } catch (err) {
+                console.log(err);
+                // message.error("Đã có lỗi xảy ra!");
+                }
+            }
     }
 
     const handleClickFile = (info) => {
@@ -260,6 +258,7 @@ export const DetailAccount = () => {
 
     async function handleCancel(e) {
         setAvatar('');
+        setImage('');
         resetError();
         setAccount({...user});
         setIsEdit(false);
@@ -308,12 +307,14 @@ export const DetailAccount = () => {
                     if(response.status===400){
                         openNotificationWithIcon('error', 'Thông báo', result.message)
                     }else{
-                    message.error(result.message);
+                        message.error(result.message);
                     }
                     setAccount({...user});
                 }else{
                     openNotificationWithIcon('success', 'Thông báo', 'Bạn đã sửa thành công!')
                     changeUser({...account})
+                    setImage('');
+                    setAvatar('');
                     setIsEdit(false);
                 }
             }
@@ -373,7 +374,12 @@ export const DetailAccount = () => {
             <div className='background-image'></div>
             <div className='introduce-bottom'>
                 <div className='avatar-container'>
-                    <Avatar className='avatar' size={120} src={account.avatar?account.avatar:"https://joeschmoe.io/api/v1/random"} />
+                    {
+                        isEdit?
+                        <Avatar className='avatar' size={120} src={avatar?domain+avatar:account.avatar?domain+account.avatar:avatarImage} />
+                        :
+                        <Avatar className='avatar' size={120} src={account.avatar?domain+account.avatar:avatarImage} />
+                    }
                 </div>
                 {
                     isEdit?<div className='edit-avatar' onClick={handleOpenChangeAvatar}>
@@ -567,7 +573,7 @@ export const DetailAccount = () => {
             <ChangePassword setIsOpenModal={setIsOpenModal} />
         </Modal>
         <Modal title='Chọn ảnh' open={isOpenModalSelectImage} onOk={handleChangeAvatar} onCancel={handleCancelImage}>
-                    <input id='file-upload'  type='file' onChange={handleClickFile} />
+            <input id='file-upload'  type='file' onChange={handleClickFile} />
         </Modal>
     </div>
     )

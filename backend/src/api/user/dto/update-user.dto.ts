@@ -52,7 +52,7 @@ export class UpdateUserDto {
     description: 'birthday',
   })
   @IsOptional()
-  @IsDateString()
+  // @IsDateString()
   birthday?: string;
 
   @ApiPropertyOptional({

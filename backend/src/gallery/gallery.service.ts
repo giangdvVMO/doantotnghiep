@@ -17,7 +17,7 @@ export class GalleryService {
     // return;
     const resultCreate = await this.galleryModel.create({ id_account, link });
     console.log(resultCreate);
-    return resultCreate;
+    return { data: resultCreate };
   }
 
   findAll() {
