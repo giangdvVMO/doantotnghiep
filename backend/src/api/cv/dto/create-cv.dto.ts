@@ -16,10 +16,34 @@ export class CreateCvDto {
   title: string;
 
   @ApiProperty({
-    description: 'id_sv',
+    description: 'id_student',
   })
   @IsNotEmpty()
   id_student: number;
+
+  @ApiProperty({
+    description: 'experience',
+  })
+  @IsNotEmpty()
+  experience: string;
+
+  @ApiProperty({
+    description: 'speciality',
+  })
+  @IsNotEmpty()
+  speciality: string;
+
+  @ApiProperty({
+    description: 'summary',
+  })
+  @IsNotEmpty()
+  summary: string;
+
+  @ApiProperty({
+    description: 'certificate',
+  })
+  @IsNotEmpty()
+  certificate: string;
 
   @ApiPropertyOptional({
     description: 'status',

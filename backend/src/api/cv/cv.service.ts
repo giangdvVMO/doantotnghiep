@@ -21,9 +21,22 @@ export class CvService {
     private readonly fileUploadService: FileUploadService,
   ) {}
   async create(createCvDto: CreateCvDto, file_cv: Express.Multer.File) {
-    const { title, id_student, status, fields } = createCvDto;
+    const {
+      title,
+      id_student,
+      status,
+      fields,
+      experience,
+      summary,
+      certificate,
+      speciality,
+    } = createCvDto;
     const dataCreate: any = {
       title,
+      experience,
+      summary,
+      certificate,
+      speciality,
       id_student: +id_student,
       file_cv,
       status: status === 'false' ? false : true,
@@ -115,9 +128,22 @@ export class CvService {
     updateCvDto: UpdateCvDto,
     file_cv?: Express.Multer.File,
   ) {
-    const { fields, title, status, update_id } = updateCvDto;
+    const {
+      fields,
+      title,
+      status,
+      update_id,
+      experience,
+      summary,
+      certificate,
+      speciality,
+    } = updateCvDto;
     const dataUpdate: any = {
       title,
+      experience,
+      summary,
+      certificate,
+      speciality,
       status: status === 'true' ? true : false,
       update_id: +update_id,
       update_date: new Date(),
@@ -126,12 +152,6 @@ export class CvService {
       console.log('file_cv', file_cv);
       const path = file_cv.path.split('\\');
       dataUpdate.file_cv = `${path[1]}/${path[2]}`;
-      // const upload = (await this.fileUploadService.uploadS3(
-      //   image,
-      //   bucketName,
-      //   Date.now() + image.originalname,
-      // )) as string;
-      // dataUpdate.cv = upload;
     }
     if (fields) {
       const fieldsArray = fields.split(',');

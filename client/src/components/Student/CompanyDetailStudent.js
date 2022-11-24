@@ -227,7 +227,9 @@ export const CompanyDetailStudent = ()=>{
         <div className='introduce-frame'>
             <div className='background-image'></div>
             <div className='introduce-bottom'>
+            <div className='avatar-container'>
                 <Avatar className='avatar' size= {120} icon={<UserOutlined />} />
+                </div>
                 <div className='introduce-fullname'>{company.com_name}</div>
                 {renderButtonGroup()}
             </div>

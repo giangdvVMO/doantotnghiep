@@ -46,6 +46,7 @@ import { NewsManagement } from "./components/Admin/NewsManagement";
 import { NewsView } from "./components/Common/NewsView";
 import { ViewDetail } from "./components/Common/ViewDetail";
 import { StatisticCompany } from "./components/Company/StatisticCompany";
+import { MyCVChange } from "./components/Student/MyCVChange";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -67,7 +68,7 @@ root.render(
           <Route path="student-management" element={<StudentManager />} />
           <Route path="company-management" element={<CompanyManager />} />
           <Route path="cv-management" element={<CVManagerAdmin />} />
-          <Route path="my-cv" element={<MyCV />} />
+          <Route path="my-cv" element={<MyCVChange />} />
           <Route path="edit" element={<EditorConvertToHTML />} />
           <Route path="news/add" element={<AddNews />} />
           <Route path="my-news" element={<MyNews />} />

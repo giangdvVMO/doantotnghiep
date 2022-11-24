@@ -50,6 +50,7 @@ import {
   openNotificationWithIcon,
 } from "../../common/service";
 import * as moment from "moment";
+import { domain } from "../../data/default-image";
 const { Option } = Select;
 
 let initialStudent = {
@@ -641,7 +642,14 @@ export const StudentProfile = () => {
         <div className="introduce-frame">
           <div className="background-image"></div>
           <div className="introduce-bottom">
-            <Avatar className="avatar" size={120} icon={<UserOutlined />} />
+          <div className='avatar-container'>
+            {
+              account.avatar?
+              <Avatar className="avatar" size={120} src={domain+account.avatar} />
+              :
+              <Avatar className="avatar" size={120} icon={<UserOutlined />} />
+            }
+          </div>
             <div className="introduce-fullname">{account.fullname}</div>
           </div>
         </div>

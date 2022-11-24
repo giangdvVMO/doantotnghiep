@@ -55,6 +55,7 @@ export const messageCVError = {
   title: "Tiêu đề không được bỏ trống",
   fileCV: "Định dạng CV chưa đúng",
   field: "Chưa chọn lĩnh vực",
+  experience: 'Nhập số tháng kinh nghiệm chưa đúng'
 };
 
 export const messageNewsError = {

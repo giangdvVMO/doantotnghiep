@@ -34,8 +34,35 @@ export class UpdateCvDto {
   })
   @IsOptional()
   @IsNotEmpty()
-  // @IsArray()
   fields: string;
+
+  @ApiPropertyOptional({
+    description: 'experience',
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  experience: string;
+
+  @ApiPropertyOptional({
+    description: 'speciality',
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  speciality: string;
+
+  @ApiPropertyOptional({
+    description: 'summary',
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  summary: string;
+
+  @ApiPropertyOptional({
+    description: 'certificate',
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  certificate: string;
 
   @ApiPropertyOptional({
     description: 'id_student',

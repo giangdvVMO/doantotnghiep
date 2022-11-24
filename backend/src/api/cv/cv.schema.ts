@@ -14,6 +14,18 @@ export class CV {
   title: string;
 
   @Prop({ type: String, required: true })
+  speciality: string;
+
+  @Prop({ type: String, required: true })
+  summary: string;
+
+  @Prop({ type: String, required: true })
+  certificate: string;
+
+  @Prop({ type: Number, required: true })
+  experience: number;
+
+  @Prop({ type: String, required: true })
   file_cv: string;
 
   @Prop({ type: Boolean, default: false })

@@ -234,7 +234,9 @@ export const CompanyDetailAdmin = () => {
       <div className="introduce-frame">
         <div className="background-image"></div>
         <div className="introduce-bottom">
+        <div className='avatar-container'>
           <Avatar className="avatar" size={120} icon={<UserOutlined />} />
+          </div>
           <div className="introduce-fullname">{company.com_name}</div>
         </div>
       </div>
@@ -392,5 +394,5 @@ export const CompanyDetailAdmin = () => {
     return <div className="spin-container">
             <Spin />
           </div>;
-}
+  }
 };
