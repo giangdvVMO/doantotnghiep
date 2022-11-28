@@ -89,12 +89,12 @@ export const StudentManager = () => {
     useEffect(fetchListStudentx,[university, major, status, search])
     
     const columns = [
-        {
-            title: 'STT',
-            dataIndex: '_id',
-            key: '_id',
-            fixed: 'left',
-        },
+        // {
+        //     title: 'STT',
+        //     dataIndex: '_id',
+        //     key: '_id',
+        //     fixed: 'left',
+        // },
         {
             title: 'Họ và tên',
             dataIndex: 'fullname',
@@ -257,6 +257,7 @@ export const StudentManager = () => {
                     x: 800,
                     y: 800,
                 }}
+                pagination={{pageSize:5}}
             />;
         </>
     )

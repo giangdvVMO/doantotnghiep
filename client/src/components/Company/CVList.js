@@ -6,6 +6,7 @@ import {
   Select,
   Skeleton,
   Spin,
+  Tooltip,
 } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +14,7 @@ import { decodeToken } from "react-jwt";
 
 import { UserContext } from "../User/UserProvider";
 import "../../styles/manager-page.css";
-import { SearchOutlined } from "@ant-design/icons";
+import { QuestionCircleTwoTone, SearchOutlined } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
 import "../../styles/list.css";
 import { postFields } from "../../common/service";
@@ -26,6 +27,8 @@ export const CVList = () => {
   const [fields, setFields] = useState([]);
   const [field, setField] = useState([]);
   const [search, setSearch] = useState("");
+  const [specialtity, setSpeciality] = useState('');
+  const [experience, setExperience] = useState(-1)
   const [listCV, setListCV] = useState([]);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(5);
@@ -60,7 +63,7 @@ export const CVList = () => {
 
   async function fetchListCV() {
     let query = "?pageIndex=" + pageIndex + "&pageSize=" + pageSize;
-    query = field.length ? query + "&field=" + field : query;
+    query = field.length&&!field.includes(-1) ? query + "&field=" + field : query;
     query = search !== "" ? query + "&search=" + search : query;
     const url = serverURL + "CV" + query;
     console.log(query);
@@ -123,13 +126,23 @@ export const CVList = () => {
   }, []);
   useEffect(() => {
     fetchListCV();
-  }, [pageIndex, pageSize, field, search, user]);
+  }, [pageIndex, pageSize, field, experience, specialtity, search, user]);
   const handleChangeField = (e) => {
     console.log(e);
     const value = e.map((item) => {
       return item.value;
     });
     setField([...value]);
+    setPageIndex(1);
+  };
+
+  const handleChangeSpeciality = (e) => {
+    setSpeciality(e.target.value);
+    setPageIndex(1);
+  };
+  
+  const handleChangeExperience = (e) => {
+    setExperience(e.value);
     setPageIndex(1);
   };
 
@@ -151,11 +164,12 @@ export const CVList = () => {
           <Select
             mode="multiple"
             value={field}
-            defaultValue="all"
-            labelInValue="Lĩnh vực CV"
+            defaultValue={-1}
+            labelInValue={true}
             className="filter-content"
             onChange={handleChangeField}
           >
+            <Option value={-1}>Tất cả</Option>
             {fields.map((field) => {
               return (
                 <Option key={field._id} value={field._id}>
@@ -164,6 +178,38 @@ export const CVList = () => {
               );
             })}
           </Select>
+        </div>
+
+        <div className="filter">
+          <label className="label-filter">Chuyên môn
+              <Tooltip title="Các chuyên môn cách nhau dấu ,">
+                <span style={{padding:'5px'}}><QuestionCircleTwoTone /></span>
+              </Tooltip>
+            :</label>
+          <Input
+              className="input search-input"
+              placeholder="VD: C, C#"
+              value={specialtity}
+              onChange={handleChangeSpeciality}
+            ></Input>
+        </div>
+        <div className="filter">
+          <label className="label-filter">
+            Kinh nghiệm:
+              
+          </label>
+          <Select
+              value={experience}
+              defaultValue={-1}
+              labelInValue={true}
+              className="filter-content"
+              onChange={handleChangeExperience}
+            >
+              <Option value={-1}>Tất cả</Option>
+              <Option value={0}>Không yêu cầu</Option>
+              <Option value={1}>Dưới 1 năm</Option>
+              <Option value={2}>Từ 1 tới 5 năm</Option>
+            </Select>
         </div>
 
         <div className="filter">
@@ -183,46 +229,6 @@ export const CVList = () => {
       </div>
       
         <>
-          {/* <div class="flex-container-list">
-            {listCV.map((CV) => {
-              return (
-                <div class="flex-item bg-one tilt">
-                  <Link
-                    to={`../student/${CV._id}`}
-                    onCLick={() => {
-                      handleViewCV(CV._id, user._id);
-                    }}
-                  >
-                    <Image
-                      className="background-image-cv"
-                      src={CV.file_cv}
-                      preview={false}
-                    />
-                    <div className="content">
-                      <p className="title-cv">{CV.title}</p>
-                    </div>
-                    <div className="author">
-                      <Avatar
-                        className="avatar-author"
-                        size={30}
-                        icon={<UserOutlined />}
-                      />
-                      <div className="name-author">{user.fullname}</div>
-                    </div>
-                    <div className="field-list">
-                      {CV.fields.map((field) => {
-                        return (
-                          <Tag color="orange" className="tag-cv">
-                            {field.nameField}
-                          </Tag>
-                        );
-                      })}
-                    </div>
-                  </Link>
-                </div>
-              );
-            })}
-          </div> */}
           <div className="list-container">
             <CardListCV listCV={listCV} id_company={user._id} />
           </div>

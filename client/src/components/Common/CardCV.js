@@ -64,7 +64,7 @@ export const CardListCV = ({ listCV, id_company }) => {
                 :
                 <Avatar
                   className="avatar-cv"
-                  src={domain+avatarImage}
+                  src={avatarImage}
                 />
               }
               {/* {item.fields.map((field, index) => {

@@ -86,12 +86,12 @@ export const CompanyManager = () => {
   }, [scaleBound, status, search]);
 
   const columns = [
-    {
-      title: "STT",
-      dataIndex: "_id",
-      key: "_id",
-      fixed: "left",
-    },
+    // {
+    //   title: "STT",
+    //   dataIndex: "_id",
+    //   key: "_id",
+    //   fixed: "left",
+    // },
     {
       title: "Tên công ty",
       dataIndex: "com_name",
@@ -243,6 +243,7 @@ export const CompanyManager = () => {
           x: 800,
           y: 800,
         }}
+        pagination={{pageSize:5}}
       />
       ;
     </>

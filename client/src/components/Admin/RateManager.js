@@ -89,12 +89,12 @@ export const RateManagerAdmin = () => {
     fetchListRate();
   }, [user, status, search]);
   const columns = [
-    {
-      title: "STT",
-      dataIndex: "_id",
-      key: "_id",
-      fixed: "left",
-    },
+    // {
+    //   title: "STT",
+    //   dataIndex: "_id",
+    //   key: "_id",
+    //   fixed: "left",
+    // },
     {
       title: "Tiêu đề",
       dataIndex: "title",
@@ -315,6 +315,7 @@ if(user){
           x: 1000,
           y: 800,
         }}
+        pagination={{pageSize:5}}
       />
       ;
     </>

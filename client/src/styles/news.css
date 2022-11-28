@@ -1,5 +1,5 @@
 .news-add-container{
-    max-width: 1200px;
+    max-width: 1600px;
 }
 
 .title-container-news{
@@ -94,7 +94,7 @@
 
 .banner-news{
     height: 400px;
-    max-width: 1200px;
+    max-width: 1600px;
     width: 100%;
     background-color: tan;
     position: relative;
@@ -160,7 +160,7 @@
 }
 
 .relative-news-container{
-    max-width:1200px;
+    max-width:1600px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;

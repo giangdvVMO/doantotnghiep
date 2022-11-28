@@ -140,7 +140,7 @@ export const AccountManager = () => {
             <div className='banner-content'>Quản lý danh sách tài khoản</div>
             <div className='container-filter'>
                 <div className='filter'>
-                    <label>Trạng thái:</label>
+                    <label className='label-filter'>Trạng thái:</label>
                     <Select
                         value={status}
                         defaultValue='all'
@@ -171,8 +171,10 @@ export const AccountManager = () => {
                     x: 800,
                     y: 800,
                 }}
-                pagination={true}
-            />;
+                pagination={{
+                    pageSize: 5,
+                  } }
+            />
             {/* <Pagination 
                 pageSize= {1}
                 current = {current}

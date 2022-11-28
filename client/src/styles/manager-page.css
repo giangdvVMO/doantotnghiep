@@ -15,25 +15,32 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content:space-between;
 }
 
 .filter{
     display: flex;
     flex-direction: column;
     min-width: 250px;
-    max-width: 350px;
+    width: 100%;
+    margin: 0px 5px;
+    /* max-width: 350px; */
+    /* padding: 10px */
+}
+
+.label-filter{
+    text-align: left;
 }
 
 .filter-content{
-    margin-left: 5px;
-    width: 70%;
+    /* margin-left: 5px; */
+    /* width: 70%; */
 }
 
 .search{
     display: flex;
     width: 100%;
-    margin-left: 20px;
+    /* margin-left: 20px; */
 }
 
 .input{
@@ -51,5 +58,6 @@
 }
 
 .search-input{
-    width: 1200px;
+    max-width: 1600px;
+    /* width: 100%; */
 }

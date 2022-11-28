@@ -56,8 +56,19 @@ export class UserService {
   }
 
   async findAll(query) {
-    const { pageIndex = 1, pageSize = 5, status, search, role } = query;
+    const { pageIndex, pageSize, status, search, role } = query;
     console.log(status, search);
+    let limitSkip = [];
+    if (pageIndex && pageSize) {
+      limitSkip = [
+        {
+          $skip: (+pageIndex - 1) * +pageSize,
+        },
+        {
+          $limit: +pageSize,
+        },
+      ];
+    }
     const condition = {
       delete_date: null,
     };
@@ -78,10 +89,13 @@ export class UserService {
     }
 
     const total = await this.userModel.find(condition).count();
-    const accountList = await this.userModel
-      .find(condition)
-      .limit(+pageSize)
-      .skip((+pageIndex - 1) * +pageSize);
+    const accountList =
+      pageIndex && pageSize
+        ? await this.userModel
+            .find(condition)
+            .limit(+pageSize)
+            .skip((+pageIndex - 1) * +pageSize)
+        : await this.userModel.find(condition);
     return {
       data: accountList,
       pageIndex: +pageIndex,

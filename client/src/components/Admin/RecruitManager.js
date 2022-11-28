@@ -117,12 +117,12 @@ export const RecruitManagerAdmin = () => {
     fetchListRecruit();
   }, [field, status, search]);
   const columns = [
-    {
-      title: "STT",
-      dataIndex: "_id",
-      key: "_id",
-      fixed: "left",
-    },
+    // {
+    //   title: "STT",
+    //   dataIndex: "_id",
+    //   key: "_id",
+    //   fixed: "left",
+    // },
     {
       title: "Tiêu đề",
       dataIndex: "title",
@@ -336,6 +336,7 @@ if(fields){
           x: 2000,
           y: 800,
         }}
+        pagination={{pageSize:5}}
       />
       ;
     </>

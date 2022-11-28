@@ -6,7 +6,7 @@
 html, body {
   /* background: #FCEEB5;
    */
-   max-width: 1200px;
+   max-width: 1600px;
    margin: 0 auto;
    /* background: rgba(255, 245, 245, 0.5); */
   font-family: Lexend, Arial, Verdana, sans-serif;
@@ -24,4 +24,8 @@ code {
   /* background: rgba(255, 245, 245, 0.5); */
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.ant-layout-content{
+  max-width: 100000px;
 }

@@ -352,6 +352,7 @@ export const NewsManagement = () => {
           x: 800,
           y: 800,
         }}
+        pagination={{pageSize:5}}
       />
       ;
       <Modal
