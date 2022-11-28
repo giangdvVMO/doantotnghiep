@@ -369,6 +369,7 @@ export const DetailAccount = () => {
         setIsOpenModalSelectImage(true)
     }
 
+
     return (<div className='swapper-container'>
         <div className='introduce-frame'>
             <div className='background-image'></div>
@@ -569,7 +570,7 @@ export const DetailAccount = () => {
                 </Form>
             </div>
         </div>
-        <Modal title='Đổi mật khẩu' open={isOpenModal} footer={null}>
+        <Modal title='Đổi mật khẩu' open={isOpenModal} closable={false} footer={null}>
             <ChangePassword setIsOpenModal={setIsOpenModal} />
         </Modal>
         <Modal title='Chọn ảnh' open={isOpenModalSelectImage} onOk={handleChangeAvatar} onCancel={handleCancelImage}>

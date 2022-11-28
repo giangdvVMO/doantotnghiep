@@ -127,9 +127,9 @@ function App() {
     </Layout>
     ):
       (<div>
-        <div className="App">
+        {/* <div className="App"> */}
           <Nav />
-        </div>
+        {/* </div> */}
         <div className="content-app">
       <Outlet />
       </div>

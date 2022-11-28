@@ -68,6 +68,28 @@ export class ManuCompanyService {
     }
   }
 
+  async findNameManu(id_company) {
+    const result = await this.ManuCompanyModel.aggregate([
+      {
+        $match: {
+          id_company: id_company,
+        },
+      },
+      {
+        $lookup: {
+          from: 'tbl_manufacture',
+          localField: 'id_manu',
+          foreignField: '_id',
+          as: 'manufacture',
+        },
+      },
+      {
+        $unwind: '$manufacture',
+      },
+    ]);
+    return { data: result };
+  }
+
   async findOne(id: number) {
     const result = await this.ManuCompanyModel.find({ _id: id });
     if (result.length) {

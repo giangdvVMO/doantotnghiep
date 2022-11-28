@@ -863,7 +863,7 @@ export const StudentProfile = () => {
                   )}
                 </Form.Item>
                 <Form.Item
-                  label="Quê quán"
+                  label="Địa chỉ"
                   name="address"
                   validateStatus={validateAddress.status}
                   help={validateAddress.errorMsg}
@@ -872,7 +872,7 @@ export const StudentProfile = () => {
                   {isEdit ? (
                     <Input
                       className="input-login max-width"
-                      placeholder="Nhập quê quán"
+                      placeholder="Nhập địa chỉ"
                       autoFocus={true}
                       disabled={!isEdit}
                       value={student.address}

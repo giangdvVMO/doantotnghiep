@@ -66,6 +66,30 @@ export const ChangePassword = ({ setIsOpenModal }) => {
         }
     }
 
+    function checkRePasswordFunc(oldPassword, newPassword, setValidateNewPassword){
+        if (!checkPassword(newPassword)) {
+            setValidateNewPassword({
+                status: 'error',
+                errorMsg: messageSignUpError.password
+            })
+            return false;
+        } else {
+            if (checkConfirmPass(oldPassword, newPassword)) {
+                setValidateNewPassword({
+                    status: 'error',
+                    errorMsg: messageSignUpError.oldnew
+                })
+                return false;
+            } else {
+                setValidateNewPassword({
+                    status: 'success',
+                    errorMsg: null
+                })
+                return true;
+            }
+        }
+    }
+
     function checkConfirmPassFunc(password, confirmPass) {
         if (!checkConfirmPass(password, confirmPass)) {
             setValidateConfirmPassword({
@@ -86,7 +110,7 @@ export const ChangePassword = ({ setIsOpenModal }) => {
         ref.current.submit();
         let count = 0;
         count = checkPasswordFunc(oldPassword, setValidateOldPassword) ? count : count + 1;
-        count = checkPassword(newPassword, setValidateNewPassword) ? count : count + 1;
+        count = checkRePasswordFunc(newPassword, setValidateNewPassword, setValidateNewPassword) ? count : count + 1;
         count = checkConfirmPassFunc(newPassword, confirmPassword) ? count : count + 1;
         if (count === 0) {
             const url = serverURL + 'account/change-password';

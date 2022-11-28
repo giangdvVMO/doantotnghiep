@@ -310,7 +310,7 @@ const SignUp = () => {
   }
 
   return (
-    <div className="center-container">
+    <div className="register-container">
       <div className="flex-container register">
         <Form
           form={form}

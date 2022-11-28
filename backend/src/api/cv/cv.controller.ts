@@ -58,6 +58,11 @@ export class CvController {
     return this.cvService.findAll(query);
   }
 
+  @Get('hint/:id_company')
+  hint(@Param('id_company') query: string) {
+    return this.cvService.hint(+query);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.cvService.findOne(+id);

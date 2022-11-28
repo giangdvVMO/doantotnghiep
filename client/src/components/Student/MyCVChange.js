@@ -206,14 +206,6 @@ import TextArea from "antd/lib/input/TextArea";
     const refButtonSubmit = useRef();
   
     //handle change
-    function handleKeyUp(e) {
-      if (e.keyCode === 13) {
-        console.log("enter");
-        refButtonSubmit.current.focus();
-        refButtonSubmit.current.click();
-      }
-    }
-  
     //validate
     function checkTitleFunc(title) {
       if (!checkString(title)) {
@@ -293,7 +285,6 @@ import TextArea from "antd/lib/input/TextArea";
       formData.append('speciality',CV.speciality);
       formData.append('experience',CV.experience);
       formData.append('summary',CV.summary);
-      // const data = { ...CV, id_student: student._id, fields: CV.fields };
       console.log("request", formData);
       try {
         const response = await fetch(url, {
@@ -326,8 +317,7 @@ import TextArea from "antd/lib/input/TextArea";
     async function updateCV() {
       const url = serverURL + "cv/" + CV._id;
       let formData = new FormData();
-      console.log('FIELDS',CV.fields)
-      formData.append('fields',CV.fields);
+      formData.append('fields',+CV.fields[0]?CV.fields:CV.fields.map(item=>item._id));
       console.log("file", file)
       if(file){formData.append('file_cv',file)};
       formData.append('title',CV.title);
@@ -488,9 +478,9 @@ import TextArea from "antd/lib/input/TextArea";
           return { ...preCV, speciality: e.target.value };
         });
       }
-      function handleChangeExperience(value) {
+      function handleChangeExperience(e) {
         setCV((preCV) => {
-          return { ...preCV, experience: value };
+          return { ...preCV, experience: e.target.value };
         });
       }
     // const getBase64 = (img, callback) => {
@@ -579,7 +569,7 @@ import TextArea from "antd/lib/input/TextArea";
                 <div className="cv-fullname">Thông tin CV</div>
             <Form
                   ref={ref}
-                  onKeyUp={handleKeyUp}
+                  // onKeyUp={handleKeyUp}
                   className="form"
                   name="basic"
                   layout="vertical"
@@ -614,7 +604,7 @@ import TextArea from "antd/lib/input/TextArea";
                                 </Form.Item>
                       <Form.Item
                         label="Kinh nghiệm (Số tháng):"
-                        name="title"
+                        name="experience"
                         validateStatus={validateExperience.status}
                         help={validateExperience.errorMsg}
                         className="label-cv"
@@ -650,7 +640,7 @@ import TextArea from "antd/lib/input/TextArea";
                                         className="label-cv"
                                         required
                                     >
-                                                <TextArea rows={15} value={CV.certificate} 
+                                                <TextArea rows={5} value={CV.certificate} 
                                                     defaultValue={CV.certificate} 
                                                     onChange= {handleChangeCertificate}
                                                 />
@@ -691,19 +681,7 @@ import TextArea from "antd/lib/input/TextArea";
                       <Form.Item label="FILE CV:" className="label-cv" required>
                           <>
                           <input type='file' onChange={handleChange}></input>
-                            {/* {file?
-                              ''
-                              :(CV.file_cv ? (
-                              <Image
-                              src={'http://localhost:5000/'+CV.file_cv}
-                                alt="avatar"
-                                style={{
-                                  width: "200px",
-                                }}
-                              />
-                            ) : (
-                              ""
-                            ))} */}
+                          {CV.file_cv?<a href={domain+CV.file_cv} target={"_blank"} rel="noreferrer">Link</a>:''}
                           </>
                       </Form.Item>
                     <Form.Item name="status" label="Trạng thái">
@@ -729,14 +707,20 @@ import TextArea from "antd/lib/input/TextArea";
                 :
                     <div className="wrap-cv-display">
                         <div className="wrap-label-cv border-underline" ><span className="label-left-cv">Tổng quan</span></div>
-                        <div className="text-cv text5">{CV.summary}</div>
+                        <div className="text-cv">
+                          <TextArea rows={5} value={CV.summary} defaultValue={CV.summary} disabled />
+                        </div>
                         <p className="text-cv">{CV.experience?CV.experience+ 'tháng kinh nghiệm': ''}</p>
                         <>
                             <div className="wrap-label-cv border-underline"><span className="label-left-cv">Chuyên môn</span></div>
-                            <div className="text-cv text5">{CV.speciality}</div>
+                            <div className="text-cv">
+                              <TextArea rows={5} value={CV.speciality} defaultValue={CV.speciality} disabled />
+                            </div>
                         </>
                             <div className="wrap-label-cv border-underline"><span className="label-left-cv">Chứng chỉ</span></div>
-                                <div className="text-cv text5">{CV.certificate}</div>
+                                <div className="text-cv text5">
+                                <TextArea rows={5} value={CV.certificate} defaultValue={CV.certificate} disabled />
+                                </div>
                             <div>
                             <div className="wrap-label-cv"><span className="label-left-cv">Lĩnh vực</span></div>
                             {CV.fields.length ? (

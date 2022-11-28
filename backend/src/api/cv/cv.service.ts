@@ -12,12 +12,14 @@ import { UpdateCvDto } from './dto/update-cv.dto';
 // import { imgbbUploader } from 'imgbb-uploader';
 import { QueryParamCVDto } from './dto/query-param-cv.dto';
 import { title } from 'process';
+import { ManuCompanyService } from '../manu-company/manu-company.service';
 
 @Injectable()
 export class CvService {
   constructor(
     @InjectModel(CV.name) private readonly cvModel: Model<CVDocument>,
     private readonly fieldCvService: FieldCvService,
+    private readonly manuCompanyService: ManuCompanyService,
     private readonly fileUploadService: FileUploadService,
   ) {}
   async create(createCvDto: CreateCvDto, file_cv: Express.Multer.File) {
@@ -138,6 +140,7 @@ export class CvService {
       certificate,
       speciality,
     } = updateCvDto;
+    console.log('fields', fields);
     const dataUpdate: any = {
       title,
       experience,
@@ -164,6 +167,12 @@ export class CvService {
     const resultUpdate = await this.cvModel.updateOne({ _id: id }, dataUpdate);
     console.log(resultUpdate);
     return resultUpdate;
+  }
+
+  async hint(id_company: number) {
+    const manufactrue = this.manuCompanyService.findNameManu(id_company);
+    return { data: manufactrue };
+    // const hintList = await this.cvModel.aggregate();
   }
 
   async findAll(query: QueryParamCVDto) {

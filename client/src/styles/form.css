@@ -7,7 +7,7 @@
     height: 100vh;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url(https://source.unsplash.com/random);
+    background-image: url(https://i.ibb.co/ZXSVLLx/o2020-10-13-09-generated.jpg);
     background-size: cover;
 }
 
@@ -18,7 +18,7 @@
     margin: 0 auto;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 20px gray inset;
+    box-shadow: 0 0 20px gray;
 }
 
 .form {
@@ -145,6 +145,14 @@
 
 .edit-btn{
     background-color:#AFD7F7
+}
+
+.register-container{
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* background-image: url(https://i.ibb.co/g365qZ8/vecteezy-holiday-new-year-and-merry-christmas-background-vector-illustration.jpg); */
+    background-size: cover;
 }
 
 @media screen and (max-width: 800px){

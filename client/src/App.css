@@ -78,6 +78,9 @@
   cursor: pointer;
 }
 
+.register-container{
+  background-image: url();
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
