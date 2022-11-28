@@ -230,7 +230,8 @@ export const CVManagerAdmin = () => {
                     x: 1000,
                     y: 800,
                 }}
-            />;
+                pagination={{pageSize:5}}
+            />
         </>
     )}else{
         return <div className="spin-container">

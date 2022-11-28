@@ -109,6 +109,7 @@ export const CompanyManager = () => {
     },
     {
       title: "Số điện thoại",
+      width: 130,
       dataIndex: "com_phone",
       key: "com_phone",
     },
@@ -245,7 +246,6 @@ export const CompanyManager = () => {
         }}
         pagination={{pageSize:5}}
       />
-      ;
     </>
   );
 };

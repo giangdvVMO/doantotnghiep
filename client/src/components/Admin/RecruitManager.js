@@ -338,7 +338,6 @@ if(fields){
         }}
         pagination={{pageSize:5}}
       />
-      ;
     </>
   );}else{
     return <div className="spin-container">

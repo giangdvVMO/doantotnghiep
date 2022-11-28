@@ -354,7 +354,6 @@ export const NewsManagement = () => {
         }}
         pagination={{pageSize:5}}
       />
-      ;
       <Modal
         title="Xác nhận xóa"
         open={isOpenDelete}

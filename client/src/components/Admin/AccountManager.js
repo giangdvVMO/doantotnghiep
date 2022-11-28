@@ -175,13 +175,6 @@ export const AccountManager = () => {
                     pageSize: 5,
                   } }
             />
-            {/* <Pagination 
-                pageSize= {1}
-                current = {current}
-                    // defaultCurrent: 1,
-                onChange= {handleChangePage}
-                total={totalPage}
-                /> */}
         </>
     )
 }

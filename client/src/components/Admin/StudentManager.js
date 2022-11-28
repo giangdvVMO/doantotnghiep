@@ -258,7 +258,7 @@ export const StudentManager = () => {
                     y: 800,
                 }}
                 pagination={{pageSize:5}}
-            />;
+            />
         </>
     )
 }
