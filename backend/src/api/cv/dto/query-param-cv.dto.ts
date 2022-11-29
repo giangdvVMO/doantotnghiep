@@ -49,6 +49,15 @@ export class QueryParamCVDto {
 
   @ApiPropertyOptional()
   @IsOptional()
+  speciality: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsEnum(['0', '1', '2'])
+  experience: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsNumberString()
   @IsEnum(['0', '1'], { message: 'status là 0 hoặc 1' })
   status: string;

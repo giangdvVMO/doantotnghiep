@@ -176,25 +176,75 @@ export class CvService {
   }
 
   async findAll(query: QueryParamCVDto) {
-    const { field, status, search, id_student, pageIndex, pageSize } = query;
+    const {
+      field,
+      status,
+      search,
+      id_student,
+      experience,
+      speciality,
+      pageIndex,
+      pageSize,
+    } = query;
+
     console.log('field', field);
     console.log('status', status);
     console.log('search', search);
     console.log('pageIndex', pageIndex);
     console.log('pageSize', pageSize);
     console.log('id_student', id_student);
-    const condition = {};
+
+    let isExperience = {};
+    switch (experience) {
+      case '0': {
+        isExperience = {
+          $eq: ['$experience', 0],
+        };
+        break;
+      }
+      case '1': {
+        isExperience = {
+          $and: [{ $gt: ['$experience', 0] }, { $lt: ['$experience', 12] }],
+        };
+        break;
+      }
+      case '2': {
+        isExperience = {
+          $gte: ['$experience', 12],
+        };
+        break;
+      }
+      default: {
+        isExperience = true;
+        break;
+      }
+    }
 
     const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
     const searchRgx = rgx(search ? search : '');
+    let specialityCheck: any = [true];
+    if (speciality) {
+      const array = speciality.split(',').map((item) => {
+        return item.trim();
+      });
+      specialityCheck = array.map((item) => {
+        return {
+          $regexMatch: {
+            input: '$speciality',
+            regex: rgx(item.replace('+', '\\+')),
+            options: 'i',
+          },
+        };
+      });
+    }
 
+    const condition = {};
     if (status === '1') {
       condition['status'] = true;
     }
     if (status === '0') {
       condition['status'] = false;
     }
-
     if (id_student) {
       condition['id_student'] = +id_student;
     }
@@ -280,36 +330,42 @@ export class CvService {
         $addFields: {
           //search
           result: {
-            // $or: [
-            //   {
-            //     $regexMatch: {
-            //       input: '$',
-            //       regex: searchRgx,
-            //       options: 'i',
-            //     },
-            //   },
-            // {
-            $regexMatch: {
-              input: '$title',
-              regex: searchRgx,
-              options: 'i',
-            },
-            // },
-            // ],
+            $and: [
+              // $or: [
+              //   {
+              //     $regexMatch: {
+              //       input: '$',
+              //       regex: searchRgx,
+              //       options: 'i',
+              //     },
+              //   },
+              {
+                $regexMatch: {
+                  input: '$title',
+                  regex: searchRgx,
+                  options: 'i',
+                },
+              },
+              {
+                $or: [...specialityCheck],
+              },
+            ],
           },
+          // ],
           id_fields: '$field_cv.id_fields',
         },
       },
       {
         $addFields: {
           isfields: field_condition,
+          isExperience: isExperience,
         },
       },
       {
         $match: {
           result: true,
           isfields: true,
-          // isExperience: true,
+          isExperience: true,
         },
       },
       {
@@ -398,13 +454,20 @@ export class CvService {
               //   },
               // },
               // {
-              $regexMatch: {
-                input: '$title',
-                regex: searchRgx,
-                options: 'i',
-              },
-              // },
-              // ],
+              $and: [
+                {
+                  $regexMatch: {
+                    input: '$title',
+                    regex: searchRgx,
+                    options: 'i',
+                  },
+                },
+                {
+                  $or: [...specialityCheck],
+                  // },
+                  // ],
+                },
+              ],
             },
             id_fields: '$field_cv.id_fields',
           },

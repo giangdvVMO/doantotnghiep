@@ -96,6 +96,9 @@ export const CompanyManager = () => {
       title: "Tên công ty",
       dataIndex: "com_name",
       key: "com_name",
+      render:(_, record)=>{
+        return (<p className="bold-column">{record.com_name}</p>)
+      }
     },
     {
       title: "Địa chỉ",
