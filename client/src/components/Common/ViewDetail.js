@@ -23,7 +23,7 @@ export const ViewDetail = () => {
 
   async function fetchListNews() {
     if(user&&newsDetail){
-        let query = "?status=1&&field="+newsDetail.id_fields;
+        let query = "?status=1&&except_id="+newsDetail._id+"&&field="+newsDetail.id_fields;
         // query = search !== "" ? query + "&search=" + search : query;
        
         const url = serverURL + "news" + query;

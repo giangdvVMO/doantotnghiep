@@ -50,4 +50,8 @@ export class QueryParamNewsDto {
   @ApiPropertyOptional()
   @IsOptional()
   id_account: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  except_id: string;
 }

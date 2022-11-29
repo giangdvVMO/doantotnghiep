@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { FieldNewsService } from '../field_news/field_news.service';
@@ -70,8 +70,16 @@ export class NewsService {
   }
 
   async findAll(query) {
-    const { field, status, search, id_account, sort, pageIndex, pageSize } =
-      query;
+    const {
+      field,
+      status,
+      search,
+      id_account,
+      sort,
+      pageIndex,
+      pageSize,
+      except_id,
+    } = query;
 
     console.log('field', field);
     const condition = {};
@@ -85,6 +93,9 @@ export class NewsService {
     }
     if (id_account) {
       condition['id_account'] = +id_account;
+    }
+    if (except_id) {
+      condition['_id'] = { $not: { $eq: +except_id } };
     }
     let sort_order: any = { $sort: { create_date: -1 } };
 
@@ -265,6 +276,30 @@ export class NewsService {
 
   update(id: number, updateNewsDto: UpdateNewsDto) {
     return `This action updates a #${id} news`;
+  }
+
+  async view(id: number) {
+    const data = await this.newsModel.aggregate([
+      {
+        $match: {
+          _id: id,
+        },
+      },
+    ]);
+    if (!data.length) {
+      throw new BadRequestException('Mã bài đăng không tồn tại');
+      return;
+    }
+    console.log('views', data[0].views);
+    const result = await this.newsModel.updateOne(
+      { _id: id },
+      { views: data[0].views ? data[0].views + 1 : 1 },
+    );
+    if (result.modifiedCount) {
+      return { data: 'success' };
+    } else {
+      return { data: 'failure' };
+    }
   }
 
   async remove(id: number, data: number) {

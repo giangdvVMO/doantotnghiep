@@ -39,6 +39,14 @@ export class NewsController {
     return this.newsService.findOne(+id);
   }
 
+  @Patch('views/:id')
+  views(@Param('id') id: string) {
+    if (!parseInt(id)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
+    return this.newsService.view(+id);
+  }
+
   @Patch('confirm/:id')
   confirm(@Param('id') id: string, @Body() confirmNewsDto: ConfirmNewsDto) {
     if (!parseInt(id)) {

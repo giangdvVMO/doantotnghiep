@@ -133,6 +133,35 @@ export const NewsView = () => {
     }
   }
 
+  async function viewNews(id) {
+    if(user){
+      message.success('run')
+        const url = serverURL + "news/views/"+ id;
+        try {
+        const response = await fetch(url, {
+            method: "PATCH",
+            headers: {
+            "Content-Type": "application/json",
+            },
+        });
+        const result = await response.json();
+        if (response.status !== 200) {
+            message.error("Không thể tăng views!");
+        }else{
+        message.success('run views')
+        navigate(`../news-detail/${id}`)
+
+        }
+        // } else {
+        //     // console.log("result", result);
+        //     fetchListFresh();
+        // }
+        } catch (err) {
+        console.log(err);
+        }
+    }
+  }
+
   //fetch user
   const fetchUser = async () => {
     if(!user){
@@ -210,7 +239,7 @@ export const NewsView = () => {
                         return (
                             <div className="news-detail-container">
                                 <Image className="thumnail" src={item.thumnail}/>
-                                <Link to={`../news-detail/${item._id}`}><div className="title-thumnail">{item.title}</div></Link>
+                                <Link onClick={()=>{viewNews(item._id)}}><div className="title-thumnail">{item.title}</div></Link>
                                 <div className="view-detail">
                                   <div className="view-count"><EyeOutlined className="icon-view-news"/>{item.views?item.views: 0}</div>
                                   <div className="view-date"><FieldTimeOutlined className="icon-view-news" />{DateToShortStringDate(item.create_date)}</div>
@@ -232,7 +261,7 @@ export const NewsView = () => {
                         return (
                             <div className="news-detail-container">
                                 <Image className="thumnail" src={item.thumnail}/>
-                                <Link to={`../news-detail/${item._id}`}><div className="title-thumnail">{item.title}</div></Link>
+                                <Link onClick={()=>{viewNews(item._id)}}><div className="title-thumnail">{item.title}</div></Link>
                                 <div className="view-detail">
                                   <div className="view-count"><EyeOutlined className="icon-view-news"/>{item.views?item.views: 0}</div>
                                   <div className="view-date"><FieldTimeOutlined className="icon-view-news" />{DateToShortStringDate(item.create_date)}</div>

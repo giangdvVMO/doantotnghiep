@@ -225,7 +225,7 @@ async function fetchListYourRate() {
 if(user){
   return (
     <>
-      <div className="banner-content">Danh sách đánh giá</div>
+      <div className="banner-content"><h1>Danh sách đánh giá</h1></div>
       <div className='segment'>
       <Segmented className='segment-content' block options={['Đánh giá của bạn', 'Đánh giá về bạn']} value={value} onChange={setValue} />
     </div>

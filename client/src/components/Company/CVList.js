@@ -159,7 +159,7 @@ export const CVList = () => {
   if(fields&&user){
   return (
     <>
-      <div className="banner-content">Quản lý danh sách CV</div>
+      <div className="banner-content"><h1>Danh sách CV</h1></div>
       <div className="container-filter">
         <div className="filter">
           <label className="label-filter">Lĩnh vực CV:</label>
