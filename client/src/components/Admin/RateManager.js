@@ -1,4 +1,4 @@
-import { Button, Input, message, Modal, Select, Spin, Table, Tag } from "antd";
+import { Button, Image, Input, message, Modal, Select, Spin, Table, Tag } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
@@ -243,7 +243,10 @@ export const RateManagerAdmin = () => {
 if(user){
   return (
     <>
-      <div className="banner-content">Quản lý danh sách đánh giá</div>
+      <div className="banner-content">
+        <div className="text-banner">Quản lý danh sách đánh giá</div>
+        <Image className="image-background-banner" src="https://i.ibb.co/X7Fw3P2/Grades-bro.png" preview={false}/>
+       </div>
       <div className="container-filter">
         {/* <div className='filter'>
                     <label className='label-filter'>Địa điểm:</label>

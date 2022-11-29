@@ -1,4 +1,4 @@
-import { Button, Input, message, Select, Table, Tag } from 'antd';
+import { Button, Image, Input, message, Select, Table, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {decodeToken} from 'react-jwt';
@@ -114,12 +114,6 @@ export const RecruitManager = () => {
     useEffect(()=>{fetchField();},[]);
     useEffect(()=>{fetchListRecruit();},[field, status, search, user])
     const columns = [
-        {
-            title: 'STT',
-            dataIndex: '_id',
-            key: '_id',
-            fixed: 'left',
-        },
         {
             title: 'Tiêu đề',
             dataIndex: 'title',
@@ -240,7 +234,10 @@ export const RecruitManager = () => {
 
     return (
         <>
-            <div className='banner-content'>Quản lý danh sách bài đăng</div>
+            <div className='banner-content'>
+                <div className="text-banner">Quản lý danh sách bài đăng</div>
+                <Image className="image-background-banner" src="https://i.ibb.co/PTQ61JP/Accept-tasks-bro.png" preview={false}/>
+            </div>
             <div className='container-filter'>
                 <div className='filter'>
                     <label className='label-filter'>Lĩnh vực bài đăng:</label>

@@ -1,4 +1,4 @@
-import { Button, Input, message, Modal, Segmented, Select, Spin, Table, Tag } from "antd";
+import { Button, Image, Input, message, Modal, Segmented, Select, Spin, Table, Tag } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
@@ -225,7 +225,10 @@ async function fetchListYourRate() {
 if(user){
   return (
     <>
-      <div className="banner-content"><h1>Danh sách đánh giá</h1></div>
+      <div className="banner-content">
+        <div className="text-banner">Danh sách đánh giá</div>
+        <Image className="image-background-banner" src="https://i.ibb.co/X7Fw3P2/Grades-bro.png" preview={false}/>
+      </div>
       <div className='segment'>
       <Segmented className='segment-content' block options={['Đánh giá của bạn', 'Đánh giá về bạn']} value={value} onChange={setValue} />
     </div>

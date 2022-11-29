@@ -32,7 +32,7 @@
 .card-about{
     height: 200px;
     width: 200px;
-    background-color: white;
+    /* background-color: #ffe4e1; */
     border-radius: 20px;
     margin: 10px 30px;
 }
