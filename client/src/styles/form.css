@@ -15,6 +15,8 @@
     min-height: 100vh;
     width: 100%;
     display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
     margin: 0 auto;
     justify-content: center;
     align-items: center;
@@ -149,9 +151,22 @@
 
 .register-container{
     height: 100vh;
-    background-position: center;
+    max-height: 100vh;
+    /* position:fixed; */
+    /* background-position: center;
     background-repeat: no-repeat;
     /* background-image: url(https://i.ibb.co/g365qZ8/vecteezy-holiday-new-year-and-merry-christmas-background-vector-illustration.jpg); */
+    /* background-size: cover;  */
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.left-register{
+    /* position:fixed; */
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(https://i.ibb.co/g365qZ8/vecteezy-holiday-new-year-and-merry-christmas-background-vector-illustration.jpg);
     background-size: cover;
 }
 

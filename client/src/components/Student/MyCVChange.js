@@ -26,6 +26,7 @@ import {
     openNotificationWithIcon,
   } from "../../common/service";
   import {
+    BankOutlined,
     CheckCircleOutlined,
     MailOutlined,
     MinusCircleOutlined,
@@ -536,7 +537,7 @@ import TextArea from "antd/lib/input/TextArea";
                 <div className="title-in-cv">Liên hệ</div>
                 <div className="detail-section-cv-container">
                     <div className="part-section-cv">
-                        <span className="left-content-cv"><PhoneOutlined /></span><span>{account.address}</span>
+                    <span className="left-content-cv"><BankOutlined /></span><span>{student.address}</span>
                     </div>
                     <div className="part-section-cv">
                         <span className="left-content-cv"><PhoneOutlined /></span><span>{account.phone}</span>
@@ -567,6 +568,7 @@ import TextArea from "antd/lib/input/TextArea";
             </div>
             <div className="right-CV-container">
                 <div className="cv-fullname">Thông tin CV</div>
+                
             <Form
                   ref={ref}
                   // onKeyUp={handleKeyUp}
@@ -591,6 +593,7 @@ import TextArea from "antd/lib/input/TextArea";
                                     onChange={handleChangeTitle}
                                 />
                             </Form.Item>
+                            
                                 <Form.Item
                                     label="Tổng quan:"
                                     name="summary"
@@ -708,18 +711,24 @@ import TextArea from "antd/lib/input/TextArea";
                     <div className="wrap-cv-display">
                         <div className="wrap-label-cv border-underline" ><span className="label-left-cv">Tổng quan</span></div>
                         <div className="text-cv">
-                          <TextArea rows={5} value={CV.summary} defaultValue={CV.summary} disabled />
+                          <pre>
+                            {CV.summary}
+                          </pre>
                         </div>
                         <p className="text-cv">{CV.experience?CV.experience+ 'tháng kinh nghiệm': ''}</p>
                         <>
                             <div className="wrap-label-cv border-underline"><span className="label-left-cv">Chuyên môn</span></div>
                             <div className="text-cv">
-                              <TextArea rows={5} value={CV.speciality} defaultValue={CV.speciality} disabled />
+                            <pre>
+                              {CV.speciality}
+                            </pre>
                             </div>
                         </>
                             <div className="wrap-label-cv border-underline"><span className="label-left-cv">Chứng chỉ</span></div>
-                                <div className="text-cv text5">
-                                <TextArea rows={5} value={CV.certificate} defaultValue={CV.certificate} disabled />
+                                <div className="text-cv">
+                                <pre>
+                                  {CV.speciality}
+                                </pre>
                                 </div>
                             <div>
                             <div className="wrap-label-cv"><span className="label-left-cv">Lĩnh vực</span></div>

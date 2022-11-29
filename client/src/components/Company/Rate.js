@@ -116,18 +116,17 @@ export const RateModal = ({id_student, id_company, type_rate, setOpenRate}) => {
                     // }
                     message.error("Không thành công!");
                 }else{
-                    const idRate = result.data._id;
-                    const link = "admin/rate/" + idRate;
+                    const link = "admin/rate-list";
                     const title = "Yêu cầu duyệt thông tin đánh giá";
                     const type = "infor";
-                    const content = `${type_rate==='student'?'Sinh viên':'Doanh nghiệp'} yêu cầu duyệt thông tin đánh giá.`;
+                    const content = `${type_rate==='student'?'Doanh nghiệp':'Sinh viên'} yêu cầu duyệt thông tin đánh giá.`;
                     const listAdmin = await getUserAdmin();
                     console.log("listAdmin", listAdmin);
                     if (!listAdmin.length) {
                         openNotificationWithIcon('warning','Cảnh báo',"Chưa có admin, hãy yêu cầu tạo tài khoản admin");
                     } else {
                         createNoti(id_company, listAdmin, title, type, content, link);
-                        openNotificationWithIcon('success', 'Thông báo', `Bạn đã gửi đánh giá ${type_rate==='student'?'doanh nghiệp':'sinh viên'}, hãy chờ admin duyệt!`)
+                        openNotificationWithIcon('success', 'Thông báo', `Bạn đã gửi đánh giá ${type_rate==='student'?'sinh viên':'doanh nghiệp'}, hãy chờ admin duyệt!`)
                     }
                 }
                 setOpenRate(false);

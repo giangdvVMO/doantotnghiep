@@ -9,7 +9,8 @@
 }
 
 .cv-detail-avatar{
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     height: 400px;
     margin: 10 auto;
 }
@@ -75,4 +76,30 @@
 
 .border-underline{
     border-bottom: 1px solid gray;
+}
+
+.left-CV-container{
+    padding: 10px;
+    background-color: #008080;
+}
+
+.rate-cv-container{
+    text-align: center;
+}
+
+.notice{
+    padding: 10px;
+    text-align: center;
+    margin: 5px 0px;
+    background-color: #ffa500;
+}
+
+.rate-detail-container{
+    text-align: center;
+    margin: 20px;
+}
+
+.avatar-rate img{
+    height: 50px;
+    width: 50px;
 }

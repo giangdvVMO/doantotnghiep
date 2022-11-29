@@ -311,6 +311,7 @@ const SignUp = () => {
 
   return (
     <div className="register-container">
+      <div className="left-register"></div>
       <div className="flex-container register">
         <Form
           form={form}
@@ -501,10 +502,10 @@ const SignUp = () => {
               onClick={handleSubmit}
               onKeyUp={handleKeyUp}
             >
-              Submit
+              Đăng ký
             </Button>
             <Button onClick={handleReset} className="button reset">
-              Reset
+              Làm mới
             </Button>
           </Form.Item>
         </Form>

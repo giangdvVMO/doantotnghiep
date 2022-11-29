@@ -122,15 +122,13 @@ export const CompanyList = () => {
     
     const columns = [
         {
-            title: 'STT',
-            dataIndex: '_id',
-            key: '_id',
-            fixed: 'left',
-        },
-        {
             title: 'Tên công ty',
             dataIndex: 'com_name',
             key: 'com_name',
+            width: 150,
+            render:(_, record)=>{
+                return <p style={{fontWeight: 800}}>{record.com_name}</p>
+            }
         },
         {
             title: 'Địa chỉ',
@@ -199,7 +197,7 @@ export const CompanyList = () => {
     if(user&&manufactures){
     return (
         <>
-            <div className='banner-content'>Quản lý danh sách doanh nghiệp</div>
+            <div className='banner-content'><h1>Danh sách doanh nghiệp</h1></div>
             <div className='container-filter'>
                 <div className='filter'>
                     <label className='label-filter'>Số lao động:</label>
@@ -259,7 +257,7 @@ export const CompanyList = () => {
                     x: 800,
                     y: 800,
                 }}
-            />;
+            />
         </>
     )}else{
         return <div className="spin-container">

@@ -157,6 +157,17 @@ export class RateService {
         $unwind: '$account',
       },
       {
+        $lookup: {
+          from: 'tbl_account',
+          localField: 'company._id',
+          foreignField: '_id',
+          as: 'account_company',
+        },
+      },
+      {
+        $unwind: '$account_company',
+      },
+      {
         $addFields: {
           //search
           result: {

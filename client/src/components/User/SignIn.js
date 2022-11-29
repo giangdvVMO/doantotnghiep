@@ -1,5 +1,5 @@
 import { InfoCircleOutlined, UserOutlined, EyeInvisibleOutlined, EyeTwoTone, KeyOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, message, Tooltip, Typography } from 'antd';
+import { Button, Checkbox, Form, Image, Input, message, Tooltip, Typography } from 'antd';
 import React, { useContext, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { messageSignUpError } from '../../common/error';
@@ -139,6 +139,7 @@ const SignIn = () => {
         <div className='grid-container'>
             <div className='img-side' ></div>
             <div className='flex-container'>
+            <Image preview={false} src='https://i.ibb.co/zxM3J9f/Profiling-amico.png' style={{width: '200px'}}/>
                 <Form
                     form={form}
                     ref={ref}

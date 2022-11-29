@@ -1,4 +1,4 @@
-import { UserOutlined } from "@ant-design/icons";
+import { BankOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
@@ -27,7 +27,7 @@ import { serverURL } from "../../configs/server.config";
 import { Email } from "./Email";
 import { RateModal } from "./Rate";
 import { RateCommentList } from "../Common/RateCommentList";
-import { domain } from "../../data/default-image";
+import { avatarImage, domain } from "../../data/default-image";
 
 let initstudent = {
   _id: -1,
@@ -58,6 +58,7 @@ export const StudentDetailCompany = () => {
   const [rateList, setRateList] = useState([]);
   const [isOpenRate, setOpenRate] = useState(false);
   const [isOpenEmail, setOpenEmail] = useState(false);
+  const [overall, setOverall] = useState(0);
 
   const { id } = useParams();
 
@@ -270,7 +271,15 @@ export const StudentDetailCompany = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống!");
       } else {
-        setRateList(result.data);
+        console.log('result', result.data)
+        if(result.data.length!==0){
+          let sum =0;
+          result.data.forEach(element => {
+            sum = sum + element.score
+          });
+          setOverall(sum/result.data.length);
+        }
+        setRateList([...result.data]);
       }
     } catch (err) {
       console.log(err);
@@ -394,191 +403,305 @@ export const StudentDetailCompany = () => {
   };
   if (account&&student._id!==-1) {
     return (
-      <div className="swapper-container">
-        <div className="introduce-frame">
-          <div className="background-image"></div>
-          <div className="introduce-bottom">
-          <div className='avatar-container'>
-            {
-              student.account.avatar?
-              <Avatar className="avatar" size={120} src={domain+student.account.avatar} />
-              :
-              <Avatar className="avatar" size={120} icon={<UserOutlined />} />
-            }
-          </div>
-
-            <div className="introduce-fullname">{student.account.fullname}</div>
-            
-            {renderButtonGroup()}
-          </div>
-        </div>
-        <div className="detail-swapper">
-          <p className="title-account">Thông tin sinh viên</p>
-          <div className="underline"></div>
-          <div className="body">
-            <Form
-              ref={ref}
-              onKeyUp={handleKeyUp}
-              className="form"
-              name="basic"
-              layout="vertical"
-              autoComplete="off"
-            >
-              <div className="two-colums">
-                <Form.Item
-                  label="Họ và tên"
-                  name="fullname"
-                  initialValue={account.fullname}
-                  className="label"
-                >
-                  <p className="text-display">{account.fullname}</p>
-                </Form.Item>
-                <Form.Item
-                  label="Email"
-                  name="email"
-                  initialValue={account.email}
-                  className="label"
-                >
-                  <p className="text-display">{account.email}</p>
-                </Form.Item>
-
-                <Form.Item
-                  label="Số điện thoại"
-                  name="phone"
-                  initialValue={account.phone}
-                  className="label"
-                >
-                  <p className="text-display">{account.phone}</p>
-                </Form.Item>
-                <Form.Item
-                  label="Trường"
-                  name="university"
-                  initialValue={student.university}
-                  className="label"
-                >
-                  <p className="text-display">{student.university}</p>
-                </Form.Item>
-                <Form.Item
-                  label="Khoa"
-                  name="faculty"
-                  initialValue={student.faculty}
-                  className="label"
-                >
-                  <p className="text-display">{student.university}</p>
-                </Form.Item>
-                <Form.Item
-                  label="Chuyên ngành"
-                  name="major"
-                  className="label"
-                  initialValue={student.major}
-                >
-                  <p className="text-display">{student.major}</p>
-                </Form.Item>
-                <Form.Item
-                  label="Khóa học"
-                  name="course"
-                  initialValue={student.course}
-                  className="label"
-                >
-                  <p className="text-display">{student.course}</p>
-                </Form.Item>
-                <Form.Item
-                  label="CCCD"
-                  name="cccd"
-                  initialValue={student.cccd}
-                  className="label"
-                >
-                  <p className="text-display">{student.cccd}</p>
-                </Form.Item>
-                <Form.Item
-                  label="Quê quán"
-                  name="address"
-                  initialValue={student.address}
-                  className="label"
-                >
-                  <p className="text-display">{student.address}</p>
-                </Form.Item>
-                <Form.Item
-                  label="Mã sinh viên"
-                  name="card_student"
-                  initialValue={student.card_student}
-                  className="label"
-                >
-                  <p className="text-display">{student.card_student}</p>
-                </Form.Item>
-                <Form.Item label="Ngày sinh" name="birthday" className="label">
-                  <p className="text-display">
-                    {DateToShortString(account.birthday)}
-                  </p>
-                </Form.Item>
-                <Form.Item
-                  label="GPA"
-                  name="gpa"
-                  initialValue={student.gpa}
-                  className="label"
-                >
-                  <p className="text-display">{student.gpa}</p>
-                </Form.Item>
-              </div>
-            </Form>
-          </div>
-        </div>
-        <Card title="Thông tin CV">
-          {CV ? (
-            <Form
-              ref={ref}
-              onKeyUp={handleKeyUp}
-              className="form"
-              name="basic"
-              layout="vertical"
-            >
-              <div className="two-colums">
-                <Form.Item label="Tiêu đề CV:" name="title" className="label">
-                  <p className="text-display">{CV.title}</p>
-                </Form.Item>
-                <Form.Item label="Lĩnh vực:" name="fields" className="label">
-                  {
-                    <div>
-                      {CV.fields.length ? (
-                        CV.fields.map((field) => {
-                          return (
-                            <Tag className="tag" color="cyan">
-                              {field.nameField}
-                            </Tag>
-                          );
-                        })
-                      ) : (
-                        <p className="text-display"></p>
-                      )}
+      <div>
+        <div className="CV-container">
+            <div className="left-CV-container">
+                <Avatar shape='square' className='cv-detail-avatar' src={student.account.avatar?domain+student.account.avatar:avatarImage}/>
+                <div className="cv-fullname">{student.account.fullname}</div>
+                <div className="rate-cv-container">
+                  <Rate value={overall} count={10} disabled/>
+                  {rateList.length?<></>: <p>Chưa có đánh giá nào</p>}
+                  {renderButtonGroup()}
+                </div>
+                <br/>
+                
+                <div className="title-in-cv">Thông tin cá nhân</div>
+                <div className="detail-section-cv-container">
+                    <div className="part-section-cv">
+                        <span className="left-content-cv">CCCD:</span><span>{student.cccd}</span>
                     </div>
-                  }
-                </Form.Item>
-                <Form.Item label="FILE CV:" className="label">
-                  {CV.file_cv ? (
-                    <Image alt="file_cv" src={CV.file_cv} width={300} />
-                  ) : (
-                    <p>Chưa có ảnh</p>
-                  )}
-                </Form.Item>
-                <Form.Item>
-
-                </Form.Item>
-                {rate?
-                  <Form.Item label="Bạn đã tuyển sinh viên này, bạn có thể đổi trạng thái CV thành private!" className="label">
-                    <Button type="primary" onClick={async()=>{await handleChangeStatus()}}>Đổi trạng thái</Button>
-                  </Form.Item>:''
+                </div>
+                <br/>
+                <div className="title-in-cv">Liên hệ</div>
+                <div className="detail-section-cv-container">
+                    <div className="part-section-cv">
+                        <span className="left-content-cv"><BankOutlined /></span><span>{student.address}</span>
+                    </div>
+                    <div className="part-section-cv">
+                        <span className="left-content-cv"><PhoneOutlined /></span><span>{student.account.phone}</span>
+                        </div>
+                    <div className="part-section-cv">
+                        <span className="left-content-cv"><MailOutlined /></span><span>{student.account.email}</span>
+                    </div>
+                </div>
+                <br/>
+                <div className="title-in-cv">Học vấn</div>
+                <div className="detail-section-cv-container">
+                    <div className="part-section-cv">
+                        <span className="left-content-cv">Trường:</span><span>{student.university}</span>
+                    </div>
+                    <div className="part-section-cv">
+                        <span className="left-content-cv">Khoa:</span><span>{student.faculty}</span>
+                        </div>
+                    <div className="part-section-cv">
+                        <span className="left-content-cv">Chuyên ngành:</span><span>{student.major}</span>
+                    </div>
+                    <div className="part-section-cv">
+                        <span className="left-content-cv">Khóa học:</span><span>{student.course}</span>
+                    </div>
+                    <div className="part-section-cv">
+                        <span className="left-content-cv">GPA:</span><span>{student.gpa}</span>
+                    </div>
+                </div>
+            </div>
+            <div className="right-CV-container">
+              {CV&&CV.status?
+              <>
+                <div className="cv-fullname">Thông tin CV</div>
+                <div className="underline"></div>
+                    <div className="wrap-cv-display">
+                        <div className="wrap-label-cv border-underline" ><span className="label-left-cv">Tổng quan</span></div>
+                        <div className="text-cv">
+                          <pre>
+                            {CV.summary}
+                          </pre>
+                        </div>
+                        <p className="text-cv">{CV.experience?CV.experience+ 'tháng kinh nghiệm': ''}</p>
+                        <>
+                            <div className="wrap-label-cv border-underline"><span className="label-left-cv">Chuyên môn</span></div>
+                            <div className="text-cv">
+                            <pre>
+                              {CV.speciality}
+                            </pre>
+                            </div>
+                        </>
+                            <div className="wrap-label-cv border-underline"><span className="label-left-cv">Chứng chỉ</span></div>
+                                <div className="text-cv">
+                                <pre>
+                                  {CV.speciality}
+                                </pre>
+                                </div>
+                            <div>
+                            <div className="wrap-label-cv"><span className="label-left-cv">Lĩnh vực</span></div>
+                            {CV.fields.length ? (
+                              CV.fields.map((field) => {
+                                return (
+                                  <Tag className="tag" color="cyan">
+                                    {field.nameField}
+                                  </Tag>
+                                );
+                              })
+                            ) : (
+                              <p className="text-display"></p>
+                            )}
+                          </div>
+                          <div className="wrap-label-cv"><span className="label-left-cv">Tệp đính kèm</span></div>
+                          {CV.file_cv ? (
+                          <a target='_blank' href={domain+CV.file_cv} rel="noreferrer" >Link CV</a>
+                        ) : (
+                          <p>Chưa có file CV đính kèm</p>
+                        )}
+                        {rate?
+                          <div className="notice">
+                                Bạn đã tuyển sinh viên này, bạn có thể đổi trạng thái CV thành private!
+                                <Button type="primary" style={{marginLeft: '10px'}} onClick={async()=>{await handleChangeStatus()}}>Đổi trạng thái</Button>
+                          </div>:''
+                        }
+                </div>
+                
+                </>:
+                <div className="notice">Chưa có CV hoặc CV ở trạng thái private</div>
                 }
-              </div>
-            </Form>
-          ) : (
-            <p>Chưa có CV hoặc CV ở trạng thái private</p>
-          )}
-        </Card>
-        <Card title="Các đánh giá sinh viên">
-            {rateList?<RateCommentList list={rateList}/>:<div>Chưa có đánh giá nào</div>}
-        </Card>
+                <br/>
+                <div>
+                    <div className="cv-fullname">Đánh giá về sinh viên</div>
+                    <div className="underline"></div>
+                    {rateList.length?<RateCommentList list={rateList}/>:<div className="rate-detail-container">Chưa có đánh giá nào</div>}
+                </div>
+            </div>
+        </div>
+      {/* // <div className="swapper-container">
+      //   <div className="introduce-frame">
+      //     <div className="background-image"></div>
+      //     <div className="introduce-bottom">
+      //     <div className='avatar-container'>
+      //       {
+      //         student.account.avatar?
+      //         <Avatar className="avatar" size={120} src={domain+student.account.avatar} />
+      //         :
+      //         <Avatar className="avatar" size={120} icon={<UserOutlined />} />
+      //       }
+      //     </div>
 
-          {/* xác nhận */}
+      //       <div className="introduce-fullname">{student.account.fullname}</div>
+            
+      //       {renderButtonGroup()}
+      //     </div>
+      //   </div>
+      //   <div className="detail-swapper">
+      //     <p className="title-account">Thông tin sinh viên</p>
+      //     <div className="underline"></div>
+      //     <div className="body">
+      //       <Form
+      //         ref={ref}
+      //         onKeyUp={handleKeyUp}
+      //         className="form"
+      //         name="basic"
+      //         layout="vertical"
+      //         autoComplete="off"
+      //       >
+      //         <div className="two-colums">
+      //           <Form.Item
+      //             label="Họ và tên"
+      //             name="fullname"
+      //             initialValue={account.fullname}
+      //             className="label"
+      //           >
+      //             <p className="text-display">{account.fullname}</p>
+      //           </Form.Item>
+      //           <Form.Item
+      //             label="Email"
+      //             name="email"
+      //             initialValue={account.email}
+      //             className="label"
+      //           >
+      //             <p className="text-display">{account.email}</p>
+      //           </Form.Item>
+
+      //           <Form.Item
+      //             label="Số điện thoại"
+      //             name="phone"
+      //             initialValue={account.phone}
+      //             className="label"
+      //           >
+      //             <p className="text-display">{account.phone}</p>
+      //           </Form.Item>
+      //           <Form.Item
+      //             label="Trường"
+      //             name="university"
+      //             initialValue={student.university}
+      //             className="label"
+      //           >
+      //             <p className="text-display">{student.university}</p>
+      //           </Form.Item>
+      //           <Form.Item
+      //             label="Khoa"
+      //             name="faculty"
+      //             initialValue={student.faculty}
+      //             className="label"
+      //           >
+      //             <p className="text-display">{student.university}</p>
+      //           </Form.Item>
+      //           <Form.Item
+      //             label="Chuyên ngành"
+      //             name="major"
+      //             className="label"
+      //             initialValue={student.major}
+      //           >
+      //             <p className="text-display">{student.major}</p>
+      //           </Form.Item>
+      //           <Form.Item
+      //             label="Khóa học"
+      //             name="course"
+      //             initialValue={student.course}
+      //             className="label"
+      //           >
+      //             <p className="text-display">{student.course}</p>
+      //           </Form.Item>
+      //           <Form.Item
+      //             label="CCCD"
+      //             name="cccd"
+      //             initialValue={student.cccd}
+      //             className="label"
+      //           >
+      //             <p className="text-display">{student.cccd}</p>
+      //           </Form.Item>
+      //           <Form.Item
+      //             label="Quê quán"
+      //             name="address"
+      //             initialValue={student.address}
+      //             className="label"
+      //           >
+      //             <p className="text-display">{student.address}</p>
+      //           </Form.Item>
+      //           <Form.Item
+      //             label="Mã sinh viên"
+      //             name="card_student"
+      //             initialValue={student.card_student}
+      //             className="label"
+      //           >
+      //             <p className="text-display">{student.card_student}</p>
+      //           </Form.Item>
+      //           <Form.Item label="Ngày sinh" name="birthday" className="label">
+      //             <p className="text-display">
+      //               {DateToShortString(account.birthday)}
+      //             </p>
+      //           </Form.Item>
+      //           <Form.Item
+      //             label="GPA"
+      //             name="gpa"
+      //             initialValue={student.gpa}
+      //             className="label"
+      //           >
+      //             <p className="text-display">{student.gpa}</p>
+      //           </Form.Item>
+      //         </div>
+      //       </Form>
+      //     </div>
+      //   </div>
+      //   <Card title="Thông tin CV">
+          // {CV ? (
+      //       <Form
+      //         ref={ref}
+      //         onKeyUp={handleKeyUp}
+      //         className="form"
+      //         name="basic"
+      //         layout="vertical"
+      //       >
+      //         <div className="two-colums">
+      //           <Form.Item label="Tiêu đề CV:" name="title" className="label">
+      //             <p className="text-display">{CV.title}</p>
+      //           </Form.Item>
+      //           <Form.Item label="Lĩnh vực:" name="fields" className="label">
+      //             {
+      //               <div>
+      //                 {CV.fields.length ? (
+      //                   CV.fields.map((field) => {
+      //                     return (
+      //                       <Tag className="tag" color="cyan">
+      //                         {field.nameField}
+      //                       </Tag>
+      //                     );
+      //                   })
+      //                 ) : (
+      //                   <p className="text-display"></p>
+      //                 )}
+      //               </div>
+      //             }
+      //           </Form.Item>
+      //           <Form.Item label="FILE CV:" className="label">
+      //             {CV.file_cv ? (
+      //               <Image alt="file_cv" src={CV.file_cv} width={300} />
+      //             ) : (
+      //               <p>Chưa có ảnh</p>
+      //             )}
+      //           </Form.Item>
+      //           <Form.Item>
+
+      //           </Form.Item>
+      //           {rate?
+      //             <Form.Item label="Bạn đã tuyển sinh viên này, bạn có thể đổi trạng thái CV thành private!" className="label">
+      //               <Button type="primary" onClick={async()=>{await handleChangeStatus()}}>Đổi trạng thái</Button>
+      //             </Form.Item>:''
+      //           }
+      //         </div>
+      //       </Form>
+        //   ) : (
+        //     <p>Chưa có CV hoặc CV ở trạng thái private</p>
+        //   )}
+        // </Card> */}
+      
+
         <Modal
           closable={true}
           title="Xác nhận"
@@ -612,6 +735,6 @@ export const StudentDetailCompany = () => {
       </div>
     );
   } else {
-    return <Skeleton active />;
+    return <Skeleton active />
   }
 };
