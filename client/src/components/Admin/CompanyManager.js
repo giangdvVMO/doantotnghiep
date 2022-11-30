@@ -96,7 +96,7 @@ export const CompanyManager = () => {
       title: "Tên công ty",
       dataIndex: "com_name",
       key: "com_name",
-      width: 200,
+      // width: 200,
       render:(_, record)=>{
         return (<p className="bold-column">{record.com_name}</p>)
       }
@@ -105,13 +105,13 @@ export const CompanyManager = () => {
       title: "Địa chỉ",
       dataIndex: "address",
       key: "address",
-      width: 200,
+      // width: 200,
     },
     {
       title: "Năm thành lập",
       dataIndex: "year",
       key: "year",
-      width: 150,
+      // width: 150,
       sorter: (a,b)=>{
         return a.year-b.year
       }
@@ -126,19 +126,19 @@ export const CompanyManager = () => {
       title: "Email",
       dataIndex: "com_email",
       key: "com_email",
-      width: 200,
+      // width: 200,
     },
     {
       title: "Website",
       dataIndex: "website",
       key: "website",
-      width: 200,
+      // width: 200,
     },
     {
       title: "Số lao động",
       dataIndex: "scale",
       key: "scale",
-      width: 100,
+      // width: 100,
       sorter: (a,b)=>{
         return a.year-b.year
       }
@@ -147,14 +147,12 @@ export const CompanyManager = () => {
       title: "Giới thiệu",
       dataIndex: "introduction",
       key: "introduction",
-      width: 200,
-      innerHeight: 150
+      // width: 200,
     },
     {
       title: "Ngành sản xuất",
       key: "manufactures",
-      width: 200,
-      innerHeight: 150,
+      // width: 200,
       render: (_, record) => {
         return (
           <>

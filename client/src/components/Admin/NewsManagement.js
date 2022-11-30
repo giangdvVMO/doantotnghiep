@@ -61,7 +61,7 @@ export const NewsManagement = () => {
         let query = "?1=1";
         query = status !== -1 ? query + "&status=" + status : query;
         query = search !== "" ? query + "&search=" + search : query;
-        query = field.length ? query + "&field=" + field : query;
+        query = field.length&& !field.includes(-1) ? query + "&field=" + field : query;
         console.log('field', field)
         message.success('field', field)
         const url = serverURL + "news" + query;
@@ -215,6 +215,11 @@ export const NewsManagement = () => {
       title: "Số lượt xem",
       dataIndex: "views",
       key: "views",
+      sorter:(a,b)=>{
+        const first = a.views?a.views:0;
+        const second = b.views?b.views:0;
+        return first - second
+      }
     },
     {
         title: "Ngày đăng",
@@ -301,8 +306,8 @@ export const NewsManagement = () => {
           <Select
             mode="multiple"
             value={field}
-            defaultValue="all"
-            labelInValue="Lĩnh vực bài đăng"
+            defaultValue={-1}
+            labelInValue={true}
             className="filter-content"
             onChange={handleChangeField}
           >
