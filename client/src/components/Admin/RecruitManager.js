@@ -178,17 +178,17 @@ export const RecruitManagerAdmin = () => {
       dataIndex: "welfare",
       key: "welfare",
     },
-    {
-      title: "Ngày bắt đầu",
-      key: "start_date",
-      render: (_, record) => {
-        return record.start_date ? (
-          <>{DateToShortStringDate(record.start_date)}</>
-        ) : (
-          ""
-        );
-      },
-    },
+    // {
+    //   title: "Ngày bắt đầu",
+    //   key: "start_date",
+    //   render: (_, record) => {
+    //     return record.start_date ? (
+    //       <>{DateToShortStringDate(record.start_date)}</>
+    //     ) : (
+    //       ""
+    //     );
+    //   },
+    // },
     {
       title: "Ngày kết thúc",
       key: "end_date",

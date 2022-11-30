@@ -492,7 +492,7 @@ export const RecruitDetailStudent = () => {
                 {console.log(recruit.welfare)}
               </Form.Item>
               <div className="two-colums">
-                <Form.Item
+                {/* <Form.Item
                   label="Ngày bắt đầu:"
                   name="start_date"
                   className="label"
@@ -500,7 +500,7 @@ export const RecruitDetailStudent = () => {
                   <p className="text-display">
                     {DateToShortString(recruit.start_date)}
                   </p>
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item
                   label="Ngày kết thúc:"
                   name="end_date"

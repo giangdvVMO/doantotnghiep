@@ -21,6 +21,7 @@ export const RateManagerAdmin = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState(-1);
   const [search, setSearch] = useState("");
+  const [type_rate, setType] = useState('all');
   const [listRate, setListRate] = useState([]);
   const [currentId, setCurrentId] = useState('');
   const [isOpenConfirm, setOpenConfirm] = useState(false);
@@ -32,6 +33,7 @@ export const RateManagerAdmin = () => {
     let query = "?1=1";
     query = status !== -1 ? query + "&status=" + status : query;
     query = search !== "" ? query + "&search=" + search : query;
+    query = type_rate !== "all" ? query + "&type_rate=" + type_rate : query;
     const url = serverURL + "rate" + query;
     console.log(query);
     try {
@@ -87,7 +89,7 @@ export const RateManagerAdmin = () => {
   }, []);
   useEffect(() => {
     fetchListRate();
-  }, [user, status, search]);
+  }, [user, status, search, type_rate]);
   const columns = [
     // {
     //   title: "STT",
@@ -157,6 +159,9 @@ export const RateManagerAdmin = () => {
 
   const handleChangeSelect = (e) => {
     setStatus(e.value);
+  };
+  const handleChangeType =  (e) => {
+    setType(e.value);
   };
   const handleChangeSearch = (e) => {
     setSearch(e.target.value);
@@ -271,13 +276,27 @@ if(user){
           <Select
             value={status}
             defaultValue="all"
-            labelInValue="Trạng thái"
+            labelInValue={true}
             className="filter-content"
             onChange={handleChangeSelect}
           >
             <Option value={-1}>all</Option>
             <Option value={1}>duyệt</Option>
             <Option value={0}>chưa duyệt</Option>
+          </Select>
+        </div>
+        <div className="filter">
+          <label className="label-filter">Loại đánh giá:</label>
+          <Select
+            value={type_rate}
+            defaultValue="all"
+            labelInValue={true}
+            className="filter-content"
+            onChange={handleChangeType}
+          >
+            <Option value={"all"}>all</Option>
+            <Option value={"student"}>student</Option>
+            <Option value={"company"}>company</Option>
           </Select>
         </div>
         <div className="filter">
