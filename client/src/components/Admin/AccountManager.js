@@ -1,4 +1,4 @@
-import { Button, Input, message, Pagination, Select, Table, Tag } from 'antd';
+import { Button, Image, Input, message, Pagination, Select, Table, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -164,7 +164,11 @@ export const AccountManager = () => {
 
     return (
         <>
-            <div className='banner-content'>Quản lý danh sách tài khoản</div>
+            <div className='banner-content'>
+                <div className="text-banner">Quản lý danh sách tài khoản</div>
+                <Image className="image-background-banner" src="https://i.ibb.co/vD4JfCf/Mobile-login-amico.png" preview={false}/>
+            </div>
+            
             <div className='container-filter'>
                 <div className='filter'>
                     <label className='label-filter'>Trạng thái:</label>

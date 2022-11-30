@@ -1,5 +1,6 @@
 import {
   Button,
+  Image,
   Input,
   message,
   Pagination,
@@ -153,7 +154,9 @@ export const RecruitListStudent = () => {
   if (user&&fields.length) {
     return (
       <>
-        <div className="banner-content">Quản lý danh sách bài đăng</div>
+        <div className="banner-content">
+          <div className="text-banner">Danh sánh bài đăng tuyển dụng</div>
+          <Image className="image-background-banner" src="https://i.ibb.co/0C9Z0r8/Job-offers-cuate.png" preview={false}/></div>
         <div className="container-filter">
           <div className="filter">
             <label className="label-filter">Lĩnh vực bài đăng:</label>

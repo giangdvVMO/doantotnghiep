@@ -1,4 +1,4 @@
-import { Button, Input, message, Select, Table, Tag } from 'antd';
+import { Button, Image, Input, message, Select, Table, Tag } from 'antd';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {decodeToken , isExpired} from 'react-jwt';
@@ -189,7 +189,10 @@ export const StudentManager = () => {
 
     return (
         <>
-            <div className='banner-content'>Quản lý danh sách sinh viên</div>
+            <div className='banner-content'>
+                <div className="text-banner">Quản lý sinh viên</div>
+                <Image className="image-background-banner" src="https://i.ibb.co/gr1SLQp/Coding-workshop-amico.png" preview={false}/>
+            </div>
             <div className='container-filter'>
                 <div className='filter'>
                     <label className='label-filter'>Trường:</label>

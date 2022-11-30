@@ -226,7 +226,13 @@ export const NewsView = () => {
   if(user&&fields){
   return (
     <>
-      <div className="banner-content">Danh sách tin tức</div>
+      <div className="banner-content">
+        <div className="text-banner">Danh sách tin tức</div>
+        <Image className="image-background-banner" src="https://i.ibb.co/6J065b3/Exciting-news-amico.png" preview={false}/>
+      </div>
+      {/* https://i.ibb.co/L5rDFrv/Resume-amico-1.png */}
+      
+      
       <div className="view-news-container">
         <div className="news-section-container">
             <div className="title-news-section">

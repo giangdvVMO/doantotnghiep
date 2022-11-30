@@ -1,5 +1,6 @@
 import {
   Button,
+  Image,
   Input,
   message,
   Pagination,
@@ -159,7 +160,10 @@ export const CVList = () => {
   if(fields&&user){
   return (
     <>
-      <div className="banner-content"><h2>Danh sách CV</h2></div>
+      <div className="banner-content">
+        <div className="text-banner">Danh sách CV</div>
+        <Image className="image-background-banner" src="https://i.ibb.co/L5rDFrv/Resume-amico-1.png" preview={false}/>
+      </div>
       <div className="container-filter">
         <div className="filter">
           <label className="label-filter">Lĩnh vực CV:</label>

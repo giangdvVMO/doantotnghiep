@@ -1,4 +1,4 @@
-import { Button, Input, message, Modal, Select, Table, Tag } from "antd";
+import { Button, Image, Input, message, Modal, Select, Table, Tag } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
@@ -299,7 +299,10 @@ export const NewsManagement = () => {
 
   return (
     <>
-      <div className="banner-content">Quản lý danh sách bài đăng tin tức của bạn</div>
+      <div className="banner-content">
+        <div className="text-banner">Quản lý danh sách tin tức</div>
+        <Image className="image-background-banner" src="https://i.ibb.co/ggLNB5t/News-amico.png" preview={false}/>
+      </div>
       <div className="container-filter">
       <div className="filter">
           <label className="label-filter">Lĩnh vực bài đăng:</label>

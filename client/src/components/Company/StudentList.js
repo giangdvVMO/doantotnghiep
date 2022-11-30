@@ -1,4 +1,4 @@
-import { Alert, Button, Input, message, Select, Table } from "antd";
+import { Alert, Button, Image, Input, message, Select, Table } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
@@ -237,7 +237,10 @@ export const StudentList = () => {
 
   return (
     <>
-      <div className="banner-content">Danh sách sinh viên</div>
+      <div className="banner-content">
+        <div className="text-banner">Danh sách sinh viên</div>
+        <Image className="image-background-banner" src="https://i.ibb.co/gr1SLQp/Coding-workshop-amico.png" preview={false}/>
+      </div>
       <div className="container-filter">
         <div className="filter">
           <label className="label-filter">Trường:</label>

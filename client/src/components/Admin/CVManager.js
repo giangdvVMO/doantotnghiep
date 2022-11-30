@@ -1,4 +1,4 @@
-import { Button, Input, message, Select, Spin, Table, Tag } from 'antd';
+import { Button, Image, Input, message, Select, Spin, Table, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {decodeToken} from 'react-jwt';
@@ -179,7 +179,10 @@ export const CVManagerAdmin = () => {
     if(fields){
     return (
         <>
-            <div className='banner-content'>Quản lý danh sách CV</div>
+            <div className='banner-content'>
+                <div className="text-banner">Quản lý CV</div>
+                <Image className="image-background-banner" src="https://i.ibb.co/L5rDFrv/Resume-amico-1.png" preview={false}/>
+            </div>
             <div className='container-filter'>
                 <div className='filter'>
                     <label className='label-filter'>Lĩnh vực CV:</label>

@@ -1,4 +1,4 @@
-import { Button, Input, message, Pagination, Select, Spin } from 'antd';
+import { Button, Image, Input, message, Pagination, Select, Spin } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {decodeToken} from 'react-jwt';
@@ -151,7 +151,9 @@ export const RecruitCompanyListStudent = () => {
     if(user&&fields){
     return (
         <>
-            <div className='banner-content'>Danh sánh bài đăng tuyển dụng</div>
+            <div className='banner-content'>
+                <div className="text-banner">Danh sánh bài đăng tuyển dụng</div>
+                <Image className="image-background-banner" src="https://i.ibb.co/0C9Z0r8/Job-offers-cuate.png" preview={false}/></div>
             <div className='container-filter'>
                 <div className='filter'>
                     <label className='label-filter'>Lĩnh vực bài đăng:</label>

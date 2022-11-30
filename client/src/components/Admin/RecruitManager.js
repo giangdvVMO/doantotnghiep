@@ -1,4 +1,4 @@
-import { Button, Input, message, Select, Spin, Table, Tag } from "antd";
+import { Button, Image, Input, message, Select, Spin, Table, Tag } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
@@ -260,7 +260,10 @@ export const RecruitManagerAdmin = () => {
 if(fields){
   return (
     <>
-      <div className="banner-content">Quản lý danh sách bài đăng</div>
+      <div className="banner-content">
+        <div className="text-banner">Quản lý bài đăng tuyển dụng</div>
+        <Image className="image-background-banner" src="https://i.ibb.co/c1S06fB/Interview-amico.png" preview={false}/>
+      </div>
       <div className="container-filter">
         <div className="filter">
           <label className="label-filter">Lĩnh vực bài đăng:</label>

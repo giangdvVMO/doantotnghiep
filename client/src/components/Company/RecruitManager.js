@@ -236,7 +236,7 @@ export const RecruitManager = () => {
         <>
             <div className='banner-content'>
                 <div className="text-banner">Quản lý danh sách bài đăng</div>
-                <Image className="image-background-banner" src="https://i.ibb.co/PTQ61JP/Accept-tasks-bro.png" preview={false}/>
+                <Image className="image-background-banner" src="https://i.ibb.co/c1S06fB/Interview-amico.png" preview={false}/>
             </div>
             <div className='container-filter'>
                 <div className='filter'>
