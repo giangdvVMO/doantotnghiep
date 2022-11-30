@@ -331,14 +331,6 @@ export class CvService {
           //search
           result: {
             $and: [
-              // $or: [
-              //   {
-              //     $regexMatch: {
-              //       input: '$',
-              //       regex: searchRgx,
-              //       options: 'i',
-              //     },
-              //   },
               {
                 $regexMatch: {
                   input: '$title',
@@ -351,7 +343,6 @@ export class CvService {
               },
             ],
           },
-          // ],
           id_fields: '$field_cv.id_fields',
         },
       },
@@ -438,22 +429,6 @@ export class CvService {
           $addFields: {
             //search
             result: {
-              // $or: [
-              //   {
-              //     $regexMatch: {
-              //       input: '$level',
-              //       regex: searchRgx,
-              //       options: 'i',
-              //     },
-              //   },
-              //   {
-              //   $regexMatch: {
-              //     input: '$way_working',
-              //     regex: searchRgx,
-              //     options: 'i',
-              //   },
-              // },
-              // {
               $and: [
                 {
                   $regexMatch: {
@@ -464,8 +439,6 @@ export class CvService {
                 },
                 {
                   $or: [...specialityCheck],
-                  // },
-                  // ],
                 },
               ],
             },

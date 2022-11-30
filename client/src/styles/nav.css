@@ -3,21 +3,26 @@
     max-width: 1600px;
     height: 50px;
     background-color: rgba(0, 1, 63, 0.1);
-    display: flex;
+    display: grid;
     align-items: center;
+    grid-template-columns: 75% 25%;
     /* width: 100%; */
     /* justify-content: flex-end; */
 }
 
 .left-nav {
-    flex-grow: 8;
+    /* flex-grow: 8; */
+    display: flex;
     justify-content: flex-start;
     align-items: center;
-    display: flex;
+}
+
+.left-nav ul{
+    width: 100%;
 }
 
 .right-nav {
-    flex-grow: 3;
+    /* flex-grow: 3; */
     display: flex;
     justify-content: flex-end;
     align-items: center;
