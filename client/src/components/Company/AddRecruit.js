@@ -9,6 +9,7 @@ import {
   message,
   Modal,
   Select,
+  Tooltip,
 } from "antd";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +28,7 @@ import {
 import { messageRecruitError } from "../../common/error";
 import { genderList, levelList, wayWorkingList } from "../../data/list";
 import { createNoti, getUserAdmin, openNotificationWithIcon, postFields } from "../../common/service";
+import { InfoCircleOutlined } from "@ant-design/icons";
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -44,7 +46,6 @@ let initialRecruit = {
   description: "",
   requirement: "",
   welfare: "",
-  start_date: "",
   end_date: "",
   id_company: "",
   fields: [],
@@ -67,9 +68,9 @@ export const AddRecruit = () => {
 
   //fetch manucomany and Company
   async function fetchManuCompany() {
-    if (account) {
+    if (user) {
       try {
-        const _id = account._id;
+        const _id = user._id;
         const url = serverURL + "manu-company/company/" + _id;
         const response = await fetch(url, {
           method: "GET",
@@ -99,9 +100,9 @@ export const AddRecruit = () => {
     }
   }
   async function fetchCompany() {
-    if (account) {
+    if (user) {
       try {
-        const _id = account._id;
+        const _id = user._id;
         const url = serverURL + "company/" + _id;
         const response = await fetch(url, {
           method: "GET",
@@ -191,7 +192,7 @@ export const AddRecruit = () => {
   }, []);
   useEffect(() => {
     fetchCompany();
-  }, [account]);
+  }, [user]);
   useEffect(() => {
     fetchField();
   }, []);
@@ -207,23 +208,23 @@ export const AddRecruit = () => {
     useState(defaultTrueStatus);
   const [validateExperience, setValidateExperience] =
     useState(defaultTrueStatus);
-  const [validateStartDate, setValidateStartDate] = useState(defaultTrueStatus);
   const [validateEndDate, setValidateEndDate] = useState(defaultTrueStatus);
   const [validateRequirement, setValidateRequirement] =
     useState(defaultTrueStatus);
   const [validateWelfare, setValidateWelfare] = useState(defaultTrueStatus);
   const [validateFields, setValidateFields] = useState(defaultTrueStatus);
+  const [validateDescription, setValidateDescription] = useState(defaultTrueStatus)
   const ref = useRef();
   const refButtonSubmit = useRef();
 
   //handle change
-  function handleKeyUp(e) {
-    if (e.keyCode === 13) {
-      console.log("enter");
-      refButtonSubmit.current.focus();
-      refButtonSubmit.current.click();
-    }
-  }
+  // function handleKeyUp(e) {
+  //   if (e.keyCode === 13) {
+  //     console.log("enter");
+  //     refButtonSubmit.current.focus();
+  //     refButtonSubmit.current.click();
+  //   }
+  // }
 
   //validate
   function checkTitleFunc(title) {
@@ -310,6 +311,20 @@ export const AddRecruit = () => {
       return true;
     }
   }
+
+  function checkDescriptionFunc(Description) {
+    if (!checkString(Description)) {
+      setValidateDescription({
+        status: "error",
+        errorMsg: messageRecruitError.description,
+      });
+      return false;
+    } else {
+      setValidateDescription(defaultTrueStatus);
+      return true;
+    }
+  }
+
   function checkRequirementFunc(requirement) {
     if (!checkString(requirement)) {
       setValidateRequirement({
@@ -331,19 +346,6 @@ export const AddRecruit = () => {
       return false;
     } else {
       setValidateWelfare(defaultTrueStatus);
-      return true;
-    }
-  }
-  function checkStartDateFunc(start_date) {
-    console.log("start date");
-    if (!checkDate(start_date)) {
-      setValidateStartDate({
-        status: "error",
-        errorMsg: messageRecruitError.start_date,
-      });
-      return false;
-    } else {
-      setValidateStartDate(defaultTrueStatus);
       return true;
     }
   }
@@ -400,7 +402,7 @@ export const AddRecruit = () => {
         if (!listAdmin.length) {
           message.info("Chưa có admin, hãy tạo tài khoản admin");
         } else {
-          createNoti(account._id, listAdmin, title, type, content, link);
+          createNoti(user._id, listAdmin, title, type, content, link);
         }
         navigate("/company/recruit-list");
       }
@@ -412,21 +414,30 @@ export const AddRecruit = () => {
   async function handleSave(e) {
     ref.current.submit();
     let count = 0;
-    console.log("account", account);
     console.log("company", company);
     count = checkTitleFunc(recruit.title) ? count : count + 1;
+    console.log("1",count)
     count = checkWayWorkingFunc(recruit.way_working) ? count : count + 1;
+    console.log("2",count)
     count = checkSalaryFunc(recruit.salary) ? count : count + 1;
+    console.log("3",count)
     count = checkQuantityFunc(recruit.quantity) ? count : count + 1;
+    console.log("4",count)
     count = checkLevelFunc(recruit.level) ? count : count + 1;
+    console.log("5",count)
     count = checkAddressWorkingFunc(recruit.address_working)
       ? count
       : count + 1;
+      console.log("6",count)
     count = checkExperienceFunc(recruit.experience) ? count : count + 1;
+    console.log("7",count)
     count = checkRequirementFunc(recruit.requirement) ? count : count + 1;
+    count = checkDescriptionFunc(recruit.description)?count:count+1;
+    console.log("8",count)
     count = checkWelfareFunc(recruit.welfare) ? count : count + 1;
-    count = checkStartDateFunc(recruit.start_date) ? count : count + 1;
+    console.log("9",count)
     count = checkEndDateFunc(recruit.end_date) ? count : count + 1;
+    console.log("10",count)
     count = checkFieldFunc(recruit.fields) ? count : count + 1;
     console.log("count", count);
     console.log(recruit);
@@ -494,11 +505,6 @@ export const AddRecruit = () => {
       return { ...preRecruit, welfare: e.target.value };
     });
   }
-  function handleChangeStartDate(date, dateString) {
-    setRecruit((preRecruit) => {
-      return { ...preRecruit, start_date: dateString };
-    });
-  }
   function handleChangeEndDate(date, dateString) {
     setRecruit((preRecruit) => {
       return { ...preRecruit, end_date: dateString };
@@ -541,7 +547,7 @@ export const AddRecruit = () => {
         <div className="body">
           <Form
             ref={ref}
-            onKeyUp={handleKeyUp}
+            // onKeyUp={handleKeyUp}
             className="form"
             name="basic"
             layout="vertical"
@@ -555,6 +561,7 @@ export const AddRecruit = () => {
                 validateStatus={validateTitle.status}
                 help={validateTitle.errorMsg}
                 className="label"
+                tooltip={{ title: 'Tiêu đề không quá 50 kí tự, không chứa kí tự đặc biệt', icon: <InfoCircleOutlined /> }}
                 required
               >
                 <Input
@@ -569,12 +576,13 @@ export const AddRecruit = () => {
             <Card title="Chi tiết bài đăng tuyển dụng">
               <div className="two-colums">
                 <Form.Item
-                  label="Lương:"
+                  label="Lương (VND/tháng):"
                   name="salary"
                   initialValue={recruit.salary}
                   validateStatus={validateSalary.status}
                   help={validateSalary.errorMsg}
                   className="label"
+                  tooltip={{ title: 'Lương tính theo tháng đơn vị VND', icon: <InfoCircleOutlined /> }}
                   required
                 >
                   <InputNumber
@@ -616,6 +624,7 @@ export const AddRecruit = () => {
                   validateStatus={validateAddressWorking.status}
                   help={validateAddressWorking.errorMsg}
                   className="label"
+                  tooltip={{ title: 'Địa chỉ làm việc không nên viết tắt', icon: <InfoCircleOutlined /> }}
                   required
                 >
                   <Input
@@ -635,6 +644,7 @@ export const AddRecruit = () => {
                   validateStatus={validateExperience.status}
                   help={validateExperience.errorMsg}
                   className="label"
+                  tooltip={{ title: 'Nếu không yêu cầu kinh nghiệm hãy điền 0', icon: <InfoCircleOutlined /> }}
                   required
                 >
                   <InputNumber
@@ -727,6 +737,7 @@ export const AddRecruit = () => {
                   validateStatus={validateFields.status}
                   help={validateFields.errorMsg}
                   className="label"
+                  tooltip={{ title: 'Có thể chọn nhiều lĩnh vực tuyển dụng', icon: <InfoCircleOutlined /> }}
                   required
                 >
                   <Select
@@ -756,13 +767,19 @@ export const AddRecruit = () => {
                 label="Thông tin mô tả công việc:"
                 name="description"
                 initialValue={recruit.description}
+                validateStatus={validateDescription.status}
+                help={validateDescription.errorMsg}
                 className="label"
+                tooltip={{ title: 'Thông tin mô tả ngắn gọn không quá 1000 kí tự', icon: <InfoCircleOutlined /> }}
+                required
               >
                 <TextArea
                   rows={5}
                   value={recruit.description}
                   defaultValue={recruit.description}
                   onChange={handleChangeDescription}
+                  showCount
+                  maxLength={1000}
                 />
               </Form.Item>
               <Form.Item
@@ -772,6 +789,7 @@ export const AddRecruit = () => {
                 validateStatus={validateRequirement.status}
                 help={validateRequirement.errorMsg}
                 className="label"
+                tooltip={{ title: 'Thông tin yêu cầu ứng tuyển ngắn gọn không quá 1000 kí tự', icon: <InfoCircleOutlined /> }}
                 required
               >
                 <TextArea
@@ -779,6 +797,8 @@ export const AddRecruit = () => {
                   value={recruit.requirement}
                   defaultValue={recruit.requirement}
                   onChange={handleChangeRequirement}
+                  showCount
+                  maxLength={1000}
                 />
               </Form.Item>
               <Form.Item
@@ -788,6 +808,7 @@ export const AddRecruit = () => {
                 validateStatus={validateWelfare.status}
                 help={validateWelfare.errorMsg}
                 className="label"
+                tooltip={{ title: 'Thông tin quyền lợi ngắn gọn không quá 1000 kí tự', icon: <InfoCircleOutlined /> }}
                 required
               >
                 <TextArea
@@ -795,23 +816,11 @@ export const AddRecruit = () => {
                   value={recruit.welfare}
                   defaultValue={recruit.welfare}
                   onChange={handleChangeWelfare}
+                  showCount
+                  maxLength={1000}
                 />
               </Form.Item>
               <div className="two-colums">
-                {/* <Form.Item
-                  label="Ngày bắt đầu:"
-                  name="start_date"
-                  className="label"
-                  validateStatus={validateStartDate.status}
-                  help={validateStartDate.errorMsg}
-                  required
-                >
-                  <DatePicker
-                    className="birthday-input"
-                    value={recruit.start_date}
-                    onChange={handleChangeStartDate}
-                  />
-                </Form.Item> */}
                 <Form.Item
                   label="Ngày kết thúc:"
                   name="end_date"

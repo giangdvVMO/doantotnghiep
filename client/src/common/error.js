@@ -43,7 +43,7 @@ export const messageRecruitError = {
   quantity: "Số lượng tuyển không được bỏ trống",
   level: "Chức vụ không được bỏ trống",
   address_working: "Địa chỉ làm việc không được bỏ trống",
-  experience: "Số năm kinh nghiệm không được bỏ trống",
+  experience: "Số tháng kinh nghiệm không được bỏ trống",
   description: "Mô tả không được bỏ trống",
   requirement: "Yêu cầu không được bỏ trống",
   welfare: "Quyền lợi không được bỏ trống",

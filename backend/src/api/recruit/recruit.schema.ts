@@ -44,9 +44,6 @@ export class Recruit {
   welfare: string;
 
   @Prop({ type: Date, default: null })
-  start_date: Date;
-
-  @Prop({ type: Date, default: null })
   end_date: Date;
 
   @Prop({ type: Boolean, default: false })

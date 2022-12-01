@@ -140,8 +140,9 @@ export const checkString = (data)=>{
 }
 
 export const checkNumber = (data)=>{
-    console.log(+data);
-    return +data || +data>0;
+    console.log("data",data);
+    if(data === 0) return true;
+    return +data;
 }
 
 export const checkDate = (data)=>{

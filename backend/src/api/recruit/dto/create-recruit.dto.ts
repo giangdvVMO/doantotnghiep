@@ -66,10 +66,10 @@ export class CreateRecruitDto {
   @IsNotEmpty()
   experience: number;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'description',
   })
-  @IsOptional()
+  @IsNotEmpty()
   description: string;
 
   @ApiProperty({
@@ -83,12 +83,6 @@ export class CreateRecruitDto {
   })
   @IsNotEmpty()
   welfare: string;
-
-  @ApiProperty({
-    description: 'start_date',
-  })
-  @IsNotEmpty()
-  start_date: string;
 
   @ApiProperty({
     description: 'end_date',

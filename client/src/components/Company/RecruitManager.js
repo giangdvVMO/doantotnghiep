@@ -10,6 +10,7 @@ import { serverURL } from '../../configs/server.config';
 import { DateToShortStringDate, postFields } from '../../common/service';
 
 const { Option } = Select;
+const { TextArea } = Input;
 export const RecruitManager = () => {
     const { user, changeUser, token } = useContext(UserContext);
     const navigate = useNavigate();
@@ -156,26 +157,29 @@ export const RecruitManager = () => {
         },
         {
             title: 'Mô tả công việc',
-            dataIndex: 'description',
             key: 'description',
+            width: 200,
+            render: (_,record) =>{ 
+                return <TextArea value={record.description} bordered={false}/>
+            }
         },
         {
             title: 'Yêu cầu',
-            dataIndex: 'requirement',
             key: 'requirement',
+            width: 200,
+            render: (_,record) =>{ 
+                return <TextArea value={record.requirement} bordered={false}/>
+            }
         },
         {
             title: 'Quyền lợi',
-            dataIndex: 'welfare',
+            // dataIndex: 'welfare',
             key: 'welfare',
+            width: 200,
+            render: (_,record) =>{ 
+                return <TextArea value={record.welfare} bordered={false}/>
+            }
         },
-        // {
-        //     title: 'Ngày bắt đầu',
-        //     key: 'start_date',
-        //     render: (_,record) =>{ 
-        //         return record.start_date? <>{DateToShortStringDate(record.start_date)}</>:''
-        //     }
-        // },
         {
             title: 'Ngày kết thúc',
             key: 'end_date',
