@@ -6,12 +6,9 @@
     display: grid;
     align-items: center;
     grid-template-columns: 75% 25%;
-    /* width: 100%; */
-    /* justify-content: flex-end; */
 }
 
 .left-nav {
-    /* flex-grow: 8; */
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -22,7 +19,6 @@
 }
 
 .right-nav {
-    /* flex-grow: 3; */
     display: flex;
     justify-content: flex-end;
     align-items: center;

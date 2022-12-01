@@ -427,7 +427,7 @@ export const RecruitProfile = ()=>{
                 );
                 const result = await response.json();
                 console.log(result);
-                if(response.status!==201){
+                if(response.status!==200){
                     message.error(result.message);
                 }else{
                     message.success("Bạn đã xóa bài đăng tuyển dụng thành công!");
