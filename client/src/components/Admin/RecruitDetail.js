@@ -339,7 +339,7 @@ export const RecruitDetailAdmin = () => {
     }
   };
 
-  if(recruit&&company){
+  if(recruit._id!==-1&&company){
   //render UI
   return (
     <div className="swapper-container">
@@ -443,32 +443,29 @@ export const RecruitDetailAdmin = () => {
                 name="description"
                 className="label"
               >
-                <p className="text-display">{recruit.description}</p>
+                <pre style={{textAlign:'left'}}>
+                                {recruit.description}
+                            </pre>
               </Form.Item>
               <Form.Item
                 label="Thông tin yêu cầu ứng tuyển:"
                 name="requirement"
                 className="label"
               >
-                <p className="text-display">{recruit.requirement}</p>
+                <pre style={{textAlign:'left'}}>
+                                {recruit.requirement}
+                            </pre>
               </Form.Item>
               <Form.Item
                 label="Thông tin quyền lợi:"
                 name="welfare"
                 className="label"
               >
-                <p className="text-display">{recruit.welfare}</p>
+                <pre style={{textAlign:'left'}}>
+                                {recruit.welfare}
+                            </pre>
               </Form.Item>
               <div className="two-colums">
-                {/* <Form.Item
-                  label="Ngày bắt đầu:"
-                  name="start_date"
-                  className="label"
-                >
-                  <p className="text-display">
-                    {DateToShortString(recruit.start_date)}
-                  </p>
-                </Form.Item> */}
                 <Form.Item
                   label="Ngày kết thúc:"
                   name="end_date"
@@ -584,12 +581,9 @@ export const RecruitDetailAdmin = () => {
                       initialValue={company.introduction}
                       className="label"
                     >
-                      <TextArea
-                        rows={5}
-                        disabled
-                        value={company.introduction}
-                        defaultValue={company.introduction}
-                      />
+                      <pre style={{textAlign:'left'}}>
+                                {company.introduction}
+                            </pre>
                     </Form.Item>
                   </Form>
                 </div>

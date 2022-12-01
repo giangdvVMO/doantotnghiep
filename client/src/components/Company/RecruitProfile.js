@@ -224,6 +224,7 @@ export const RecruitProfile = ()=>{
     const [validateRequirement, setValidateRequirement] = useState(defaultTrueStatus);
     const [validateWelfare, setValidateWelfare] = useState(defaultTrueStatus);
     const [validateFields, setValidateFields] = useState(defaultTrueStatus);
+    const [validateDescription, setValidateDescription] = useState(defaultTrueStatus)
     const ref = useRef();
     const refButtonSubmit = useRef();
 
@@ -333,6 +334,18 @@ export const RecruitProfile = ()=>{
             return true;
         }
     }
+    function checkDescriptionFunc(Description) {
+        if (!checkString(Description)) {
+          setValidateDescription({
+            status: "error",
+            errorMsg: messageRecruitError.description,
+          });
+          return false;
+        } else {
+          setValidateDescription(defaultTrueStatus);
+          return true;
+        }
+      }
     function checkWelfareFunc(welfare) {
         if (!checkString(welfare)) {
             setValidateWelfare({
@@ -453,6 +466,7 @@ export const RecruitProfile = ()=>{
         count = checkAddressWorkingFunc(recruit.address_working) ? count : count + 1;
         count = checkExperienceFunc(recruit.experience) ? count : count + 1;
         count = checkRequirementFunc(recruit.requirement) ? count : count +1;
+        count = checkDescriptionFunc(recruit.description)?count:count+1;
         count = checkWelfareFunc(recruit.welfare) ? count : count + 1;
         count = checkStartDateFunc(recruit.start_date) ? count : count + 1;
         count = checkEndDateFunc(recruit.end_date) ? count : count + 1;
@@ -551,9 +565,6 @@ export const RecruitProfile = ()=>{
     }
     function handleChangeWelfare(e){
         setRecruit((preRecruit)=>{ return {...preRecruit, welfare:e.target.value}})
-    }
-    function handleChangeStartDate(date, dateString){
-        setRecruit((preRecruit)=>{ return {...preRecruit, start_date:dateString}})
     }
     function handleChangeEndDate(date, dateString){
         setRecruit((preRecruit)=>{ return {...preRecruit, end_date:dateString}})
@@ -857,7 +868,10 @@ export const RecruitProfile = ()=>{
                         <Form.Item
                             label="Thông tin mô tả công việc:"
                             name="description"
+                            validateStatus={validateDescription.status}
+                            help={validateDescription.errorMsg}
                             className='label'
+                            required
                         >
                             {
                                 isEdit?
@@ -865,7 +879,9 @@ export const RecruitProfile = ()=>{
                                 defaultValue={recruit.description} 
                                 onChange= {handleChangeDescription}
                             />:
-                            <p className="text-display">{recruit.description}</p>
+                            <pre style={{textAlign:'left'}}>
+                                {recruit.description}
+                            </pre>
                         }
                         </Form.Item>
                         <Form.Item
@@ -882,7 +898,9 @@ export const RecruitProfile = ()=>{
                                 defaultValue={recruit.requirement} 
                                 onChange= {handleChangeRequirement}
                             />:
-                            <p className="text-display">{recruit.requirement}</p>
+                            <pre style={{textAlign:'left'}}>
+                                {recruit.requirement}
+                            </pre>
                         }
                         </Form.Item>
                         <Form.Item
@@ -899,7 +917,9 @@ export const RecruitProfile = ()=>{
                                 defaultValue={recruit.welfare} 
                                 onChange= {handleChangeWelfare}
                             />:
-                            <p className="text-display">{recruit.welfare}</p>
+                            <pre style={{textAlign:'left'}}>
+                                {recruit.welfare}
+                            </pre>
                         }
                         </Form.Item>
                         <div className='two-colums'>
