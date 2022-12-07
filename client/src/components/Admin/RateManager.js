@@ -1,4 +1,4 @@
-import { Button, Image, Input, message, Modal, Select, Spin, Table, Tag } from "antd";
+import { Button, Image, Input, message, Modal, Rate, Select, Spin, Table, Tag } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
@@ -16,6 +16,7 @@ import { serverURL } from "../../configs/server.config";
 import { createNoti, openNotificationWithIcon } from "../../common/service";
 
 const { Option } = Select;
+const {TextArea} = Input;
 export const RateManagerAdmin = () => {
   const { user, changeUser, token } = useContext(UserContext);
   const navigate = useNavigate();
@@ -91,25 +92,34 @@ export const RateManagerAdmin = () => {
     fetchListRate();
   }, [user, status, search, type_rate]);
   const columns = [
-    // {
-    //   title: "STT",
-    //   dataIndex: "_id",
-    //   key: "_id",
-    //   fixed: "left",
-    // },
     {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title",
+      width: 200,
+    },
+    {
+      title: "Điểm đánh giá",
+      dataIndex: "score",
+      key: "score",
+      width: 180,
+      render: (_, record) => {
+        return <Rate disabled defaultValue={record.score} count={10}/>
+      },
     },
     {
       title: "Nội dung đánh giá",
-      dataIndex: "content",
+      // dataIndex: "content",
+      width: 200,
       key: "content",
+      render: (_,record) =>{ 
+        return <TextArea value={record.content} bordered={false}/>
+    }
     },
     {
       title: "Sinh viên",
       key: "fullname",
+      width: 200,
       render: (_, record) => {
         return <div>{record.account.fullname}</div>
       },
@@ -117,6 +127,7 @@ export const RateManagerAdmin = () => {
     {
         title: "Doanh nghiệp",
         key: "company",
+        width: 200,
         render: (_, record) => {
           return <div>{record.company.com_name}</div>
         },
@@ -124,6 +135,7 @@ export const RateManagerAdmin = () => {
     {
       title: "Loại đánh giá",
       key: "type",
+      width: 150,
       render: (_, record) => {
         return (record.type_rate==='student'?
         <Tag color="#87d068">{record.type_rate}</Tag>:<Tag color="#2db7f5">{record.type_rate}</Tag>
@@ -133,6 +145,7 @@ export const RateManagerAdmin = () => {
     {
       title: "Trạng thái",
       key: "status",
+      width: 150,
       render: (_, record) =>
         record.status ? (
           <Tag icon={<CheckCircleOutlined />} color="success">
@@ -147,6 +160,7 @@ export const RateManagerAdmin = () => {
     },
     {
       title: "Hành động",
+      width: 150,
       key: "action",
       render: (_, record) => (<>
          {!record.status?<Button type="text" onClick={()=>handleConfirm(record._id, record.company)}><SafetyCertificateTwoTone size={100} /></Button>:''}
@@ -253,24 +267,6 @@ if(user){
         <Image className="image-background-banner" src="https://i.ibb.co/X7Fw3P2/Grades-bro.png" preview={false}/>
        </div>
       <div className="container-filter">
-        {/* <div className='filter'>
-                    <label className='label-filter'>Địa điểm:</label>
-                    <Select
-                    mode='multiple'
-                        value={field}
-                        defaultValue='all'
-                        labelInValue='Địa điểm'
-                        className='filter-content'
-                        onChange={handleChangeField}
-                    >
-                        <Option value={-1}>all</Option>
-                        {
-                            fields.map((field)=>{
-                                return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
-                            })
-                        }
-                    </Select>
-                </div> */}
         <div className="filter">
           <label className="label-filter">Trạng thái:</label>
           <Select

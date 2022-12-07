@@ -14,6 +14,7 @@ import { scaleList } from "../../data/list";
 import { serverURL } from "../../configs/server.config";
 
 const { Option } = Select;
+const {TextArea} = Input;
 export const CompanyManager = () => {
   const { user, changeUser, token } = useContext(UserContext);
   const navigate = useNavigate();
@@ -86,17 +87,11 @@ export const CompanyManager = () => {
   }, [scaleBound, status, search]);
 
   const columns = [
-    // {
-    //   title: "STT",
-    //   dataIndex: "_id",
-    //   key: "_id",
-    //   fixed: "left",
-    // },
     {
       title: "Tên công ty",
       dataIndex: "com_name",
+      width: 200,
       key: "com_name",
-      // width: 200,
       render:(_, record)=>{
         return (<p className="bold-column">{record.com_name}</p>)
       }
@@ -104,12 +99,14 @@ export const CompanyManager = () => {
     {
       title: "Địa chỉ",
       dataIndex: "address",
+      width: 150,
       key: "address",
       // width: 200,
     },
     {
       title: "Năm thành lập",
       dataIndex: "year",
+      width: 200,
       key: "year",
       // width: 150,
       sorter: (a,b)=>{
@@ -125,20 +122,21 @@ export const CompanyManager = () => {
     {
       title: "Email",
       dataIndex: "com_email",
+      width: 200,
       key: "com_email",
-      // width: 200,
     },
     {
       title: "Website",
       dataIndex: "website",
+      width: 100,
       key: "website",
-      // width: 200,
     },
     {
       title: "Số lao động",
       dataIndex: "scale",
+      width: 100,
       key: "scale",
-      // width: 100,
+      
       sorter: (a,b)=>{
         return a.year-b.year
       }
@@ -147,12 +145,16 @@ export const CompanyManager = () => {
       title: "Giới thiệu",
       dataIndex: "introduction",
       key: "introduction",
+      width: 150,
+      render: (_,record) =>{ 
+        return <TextArea value={record.introduction} bordered={false}/>
+    }
       // width: 200,
     },
     {
       title: "Ngành sản xuất",
       key: "manufactures",
-      // width: 200,
+      width: 200,
       render: (_, record) => {
         return (
           <>
@@ -170,6 +172,7 @@ export const CompanyManager = () => {
     {
       title: "Trạng thái",
       key: "status",
+      width: 150,
       render: (_, record) =>
         record.status ? (
           <Tag icon={<CheckCircleOutlined />} color="success">
@@ -185,6 +188,7 @@ export const CompanyManager = () => {
     {
       title: "Hành động",
       key: "action",
+      width: 150,
       render: (_, record) => (
         <Link to={`../admin/company/${record._id}`}>Xem chi tiết</Link>
       ),

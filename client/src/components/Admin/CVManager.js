@@ -163,7 +163,6 @@ export const CVManagerAdmin = () => {
             width: 200,
             render: (_,record) =><TextArea value={record.certificate}  bordered={false}/>
         },
-        
         {
             title: 'Trạng thái',
             key: 'status',

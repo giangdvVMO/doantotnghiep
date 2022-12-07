@@ -78,20 +78,21 @@ export const AccountManager = () => {
             title: 'STT',
             dataIndex: '_id',
             key: '_id',
+            width: 80,
             fixed: 'left',
         },
         {
             title: 'Tên đăng nhập',
             dataIndex: 'username',
             key: 'username',
-            width: 100,
+            width: 150,
             fixed: 'left',
         },
         {
             title: 'Họ và tên',
             dataIndex: 'fullname',
             key: 'fullname',
-            width: 150,
+            width: 200,
             sorter: (a,b)=>{
                 return sortFullName(a,b);
             }
