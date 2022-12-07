@@ -181,11 +181,11 @@ export const NewsManagement = () => {
       if (response.status !== 200) {
         message.error(result.message);
       } else {
-        // const title = "Duyệt bài đăng tin tức";
-        //   const type = "infor";
-        //   const content = `Admin ${user.fullname} đã duyệt bài đăng tin tức của bạn.`;
-        //   createNoti(user._id, [currentAccount._id], title, type, content);
-          openNotificationWithIcon('success','Thông báo',"Bạn đã duyệt đánh giá thành công, thông báo đã gửi tới người đăng bài!");
+          // const title = "Duyệt bài đăng tin tức";
+          // const type = "infor";
+          // const content = `Admin ${user.fullname} đã duyệt bài đăng tin tức của bạn.`;
+          // createNoti(user._id, [currentAccount._id], title, type, content);
+          openNotificationWithIcon('success','Thông báo',"Bạn đã duyệt tin tức thành công, thông báo đã gửi tới người đăng bài!");
         fetchListNews();
         setOpenConfirm(false);
       }
@@ -273,7 +273,6 @@ export const NewsManagement = () => {
         <Button type="text" onClick={()=>handleDelete(record._id)}><DeleteTwoTone /></Button>
 
         </>
-        // <Link to={`../admin/company/${record._id}`}></Link>
       ),
       fixed: "right",
     },
@@ -281,6 +280,7 @@ export const NewsManagement = () => {
 
   const handleConfirm = (id, account)=>{
     setCurrentId(id);
+    console.log("acc account",account);
     setCurrentAccount({...account})
     setOpenConfirm(true);
   }
