@@ -98,52 +98,66 @@ export const StudentManager = () => {
         {
             title: 'Họ và tên',
             dataIndex: 'fullname',
+            width: 120,
             key: 'fullname',
+            fixed: 'left'
         },
         {
             title: 'Ngày sinh',
             dataIndex: 'birthday',
+            width: 120,
             key: 'birthday',
         },
         {
             title: 'Quê quán',
             dataIndex: 'address',
+            width: 120,
             key: 'address',
         },
         {
             title: 'Số điện thoại',
             dataIndex: 'phone',
+            width: 120,
             key: 'phone',
         },
         {
             title: 'CCCD',
             dataIndex: 'cccd',
+            width: 130,
             key: 'cccd',
         },
         {
             title: 'Trường',
             dataIndex: 'university',
+            width: 120,
             key: 'university',
         },
         {
             title: 'Khoa',
             dataIndex: 'faculty',
+            width: 120,
             key: 'faculty',
         },
         {
             title: 'Chuyên ngành',
             dataIndex: 'major',
+            width: 120,
             key: 'major',
         },
         {
             title: 'Khóa học',
             dataIndex: 'course',
+            width: 120,
             key: 'course',
         },
         {
             title: 'GPA',
             dataIndex: 'gpa',
+            width: 120,
             key: 'gpa',
+            sorter: (a,b)=>{
+                return a.gpa - b.gpa
+            }
         },
         {
             title: 'Trạng thái',
@@ -159,11 +173,13 @@ export const StudentManager = () => {
                             chưa duyệt
                         </Tag>
             ),
+            width: 120,
             fixed: 'right',
         },
         {
             title: 'Hành động',
             key: 'action',
+            width: 120,
             render: (_, record) => (
                 <Link to={`../admin/student/${record._id}`}>Xem chi tiết</Link>
             ),

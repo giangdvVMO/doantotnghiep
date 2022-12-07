@@ -7,6 +7,7 @@ import {
   openNotificationWithIcon,
 } from "../../common/service";
 import { serverURL } from "../../configs/server.config";
+import { companyImage } from "../../data/default-image";
 import "../../styles/card.css";
 
 export const CardList = ({ listRecruit, id_student }) => {
@@ -47,8 +48,8 @@ export const CardList = ({ listRecruit, id_student }) => {
                 {changeExperience(item.experience)}
               </div>
               <Avatar
-                className="avatar"
-                src="https://joeschmoe.io/api/v1/random"
+                className="avatar-cv"
+                src={companyImage}
               />
               {item.fields.map((field, index) => {
                 if (index < 2) {
@@ -68,10 +69,7 @@ export const CardList = ({ listRecruit, id_student }) => {
             </div>
             <div class="more-info">
               <h1>{item.title}</h1>
-              <div class="coords">
-                <span>Ngày bắt đầu tuyển</span>
-                <span>{DateToShortStringDate(item.start_date)}</span>
-              </div>
+              
               <div class="coords">
                 <span>Hạn tuyển dụng</span>
                 <span>{DateToShortStringDate(item.end_date)}</span>
@@ -105,6 +103,7 @@ export const CardList = ({ listRecruit, id_student }) => {
           <div class="general">
             <h1>{item.title}</h1>
             <p>{item.description}</p>
+            <p class="hover">Hover để xem thêm</p>
           </div>
         </div>
       </>

@@ -84,12 +84,14 @@ export const AccountManager = () => {
             title: 'Tên đăng nhập',
             dataIndex: 'username',
             key: 'username',
+            width: 100,
             fixed: 'left',
         },
         {
             title: 'Họ và tên',
             dataIndex: 'fullname',
             key: 'fullname',
+            width: 150,
             sorter: (a,b)=>{
                 return sortFullName(a,b);
             }
@@ -97,6 +99,7 @@ export const AccountManager = () => {
         {
             title: 'Ngày sinh',
             key: 'birthday',
+            width: 120,
             render: (_,record) =>{ 
                 return record.birthday? <>{DateToShortStringDate(record.birthday)}</>:''
             },
@@ -107,21 +110,25 @@ export const AccountManager = () => {
         {
             title: 'Email',
             dataIndex: 'email',
+            width: 200,
             key: 'email',
         },
         {
             title: 'Vị trí',
             dataIndex: 'role',
+            width: 100,
             key: 'role',
         },
         {
             title: 'Số điện thoại',
             dataIndex: 'phone',
+            width: 120,
             key: 'phone',
         },
         {
             title: 'Trạng thái',
             key: 'status',
+            width: 100,
             render: (_, record) => (
                      record.status?
                         <Tag icon={<CheckCircleOutlined />} 
@@ -138,6 +145,7 @@ export const AccountManager = () => {
         {
             title: 'Hành động',
             key: 'action',
+            width: 100,
             render: (_, record) => (
                 <Link to={`../account/${record._id}`}>Xem chi tiết</Link>
             ),

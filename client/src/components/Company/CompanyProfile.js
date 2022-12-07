@@ -369,7 +369,7 @@ export const CompanyProfile = () => {
       if (response.status !== 201) {
         message.error(result.message);
       } else {
-        const link = "admin/company/" + company._id;
+        const link = "admin/company/" + account._id;
           const title = "Yêu cầu duyệt thông tin doanh nghiệp";
           const type = "infor";
           const content = `Doanh nghiệp ${company.com_name} yêu cầu duyệt thông tin doanh nghiệp.`;
@@ -586,7 +586,9 @@ export const CompanyProfile = () => {
       <div className="introduce-frame">
         <div className="background-image"></div>
         <div className="introduce-bottom">
-          <Avatar className="avatar" size={120} icon={<UserOutlined />} />
+          <div className='avatar-container'>
+            <Avatar className="avatar" size={120} icon={<UserOutlined />} />
+          </div>
           <div className="introduce-fullname">{company.com_name}</div>
         </div>
       </div>

@@ -303,7 +303,9 @@ export const DetailAccountAdmin = () => {
         <div className='introduce-frame'>
             <div className='background-image'></div>
             <div className='introduce-bottom'>
-                <Avatar className='avatar' size={120} icon={<UserOutlined />} />
+                <div className='avatar-container'>
+                    <Avatar className='avatar' size={120} icon={<UserOutlined />} />
+                </div>
                 <div className='introduce-fullname'>{account.fullname}</div>
             </div>
         </div>

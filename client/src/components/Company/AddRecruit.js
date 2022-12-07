@@ -215,16 +215,7 @@ export const AddRecruit = () => {
   const [validateFields, setValidateFields] = useState(defaultTrueStatus);
   const [validateDescription, setValidateDescription] = useState(defaultTrueStatus)
   const ref = useRef();
-  const refButtonSubmit = useRef();
-
-  //handle change
-  // function handleKeyUp(e) {
-  //   if (e.keyCode === 13) {
-  //     console.log("enter");
-  //     refButtonSubmit.current.focus();
-  //     refButtonSubmit.current.click();
-  //   }
-  // }
+  // const refButtonSubmit = useRef();
 
   //validate
   function checkTitleFunc(title) {
@@ -392,8 +383,10 @@ export const AddRecruit = () => {
       if (response.status !== 201) {
         message.error(result.message);
       } else {
+        const idRecruit = result._id;
+        console.log("idRecruit",idRecruit)
         openNotificationWithIcon('success', 'Thành công', 'Bạn đã thêm bài đăng tuyển dụng thành công! Hãy đợi admin duyệt!')
-        const link = "admin/recruit/" + recruit._id;
+        const link = "admin/recruit/" + idRecruit+','+company._id;
         const title = "Yêu cầu duyệt thông tin bài đăng tuyển dụng";
         const type = "infor";
         const content = `Doanh nghiệp ${company.com_name} yêu cầu duyệt thông tin bài đăng tuyển dụng.`;

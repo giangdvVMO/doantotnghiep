@@ -10,6 +10,7 @@ import { serverURL } from '../../configs/server.config';
 import { postFields } from '../../common/service';
 
 const { Option } = Select;
+const {TextArea} = Input;
 export const CVManagerAdmin = () => {
     const { user,changeUser, token } = useContext(UserContext);
     const navigate = useNavigate();
@@ -117,19 +118,16 @@ export const CVManagerAdmin = () => {
     useEffect(()=>{fetchListCV()},[field, status, search])
     const columns = [
         {
-            title: 'STT',
-            dataIndex: '_id',
-            key: '_id',
-            fixed: 'left',
-        },
-        {
             title: 'Tiêu đề',
             dataIndex: 'title',
+            width: 150,
             key: 'title',
+            fixed: 'left'
         },
         {
             title: 'Lĩnh vực',
             key: 'fields',
+            width: 150,
             render: (_,record) =>{ return (<>{
                 record.fields.map((manu) => {return(
                     <Tag className="tag" color="cyan">{manu.nameField}</Tag>)
@@ -138,8 +136,38 @@ export const CVManagerAdmin = () => {
             }
         },
         {
+            title: 'Mô tả',
+            key: 'summary',
+            width: 200,
+            render: (_,record) =>
+                <TextArea value={record.summary}  bordered={false}/>
+        },
+        {
+            title: 'Kinh nghiệm',
+            dataIndex: 'experience',
+            key: 'certificate',
+            width: 100,
+            sorter: (a,b)=>{
+                return a.experience - b.experience
+            }
+        },
+        {
+            title: 'Chuyên môn',
+            key: 'speciality',
+            width: 200,
+            render: (_,record) =><TextArea value={record.speciality}  bordered={false}/>
+        },
+        {
+            title: 'Chứng chỉ',
+            key: 'certificate',
+            width: 200,
+            render: (_,record) =><TextArea value={record.certificate}  bordered={false}/>
+        },
+        
+        {
             title: 'Trạng thái',
             key: 'status',
+            width: 100,
             render: (_, record) => (
                      record.status?
                         <Tag icon={<CheckCircleOutlined />} 
@@ -156,6 +184,7 @@ export const CVManagerAdmin = () => {
         {
             title: 'Hành động',
             key: 'action',
+            width: 100,
             render: (_, record) => (
                 <Link to={`../admin/student/${record._id}`}>Xem chi tiết</Link>
             ),

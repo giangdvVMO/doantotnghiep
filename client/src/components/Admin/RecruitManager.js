@@ -128,42 +128,64 @@ export const RecruitManagerAdmin = () => {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title",
+      width:150,
+      fixed: 'left'
     },
     {
       title: "Phương thức làm việc",
       dataIndex: "way_working",
       key: "way_working",
+      width:100,
     },
     {
       title: "Lương",
       dataIndex: "salary",
       key: "salary",
-    },
-    {
-      title: "Số lượng tuyển",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Cấp bậc",
-      dataIndex: "level",
-      key: "level",
-    },
-    {
-      title: "Giới tính",
-      dataIndex: "gender",
-      key: "gender",
-    },
-    {
-      title: "Địa chỉ làm việc",
-      dataIndex: "address_working",
-      key: "address_working",
+      width:150,
+      sorter: (a,b)=>{
+        return a.salary - b.salary
+      }
     },
     {
       title: "Kinh nghiệm",
       dataIndex: "experience",
       key: "experience",
+      width:150,
+      sorter: (a,b)=>{
+        return a.experience - b.experience
+      }
     },
+    {
+      title: "Số lượng tuyển",
+      dataIndex: "quantity",
+      key: "quantity",
+      width:120,
+      sorter: (a,b)=>{
+        return a.quantity - b.quantity
+      }
+    },
+    {
+      title: "Cấp bậc",
+      dataIndex: "level",
+      key: "level",
+      width:120,
+    },
+    {
+      title: "Giới tính",
+      dataIndex: "gender",
+      key: "gender",
+      width:120,
+      render:(_, record)=>{
+        return record.gender===true? 'Nam':record.gender===false? 'Nữ': 'All'
+      }
+    },
+    {
+      title: "Địa chỉ làm việc",
+      dataIndex: "address_working",
+      key: "address_working",
+      width:150,
+    },
+    
     {
       title: "Mô tả công việc",
       key: "description",
@@ -191,6 +213,7 @@ export const RecruitManagerAdmin = () => {
     {
       title: "Ngày kết thúc",
       key: "end_date",
+      width: 150,
       render: (_, record) => {
         return record.end_date ? (
           <>{DateToShortStringDate(record.end_date)}</>
@@ -202,6 +225,7 @@ export const RecruitManagerAdmin = () => {
     {
       title: "Lĩnh vực",
       key: "fields",
+      width: 150,
       render: (_, record) => {
         return (
           <>
@@ -219,6 +243,7 @@ export const RecruitManagerAdmin = () => {
     {
       title: "Trạng thái",
       key: "status",
+      width: 120,
       render: (_, record) =>{
         return (new Date(record.end_date) < new Date()? 
         <Tag icon={<ClockCircleOutlined />} color="default">Hết hạn</Tag>
@@ -234,6 +259,7 @@ export const RecruitManagerAdmin = () => {
     {
       title: "Hành động",
       key: "action",
+      width: 120,
       render: (_, record) => (
         <Link to={`../recruit/${record._id},${record.id_company}`}>
           Xem chi tiết
