@@ -1,4 +1,4 @@
-import { Button, Image, Input, message, Modal, Segmented, Select, Spin, Table, Tag } from "antd";
+import { Button, Image, Input, message, Modal, Rate, Segmented, Select, Spin, Table, Tag } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
@@ -16,6 +16,7 @@ import { openNotificationWithIcon } from "../../common/service";
 import { RateCommentList } from "../Common/RateCommentList";
 
 const { Option } = Select;
+const {TextArea} = Input;
 export const RateListCompany = () => {
   const { user, changeUser, token } = useContext(UserContext);
   const navigate = useNavigate();
@@ -120,23 +121,32 @@ async function fetchListYourRate() {
   const columns = [
     {
       title: "STT",
-      dataIndex: "_id",
       key: "_id",
+      width: 100,
+      render: (_, record, index)=>{
+        return <p>{index+1}</p>
+      },
       fixed: "left",
     },
     {
       title: "Tiêu đề",
       dataIndex: "title",
+      width: 150,
       key: "title",
     },
     {
       title: "Nội dung đánh giá",
       dataIndex: "content",
+      width: 200,
       key: "content",
+      render: (_,record) =>{ 
+        return <TextArea value={record.content} bordered={false}/>
+    }
     },
     {
       title: "Sinh viên",
       key: "fullname",
+      width: 150,
       render: (_, record) => {
         return <div>{record.account.fullname}</div>
       },
@@ -144,6 +154,7 @@ async function fetchListYourRate() {
     {
         title: "Doanh nghiệp",
         key: "company",
+        width: 150,
         render: (_, record) => {
           return <div>{record.company.com_name}</div>
         },
@@ -151,6 +162,7 @@ async function fetchListYourRate() {
     {
       title: "Loại đánh giá",
       key: "type",
+      width: 150,
       render: (_, record) => {
         return (record.type_rate==='student'?
         <Tag color="#87d068">{record.type_rate}</Tag>:<Tag color="#2db7f5">{record.type_rate}</Tag>
@@ -158,8 +170,18 @@ async function fetchListYourRate() {
       },
     },
     {
+      title: "Điểm đánh giá",
+      dataIndex: "score",
+      key: "score",
+      width: 180,
+      render: (_, record) => {
+        return <Rate disabled defaultValue={record.score} count={10}/>
+      },
+    },
+    {
       title: "Trạng thái",
       key: "status",
+      width: 120,
       render: (_, record) =>
         record.status ? (
           <Tag icon={<CheckCircleOutlined />} color="success">
@@ -175,6 +197,7 @@ async function fetchListYourRate() {
     {
       title: "Hành động",
       key: "action",
+      width: 150,
       render: (_, record) => (<>
        <Button type="text" onClick={()=>handleDelete(record._id)}><DeleteTwoTone /></Button>
         </>

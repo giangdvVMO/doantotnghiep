@@ -151,64 +151,69 @@ export const StudentList = () => {
 
   const columns = [
     {
-      title: "STT",
-      dataIndex: "_id",
-      key: "_id",
-      fixed: "left",
-    },
-    {
       title: "Họ và tên",
       dataIndex: "fullname",
+      width: 200,
       key: "fullname",
     },
     {
       title: "Ngày sinh",
       dataIndex: "birthday",
+      width: 120,
       key: "birthday",
     },
     {
       title: "Quê quán",
       dataIndex: "address",
+      width: 150,
       key: "address",
     },
     {
       title: "Số điện thoại",
       dataIndex: "phone",
+      width: 120,
       key: "phone",
     },
     {
       title: "CCCD",
       dataIndex: "cccd",
+      width: 200,
       key: "cccd",
     },
     {
       title: "Trường",
       dataIndex: "university",
+      width: 150,
       key: "university",
     },
     {
       title: "Khoa",
       dataIndex: "faculty",
+      width: 150,
       key: "faculty",
     },
     {
       title: "Chuyên ngành",
       dataIndex: "major",
+      width: 150,
       key: "major",
     },
     {
       title: "Khóa học",
       dataIndex: "course",
+      width: 150,
       key: "course",
     },
     {
       title: "GPA",
       dataIndex: "gpa",
+      width: 100,
       key: "gpa",
     },
     {
       title: "Hành động",
       key: "action",
+      width: 150,
       render: (_, record) => (
         <Link
           to={`../student/${record._id}`}

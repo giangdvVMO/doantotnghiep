@@ -66,8 +66,8 @@ export const CVList = () => {
     let query = "?pageIndex=" + pageIndex + "&pageSize=" + pageSize;
     query = field.length&&!field.includes(-1) ? query + "&field=" + field : query;
     query = search !== "" ? query + "&search=" + search : query;
-    query = specialtity!==""? query + "&specialtity" + specialtity : query;
-    query = experience!==-1? query + "&experience" + experience : query;
+    query = specialtity!==""? query + "&specialtity=" + specialtity : query;
+    query = experience!==-1? query + "&experience=" + experience : query;
     const url = serverURL + "CV" + query;
     console.log(query);
     try {
