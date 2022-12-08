@@ -20,6 +20,7 @@ export const StudentList = () => {
   const [major, setMajor] = useState(-1);
   const [search, setSearch] = useState("");
   const [listUser, setListUser] = useState([]);
+  const [listApply, setListApply] = useState([]);
   async function fetchListStudent() {
     let query = "?status=1";
     query = major !== -1 ? query + "&major=" + major : query;
@@ -138,7 +139,9 @@ export const StudentList = () => {
       }
     } catch (err) {}
   };
+  const fetchApply = ()=>{
 
+  }
   useEffect(() => {
     fetchUser();
   }, []);
@@ -147,6 +150,7 @@ export const StudentList = () => {
   useEffect(() => {
     fetchListStudent();
   }, [university, major, search]);
+  useEffect(()=>{fetchApply()},[user]);
 
   const columns = [
     {
@@ -221,6 +225,73 @@ export const StudentList = () => {
           }}
         >
           Xem chi tiết
+        </Link>
+      ),
+      fixed: "right",
+    },
+  ];
+
+  const columnsApply = [
+    {
+      title: "Họ và tên",
+      dataIndex: "fullname",
+      width: 200,
+      key: "fullname",
+    },
+    {
+      title: "GPA",
+      dataIndex: "gpa",
+      width: 100,
+      key: "gpa",
+    },
+    {
+      title: "Vị trí ứng tuyển",
+      dataIndex: "phone",
+      width: 120,
+      key: "position",
+    },
+    {
+      title: "Ngày ứng tuyển",
+      dataIndex: "cccd",
+      width: 200,
+      key: "date",
+    },
+    {
+      title: "Trường",
+      dataIndex: "university",
+      width: 150,
+      key: "university",
+    },
+    {
+      title: "Khoa",
+      dataIndex: "faculty",
+      width: 150,
+      key: "faculty",
+    },
+    {
+      title: "Chuyên ngành",
+      dataIndex: "major",
+      width: 150,
+      key: "major",
+    },
+    {
+      title: "Khóa học",
+      dataIndex: "course",
+      width: 150,
+      key: "course",
+    },
+    {
+      title: "Hành động",
+      key: "action",
+      width: 150,
+      render: (_, record) => (
+        <Link
+          to={`../student/${record._id}`}
+          onCLick={() => {
+            handleViewCV(record._id, user._id);
+          }}
+        >
+          Xem hồ sơ
         </Link>
       ),
       fixed: "right",
@@ -308,6 +379,18 @@ export const StudentList = () => {
           y: 800,
         }}
       />
+    <div className="apply-student">
+        <div className="title">Sinh viên ứng tuyển</div>
+        {/* <div className="underline"></div> */}
+        <Table
+          dataSource={listApply}
+          columns={columnsApply}
+          scroll={{
+            x: 800,
+            y: 800,
+          }}
+        />
+    </div>
     </>
   );
 };

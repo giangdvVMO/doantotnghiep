@@ -40,6 +40,11 @@ export class ApplyController {
     return this.applyService.statistic(+id_student, +month, +year);
   }
 
+  @Get(':id_company')
+  findApply(@Param('id_company') id_company: string) {
+    return this.applyService.findApply(+id_company);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.applyService.remove(+id);

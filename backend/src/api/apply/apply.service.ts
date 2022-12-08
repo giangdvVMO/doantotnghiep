@@ -99,4 +99,50 @@ export class ApplyService {
   remove(id: number) {
     return `This action removes a #${id} apply`;
   }
+
+  async findApply(id_company: number) {
+    const result = await this.applyModel.aggregate([
+      {
+        $lookup: {
+          from: 'tbl_recruit',
+          localField: 'id_recruit',
+          foreignField: '_id',
+          as: 'recruit',
+          pipeline: [
+            {
+              $lookup: {
+                from: 'tbl_company',
+                localField: 'id_company',
+                foreignField: '_id',
+                as: 'company',
+              },
+            },
+            {
+              $match: {
+                _id: id_company,
+              },
+            },
+            {
+              $unwind: '$company',
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$recruit',
+      },
+      {
+        $lookup: {
+          from: 'tbl_student',
+          localField: 'id_student',
+          foreignField: '_id',
+          as: 'student',
+        },
+      },
+      {
+        $unwind: '$student',
+      },
+    ]);
+    return { data: result };
+  }
 }
