@@ -58,7 +58,7 @@ export const NewsView = () => {
         let query = "?1=1&status=1"
         // query = status !== -1 ? query + "&status=" + status : query;
         query = search !== "" ? query + "&search=" + search : query;
-        query = field.length&&!field.contain(-1) ? query + "&field=" + field : query;
+        query = field.length&&!field.includes(-1) ? query + "&field=" + field : query;
        // console.log('field', field)
         message.success('field', field)
         const url = serverURL + "news" + query;
