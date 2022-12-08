@@ -39,17 +39,16 @@ export const messageCompanyError = {
 };
 
 export const messageRecruitError = {
-  title: "Tiêu đề không được bỏ trống",
+  title: "Tiêu đề không được bỏ trống, không quá 50 kí tự, không chứa kí tự đặc biệt",
   way_working: "Phương thức làm việc không được bỏ trống",
   salary: "Lương không được bỏ trống",
   quantity: "Số lượng tuyển không được bỏ trống",
   level: "Chức vụ không được bỏ trống",
-  address_working: "Địa chỉ làm việc không được bỏ trống",
+  address_working: "Địa chỉ làm việc không được bỏ trống, không quá 50 kí tự, không chứa kí tự đặc biệt",
   experience: "Số tháng kinh nghiệm không được bỏ trống",
-  description: "Mô tả không được bỏ trống",
-  requirement: "Yêu cầu không được bỏ trống",
-  welfare: "Quyền lợi không được bỏ trống",
-  start_date: "Ngày bắt đầu không được bỏ trống",
+  description: "Mô tả không được bỏ trống, không quá 1000 kí tự, không chứa kí tự đặc biệt",
+  requirement: "Yêu cầu không được bỏ trống, không quá 1000 kí tự, không chứa kí tự đặc biệt",
+  welfare: "Quyền lợi không được bỏ trống, không quá 1000 kí tự, không chứa kí tự đặc biệt",
   end_date: "Ngày kết thúc không được bỏ trống",
   field: "Chưa chọn lĩnh vực",
 };

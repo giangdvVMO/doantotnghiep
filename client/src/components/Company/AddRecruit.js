@@ -24,6 +24,7 @@ import {
   checkNumber,
   checkDate,
   checkArray,
+  checkSpecial,
 } from "../../common/validation";
 import { messageRecruitError } from "../../common/error";
 import { genderList, levelList, wayWorkingList } from "../../data/list";
@@ -219,7 +220,7 @@ export const AddRecruit = () => {
 
   //validate
   function checkTitleFunc(title) {
-    if (!checkString(title)) {
+    if (!checkSpecial(title, 50)) {
       setValidateTitle({
         status: "error",
         errorMsg: messageRecruitError.title,
@@ -231,7 +232,7 @@ export const AddRecruit = () => {
     }
   }
   function checkWayWorkingFunc(WayWorking) {
-    if (!checkString(WayWorking)) {
+    if (!checkSpecial(WayWorking, 1000)) {
       setValidateWayWorking({
         status: "error",
         errorMsg: messageRecruitError.way_working,
@@ -279,7 +280,7 @@ export const AddRecruit = () => {
     }
   }
   function checkAddressWorkingFunc(address_working) {
-    if (!checkString(address_working)) {
+    if (!checkSpecial(address_working, 1000)) {
       setValidateAddressWorking({
         status: "error",
         errorMsg: messageRecruitError.address_working,
@@ -304,7 +305,7 @@ export const AddRecruit = () => {
   }
 
   function checkDescriptionFunc(Description) {
-    if (!checkString(Description)) {
+    if (!checkSpecial(Description, 1000)) {
       setValidateDescription({
         status: "error",
         errorMsg: messageRecruitError.description,
@@ -317,7 +318,7 @@ export const AddRecruit = () => {
   }
 
   function checkRequirementFunc(requirement) {
-    if (!checkString(requirement)) {
+    if (!checkSpecial(requirement, 1000)) {
       setValidateRequirement({
         status: "error",
         errorMsg: messageRecruitError.requirement,
@@ -329,7 +330,7 @@ export const AddRecruit = () => {
     }
   }
   function checkWelfareFunc(welfare) {
-    if (!checkString(welfare)) {
+    if (!checkSpecial(welfare, 1000)) {
       setValidateWelfare({
         status: "error",
         errorMsg: messageRecruitError.welfare,
@@ -408,9 +409,9 @@ export const AddRecruit = () => {
     ref.current.submit();
     let count = 0;
    // console.log("company", company);
-    count = checkTitleFunc(recruit.title) ? count : count + 1;
+    count = checkTitleFunc(recruit.title.trim()) ? count : count + 1;
    // console.log("1",count)
-    count = checkWayWorkingFunc(recruit.way_working) ? count : count + 1;
+    count = checkWayWorkingFunc(recruit.way_working.trim()) ? count : count + 1;
    // console.log("2",count)
     count = checkSalaryFunc(recruit.salary) ? count : count + 1;
    // console.log("3",count)
@@ -418,16 +419,16 @@ export const AddRecruit = () => {
    // console.log("4",count)
     count = checkLevelFunc(recruit.level) ? count : count + 1;
    // console.log("5",count)
-    count = checkAddressWorkingFunc(recruit.address_working)
+    count = checkAddressWorkingFunc(recruit.address_working.trim())
       ? count
       : count + 1;
      // console.log("6",count)
     count = checkExperienceFunc(recruit.experience) ? count : count + 1;
    // console.log("7",count)
-    count = checkRequirementFunc(recruit.requirement) ? count : count + 1;
-    count = checkDescriptionFunc(recruit.description)?count:count+1;
+    count = checkRequirementFunc(recruit.requirement.trim()) ? count : count + 1;
+    count = checkDescriptionFunc(recruit.description.trim())?count:count+1;
    // console.log("8",count)
-    count = checkWelfareFunc(recruit.welfare) ? count : count + 1;
+    count = checkWelfareFunc(recruit.welfare.trim()) ? count : count + 1;
    // console.log("9",count)
     count = checkEndDateFunc(recruit.end_date) ? count : count + 1;
    // console.log("10",count)
