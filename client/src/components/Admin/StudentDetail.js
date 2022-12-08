@@ -7,10 +7,12 @@ import {decodeToken , isExpired} from 'react-jwt';
 import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
-import { DateToShortString } from "../../common/service";
+import { DateToShortString, openNotificationWithIcon } from "../../common/service";
 import TextArea from "antd/lib/input/TextArea";
 import { serverURL } from "../../configs/server.config";
 import { domain } from "../../data/default-image";
+import { checkReason } from "../../common/validation";
+import { messageConfirmError } from "../../common/error";
 
 let students = {
     _id:-1,
@@ -133,7 +135,28 @@ export const StudentDetailAdmin = ()=>{
             fetchStudent();
         },[]
     )
-    
+
+    const [validateReason, setValidateReason] = useState({
+        status: 'success',
+        errorMsg: null
+    });
+    function checkReasonFunc(Reason) {
+        const reason = Reason.trim();
+        console.log("reason",reason)
+        if (!checkReason(reason)) {
+            setValidateReason({
+                status: 'error',
+                errorMsg: messageConfirmError.reason
+            })
+            return false;
+        } else {
+            setValidateReason({
+                status: 'success',
+                errorMsg: null
+            })
+            return true;
+        }
+    }
     const ref = useRef();
     const refButtonSubmit = useRef();
 
@@ -145,9 +168,14 @@ export const StudentDetailAdmin = ()=>{
         return;
     }
     async function handleSubmitDeny(){
+        if(checkReasonFunc(reason)){
+            openNotificationWithIcon('success', 'Thành công','Đã gửi thông báo tới sinh viên!')
+            setOpen(false);
+        }else{
+            openNotificationWithIcon('error', 'Thất bại','Hãy nhập lí do từ chối!')
+        }
         // set notification (later)
-        message.success('Đã gửi thông báo tới sinh viên!');
-        setOpen(false);
+        
     }
     async function handleCancelDeny(){
         setOpen(false);
@@ -335,20 +363,31 @@ export const StudentDetailAdmin = ()=>{
             </div>
             <Modal title='Xác nhận từ chối' open={isOpen} footer={null}>
                 <label>Lý do từ chối</label>
-                <TextArea 
-                    className='input-login max-width'
-                    placeholder="Nhập lí do"
-                    autoFocus={true}
-                    rows={6}
-                    defaultValue={reason}
-                    value={reason}
-                    onChange={handleChangeReason}
-                    />
-                    <br/>
-                    <div className='group-button'>
-                        <Button type='submit' className='button save-btn' onClick={handleSubmitDeny}>Từ chối</Button>
-                        <Button type='reset' className='button cancel-btn' onClick={handleCancelDeny}>Hủy</Button>
-                    </div>
+                <Form>
+                    <Form.Item 
+                        validateStatus={validateReason.status}
+                        help={validateReason.errorMsg}
+                        rules={[{ required: true, message: 'Hãy nhập lí do!' }]}
+                    >
+                        <TextArea 
+                            className='input-login max-width'
+                            placeholder="Nhập lí do"
+                            autoFocus={true}
+                            rows={6}
+                            defaultValue={reason}
+                            value={reason}
+                            onChange={handleChangeReason}
+                            required
+                            />
+                    </Form.Item>
+                            <br/>
+                    <Form.Item>
+                            <div className='group-button'>
+                                <Button type='submit' className='button save-btn' onClick={handleSubmitDeny}>Từ chối</Button>
+                                <Button type='reset' className='button cancel-btn' onClick={handleCancelDeny}>Hủy</Button>
+                            </div>
+                    </Form.Item>
+                </Form>
             </Modal>
         </div>
     )}else{

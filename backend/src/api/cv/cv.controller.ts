@@ -8,6 +8,7 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -58,9 +59,12 @@ export class CvController {
     return this.cvService.findAll(query);
   }
 
-  @Get('hint/:id_company')
+  @Get('suggest/:id_company')
   hint(@Param('id_company') query: string) {
-    return this.cvService.hint(+query);
+    if (!parseInt(query)) {
+      throw new BadRequestException('id không hợp lệ');
+    }
+    return this.cvService.suggest(+query);
   }
 
   @Get(':id')

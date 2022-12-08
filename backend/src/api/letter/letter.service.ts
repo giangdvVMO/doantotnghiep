@@ -8,6 +8,7 @@ import { UserService } from '../user/user.service';
 import { ConditionLetterDto, CreateLetterDto } from './dto/create-letter.dto';
 import { UpdateLetterDto } from './dto/update-letter.dto';
 import { Letter, LetterDocument } from './letter.schema';
+import * as _ from 'lodash';
 
 @Injectable()
 export class LetterService {
@@ -59,6 +60,85 @@ export class LetterService {
       },
     ]);
     return { data: result };
+  }
+
+  async findLetterStudent(id_company: number) {
+    const students = await this.letterModel.aggregate([
+      {
+        $match: {
+          id_account: id_company,
+        },
+      },
+      {
+        $lookup: {
+          from: 'tbl_letter_student',
+          localField: '_id',
+          foreignField: 'id_letter',
+          as: 'letter',
+          pipeline: [
+            {
+              $lookup: {
+                from: 'tbl_student',
+                localField: 'id_student',
+                foreignField: '_id',
+                as: 'student',
+              },
+            },
+            {
+              $lookup: {
+                from: 'tbl_cv',
+                localField: 'id_student',
+                foreignField: '_id',
+                as: 'cv',
+                pipeline: [
+                  {
+                    $lookup: {
+                      from: 'tbl_field_cv',
+                      localField: '_id',
+                      foreignField: 'id_cv',
+                      as: 'field_cv',
+                      pipeline: [
+                        {
+                          $group: {
+                            _id: '$id_cv',
+                            fieldId: { $push: '$id_field' },
+                          },
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    $unwind: '$field_cv',
+                  },
+                ],
+              },
+            },
+            {
+              $unwind: '$student',
+            },
+            {
+              $unwind: '$cv',
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$letter',
+      },
+    ]);
+    const field = [];
+    const experience = [];
+    if (!students.length) return null;
+    students.forEach((item) => {
+      field.push(...item.letter.cv.field_cv.fieldId);
+      experience.push(item.letter.cv.experience);
+    });
+    const min = _.min(experience);
+    const max = _.max(experience);
+    return {
+      field: _.uniq(field),
+      experience: { min, max },
+    };
   }
 
   async create(createLetterDto: CreateLetterDto) {

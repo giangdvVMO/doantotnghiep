@@ -13,6 +13,7 @@ import { UpdateCvDto } from './dto/update-cv.dto';
 import { QueryParamCVDto } from './dto/query-param-cv.dto';
 import { title } from 'process';
 import { ManuCompanyService } from '../manu-company/manu-company.service';
+import { LetterService } from '../letter/letter.service';
 
 @Injectable()
 export class CvService {
@@ -20,6 +21,7 @@ export class CvService {
     @InjectModel(CV.name) private readonly cvModel: Model<CVDocument>,
     private readonly fieldCvService: FieldCvService,
     private readonly manuCompanyService: ManuCompanyService,
+    private readonly letterService: LetterService,
     private readonly fileUploadService: FileUploadService,
   ) {}
   async create(createCvDto: CreateCvDto, file_cv: Express.Multer.File) {
@@ -169,10 +171,66 @@ export class CvService {
     return resultUpdate;
   }
 
-  async hint(id_company: number) {
-    const manufactrue = this.manuCompanyService.findNameManu(id_company);
-    return { data: manufactrue };
-    // const hintList = await this.cvModel.aggregate();
+  async suggest(id_company: number) {
+    const manufacture = await this.manuCompanyService.findNameManu(id_company);
+
+    //suggest by experience
+    const studentMail = await this.letterService.findLetterStudent(id_company);
+    let isExperience = {};
+    if (studentMail) {
+      console.log(studentMail);
+      const min = studentMail.experience.min;
+      const max = studentMail.experience.max;
+      console.log(min, max);
+      if (min === 0) {
+        if (max === 0) {
+          isExperience = {
+            $eq: ['$experience', 0],
+          };
+        }
+        if (max < 12) {
+          isExperience = {
+            $and: [{ $gte: ['$experience', 0] }, { $lt: ['$experience', 12] }],
+          };
+        }
+        isExperience = true;
+      }
+      if (min >= 12) {
+        isExperience = {
+          $gte: ['$experience', 12],
+        };
+      }
+      if (min > 0 && min < 12) {
+        if (max < 12) {
+          isExperience = {
+            $and: [{ $gt: ['$experience', 0] }, { $lt: ['$experience', 12] }],
+          };
+        } else {
+          isExperience = {
+            $gt: ['$experience', 0],
+          };
+        }
+      }
+    } else {
+      isExperience = true;
+    }
+    console.log('isExperience', isExperience);
+
+    const hintList = await this.cvModel.aggregate([
+      {
+        $addFields: {
+          isExperience: isExperience,
+        },
+      },
+      {
+        $match: {
+          isExperience: true,
+        },
+      },
+    ]);
+
+    // const hintList = await this.cvModel.aggregate([{}]);
+    return { data: hintList };
   }
 
   async findAll(query: QueryParamCVDto) {

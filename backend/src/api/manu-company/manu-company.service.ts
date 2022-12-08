@@ -68,7 +68,7 @@ export class ManuCompanyService {
     }
   }
 
-  async findNameManu(id_company) {
+  async findNameManu(id_company: number) {
     const result = await this.ManuCompanyModel.aggregate([
       {
         $match: {
@@ -86,8 +86,17 @@ export class ManuCompanyService {
       {
         $unwind: '$manufacture',
       },
+      {
+        $group: {
+          _id: '$id_company',
+          manufacture: {
+            $push: '$manufacture.name_manu',
+          },
+        },
+      },
     ]);
-    return { data: result };
+    // console.log(result);
+    return result[0].manufacture;
   }
 
   async findOne(id: number) {

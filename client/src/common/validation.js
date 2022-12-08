@@ -34,6 +34,15 @@ export const checkFullName = (fullname) => {
     return true;
 }
 
+export const checkReason = (reason)=>{
+    if(!reason|| reason.length>50){
+        return false
+    }
+    const regex = /^[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆfFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ0-9\s]{1,50}$/
+    console.log("test",regex.test(reason));
+    return regex.test(reason)
+}
+
 export const checkBirthday = (birthday) => {
     const now = new Date();
     const year = new Date(birthday).getFullYear();

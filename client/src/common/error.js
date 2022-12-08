@@ -79,3 +79,7 @@ export const messageRate = {
   content: "Nội dung không chứa các kí tự đặc biệt",
   score: 'Điểm đánh giá không được bỏ trống'
 };
+
+export const messageConfirmError = {
+  reason: 'Lí do không chứa kí tự đặc biệt không quá 50 kí tự'
+}
