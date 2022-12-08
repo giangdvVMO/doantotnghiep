@@ -5,7 +5,7 @@ import { avatarImage, domain } from "../../data/default-image"
 export const RateCommentList  =  ({list})=>{
     return (
         list.map(rate=>{
-            console.log('rate', rate)
+           // console.log('rate', rate)
             return (
                 <Comment
                     author={rate.type_rate==='company'?rate.account.fullname:rate.account_company.fullname}

@@ -53,13 +53,13 @@ export const StudentDetailAdmin = ()=>{
                     message.warning('Không tồn tại sinh viên mã đã tìm!');
                     navigate('/home');
                 }else{
-                    console.log("result",result.data)
+                   // console.log("result",result.data)
                     setStudent(result.data);
                 }
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
         }
     }
 
@@ -90,16 +90,16 @@ export const StudentDetailAdmin = ()=>{
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
         }
     }
     //fetch user
     const fetchUser = async()=>{
-        console.log('fetch user account')
+       // console.log('fetch user account')
         const tokenx = token? token: window.localStorage.getItem('accessToken');
-        console.log('tokenx', tokenx);
+       // console.log('tokenx', tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id",id);
+       // console.log("id",id);
         const url = serverURL + 'account/'+id;
             try {
                 const response = await fetch(url, {
@@ -113,7 +113,7 @@ export const StudentDetailAdmin = ()=>{
                 if(response.status!==200){
                     message.error("Lỗi hệ thống load user!");
                 }else{
-                  console.log("user fetch to set role", result)
+                 // console.log("user fetch to set role", result)
                   if(!result||result.role!=='admin'){
                       message.warn('Bạn ko có quyền xem trang này');
                       navigate('/')
@@ -123,7 +123,7 @@ export const StudentDetailAdmin = ()=>{
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
             }
     }
 
@@ -158,7 +158,7 @@ export const StudentDetailAdmin = ()=>{
     }
     function handleKeyUp(e) {
         if (e.keyCode === 13) {
-            console.log('enter');
+           // console.log('enter');
             refButtonSubmit.current.focus();
             refButtonSubmit.current.click();
         }

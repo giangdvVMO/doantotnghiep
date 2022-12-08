@@ -14,18 +14,18 @@ const { Option } = Select;
 export const StudentManager = () => {
     const { user, changeUser , token, changeToken} = useContext(UserContext)
     const navigate = useNavigate();
-    console.log('StudentManager', user)
+   // console.log('StudentManager', user)
     const [university, setUniversity] = useState(-1);
     const [major, setMajor] = useState(-1);
     const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
     const [listUser, setListUser] = useState([]);
     const fetchUser = async()=>{
-              console.log('fetch user account')
+             // console.log('fetch user account')
               const tokenx = token? token: window.localStorage.getItem('accessToken');
-              console.log('tokenx', tokenx);
+             // console.log('tokenx', tokenx);
               const id = decodeToken(tokenx).sub;
-              console.log("id",id);
+             // console.log("id",id);
               const url = serverURL + 'account/'+id;
                   try {
                       const response = await fetch(url, {
@@ -39,7 +39,7 @@ export const StudentManager = () => {
                       if(response.status!==200){
                           message.error("Lỗi hệ thống load user!");
                       }else{
-                        console.log("user fetch to set role", result)
+                       // console.log("user fetch to set role", result)
                         if(!result||result.role!=='admin'){
                             message.warn('Bạn ko có quyền xem trang này');
                             navigate('/')
@@ -49,7 +49,7 @@ export const StudentManager = () => {
                       }
                   }
                   catch (err) {
-                      console.log(err);
+                     // console.log(err);
                   }
           }
 
@@ -62,7 +62,7 @@ export const StudentManager = () => {
                     query = university!==-1? query+'&university='+university:query;
                     query = search!==''? query+'&search='+search:query;
                     const url = serverURL + 'student'+ query;
-                    console.log(query);
+                   // console.log(query);
                     try {
                         const response = await fetch(url, {
                             method: 'GET',
@@ -75,12 +75,12 @@ export const StudentManager = () => {
                         if(response.status!==200){
                             message.error("Lỗi hệ thống!");
                         }else{
-                            console.log("fetch result",result)
+                           // console.log("fetch result",result)
                             setListUser([...result.data]);
                         }
                     }
                     catch (err) {
-                        console.log(err);
+                       // console.log(err);
                     }
             }
             fetchListStudents()

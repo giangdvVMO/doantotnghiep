@@ -12,7 +12,7 @@ const { Option } = Select;
 
 export const AccountManager = () => {
     const { user } = useContext(UserContext);
-    // console.log('AccountManager', user);
+    //// console.log('AccountManager', user);
     const [status, setStatus] = useState(-1);
     const [search, setSearch] = useState('');
     const [current, setCurrent] = useState(1);
@@ -30,7 +30,7 @@ export const AccountManager = () => {
                 query = search!==-1? query+'&search='+search:query;
                 query = role!=='all'? query+ '&role='+role: query;
                 const url = serverURL + 'account'+ query;
-                console.log(query);
+               // console.log(query);
                 try {
                     const response = await fetch(url, {
                         method: 'GET',
@@ -43,15 +43,15 @@ export const AccountManager = () => {
                     if(response.status!==200){
                         message.error("Lỗi hệ thống!");
                     }else{
-                        console.log('userList',result.data)
+                       // console.log('userList',result.data)
                         setListUser(result.data);
                     }
                 }
                 catch (err) {
-                    console.log(err);
+                   // console.log(err);
                 }
             }
-            console.log('fetch data');
+           // console.log('fetch data');
         fetchData();
         };
     useEffect( getAccountList,[current, search, status, role]);
@@ -66,7 +66,7 @@ export const AccountManager = () => {
         const splitA = a.fullname.split(' ');
         const splitB = b.fullname.split(' ');
         const sortLastName = customSort(splitA[splitA.length-1],splitB[splitB.length-1]);
-        console.log("sortLastName",sortLastName)
+       // console.log("sortLastName",sortLastName)
         if(sortLastName===0){
             return customSort(a.fullname,b.fullname);
         }
@@ -163,7 +163,7 @@ export const AccountManager = () => {
     }
 
     const handleChangeSearch = (e)=>{
-        console.log(e.target.value);
+       // console.log(e.target.value);
         setSearch(e.target.value);
     }
 

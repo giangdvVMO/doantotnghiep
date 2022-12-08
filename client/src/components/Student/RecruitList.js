@@ -16,7 +16,7 @@ import "../../styles/manager-page.css";
 import { SearchOutlined } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
 import "../../styles/list.css";
-import { DateToShortStringDate, postFields } from "../../common/service";
+import { DateToShortStringDate, openNotificationWithIcon, postFields } from "../../common/service";
 import { CardList } from "../Common/Card";
 
 const { Option } = Select;
@@ -44,7 +44,7 @@ export const RecruitListStudent = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -55,7 +55,7 @@ export const RecruitListStudent = () => {
       setFields(result.data);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
@@ -69,7 +69,7 @@ export const RecruitListStudent = () => {
     query = experience !== -1 ? query + "&experience=" + experience : query;
     query = search !== "" ? query + "&search=" + search : query;
     const url = serverURL + "recruit" + query;
-    console.log(query);
+   // console.log(query);
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -81,22 +81,22 @@ export const RecruitListStudent = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống!");
       } else {
-        console.log("result", result);
+       // console.log("result", result);
         setPageTotal(result.total);
         setListRecruit(result.data);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
 
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -109,7 +109,7 @@ export const RecruitListStudent = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "student") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -117,21 +117,49 @@ export const RecruitListStudent = () => {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
-  useEffect(() => {
-    fetchField();
-  }, []);
-  useEffect(() => {
-    fetchListRecruit();
-  }, [pageIndex, pageSize, field, experience, search, user]);
+  async function fetchStudent() {
+    if (user) {
+      try {
+        const _id = user._id;
+        const url = serverURL + "student/" + _id;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        if (response.status !== 200) {
+         // console.log("Lỗi hệ thống!");
+          message.error("Lỗi hệ thống!");
+        } else {
+        if (result.data === "empty") {
+            openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn phải cập nhật thông tin sinh viên!')
+            navigate("/student-profile");
+          } else {
+                if(result.data.status === false){
+                    openNotificationWithIcon('warning', 'Cảnh báo', 'Hãy đợi admin duyệt thông tin nhé!')
+                    navigate("/home");
+                    return;
+                }
+            }
+        }
+      } catch (err) {
+        message.error('Đã có lỗi xảy ra');
+      }
+    }
+  }
+
+  useEffect(() => {fetchUser();}, []);
+  useEffect(() => {fetchStudent();}, [user]);
+  useEffect(() => {fetchField();}, []);
+  useEffect(() => {fetchListRecruit(); }, [pageIndex, pageSize, field, experience, search, user]);
   const handleChangeField = (e) => {
-    console.log(e);
+   // console.log(e);
     const value = e.map((item) => {
       return item.value;
     });
@@ -148,7 +176,7 @@ export const RecruitListStudent = () => {
     setPageIndex(1);
   };
   const onShowSizeChange = (current, pageSize) => {
-    console.log(current, pageSize);
+   // console.log(current, pageSize);
     setPageIndex(current);
   };
   if (user&&fields.length) {

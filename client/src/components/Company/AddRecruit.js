@@ -80,22 +80,22 @@ export const AddRecruit = () => {
         });
         const result = await response.json();
         if (response.status !== 200) {
-          console.log("Lỗi hệ thống!");
+         // console.log("Lỗi hệ thống!");
           message.error("Lỗi hệ thống!");
         } else {
-          console.log("result", result);
+         // console.log("result", result);
           if (result.data === "empty") {
             //   setOpenModal(true);
             setCompany({ ...initialCompany });
           } else {
-            console.log("fetch Manu Company", result.data);
+           // console.log("fetch Manu Company", result.data);
             setCompany((preCompany) => {
               return { ...preCompany, manufacture: result.data.manufacture };
             });
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     }
   }
@@ -112,21 +112,21 @@ export const AddRecruit = () => {
         });
         const result = await response.json();
         if (response.status !== 200) {
-          console.log("Lỗi hệ thống!");
+         // console.log("Lỗi hệ thống!");
           message.error("Lỗi hệ thống!");
         } else {
-          console.log("result", result);
+         // console.log("result", result);
           if (result.data === "empty") {
             setOpenModal(true);
             setCompany({ ...initialCompany });
           } else {
-            console.log("fetch Company", result.data);
+           // console.log("fetch Company", result.data);
             setCompany({ ...company, ...result.data });
             fetchManuCompany();
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     }
   }
@@ -141,7 +141,7 @@ export const AddRecruit = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -152,17 +152,17 @@ export const AddRecruit = () => {
       setFields(result.data);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -175,7 +175,7 @@ export const AddRecruit = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "company") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -183,7 +183,7 @@ export const AddRecruit = () => {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
 
@@ -353,7 +353,7 @@ export const AddRecruit = () => {
     }
   }
   function checkFieldFunc(fields) {
-    console.log("fields", fields);
+   // console.log("fields", fields);
     if (!checkArray(fields)) {
       setValidateFields({
         status: "error",
@@ -369,7 +369,7 @@ export const AddRecruit = () => {
   async function createRecruit() {
     const url = serverURL + "recruit";
     const data = { ...recruit, id_company: company._id };
-    console.log("request", data);
+   // console.log("request", data);
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -379,19 +379,19 @@ export const AddRecruit = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 201) {
         message.error(result.message);
       } else {
         const idRecruit = result._id;
-        console.log("idRecruit",idRecruit)
+       // console.log("idRecruit",idRecruit)
         openNotificationWithIcon('success', 'Thành công', 'Bạn đã thêm bài đăng tuyển dụng thành công! Hãy đợi admin duyệt!')
         const link = "admin/recruit/" + idRecruit+','+company._id;
         const title = "Yêu cầu duyệt thông tin bài đăng tuyển dụng";
         const type = "infor";
         const content = `Doanh nghiệp ${company.com_name} yêu cầu duyệt thông tin bài đăng tuyển dụng.`;
         const listAdmin = await getUserAdmin();
-        console.log("listAdmin", listAdmin);
+       // console.log("listAdmin", listAdmin);
         if (!listAdmin.length) {
           message.info("Chưa có admin, hãy tạo tài khoản admin");
         } else {
@@ -400,40 +400,40 @@ export const AddRecruit = () => {
         navigate("/company/recruit-list");
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
   async function handleSave(e) {
     ref.current.submit();
     let count = 0;
-    console.log("company", company);
+   // console.log("company", company);
     count = checkTitleFunc(recruit.title) ? count : count + 1;
-    console.log("1",count)
+   // console.log("1",count)
     count = checkWayWorkingFunc(recruit.way_working) ? count : count + 1;
-    console.log("2",count)
+   // console.log("2",count)
     count = checkSalaryFunc(recruit.salary) ? count : count + 1;
-    console.log("3",count)
+   // console.log("3",count)
     count = checkQuantityFunc(recruit.quantity) ? count : count + 1;
-    console.log("4",count)
+   // console.log("4",count)
     count = checkLevelFunc(recruit.level) ? count : count + 1;
-    console.log("5",count)
+   // console.log("5",count)
     count = checkAddressWorkingFunc(recruit.address_working)
       ? count
       : count + 1;
-      console.log("6",count)
+     // console.log("6",count)
     count = checkExperienceFunc(recruit.experience) ? count : count + 1;
-    console.log("7",count)
+   // console.log("7",count)
     count = checkRequirementFunc(recruit.requirement) ? count : count + 1;
     count = checkDescriptionFunc(recruit.description)?count:count+1;
-    console.log("8",count)
+   // console.log("8",count)
     count = checkWelfareFunc(recruit.welfare) ? count : count + 1;
-    console.log("9",count)
+   // console.log("9",count)
     count = checkEndDateFunc(recruit.end_date) ? count : count + 1;
-    console.log("10",count)
+   // console.log("10",count)
     count = checkFieldFunc(recruit.fields) ? count : count + 1;
-    console.log("count", count);
-    console.log(recruit);
+   // console.log("count", count);
+   // console.log(recruit);
     if (count === 0) {
       createRecruit();
     }
@@ -453,7 +453,7 @@ export const AddRecruit = () => {
     });
   }
   function handleChangeWayWorking(value) {
-    console.log(value);
+   // console.log(value);
     setRecruit((preRecruit) => {
       return { ...preRecruit, way_working: value };
     });
@@ -504,13 +504,13 @@ export const AddRecruit = () => {
     });
   }
   function handleChangeFields(value) {
-    console.log("value", value);
+   // console.log("value", value);
     setRecruit((preRecruit) => {
       return { ...preRecruit, fields: value };
     });
   }
   function handleChangeGender(value) {
-    console.log("value", value);
+   // console.log("value", value);
     setRecruit((preRecruit) => {
       return { ...preRecruit, gender: value };
     });

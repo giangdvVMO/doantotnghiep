@@ -71,7 +71,7 @@ const SignIn = () => {
 
     function handleKeyUp(e) {
         if (e.keyCode === 13) {
-            console.log('enter');
+           // console.log('enter');
             refButtonSubmit.current.focus();
             refButtonSubmit.current.click();
         }
@@ -85,8 +85,8 @@ const SignIn = () => {
         let count = 0;
         count = checkPasswordFunc(user.password) ? count : count + 1;
         count = checkUserNameFunc(user.username) ? count : count + 1;
-        console.log(count);
-        console.log(user);
+       // console.log(count);
+       // console.log(user);
         if (count === 0) {
             const url = serverURL + 'auth/login';
             try {
@@ -107,7 +107,7 @@ const SignIn = () => {
                 }else{
                     openNotificationWithIcon('success', 'Thông báo', 'Bạn đã đăng nhập thành công')
                     const account = result.user;
-                    console.log('socket', socket.id);
+                   // console.log('socket', socket.id);
                     changeUser(account);
                     socket.emit('msgToSignin', {id:account._id})
                     window.localStorage.setItem('accessToken', result.accessToken)
@@ -116,7 +116,7 @@ const SignIn = () => {
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
             }
         }
         return;

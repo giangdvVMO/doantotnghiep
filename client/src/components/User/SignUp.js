@@ -32,6 +32,7 @@ import {
   checkUsername,
 } from "../../common/validation";
 import { messageSignUpError } from "../../common/error";
+import { openNotificationWithIcon } from "../../common/service";
 
 const SignUp = () => {
   const [account, setAccount] = useState({
@@ -119,7 +120,7 @@ const SignUp = () => {
 
   function handleKeyUp(e) {
     if (e.keyCode === 13) {
-      console.log("enter");
+     // console.log("enter");
       refButtonSubmit.current.focus();
       refButtonSubmit.current.click();
     }
@@ -277,15 +278,32 @@ const SignUp = () => {
           },
           body: JSON.stringify(account),
         });
+        const result = await response.json();
         //const response = await axios.post(url, JSON.stringify(account),{})
         if (response.status !== 201) {
-          message.error("Đăng ký không thành công!");
+          if(response.status===400){
+            if(result.message==='username'){
+              openNotificationWithIcon('error','Thông tin nhập chưa đúng',messageSignUpError.existUsername)
+              setValidateUsername({
+                status: "error",
+                errorMsg: messageSignUpError.existUsername,
+              });
+            }
+            if(result.message==='email'){
+              openNotificationWithIcon('error','Thông tin nhập chưa đúng',messageSignUpError.existEmail)
+              setValidateEmail({
+                status: "error",
+                errorMsg: messageSignUpError.existEmail,
+              });
+            }
+          }else
+            message.error("Đăng ký không thành công!");
         } else {
           message.success("Bạn đã đăng ký thành công");
           navigate("/sign-in");
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     }
     return;

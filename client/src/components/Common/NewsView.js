@@ -37,7 +37,7 @@ export const NewsView = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -48,7 +48,7 @@ export const NewsView = () => {
       setFields(result.data);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
@@ -59,10 +59,10 @@ export const NewsView = () => {
         query = status !== -1 ? query + "&status=" + status : query;
         query = search !== "" ? query + "&search=" + search : query;
         query = field.length&&!field.contain(-1) ? query + "&field=" + field : query;
-        console.log('field', field)
+       // console.log('field', field)
         message.success('field', field)
         const url = serverURL + "news" + query;
-        console.log(query);
+       // console.log(query);
         try {
         const response = await fetch(url, {
             method: "GET",
@@ -74,11 +74,11 @@ export const NewsView = () => {
         if (response.status !== 200) {
             message.error("Lỗi hệ thống!");
         } else {
-            console.log("result", result);
+           // console.log("result", result);
             setListNews(result.data);
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   }
@@ -87,7 +87,7 @@ export const NewsView = () => {
     if(user){
         let query = "?status=1&&sort=views&&pageIndex=1&&pageSize=3";
         const url = serverURL + "news" + query;
-        console.log(query);
+       // console.log(query);
         try {
         const response = await fetch(url, {
             method: "GET",
@@ -99,11 +99,11 @@ export const NewsView = () => {
         if (response.status !== 200) {
             message.error("Lỗi hệ thống!");
         } else {
-            console.log("result", result);
+           // console.log("result", result);
             setListHot(result.data);
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   }
@@ -112,7 +112,7 @@ export const NewsView = () => {
     if(user){
         let query = "?status=1&&sort=create_date&&pageIndex=1&&pageSize=3";
         const url = serverURL + "news" + query;
-        console.log(query);
+       // console.log(query);
         try {
         const response = await fetch(url, {
             method: "GET",
@@ -124,11 +124,11 @@ export const NewsView = () => {
         if (response.status !== 200) {
             message.error("Lỗi hệ thống!");
         } else {
-            console.log("result", result);
+           // console.log("result", result);
             setListFresh(result.data);
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   }
@@ -153,11 +153,11 @@ export const NewsView = () => {
 
         }
         // } else {
-        //     // console.log("result", result);
+        //     //// console.log("result", result);
         //     fetchListFresh();
         // }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   }
@@ -165,11 +165,11 @@ export const NewsView = () => {
   //fetch user
   const fetchUser = async () => {
     if(!user){
-        console.log("fetch user account");
+       // console.log("fetch user account");
         const tokenx = token ? token : window.localStorage.getItem("accessToken");
-        console.log("tokenx", tokenx);
+       // console.log("tokenx", tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id", id);
+       // console.log("id", id);
         const url = serverURL + "account/" + id;
         try {
         const response = await fetch(url, {
@@ -182,7 +182,7 @@ export const NewsView = () => {
         if (response.status !== 200) {
             message.error("Lỗi hệ thống load user!");
         } else {
-            console.log("user fetch to set role", result);
+           // console.log("user fetch to set role", result);
             if (!result) {
             message.warn("Bạn ko có quyền xem trang này");
             navigate("/");
@@ -190,18 +190,18 @@ export const NewsView = () => {
             changeUser({ ...result });
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   };
 
   const handleChangeField = (e) => {
-    console.log(e);
+   // console.log(e);
     const value = e.map((item) => {
       return item.value;
     });
     setField([...value]);
-    console.log('field-news', value)
+   // console.log('field-news', value)
   };
 
   useEffect(() => {

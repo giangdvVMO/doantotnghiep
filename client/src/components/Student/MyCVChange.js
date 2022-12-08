@@ -91,20 +91,20 @@ import TextArea from "antd/lib/input/TextArea";
           });
           const result = await response.json();
           if (response.status !== 200) {
-            console.log("Lỗi hệ thống!");
+           // console.log("Lỗi hệ thống!");
             message.error("Lỗi hệ thống!");
           } else {
-            console.log("result", result);
+           // console.log("result", result);
             if (result.data === "empty") {
               openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn phải cập nhật thông tin sinh viên!')
               navigate("/student-profile");
             } else {
-              console.log("fetch Student", result.data);
+             // console.log("fetch Student", result.data);
               setStudent({ ...student, ...result.data });
             }
           }
         } catch (err) {
-          console.log(err);
+         // console.log(err);
         }
       }
     }
@@ -119,21 +119,21 @@ import TextArea from "antd/lib/input/TextArea";
           },
         });
         const result = await response.json();
-        console.log(result);
+       // console.log(result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
-          message.success("Load field thành công!");
+          // message.success("Load field thành công!");
           setFields(result.data);
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     }
     
     async function fetchCV() {
-      console.log("fetchCV");
+     // console.log("fetchCV");
       const url = serverURL + "cv/" + student._id;
       try {
         const response = await fetch(url, {
@@ -143,24 +143,24 @@ import TextArea from "antd/lib/input/TextArea";
           },
         });
         const result = await response.json();
-        console.log("CV", result);
+       // console.log("CV", result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
           setCV({ ...initialCV, ...result.data });
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     }
     //fetch user
     const fetchUser = async () => {
-      console.log("fetch user account");
+     // console.log("fetch user account");
       const tokenx = token ? token : window.localStorage.getItem("accessToken");
-      console.log("tokenx", tokenx);
+     // console.log("tokenx", tokenx);
       const id = decodeToken(tokenx).sub;
-      console.log("id", id);
+     // console.log("id", id);
       const url = serverURL + "account/" + id;
       try {
         const response = await fetch(url, {
@@ -173,7 +173,7 @@ import TextArea from "antd/lib/input/TextArea";
         if (response.status !== 200) {
           message.error("Lỗi hệ thống load user!");
         } else {
-          console.log("user fetch to set role", result);
+         // console.log("user fetch to set role", result);
           if (!result || result.role !== "student") {
             message.warn("Bạn ko có quyền xem trang này");
             navigate("/");
@@ -182,7 +182,7 @@ import TextArea from "antd/lib/input/TextArea";
           changeUser({ ...result });
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     };
     useEffect(() => {
@@ -261,7 +261,7 @@ import TextArea from "antd/lib/input/TextArea";
     }
   
     function checkFieldFunc(fields) {
-      console.log("fields", fields);
+     // console.log("fields", fields);
       if (!checkArray(fields)) {
         setValidateFields({
           status: "error",
@@ -286,7 +286,7 @@ import TextArea from "antd/lib/input/TextArea";
       formData.append('speciality',CV.speciality);
       formData.append('experience',CV.experience);
       formData.append('summary',CV.summary);
-      console.log("request", formData);
+     // console.log("request", formData);
       try {
         const response = await fetch(url, {
           method: "POST",
@@ -296,7 +296,7 @@ import TextArea from "antd/lib/input/TextArea";
           // },
         });
         const result = await response.json();
-        console.log(result);
+       // console.log(result);
         if (response.status !== 201) {
           openNotificationWithIcon('error','Thông báo', 'Lỗi')
           message.error(result.message);
@@ -310,7 +310,7 @@ import TextArea from "antd/lib/input/TextArea";
           setIsEdit(false);
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     }
@@ -319,7 +319,7 @@ import TextArea from "antd/lib/input/TextArea";
       const url = serverURL + "cv/" + CV._id;
       let formData = new FormData();
       formData.append('fields',+CV.fields[0]?CV.fields:CV.fields.map(item=>item._id));
-      console.log("file", file)
+     // console.log("file", file)
       if(file){formData.append('file_cv',file)};
       formData.append('title',CV.title);
       formData.append('status',CV.status);
@@ -329,7 +329,7 @@ import TextArea from "antd/lib/input/TextArea";
       formData.append('experience',CV.experience);
       formData.append('summary',CV.summary);
       // const data = { ...CV, update_id:  };
-      console.log("request", formData);
+     // console.log("request", formData);
       try {
         const response = await fetch(url, {
           method: "PATCH",
@@ -339,7 +339,7 @@ import TextArea from "antd/lib/input/TextArea";
           body: formData,
         });
         const result = await response.json();
-        console.log(result);
+       // console.log(result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
@@ -353,7 +353,7 @@ import TextArea from "antd/lib/input/TextArea";
           // fetchCompany();
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     }
@@ -361,24 +361,24 @@ import TextArea from "antd/lib/input/TextArea";
     async function handleSave(e) {
       ref.current.submit();
       let count = 0;
-      console.log("account", account);
-      console.log("student", student);
+     // console.log("account", account);
+     // console.log("student", student);
       count = checkTitleFunc(CV.title) ? count : count + 1;
-      console.log("count", count);
+     // console.log("count", count);
       count = file||CV.file_cv? count: count+1;
-      console.log("count", count);
+     // console.log("count", count);
       count = CV.certificate?count: count+1;
-      console.log("count", count);
+     // console.log("count", count);
       count = CV.speciality?count: count+1;
-      console.log("count", count);
+     // console.log("count", count);
       count = CV.experience?count: count+1;
-      console.log("count", count);
+     // console.log("count", count);
       count = CV.summary?count: count+1;
-      console.log("count", count);
+     // console.log("count", count);
       // count = checkFileFunc(CV.file_cv) ? count : count + 1;
       count = checkFieldFunc(CV.fields) ? count : count + 1;
-      console.log("count", count);
-      console.log(CV);
+     // console.log("count", count);
+     // console.log(CV);
       if (count === 0) {
         if (CV._id === -1) {
           createCV();
@@ -392,7 +392,7 @@ import TextArea from "antd/lib/input/TextArea";
     async function handleEdit(e) {
       await fetchCV();
       setIsEdit(true);
-      console.log("edit", CV);
+     // console.log("edit", CV);
       // return;
     }
     async function handleCancel(e) {
@@ -456,7 +456,7 @@ import TextArea from "antd/lib/input/TextArea";
     }
   
     function handleChangeFields(value) {
-      console.log("value", value);
+     // console.log("value", value);
       setCV((preCV) => {
         return { ...preCV, fields: value };
       });
@@ -507,9 +507,9 @@ import TextArea from "antd/lib/input/TextArea";
     //   return isJpgOrPng && isLt2M;
     // };
     const handleChange = (info) => {
-      console.log("info", info.target.files[0]);
+     // console.log("info", info.target.files[0]);
       setFile(info.target.files[0]);
-      console.log(CV);
+     // console.log(CV);
     };
     const uploadButton = (
       <div>

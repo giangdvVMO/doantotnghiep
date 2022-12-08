@@ -36,7 +36,7 @@ export const RateManagerAdmin = () => {
     query = search !== "" ? query + "&search=" + search : query;
     query = type_rate !== "all" ? query + "&type_rate=" + type_rate : query;
     const url = serverURL + "rate" + query;
-    console.log(query);
+   // console.log(query);
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -51,17 +51,17 @@ export const RateManagerAdmin = () => {
         setListRate(result.data);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
 }
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -74,7 +74,7 @@ export const RateManagerAdmin = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "admin") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -82,7 +82,7 @@ export const RateManagerAdmin = () => {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
   useEffect(() => {
@@ -181,9 +181,9 @@ export const RateManagerAdmin = () => {
     setSearch(e.target.value);
   };
   const handleConfirm = (id, company)=>{
-    console.log('id', id);
+   // console.log('id', id);
     setCurrentId(id);
-    console.log('currentId', currentId);
+   // console.log('currentId', currentId);
     setCurrentCompany({...company})
     setOpenConfirm(true);
   }
@@ -194,7 +194,7 @@ export const RateManagerAdmin = () => {
     setOpenDelete(true);
   }
   const handleConfirmDelete = async ()=>{
-    console.log('currentId', currentId);
+   // console.log('currentId', currentId);
     const url = serverURL + "rate/" + currentId;
     try {
       const response = await fetch(url, {
@@ -204,7 +204,7 @@ export const RateManagerAdmin = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -217,7 +217,7 @@ export const RateManagerAdmin = () => {
         setOpenDelete(false);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
@@ -227,7 +227,7 @@ export const RateManagerAdmin = () => {
   const handleConfirmConfirm = async()=>{
     const url = serverURL + "rate/confirm/" + currentId;
     const data = { confirm_id: user._id };
-    console.log("request", data);
+   // console.log("request", data);
     try {
       const response = await fetch(url, {
         method: "PATCH",
@@ -237,7 +237,7 @@ export const RateManagerAdmin = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -250,12 +250,12 @@ export const RateManagerAdmin = () => {
         setOpenConfirm(false);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
   const handleCancelConfirm = ()=>{
-    console.log('currentId', currentId);
+   // console.log('currentId', currentId);
 
     setOpenConfirm(false);
   }

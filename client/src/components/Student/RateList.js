@@ -34,7 +34,7 @@ export const RateListStudent = () => {
       query = status !== -1 ? query + "&status=" + status : query;
       query = search !== "" ? query + "&search=" + search : query;
       const url = serverURL + "rate" + query;
-      console.log(query);
+     // console.log(query);
       try {
         const response = await fetch(url, {
           method: "GET",
@@ -49,7 +49,7 @@ export const RateListStudent = () => {
           setListRate(result.data);
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     }
   }
@@ -58,7 +58,7 @@ async function fetchListYourRate() {
     let query = `?type_rate=student&id_student=${user._id}&status=1`;
     query = search !== "" ? query + "&search=" + search : query;
     const url = serverURL + "rate" + query;
-    console.log(query);
+   // console.log(query);
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -73,17 +73,17 @@ async function fetchListYourRate() {
         setListYourRate(result.data);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
     }
   }
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -96,7 +96,7 @@ async function fetchListYourRate() {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "student") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -104,7 +104,7 @@ async function fetchListYourRate() {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
   useEffect(() => {
@@ -194,7 +194,7 @@ async function fetchListYourRate() {
     setOpenDelete(true);
   }
   const handleConfirmDelete = async ()=>{
-    console.log('currentId', currentId);
+   // console.log('currentId', currentId);
     const url = serverURL + "rate/" + currentId;
     try {
       const response = await fetch(url, {
@@ -204,7 +204,7 @@ async function fetchListYourRate() {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -213,7 +213,7 @@ async function fetchListYourRate() {
         setOpenDelete(false);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }

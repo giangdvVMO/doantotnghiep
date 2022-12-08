@@ -95,7 +95,7 @@ export const checkMajor = (major) => {
 }
 
 export const checkGPA = (gpa) => {
-    console.log('gpa', parseFloat(gpa) );
+   // console.log('gpa', parseFloat(gpa) );
     if(!gpa||!parseFloat(gpa)||parseFloat(gpa)<0||parseFloat(gpa)>4){
         return false;
     }
@@ -140,7 +140,7 @@ export const checkString = (data)=>{
 }
 
 export const checkNumber = (data)=>{
-    console.log("data",data);
+   // console.log("data",data);
     if(data === 0) return true;
     return +data;
 }
@@ -158,12 +158,12 @@ export const checkDate = (data)=>{
 }
 
 export const checkArray = (data)=>{
-    console.log("data",data)
+   // console.log("data",data)
     return data.length;
 }
 
 export const checkFileCV = (data)=>{
-    console.log("data",data)
+   // console.log("data",data)
     return data.length;
 }
 

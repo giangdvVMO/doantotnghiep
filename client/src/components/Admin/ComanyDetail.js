@@ -52,21 +52,21 @@ export const CompanyDetailAdmin = () => {
       });
       const result = await response.json();
       if (response.status !== 200) {
-        console.log("Lỗi hệ thống!");
+       // console.log("Lỗi hệ thống!");
         message.error("Lỗi hệ thống!");
       } else {
-        console.log("result", result);
+       // console.log("result", result);
         if (result.data === "empty") {
           setCompany({ ...initialCompany });
         } else {
-          console.log("fetch Manu Company", result.data);
+         // console.log("fetch Manu Company", result.data);
           setCompany((preCompany) => {
             return { ...preCompany, manufacture: result.data.manufacture };
           });
         }
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
   async function fetchCompany() {
@@ -80,31 +80,31 @@ export const CompanyDetailAdmin = () => {
       });
       const result = await response.json();
       if (response.status !== 200) {
-        console.log("Lỗi hệ thống!");
+       // console.log("Lỗi hệ thống!");
         message.error("Lỗi hệ thống!");
       } else {
-        console.log("result", result);
+       // console.log("result", result);
         if (result.data === "empty") {
           navigate("/page-not-found");
           setCompany({ ...initialCompany });
         } else {
-          console.log("fetch Company", result.data);
+         // console.log("fetch Company", result.data);
           setCompany({ ...company, ...result.data });
           fetchManuCompany();
         }
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
 
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -117,7 +117,7 @@ export const CompanyDetailAdmin = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "admin") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -126,7 +126,7 @@ export const CompanyDetailAdmin = () => {
         setAccount({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
 
@@ -165,7 +165,7 @@ export const CompanyDetailAdmin = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
 

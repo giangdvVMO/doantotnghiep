@@ -39,7 +39,7 @@ export const CompanyDetailStudent = ()=>{
     const [isOpenRate, setOpenRate] = useState(false);
 
     const {id} = useParams();
-    // console.log("company.manufacture",company.manufacture)
+    //// console.log("company.manufacture",company.manufacture)
 
     //fetch manucomany and Company
     async function fetchManuCompany(){
@@ -54,14 +54,14 @@ export const CompanyDetailStudent = ()=>{
             );
             const result = await response.json();
             if(response.status!==200){
-                console.log("Lỗi hệ thống!")
+               // console.log("Lỗi hệ thống!")
                 message.error("Lỗi hệ thống!");
             }else{
-                console.log("result",result);
+               // console.log("result",result);
                 if(result.data==='empty'){
                     setCompany({...initialCompany});
                 }else{
-                    console.log('fetch Manu Company', result.data);
+                   // console.log('fetch Manu Company', result.data);
                     setCompany((preCompany)=>{
                         return {...preCompany,
                             manufacture:  result.data.manufacture
@@ -71,7 +71,7 @@ export const CompanyDetailStudent = ()=>{
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
         }
     }
     async function fetchCompany(){
@@ -86,31 +86,31 @@ export const CompanyDetailStudent = ()=>{
             );
             const result = await response.json();
             if(response.status!==200){
-                console.log("Lỗi hệ thống!");
+               // console.log("Lỗi hệ thống!");
                 message.error("Lỗi hệ thống!");
             }else{
-                console.log("result",result);
+               // console.log("result",result);
                 if(result.data==='empty'){
                     navigate("/page-not-found");
                     setCompany({...initialCompany});
                 }else{
-                    console.log('fetch Company', result.data);
+                   // console.log('fetch Company', result.data);
                     setCompany({...company,...result.data});
                     fetchManuCompany();
                 }
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
         }
     }
     //fetch user
     const fetchUser = async()=>{
-        console.log('fetch user account')
+       // console.log('fetch user account')
         const tokenx = token? token: window.localStorage.getItem('accessToken');
-        console.log('tokenx', tokenx);
+       // console.log('tokenx', tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id",id);
+       // console.log("id",id);
         const url = serverURL + 'account/'+id;
             try {
                 const response = await fetch(url, {
@@ -124,7 +124,7 @@ export const CompanyDetailStudent = ()=>{
                 if(response.status!==200){
                     message.error("Lỗi hệ thống load user!");
                 }else{
-                  console.log("user fetch to set role", result)
+                 // console.log("user fetch to set role", result)
                   if(!result||result.role!=='student'){
                       message.warn('Bạn ko có quyền xem trang này');
                       navigate('/')
@@ -133,7 +133,7 @@ export const CompanyDetailStudent = ()=>{
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
             }
     }
 
@@ -142,7 +142,7 @@ export const CompanyDetailStudent = ()=>{
         if(user&&company&&company._id !== -1){
         let query = `?type_rate=company&id_company=${company._id}&status=1`;
         const url = serverURL + "rate" + query;
-        console.log(query);
+       // console.log(query);
         try {
           const response = await fetch(url, {
             method: "GET",
@@ -157,7 +157,7 @@ export const CompanyDetailStudent = ()=>{
             setRateList(result.data);
           }
         } catch (err) {
-          console.log(err);
+         // console.log(err);
         }
       }
     }
@@ -175,7 +175,7 @@ export const CompanyDetailStudent = ()=>{
               },
             });
             const result = await response.json();
-            console.log("result letter", result);
+           // console.log("result letter", result);
             if (response.status !== 200) {
               message.error(result.message);
             } else {
@@ -191,7 +191,7 @@ export const CompanyDetailStudent = ()=>{
               }
             }
           } catch (err) {
-            console.log(err);
+           // console.log(err);
             message.error("Đã có lỗi xảy ra!");
           }
         }

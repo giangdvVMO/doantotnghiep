@@ -23,8 +23,8 @@ export const CardList = ({ listRecruit, id_student }) => {
         body: JSON.stringify(data),
       });
       const result = await response.json();
-      console.log(result);
-      console.log("status", response.status);
+     // console.log(result);
+     // console.log("status", response.status);
       if (response.status !== 201) {
         openNotificationWithIcon(
           "error",
@@ -33,7 +33,7 @@ export const CardList = ({ listRecruit, id_student }) => {
         );
       }
     } catch (err) {
-      console.log(err)
+     // console.log(err)
     }
   };
   return listRecruit.map((item) => {

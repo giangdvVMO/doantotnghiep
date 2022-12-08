@@ -70,15 +70,15 @@ export const RecruitProfile = ()=>{
             );
             const result = await response.json();
             if(response.status!==200){
-                console.log("Lỗi hệ thống!")
+               // console.log("Lỗi hệ thống!")
                 message.error("Lỗi hệ thống!");
             }else{
-                console.log("result",result);
+               // console.log("result",result);
                 if(result.data==='empty'){
                     setOpenModal(true);
                     setCompany({...initialCompany});
                 }else{
-                    console.log('fetch Manu Company', result.data);
+                   // console.log('fetch Manu Company', result.data);
                     setCompany((preCompany)=>{
                         return {...preCompany,
                             manufacture:  result.data.manufacture
@@ -88,7 +88,7 @@ export const RecruitProfile = ()=>{
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
         }
     }
     async function fetchCompany(){
@@ -104,22 +104,22 @@ export const RecruitProfile = ()=>{
             );
             const result = await response.json();
             if(response.status!==200){
-                console.log("Lỗi hệ thống!")
+               // console.log("Lỗi hệ thống!")
                 message.error("Lỗi hệ thống!");
             }else{
-                console.log("result",result);
+               // console.log("result",result);
                 if(result.data==='empty'){
                     setOpenModal(true);
                     setCompany({...initialCompany});
                 }else{
-                    console.log('fetch Company', result.data);
+                   // console.log('fetch Company', result.data);
                     setCompany({...company,...result.data});
                     fetchManuCompany();
                 }
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
         }
     }
     //fetch Fields
@@ -134,7 +134,7 @@ export const RecruitProfile = ()=>{
                 }
                 );
                 const result = await response.json();
-                console.log(result);
+               // console.log(result);
                 if(response.status!==200){
                     message.error(result.message);
                 }else{
@@ -146,7 +146,7 @@ export const RecruitProfile = ()=>{
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
                 message.error("Đã có lỗi xảy ra!");
             }
     }
@@ -161,7 +161,7 @@ export const RecruitProfile = ()=>{
             }
             );
             const result = await response.json();
-            console.log(result);
+           // console.log(result);
             if(response.status!==200){
                 message.error(result.message);
             }else{
@@ -170,17 +170,17 @@ export const RecruitProfile = ()=>{
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
             message.error("Đã có lỗi xảy ra!");
         }
     }
     //fetch user
     const fetchUser = async()=>{
-        console.log('fetch user account')
+       // console.log('fetch user account')
         const tokenx = token? token: window.localStorage.getItem('accessToken');
-        console.log('tokenx', tokenx);
+       // console.log('tokenx', tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id",id);
+       // console.log("id",id);
         const url = serverURL + 'account/'+id;
             try {
                 const response = await fetch(url, {
@@ -194,7 +194,7 @@ export const RecruitProfile = ()=>{
                 if(response.status!==200){
                     message.error("Lỗi hệ thống load user!");
                 }else{
-                  console.log("user fetch to set role", result)
+                 // console.log("user fetch to set role", result)
                   if(!result||result.role!=='company'){
                       message.warn('Bạn ko có quyền xem trang này');
                       navigate('/')
@@ -203,7 +203,7 @@ export const RecruitProfile = ()=>{
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
             }
     }
     useEffect(()=>{fetchUser()},[]);
@@ -231,7 +231,7 @@ export const RecruitProfile = ()=>{
     //handle change
     function handleKeyUp(e) {
         if (e.keyCode === 13) {
-            console.log('enter');
+           // console.log('enter');
             refButtonSubmit.current.focus();
             refButtonSubmit.current.click();
         }
@@ -359,7 +359,7 @@ export const RecruitProfile = ()=>{
         }
     }
     function checkStartDateFunc(start_date) {
-        console.log('start date');
+       // console.log('start date');
         if (!checkDate(start_date)) {
             setValidateStartDate({
                 status: 'error',
@@ -384,7 +384,7 @@ export const RecruitProfile = ()=>{
         }
     }
     function checkFieldFunc(fields){
-        console.log("fields",fields);
+       // console.log("fields",fields);
         if (!checkArray(fields)) {
             setValidateFields({
                 status: 'error',
@@ -400,7 +400,7 @@ export const RecruitProfile = ()=>{
     async function updateRecruit(){
         const url = serverURL + 'recruit/'+id;
             const data = { ...recruit, update_id: company._id};
-            console.log("request", data)
+           // console.log("request", data)
             try {
                 const response = await fetch(url, {
                     method: 'PATCH',
@@ -411,7 +411,7 @@ export const RecruitProfile = ()=>{
                 }
                 );
                 const result = await response.json();
-                console.log(result);
+               // console.log(result);
                 if(response.status!==201){
                     message.error(result.message);
                 }else{
@@ -420,7 +420,7 @@ export const RecruitProfile = ()=>{
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
                 message.error("Đã có lỗi xảy ra!");
             }
     }
@@ -428,7 +428,7 @@ export const RecruitProfile = ()=>{
     async function deleteRecruit(){
         const url = serverURL + 'recruit/'+id;
         const data = {delete_id: account._id}
-            console.log("request", data)
+           // console.log("request", data)
             try {
                 const response = await fetch(url, {
                     method: 'DELETE',
@@ -439,7 +439,7 @@ export const RecruitProfile = ()=>{
                 }
                 );
                 const result = await response.json();
-                console.log(result);
+               // console.log(result);
                 if(response.status!==200){
                     message.error(result.message);
                 }else{
@@ -448,7 +448,7 @@ export const RecruitProfile = ()=>{
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
                 message.error("Đã có lỗi xảy ra!");
             }
     }
@@ -456,8 +456,8 @@ export const RecruitProfile = ()=>{
     async function handleSave(e) {
         ref.current.submit();
         let count =0;
-        console.log("account",account);
-        console.log("company",company);
+       // console.log("account",account);
+       // console.log("company",company);
         count = checkTitleFunc(recruit.title) ? count : count + 1;
         count = checkWayWorkingFunc(recruit.way_working) ? count : count + 1;
         count = checkSalaryFunc(recruit.salary) ? count : count + 1;
@@ -471,8 +471,8 @@ export const RecruitProfile = ()=>{
         count = checkStartDateFunc(recruit.start_date) ? count : count + 1;
         count = checkEndDateFunc(recruit.end_date) ? count : count + 1;
         count = checkFieldFunc(recruit.fields) ? count : count + 1;
-         console.log("count",count);
-         console.log(recruit)
+        // console.log("count",count);
+        // console.log(recruit)
         if(count===0){
             updateRecruit();
         }
@@ -482,7 +482,7 @@ export const RecruitProfile = ()=>{
     async function handleEdit(e) {
         await fetchRecruit();
         setIsEdit(true);
-        console.log('edit', recruit)
+       // console.log('edit', recruit)
         // return;
     }
     async function handleDelete(e){
@@ -539,7 +539,7 @@ export const RecruitProfile = ()=>{
         setRecruit((preRecruit) => { return { ...preRecruit, title: e.target.value } });
     }
     function handleChangeWayWorking(value) {
-        console.log(value);
+       // console.log(value);
         setRecruit((preRecruit) => { return { ...preRecruit, way_working: value } });
     }
     function handleChangeSalary(value) {
@@ -570,11 +570,11 @@ export const RecruitProfile = ()=>{
         setRecruit((preRecruit)=>{ return {...preRecruit, end_date:dateString}})
     }
     function handleChangeFields(value){
-        console.log("value",value);
+       // console.log("value",value);
         setRecruit((preRecruit)=>{ return {...preRecruit, fields:value}})
     }
     function handleChangeGender(value){
-        console.log("value",value);
+       // console.log("value",value);
         setRecruit((preRecruit)=>{ return {...preRecruit, gender:value}})
     }
     

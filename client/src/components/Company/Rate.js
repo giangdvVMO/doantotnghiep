@@ -85,7 +85,7 @@ export const RateModal = ({id_student, id_company, type_rate, setOpenRate}) => {
         setContent(e.target.value);
     }
     function handleChangeScore(value) {
-        console.log(value)
+       // console.log(value)
         setScore(value);
     }
 
@@ -94,7 +94,7 @@ export const RateModal = ({id_student, id_company, type_rate, setOpenRate}) => {
         count = checkTitleFunc(title) ? count : count + 1;
         count = checkContentFunc(content) ? count : count + 1;
         count = checkScoreFunc(score)? count : count + 1;
-        console.log(count);
+       // console.log(count);
         if (count === 0) {
             const url = serverURL + 'rate';
             const data = {
@@ -121,7 +121,7 @@ export const RateModal = ({id_student, id_company, type_rate, setOpenRate}) => {
                     const type = "infor";
                     const content = `${type_rate==='student'?'Doanh nghiệp':'Sinh viên'} yêu cầu duyệt thông tin đánh giá.`;
                     const listAdmin = await getUserAdmin();
-                    console.log("listAdmin", listAdmin);
+                   // console.log("listAdmin", listAdmin);
                     if (!listAdmin.length) {
                         openNotificationWithIcon('warning','Cảnh báo',"Chưa có admin, hãy yêu cầu tạo tài khoản admin");
                     } else {
@@ -132,7 +132,7 @@ export const RateModal = ({id_student, id_company, type_rate, setOpenRate}) => {
                 setOpenRate(false);
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
             }
         }else{
             openNotificationWithIcon('error','Lỗi',"Thông tin chưa đúng");

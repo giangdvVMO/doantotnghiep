@@ -79,21 +79,21 @@ export const StudentDetailCompany = () => {
           message.warning("Không tồn tại sinh viên mã đã tìm!");
           navigate("/home");
         } else {
-          console.log("result", result.data);
+         // console.log("result", result.data);
           setStudent(result.data);
         }
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -106,7 +106,7 @@ export const StudentDetailCompany = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "company") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -115,7 +115,7 @@ export const StudentDetailCompany = () => {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
 
@@ -131,7 +131,7 @@ export const StudentDetailCompany = () => {
           },
         });
         const result = await response.json();
-        console.log("CV", result);
+       // console.log("CV", result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
@@ -147,7 +147,7 @@ export const StudentDetailCompany = () => {
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     }
@@ -178,7 +178,7 @@ export const StudentDetailCompany = () => {
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     }
@@ -197,7 +197,7 @@ export const StudentDetailCompany = () => {
           },
         });
         const result = await response.json();
-        console.log("result letter", result);
+       // console.log("result letter", result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
@@ -213,7 +213,7 @@ export const StudentDetailCompany = () => {
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     }
@@ -232,7 +232,7 @@ export const StudentDetailCompany = () => {
           },
         });
         const result = await response.json();
-        console.log("result letter", result);
+       // console.log("result letter", result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
@@ -248,7 +248,7 @@ export const StudentDetailCompany = () => {
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     }
@@ -259,7 +259,7 @@ export const StudentDetailCompany = () => {
     if(user&&student._id!==-1){
     let query = `?type_rate=student&id_student=${student._id}&status=1`;
     const url = serverURL + "rate" + query;
-    console.log(query);
+   // console.log(query);
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -271,7 +271,7 @@ export const StudentDetailCompany = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống!");
       } else {
-        console.log('result', result.data)
+       // console.log('result', result.data)
         if(result.data.length!==0){
           let sum =0;
           result.data.forEach(element => {
@@ -282,7 +282,7 @@ export const StudentDetailCompany = () => {
         setRateList([...result.data]);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
 }
@@ -315,7 +315,7 @@ export const StudentDetailCompany = () => {
 
   function handleKeyUp(e) {
     if (e.keyCode === 13) {
-      console.log("enter");
+     // console.log("enter");
       refButtonSubmit.current.focus();
       refButtonSubmit.current.click();
     }
@@ -376,7 +376,7 @@ export const StudentDetailCompany = () => {
         }
         );
         const result = await response.json();
-        console.log(result);
+       // console.log(result);
         if(response.status!==200){
             message.error("Không thành công!");
         }else{
@@ -392,7 +392,7 @@ export const StudentDetailCompany = () => {
       }
     }
     catch (err) {
-        console.log(err);
+       // console.log(err);
     }
   }
 

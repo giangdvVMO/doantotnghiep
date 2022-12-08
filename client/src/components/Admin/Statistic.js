@@ -24,7 +24,7 @@ export const StatisticAdmin = ()=>{
           setStudent({...result.data})
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     }
 
@@ -45,7 +45,7 @@ export const StatisticAdmin = ()=>{
           setCompany({...result.data})
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     }
 
@@ -66,7 +66,7 @@ export const StatisticAdmin = ()=>{
           setRecruit({...result.data})
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     }
 

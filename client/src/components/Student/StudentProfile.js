@@ -92,30 +92,30 @@ export const StudentProfile = () => {
         });
         const result = await response.json();
         if (response.status !== 200) {
-          console.log("Lỗi hệ thống!");
+         // console.log("Lỗi hệ thống!");
           message.error("Lỗi hệ thống!");
         } else {
-          console.log("result", result);
+         // console.log("result", result);
           if (result.data === "empty") {
             setOpenModal(true);
             setStudent({ ...initialStudent });
           } else {
-            console.log("fetch student", result.data);
+           // console.log("fetch student", result.data);
             setStudent({ ...result.data });
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     }
   }
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -128,7 +128,7 @@ export const StudentProfile = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "student") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -137,7 +137,7 @@ export const StudentProfile = () => {
         // changeUser({...result})
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
 
@@ -186,7 +186,7 @@ export const StudentProfile = () => {
   }
   function handleKeyUp(e) {
     if (e.keyCode === 13) {
-      console.log("enter");
+     // console.log("enter");
       refButtonSubmit.current.focus();
       refButtonSubmit.current.click();
     }
@@ -371,11 +371,11 @@ export const StudentProfile = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống!");
       } else {
-        console.log("result", result);
+       // console.log("result", result);
         setAccount(result);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
   async function updateAccount() {
@@ -389,7 +389,7 @@ export const StudentProfile = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -397,7 +397,7 @@ export const StudentProfile = () => {
         setIsEdit(false);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
     fetchAccount();
@@ -407,7 +407,7 @@ export const StudentProfile = () => {
     if (student._id === -1) {
       const url = serverURL + "student";
       const data = { ...student, _id: account._id, id_account: account._id };
-      console.log("request", data);
+     // console.log("request", data);
       try {
         const response = await fetch(url, {
           method: "POST",
@@ -417,7 +417,7 @@ export const StudentProfile = () => {
           },
         });
         const result = await response.json();
-        console.log(result);
+       // console.log(result);
         if (response.status !== 201) {
           message.error(result.message);
         } else {
@@ -435,7 +435,7 @@ export const StudentProfile = () => {
           setIsEdit(false);
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     } else {
@@ -452,7 +452,7 @@ export const StudentProfile = () => {
         update_id: account._id,
         status: false,
       };
-      console.log("update", data);
+     // console.log("update", data);
       try {
         const response = await fetch(url, {
           method: "PATCH",
@@ -462,7 +462,7 @@ export const StudentProfile = () => {
           },
         });
         const result = await response.json();
-        console.log("result update", result);
+       // console.log("result update", result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
@@ -471,7 +471,7 @@ export const StudentProfile = () => {
           const type = "infor";
           const content = `Sinh viên ${account.fullname} yêu cầu duyệt thông tin sinh viên.`;
           const listAdmin = await getUserAdmin();
-          console.log("listAdmin", listAdmin);
+         // console.log("listAdmin", listAdmin);
           if (!listAdmin.length) {
             message.info("Chưa có admin, hãy tạo tài khoản admin");
           } else {
@@ -481,7 +481,7 @@ export const StudentProfile = () => {
           setIsEdit(false);
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     }
@@ -490,8 +490,8 @@ export const StudentProfile = () => {
   async function handleSave(e) {
     ref.current.submit();
     let count = 0;
-    console.log("account", account);
-    console.log("student", student);
+   // console.log("account", account);
+   // console.log("student", student);
     count = checkFullNameFunc(account.fullname) ? count : count + 1;
     count = checkMailFunc(account.email) ? count : count + 1;
     count = checkPhoneFunc(account.phone) ? count : count + 1;
@@ -504,7 +504,7 @@ export const StudentProfile = () => {
     count = checkBirthdayFunc(account.birthday) ? count : count + 1;
     count = checkMajorFunc(student.major) ? count : count + 1;
     count = checkGPAFunc(student.gpa) ? count : count + 1;
-    console.log("count", count);
+   // console.log("count", count);
     if (count === 0) {
       if (checkChangeAccount()) {
         updateAccount();
@@ -574,7 +574,7 @@ export const StudentProfile = () => {
   }
 
   function handleChangeEmail(e) {
-    console.log(e.target.value);
+   // console.log(e.target.value);
     setAccount((preUser) => {
       return { ...preUser, email: e.target.value };
     });
@@ -631,7 +631,7 @@ export const StudentProfile = () => {
     });
   }
   function handleChangeUniversity(value) {
-    console.log(value);
+   // console.log(value);
     setStudent((preStudent) => {
       return { ...preStudent, university: value };
     });

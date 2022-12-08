@@ -72,13 +72,13 @@ export const Email = ({id_student, id_company, setOpenEmail, setRate}) => {
         let count = 0;
         count = checkTitleFunc(title) ? count : count + 1;
         count = checkContentFunc(content) ? count : count + 1;
-        console.log(count);
+       // console.log(count);
         if (count === 0) {
             const url = serverURL + 'letter';
             const data = {
                 title, content, id_account:id_company,students:[id_student]
             };
-            console.log('send data', data)
+           // console.log('send data', data)
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -107,7 +107,7 @@ export const Email = ({id_student, id_company, setOpenEmail, setRate}) => {
                 setOpenEmail(false);
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
             }
         }
         return;

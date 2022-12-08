@@ -59,7 +59,7 @@ export const RecruitDetailAdmin = () => {
   //fetch manucomany and Company
   async function fetchManuCompany() {
     try {
-      console.log("fetch manu Company!", recruit.id_company);
+     // console.log("fetch manu Company!", recruit.id_company);
       const _id = ids[1];
       const url = serverURL + "manu-company/company/" + _id;
       const response = await fetch(url, {
@@ -70,27 +70,27 @@ export const RecruitDetailAdmin = () => {
       });
       const result = await response.json();
       if (response.status !== 200) {
-        console.log("Lỗi hệ thống!");
+       // console.log("Lỗi hệ thống!");
         message.error("Lỗi hệ thống!");
       } else {
-        console.log("result", result);
+       // console.log("result", result);
         if (result.data === "empty") {
           // setOpenModal(true);
           setCompany({ ...initialCompany });
         } else {
-          console.log("fetch Manu Company", result.data);
+         // console.log("fetch Manu Company", result.data);
           setCompany((preCompany) => {
             return { ...preCompany, manufacture: result.data.manufacture };
           });
         }
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
   async function fetchCompany() {
     try {
-      console.log("fetch Company!", recruit.id_company);
+     // console.log("fetch Company!", recruit.id_company);
       const url = serverURL + "company/" + ids[1];
       const response = await fetch(url, {
         method: "GET",
@@ -100,20 +100,20 @@ export const RecruitDetailAdmin = () => {
       });
       const result = await response.json();
       if (response.status !== 200) {
-        console.log("Lỗi hệ thống!");
+       // console.log("Lỗi hệ thống!");
         message.error("Lỗi hệ thống!");
       } else {
-        console.log("result", result);
+       // console.log("result", result);
         if (result.data === "empty") {
           setCompany({ ...initialCompany });
         } else {
-          console.log("fetch Company", result.data);
+         // console.log("fetch Company", result.data);
           setCompany({ ...company, ...result.data });
           fetchManuCompany();
         }
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
 
@@ -127,7 +127,7 @@ export const RecruitDetailAdmin = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -135,18 +135,18 @@ export const RecruitDetailAdmin = () => {
         setRecruit({ ...result.data });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
 
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -159,7 +159,7 @@ export const RecruitDetailAdmin = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "admin") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -167,7 +167,7 @@ export const RecruitDetailAdmin = () => {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
 
@@ -189,7 +189,7 @@ export const RecruitDetailAdmin = () => {
   //handle change
   function handleKeyUp(e) {
     if (e.keyCode === 13) {
-      console.log("enter");
+     // console.log("enter");
       refButtonSubmit.current.focus();
       refButtonSubmit.current.click();
     }
@@ -226,14 +226,14 @@ export const RecruitDetailAdmin = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
 
   async function deleteRecruit() {
     const url = serverURL + "recruit/" + ids[0];
     const data = { delete_id: user._id };
-    console.log("request", data);
+   // console.log("request", data);
     try {
       const response = await fetch(url, {
         method: "DELETE",
@@ -243,7 +243,7 @@ export const RecruitDetailAdmin = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -255,7 +255,7 @@ export const RecruitDetailAdmin = () => {
           navigate("/admin/recruit-list");
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }

@@ -67,7 +67,7 @@ export const Notification = () => {
   };
 
   const setLabel = () => {
-    console.log("load", noti.length);
+   // console.log("load", noti.length);
     if (noti.length) {
       return (
         <List className="list-noti">
@@ -130,11 +130,11 @@ export const Notification = () => {
           },
         });
         const result = await response.json();
-        console.log(result);
+       // console.log(result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
-          console.log("fetchNoti", result.data);
+         // console.log("fetchNoti", result.data);
           if (result.data.length) {
             setNoti([...result.data]);
             setCount(result.data.length);
@@ -144,18 +144,18 @@ export const Notification = () => {
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra!");
       }
     }
   };
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -168,7 +168,7 @@ export const Notification = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result) {
           notification["warning"]({
             message: "Notification Title",
@@ -180,7 +180,7 @@ export const Notification = () => {
         setAccount({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
   useEffect(() => {

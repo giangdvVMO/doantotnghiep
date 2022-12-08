@@ -28,7 +28,7 @@ export const CompanyManager = () => {
     query = scaleBound !== -1 ? query + "&scaleBound=" + scaleBound : query;
     query = search !== "" ? query + "&search=" + search : query;
     const url = serverURL + "company" + query;
-    console.log(query);
+   // console.log(query);
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -40,21 +40,21 @@ export const CompanyManager = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống!");
       } else {
-        console.log("result", result);
+       // console.log("result", result);
         setListUser(result.data);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
 
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -67,7 +67,7 @@ export const CompanyManager = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "admin") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -75,7 +75,7 @@ export const CompanyManager = () => {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
 

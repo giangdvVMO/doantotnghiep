@@ -17,11 +17,11 @@ export const Statistic = () => {
 
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -34,7 +34,7 @@ export const Statistic = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "student") {
             openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn ko có quyền xem trang này')
           navigate("/");
@@ -42,13 +42,13 @@ export const Statistic = () => {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
   //FETCHCV
   async function fetchCV() {
     if(user){
-    console.log("fetchCV");
+   // console.log("fetchCV");
     const url = serverURL + "cv-view/list/" + user._id;
     try {
       const response = await fetch(url, {
@@ -58,14 +58,14 @@ export const Statistic = () => {
         },
       });
       const result = await response.json();
-      console.log("CV", result);
+     // console.log("CV", result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
         setCV({...result.data });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
 }

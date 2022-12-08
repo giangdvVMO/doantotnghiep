@@ -24,9 +24,9 @@ export const DetailAccount = () => {
     const [image, setImage] = useState('');
     const fetchUser = async()=>{
         const tokenx = token?token:window.localStorage.getItem('accessToken');
-        console.log('tokenx', tokenx);
+       // console.log('tokenx', tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id",id);
+       // console.log("id",id);
         const url = serverURL + 'account/'+id;
             try {
                 const response = await fetch(url, {
@@ -44,7 +44,7 @@ export const DetailAccount = () => {
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
             }
     }
     useEffect(()=>{fetchUser()},[]);
@@ -84,7 +84,7 @@ export const DetailAccount = () => {
     }
 
     function handleChangeEmail(e) {
-        console.log(e.target.value);
+       // console.log(e.target.value);
         setAccount((preUser) => { return { ...preUser, email: e.target.value } });
     }
 
@@ -105,14 +105,14 @@ export const DetailAccount = () => {
             formData.append('id_account', user._id)
             if(image){formData.append('image',image)};
             // const data = { ...CV, update_id:  };
-            console.log("request", formData);
+           // console.log("request", formData);
             try {
                 const response = await fetch(url, {
                     method: "POST",
                     body: formData,
                 });
                 const result = await response.json();
-                console.log(result);
+               // console.log(result);
                 if (response.status !== 201) {
                     // message.error(result.message);
                 } else {
@@ -121,21 +121,21 @@ export const DetailAccount = () => {
                     "Thông báo",
                     "Bạn đã thêm ảnh thành công!"
                     );
-                    // console.log('ơ',result.data);
+                    //// console.log('ơ',result.data);
                     setAvatar(result.data.link);
                     setIsOpenModalSelectImage(false);
                 }
             } catch (err) {
-                console.log(err);
+               // console.log(err);
                 // message.error("Đã có lỗi xảy ra!");
                 }
             }
     }
 
     const handleClickFile = (info) => {
-            console.log("info", info.target.files[0]);
+           // console.log("info", info.target.files[0]);
             setImage(info.target.files[0]);
-            console.log(image);
+           // console.log(image);
           };
 
     const handleChangeAvatar = ()=>{
@@ -144,7 +144,7 @@ export const DetailAccount = () => {
 
     function handleKeyUp(e) {
         if (e.keyCode === 13) {
-            console.log('enter');
+           // console.log('enter');
             refButtonSubmit.current.focus();
             refButtonSubmit.current.click();
         }
@@ -285,7 +285,7 @@ export const DetailAccount = () => {
         count = checkUserNameFunc(account.username) ? count : count + 1;
         count = checkBirthdayFunc(account.birthday) ? count : count + 1;
         
-        console.log(count);
+       // console.log(count);
         if (count === 0) {
             if(avatar){
                 account.avatar = avatar;
@@ -301,7 +301,7 @@ export const DetailAccount = () => {
                 }
                 );
                 const result = await response.json();
-                console.log(result);
+               // console.log(result);
                 if(response.status!==200){
                     // message.error(result.message);
                     if(response.status===400){
@@ -319,7 +319,7 @@ export const DetailAccount = () => {
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
                 setAccount({...user});
                 message.error("Đã có lỗi xảy ra!");
             }

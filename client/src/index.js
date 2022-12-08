@@ -31,7 +31,6 @@ import { StudentList } from "./components/Company/StudentList";
 import { RecruitListStudent } from "./components/Student/RecruitList";
 import { RecruitCompanyListStudent } from "./components/Student/RecruitCompanyList";
 import { RecruitDetailStudent } from "./components/Student/RecruitDetail";
-import { MyCV } from "./components/Student/MyCV";
 import { CVManagerAdmin } from "./components/Admin/CVManager";
 import { CVList } from "./components/Company/CVList";
 import { Statistic } from "./components/Student/Statistic";

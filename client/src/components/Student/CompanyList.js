@@ -1,14 +1,14 @@
 import { Button, Image, Input, message, Select, Spin, Table, Tag } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {decodeToken , isExpired} from 'react-jwt';
+import {decodeToken} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
 import { SearchOutlined } from '@ant-design/icons';
 import { scaleList } from '../../data/list';
 import { serverURL } from '../../configs/server.config';
-import { postManufactures } from '../../common/service';
+import { openNotificationWithIcon, postManufactures } from '../../common/service';
 
 const { Option } = Select;
 export const CompanyList = () => {
@@ -35,7 +35,7 @@ export const CompanyList = () => {
             }
             );
             const result = await response.json();
-            console.log(result);
+            //// console.log(result);
             if(response.status!==200){
                 message.error(result.message);
             }else{
@@ -47,7 +47,7 @@ export const CompanyList = () => {
             }
         }
         catch (err) {
-            console.log(err);
+            //// console.log(err);
             message.error("Đã có lỗi xảy ra!");
         }
     }
@@ -57,7 +57,7 @@ export const CompanyList = () => {
                 query = scaleBound!==-1? query+'&scaleBound='+scaleBound:query;
                 query = search!==''? query+'&search='+search:query;
                 const url = serverURL + 'company'+ query;
-                console.log(query);
+                //// console.log(query);
                 try {
                     const response = await fetch(url, {
                         method: 'GET',
@@ -70,21 +70,22 @@ export const CompanyList = () => {
                     if(response.status!==200){
                         message.error("Lỗi hệ thống!");
                     }else{
-                        console.log("result",result)
+                        //// console.log("result",result)
                         setListUser(result.data);
                     }
                 }
                 catch (err) {
-                    console.log(err);
+                    //// console.log(err);
+                    message.error("Đã có lỗi xảy ra!");
                 }
     }
     //fetch user
     const fetchUser = async()=>{
-        console.log('fetch user account')
+        //// console.log('fetch user account')
         const tokenx = token? token: window.localStorage.getItem('accessToken');
-        console.log('tokenx', tokenx);
+        //// console.log('tokenx', tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id",id);
+        //// console.log("id",id);
         const url = serverURL + 'account/'+id;
             try {
                 const response = await fetch(url, {
@@ -98,27 +99,58 @@ export const CompanyList = () => {
                 if(response.status!==200){
                     message.error("Lỗi hệ thống load user!");
                 }else{
-                  console.log("user fetch to set role", result)
+                //  // console.log("user fetch to set role", result)
                   if(!result||result.role!=='student'){
                       message.warn('Bạn ko có quyền xem trang này');
                       navigate('/')
                   }
                     changeUser({...result})
-
                 }
             }
             catch (err) {
-                console.log(err);
+                //// console.log(err);
+                message.error("Đã có lỗi xảy ra!");
             }
     }
 
+    async function fetchStudent() {
+        if (user) {
+          try {
+            const _id = user._id;
+            const url = serverURL + "student/" + _id;
+            const response = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            const result = await response.json();
+            if (response.status !== 200) {
+             // console.log("Lỗi hệ thống!");
+              message.error("Lỗi hệ thống!");
+            } else {
+            if (result.data === "empty") {
+                openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn phải cập nhật thông tin sinh viên!')
+                navigate("/student-profile");
+              } else {
+                    if(result.data.status === false){
+                        // console.log('re')
+                        openNotificationWithIcon('warning', 'Cảnh báo', 'Hãy đợi admin duyệt thông tin nhé!')
+                        navigate("/home");
+                        return;
+                    }
+                }
+            }
+          } catch (err) {
+            message.error('Đã có lỗi xảy ra');
+          }
+        }
+      }
+
     useEffect(()=>{fetchUser()}, []);
-    useEffect(()=>{
-        fetchManufacture();
-    },[])
-    useEffect(()=>{
-        fetchListCompany();
-    },[scaleBound, manufacture, search])
+    useEffect(()=>{fetchStudent()},[user]);
+    useEffect(()=>{fetchManufacture();},[])
+    useEffect(()=>{fetchListCompany();},[scaleBound, manufacture, search])
     
     const columns = [
         {

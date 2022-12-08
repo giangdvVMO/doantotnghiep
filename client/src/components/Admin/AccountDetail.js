@@ -37,12 +37,12 @@ export const DetailAccountAdmin = () => {
             if(response.status!==200){
                 message.error("Lỗi hệ thống!");
             }else{
-                console.log("result",result)
+               // console.log("result",result)
                 setAccount(result);
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
         }
     }
 
@@ -60,18 +60,18 @@ export const DetailAccountAdmin = () => {
             if(response.status!==200){
                 message.error("Lỗi hệ thống!");
             }else{
-                console.log("result",result);
+               // console.log("result",result);
                 navigate('/account-management');
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
         }
     }
     
     const date = new Date();
-    console.log(date.toISOString());
-    console.log(account);
+   // console.log(date.toISOString());
+   // console.log(account);
     const defaultTrueStatus = {
         status: 'success',
         errorMsg: null
@@ -101,7 +101,7 @@ export const DetailAccountAdmin = () => {
     }
 
     function handleChangeEmail(e) {
-        console.log(e.target.value);
+       // console.log(e.target.value);
         setAccount((preUser) => { return { ...preUser, email: e.target.value } });
     }
 
@@ -111,7 +111,7 @@ export const DetailAccountAdmin = () => {
 
     function handleKeyUp(e) {
         if (e.keyCode === 13) {
-            console.log('enter');
+           // console.log('enter');
             refButtonSubmit.current.focus();
             refButtonSubmit.current.click();
         }
@@ -228,7 +228,7 @@ export const DetailAccountAdmin = () => {
         count = checkRoleFunc(account.role) ? count : count + 1;
         count = checkUserNameFunc(account.username) ? count : count + 1;
         count = checkBirthdayFunc(account.birthday) ? count : count + 1;
-        console.log(count);
+       // console.log(count);
         if (count === 0) {
             const url = serverURL + 'account/'+id;
             try {
@@ -238,7 +238,7 @@ export const DetailAccountAdmin = () => {
                 }
                 );
                 const result = await response.json();
-                console.log(result);
+               // console.log(result);
                 if(response.status!==200){
                     if(response.status===400){
                         openNotificationWithIcon('error', 'Thông báo', result.message)
@@ -255,7 +255,7 @@ export const DetailAccountAdmin = () => {
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
                 notification['error']({
                     message: 'Lỗi',
                     description:

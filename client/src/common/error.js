@@ -7,7 +7,9 @@ export const messageSignUpError = {
   fullname: "Bạn chưa nhập họ và tên",
   birthday: "Bạn chưa đủ 18 tuổi?",
   confirmpassword: "Mật khẩu nhập lại chưa chính xác",
-  oldnew: 'Mật khẩu mới không được trùng mật khẩu cũ'
+  oldnew: 'Mật khẩu mới không được trùng mật khẩu cũ',
+  existEmail: 'Email đã được sử dụng',
+  existUsername: 'Uesrname đã được sử dụng'
 };
 
 export const messageChangePass = {

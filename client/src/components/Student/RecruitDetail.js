@@ -65,7 +65,7 @@ export const RecruitDetailStudent = () => {
   async function fetchManuCompany() {
     if (company._id !== -1) {
       try {
-        console.log("fetch manu Company!", recruit.id_company);
+       // console.log("fetch manu Company!", recruit.id_company);
         // const _id = ids[1];
         const url = serverURL + "manu-company/company/" + company._id;
         const response = await fetch(url, {
@@ -76,21 +76,21 @@ export const RecruitDetailStudent = () => {
         });
         const result = await response.json();
         if (response.status !== 200) {
-          console.log("Lỗi hệ thống!");
+         // console.log("Lỗi hệ thống!");
           message.error("Lỗi fetch manu!");
         } else {
-          console.log("result", result);
+         // console.log("result", result);
           if (result.data === "empty") {
             setCompany({ ...initialCompany });
           } else {
-            console.log("fetch Manu Company", result.data);
+           // console.log("fetch Manu Company", result.data);
             setCompany((preCompany) => {
               return { ...preCompany, manufacture: result.data.manufacture };
             });
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     }
   }
@@ -106,20 +106,20 @@ export const RecruitDetailStudent = () => {
         });
         const result = await response.json();
         if (response.status !== 200) {
-          console.log("Lỗi hệ thống!");
+         // console.log("Lỗi hệ thống!");
           message.error("Lỗi fetch company!");
         } else {
-          console.log("result", result);
+         // console.log("result", result);
           if (result.data === "empty") {
             setCompany({ ...initialCompany });
           } else {
-            console.log("fetch Company", result.data);
+           // console.log("fetch Company", result.data);
             setCompany({ ...company, ...result.data });
             fetchManuCompany();
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
       }
     }
   }
@@ -134,7 +134,7 @@ export const RecruitDetailStudent = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -142,16 +142,16 @@ export const RecruitDetailStudent = () => {
         // setCompany({...recruit.data.company});
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra fetchRecruit!");
     }
   }
 
   //fetchCV
   async function fetchCV() {
-    console.log("user", user);
+   // console.log("user", user);
     if (user) {
-      console.log("fetchCV");
+     // console.log("fetchCV");
       const url = serverURL + "cv/" + account._id;
       try {
         const response = await fetch(url, {
@@ -161,7 +161,7 @@ export const RecruitDetailStudent = () => {
           },
         });
         const result = await response.json();
-        console.log("CV", result);
+       // console.log("CV", result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
@@ -172,7 +172,7 @@ export const RecruitDetailStudent = () => {
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra cv!");
       }
     }
@@ -180,11 +180,11 @@ export const RecruitDetailStudent = () => {
 
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -197,7 +197,7 @@ export const RecruitDetailStudent = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "student") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -206,7 +206,7 @@ export const RecruitDetailStudent = () => {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
 
@@ -220,7 +220,7 @@ export const RecruitDetailStudent = () => {
         id_student: account._id,
         id_recruit: recruit._id,
       };
-      console.log("fetchCondition", data);
+     // console.log("fetchCondition", data);
       try {
         const response = await fetch(url, {
           method: "GET",
@@ -229,7 +229,7 @@ export const RecruitDetailStudent = () => {
           },
         });
         const result = await response.json();
-        console.log("condition", result);
+       // console.log("condition", result);
         if (response.status !== 200) {
           message.error(result.message);
         } else {
@@ -245,7 +245,7 @@ export const RecruitDetailStudent = () => {
           }
         }
       } catch (err) {
-        console.log(err);
+       // console.log(err);
         message.error("Đã có lỗi xảy ra condition!");
       }
     }
@@ -267,7 +267,7 @@ export const RecruitDetailStudent = () => {
         body: JSON.stringify(data),
       });
       const result = await response.json();
-      console.log("condition", result);
+     // console.log("condition", result);
       if (response.status !== 201) {
         message.error(result.message);
       } else {
@@ -284,7 +284,7 @@ export const RecruitDetailStudent = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra create apply!");
     }
   }
@@ -311,7 +311,7 @@ export const RecruitDetailStudent = () => {
   //handle change
   function handleKeyUp(e) {
     if (e.keyCode === 13) {
-      console.log("enter");
+     // console.log("enter");
       refButtonSubmit.current.focus();
       refButtonSubmit.current.click();
     }

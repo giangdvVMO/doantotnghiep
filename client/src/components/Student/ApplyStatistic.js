@@ -19,15 +19,15 @@ export const ApplyStatistic = ({user})=>{
           });
           const result = await response.json();
           if (response.status !== 200) {
-            console.log("Lỗi hệ thống!");
+           // console.log("Lỗi hệ thống!");
             // message.error("Lỗi hệ thống!");
           } else {
-            console.log("result", result);
-              console.log("fetch student", result.data);
+           // console.log("result", result);
+             // console.log("fetch student", result.data);
               setListApply( [...result.data] );
             }
         } catch (err) {
-          console.log(err);
+         // console.log(err);
         }
       }
     }
@@ -44,15 +44,15 @@ export const ApplyStatistic = ({user})=>{
           });
           const result = await response.json();
           if (response.status !== 200) {
-            console.log("Lỗi hệ thống!");
+           // console.log("Lỗi hệ thống!");
             // message.error("Lỗi hệ thống!");
           } else {
-            console.log("result", result);
-              console.log("fetch student", result.data);
+           // console.log("result", result);
+             // console.log("fetch student", result.data);
               setListLetter([ ...result.data ]);
             }
         } catch (err) {
-          console.log(err);
+         // console.log(err);
         }
       }
     }

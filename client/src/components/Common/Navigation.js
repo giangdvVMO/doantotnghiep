@@ -11,14 +11,14 @@ import { message } from 'antd';
 
 const Nav = () => {
     const { user, changeUser , token, changeToken} = useContext(UserContext)
-    console.log("accessToken Nav",token)
+   // console.log("accessToken Nav",token)
     // const fetchUser = async()=>{
-    //           console.log('fetch user account')
-    //           console.log('token', token);
+    //          // console.log('fetch user account')
+    //          // console.log('token', token);
 
     //           const tokenx = token? token: window.localStorage.getItem('accessToken');
     //           const id = decodeToken(tokenx).sub;
-    //           console.log("id",id);
+    //          // console.log("id",id);
     //           const url = serverURL + 'account/'+id;
     //               try {
     //                   const response = await fetch(url, {
@@ -36,7 +36,7 @@ const Nav = () => {
     //                   }
     //               }
     //               catch (err) {
-    //                   console.log(err);
+    //                  // console.log(err);
     //               }
     //       }
     //       useEffect(()=>{fetchUser()},[]);

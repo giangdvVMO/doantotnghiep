@@ -33,7 +33,7 @@ export const CVManagerAdmin = () => {
             }
             );
             const result = await response.json();
-            console.log(result);
+           // console.log(result);
             if(response.status!==200){
                 message.error(result.message);
             }else{
@@ -45,7 +45,7 @@ export const CVManagerAdmin = () => {
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
             message.error("Đã có lỗi xảy ra!");
         }
 }
@@ -60,7 +60,7 @@ export const CVManagerAdmin = () => {
                 query = field.length? query+'&field='+field:query;
                 query = search!==''? query+'&search='+search:query;
                 const url = serverURL + 'cv'+ query;
-                console.log(query);
+               // console.log(query);
                 try {
                     const response = await fetch(url, {
                         method: 'GET',
@@ -73,21 +73,21 @@ export const CVManagerAdmin = () => {
                     if(response.status!==200){
                         message.error("Lỗi hệ thống!");
                     }else{
-                        console.log("result",result)
+                       // console.log("result",result)
                         setListCV(result.data);
                     }
                 }
                 catch (err) {
-                    console.log(err);
+                   // console.log(err);
                 }
     }
     //fetch user
     const fetchUser = async()=>{
-        console.log('fetch user account')
+       // console.log('fetch user account')
         const tokenx = token? token: window.localStorage.getItem('accessToken');
-        console.log('tokenx', tokenx);
+       // console.log('tokenx', tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id",id);
+       // console.log("id",id);
         const url = serverURL + 'account/'+id;
             try {
                 const response = await fetch(url, {
@@ -101,7 +101,7 @@ export const CVManagerAdmin = () => {
                 if(response.status!==200){
                     message.error("Lỗi hệ thống load user!");
                 }else{
-                  console.log("user fetch to set role", result)
+                 // console.log("user fetch to set role", result)
                   if(!result||result.role!=='admin'){
                       message.warn('Bạn ko có quyền xem trang này');
                       navigate('/')
@@ -110,7 +110,7 @@ export const CVManagerAdmin = () => {
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
             }
     }
     useEffect(()=>{fetchUser()},[]);
@@ -191,7 +191,7 @@ export const CVManagerAdmin = () => {
         },
     ];
     const handleChangeField = (e)=>{
-        console.log(e);
+       // console.log(e);
         const value = e.map(item=>{
             return item.value
         })

@@ -51,12 +51,12 @@ export const AddNews = ()=>{
    
     //fetch user
     const fetchUser = async () => {
-    // console.log("fetch user account");
+    //// console.log("fetch user account");
     if(!user){
         const tokenx = token ? token : window.localStorage.getItem("accessToken");
-        console.log("tokenx", tokenx);
+       // console.log("tokenx", tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id", id);
+       // console.log("id", id);
         const url = serverURL + "account/" + id;
         try {
         const response = await fetch(url, {
@@ -69,7 +69,7 @@ export const AddNews = ()=>{
         if (response.status !== 200) {
             // message.error("Lỗi hệ thống load user!");
         } else {
-            console.log("user fetch to set role", result);
+           // console.log("user fetch to set role", result);
             if (!result) {
             // message.warn("Bạn ko có quyền xem trang này");
             navigate("/");
@@ -77,7 +77,7 @@ export const AddNews = ()=>{
             changeUser({ ...result });
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   };
@@ -93,7 +93,7 @@ export const AddNews = ()=>{
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         // message.error(result.message);
       } else {
@@ -101,7 +101,7 @@ export const AddNews = ()=>{
         setListField(result.data);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     //   message.error("Đã có lỗi xảy ra!");
     }
   }
@@ -146,7 +146,7 @@ export const AddNews = ()=>{
   }
 
   function checkFieldFunc(fields) {
-    console.log("fields", fields);
+   // console.log("fields", fields);
     if (!checkArray(fields)) {
       setValidateFields({
         status: "error",
@@ -176,15 +176,15 @@ export const AddNews = ()=>{
     const html = draftToHtml(convertToRaw(editorState.getCurrentContent()));
     const data = {title, fields, id_account: user._id, thumnail, status:user.role==='admin'?true:false, content: html}
     let formData = new FormData();
-    console.log('fields',fields)
-    console.log('title',title)
+   // console.log('fields',fields)
+   // console.log('title',title)
     formData.append('fields',fields);
     formData.append('title',title);
     formData.append('thumnail', thumnail)
     formData.append('status',user.role==='admin'?true:false);
     formData.append('content', html);
-    console.log('html',html)
-    console.log("request", formData);
+   // console.log('html',html)
+   // console.log("request", formData);
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -194,7 +194,7 @@ export const AddNews = ()=>{
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 201) {
         openNotificationWithIcon('error','Thông báo', 'Lỗi')
         // message.error(result.message);
@@ -208,7 +208,7 @@ export const AddNews = ()=>{
         // navigate('/list-news')
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     //   message.error("Đã có lỗi xảy ra!");
     }
   }
@@ -220,7 +220,7 @@ export const AddNews = ()=>{
     count= checkThumnailFunc(thumnail)? count:count+1;
     // count = file? count: count+1;
     count = checkFieldFunc(fields) ? count : count + 1;
-    console.log("count", count);
+   // console.log("count", count);
     if (count === 0) {
       createNews();
     }

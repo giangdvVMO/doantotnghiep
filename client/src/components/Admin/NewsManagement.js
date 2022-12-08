@@ -40,7 +40,7 @@ export const NewsManagement = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -51,7 +51,7 @@ export const NewsManagement = () => {
       setFields(result.data);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
@@ -62,10 +62,10 @@ export const NewsManagement = () => {
         query = status !== -1 ? query + "&status=" + status : query;
         query = search !== "" ? query + "&search=" + search : query;
         query = field.length&& !field.includes(-1) ? query + "&field=" + field : query;
-        console.log('field', field)
+       // console.log('field', field)
         message.success('field', field)
         const url = serverURL + "news" + query;
-        console.log(query);
+       // console.log(query);
         try {
         const response = await fetch(url, {
             method: "GET",
@@ -77,11 +77,11 @@ export const NewsManagement = () => {
         if (response.status !== 200) {
             message.error("Lỗi hệ thống!");
         } else {
-            console.log("result", result);
+           // console.log("result", result);
             setListNews(result.data);
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   }
@@ -89,11 +89,11 @@ export const NewsManagement = () => {
   //fetch user
   const fetchUser = async () => {
     if(!user){
-        console.log("fetch user account");
+       // console.log("fetch user account");
         const tokenx = token ? token : window.localStorage.getItem("accessToken");
-        console.log("tokenx", tokenx);
+       // console.log("tokenx", tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id", id);
+       // console.log("id", id);
         const url = serverURL + "account/" + id;
         try {
         const response = await fetch(url, {
@@ -106,7 +106,7 @@ export const NewsManagement = () => {
         if (response.status !== 200) {
             message.error("Lỗi hệ thống load user!");
         } else {
-            console.log("user fetch to set role", result);
+           // console.log("user fetch to set role", result);
             if (!result) {
             message.warn("Bạn ko có quyền xem trang này");
             navigate("/");
@@ -114,18 +114,18 @@ export const NewsManagement = () => {
             changeUser({ ...result });
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   };
 
   const handleChangeField = (e) => {
-    console.log(e);
+   // console.log(e);
     const value = e.map((item) => {
       return item.value;
     });
     setField([...value]);
-    console.log('field-news', value)
+   // console.log('field-news', value)
   };
 
   const handleCancelDelete = ()=>{
@@ -133,7 +133,7 @@ export const NewsManagement = () => {
   }
 
   const handleConfirmDelete = async ()=>{
-    console.log('currentId', currentId);
+   // console.log('currentId', currentId);
     const data = {delete_id: user._id}
     const url = serverURL + "news/" + currentId;
     try {
@@ -145,7 +145,7 @@ export const NewsManagement = () => {
         body: JSON.stringify(data)
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -154,20 +154,20 @@ export const NewsManagement = () => {
         setOpenDelete(false);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
 
   const handleCancelConfirm = ()=>{
-    console.log('currentId', currentId);
+   // console.log('currentId', currentId);
     setOpenConfirm(false);
   }
 
   const handleConfirmConfirm = async()=>{
     const url = serverURL + "news/confirm/" + currentId;
     const data = { confirm_id: user._id };
-    console.log("request", data);
+   // console.log("request", data);
     try {
       const response = await fetch(url, {
         method: "PATCH",
@@ -177,7 +177,7 @@ export const NewsManagement = () => {
         },
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -190,7 +190,7 @@ export const NewsManagement = () => {
         setOpenConfirm(false);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
@@ -280,7 +280,7 @@ export const NewsManagement = () => {
 
   const handleConfirm = (id, account)=>{
     setCurrentId(id);
-    console.log("acc account",account);
+   // console.log("acc account",account);
     setCurrentAccount({...account})
     setOpenConfirm(true);
   }

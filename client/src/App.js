@@ -20,7 +20,7 @@ socket = io("http://localhost:5000");
 function App() {
   const { user, changeUser, token, changeToken, change, setChange } =
     useContext(UserContext);
-  console.log("accessTokenApp", token);
+ // console.log("accessTokenApp", token);
   const navigate = useNavigate();
 
   const checkToken = async () => {
@@ -37,7 +37,7 @@ function App() {
   useEffect(() => {
     socket.on("connect", () => {
       setIsConnected(true);
-      console.log("connected");
+     // console.log("connected");
     });
 
     socket.on("disconnect", () => {

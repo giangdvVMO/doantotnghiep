@@ -23,7 +23,7 @@ export const ChangePassword = ({ setIsOpenModal }) => {
 
     function handleKeyUp(e) {
         if (e.keyCode === 13) {
-            console.log('enter');
+           // console.log('enter');
             refButtonSubmit.current.focus();
             refButtonSubmit.current.click();
         }
@@ -124,7 +124,7 @@ export const ChangePassword = ({ setIsOpenModal }) => {
                 }
                 );
                 const result = await response.json();
-                console.log(result);
+               // console.log(result);
                 if(response.status!==200){
                     message.error(result.message);
                 }else{
@@ -133,7 +133,7 @@ export const ChangePassword = ({ setIsOpenModal }) => {
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
             }
         }
         return;

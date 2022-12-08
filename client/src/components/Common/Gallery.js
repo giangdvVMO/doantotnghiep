@@ -15,9 +15,9 @@ export const Gallery = ({user})=>{
     const navigate = useNavigate();
 
     const handleChange = (info) => {
-        console.log("info", info.target.files[0]);
+       // console.log("info", info.target.files[0]);
         setImage(info.target.files[0]);
-        console.log(image);
+       // console.log(image);
       };
 
     const fetchGallery = async()=>{
@@ -34,12 +34,12 @@ export const Gallery = ({user})=>{
             if (response.status !== 200) {
                 // message.error("Lỗi hệ thống load user!");
             } else {
-                console.log("fetch gallery", result);
+               // console.log("fetch gallery", result);
                 setGallery([ ...result.data ]);
                 // changeUser({ ...result });
             }
             } catch (err) {
-            console.log(err);
+           // console.log(err);
             }
         }
     }
@@ -57,14 +57,14 @@ export const Gallery = ({user})=>{
         formData.append('id_account', user._id)
         if(image){formData.append('image',image)};
         // const data = { ...CV, update_id:  };
-        console.log("request", formData);
+       // console.log("request", formData);
         try {
         const response = await fetch(url, {
             method: "POST",
             body: formData,
         });
         const result = await response.json();
-        console.log(result);
+       // console.log(result);
         if (response.status !== 201) {
             // message.error(result.message);
         } else {
@@ -81,19 +81,19 @@ export const Gallery = ({user})=>{
             // fetchCompany();
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         // message.error("Đã có lỗi xảy ra!");
         }
     }
 
     //fetch user
   const fetchUser = async () => {
-    // console.log("fetch user account");
+    //// console.log("fetch user account");
     if(!user){
         const tokenx = token ? token : window.localStorage.getItem("accessToken");
-        console.log("tokenx", tokenx);
+       // console.log("tokenx", tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id", id);
+       // console.log("id", id);
         const url = serverURL + "account/" + id;
         try {
         const response = await fetch(url, {
@@ -106,7 +106,7 @@ export const Gallery = ({user})=>{
         if (response.status !== 200) {
             // message.error("Lỗi hệ thống load user!");
         } else {
-            console.log("user fetch to set role", result);
+           // console.log("user fetch to set role", result);
             if (!result) {
             // message.warn("Bạn ko có quyền xem trang này");
             // navigate("/");
@@ -114,7 +114,7 @@ export const Gallery = ({user})=>{
             changeUser({ ...result });
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   };

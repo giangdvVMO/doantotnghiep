@@ -27,7 +27,7 @@ export const ViewDetail = () => {
         // query = search !== "" ? query + "&search=" + search : query;
        
         const url = serverURL + "news" + query;
-        console.log(query);
+       // console.log(query);
         try {
         const response = await fetch(url, {
             method: "GET",
@@ -39,11 +39,11 @@ export const ViewDetail = () => {
         if (response.status !== 200) {
             message.error("Lỗi hệ thống!");
         } else {
-            console.log("result", result);
+           // console.log("result", result);
             setListNews(result.data);
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   }
@@ -62,8 +62,8 @@ export const ViewDetail = () => {
         if (response.status !== 200) {
             message.error("Lỗi hệ thống load news!");
         } else {
-            console.log("user fetch to set role", result);
-            console.log("result.data",result.data)
+           // console.log("user fetch to set role", result);
+           // console.log("result.data",result.data)
 
             if (!result) {
             // message.warn("Bạn ko có quyền xem trang này");
@@ -73,7 +73,7 @@ export const ViewDetail = () => {
             }
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   }
@@ -81,9 +81,9 @@ export const ViewDetail = () => {
   //fetch user
   const fetchUser = async () => {
     if(!user){
-        console.log("fetch user account");
+       // console.log("fetch user account");
         const tokenx = token ? token : window.localStorage.getItem("accessToken");
-        console.log("tokenx", tokenx);
+       // console.log("tokenx", tokenx);
         const ids = decodeToken(tokenx).sub;
         const url = serverURL + "account/" + ids;
         try {
@@ -97,7 +97,7 @@ export const ViewDetail = () => {
         if (response.status !== 200) {
             message.error("Lỗi hệ thống load user!");
         } else {
-            console.log("user fetch to set role", result);
+           // console.log("user fetch to set role", result);
             if (!result) {
             message.warn("Bạn ko có quyền xem trang này");
             navigate("/");
@@ -105,7 +105,7 @@ export const ViewDetail = () => {
             changeUser({ ...result });
         }
         } catch (err) {
-        console.log(err);
+       // console.log(err);
         }
     }
   };

@@ -29,7 +29,7 @@ export const CardListCV = ({ listCV, id_company }) => {
             body: JSON.stringify(data),
           });
           const result = await response.json();
-          console.log(result);
+         // console.log(result);
           if (response.status !== 201 && response.status !== 200) {
             openNotificationWithIcon(
               "error",

@@ -3,7 +3,7 @@ import {socket} from '../App';
 import { serverURL } from "../configs/server.config";
 import { fieldList, manufacturesList } from "../data/list";
 export const DateToShortString = (dateString)=>{
-    console.log(dateString);
+   // console.log(dateString);
     const date = new Date(dateString);
     return date.getDate() +'/'+(date.getMonth()+1)+'/'+date.getFullYear();
 }
@@ -44,7 +44,7 @@ export const createNoti = async(id_send, id_receive, title, type, content, link)
             }
         }
         catch (err) {
-            console.log(err);
+           // console.log(err);
         }
     }
 
@@ -71,7 +71,7 @@ export const getUserAdmin = async()=>{
         }
     }
     catch (err) {
-        console.log(err);
+       // console.log(err);
     }
 }
 
@@ -132,14 +132,14 @@ export const openNotificationWithIcon = (type, message, description) => {
         body: JSON.stringify({ array: manufacturesList }),
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 201) {
         message.error(result.message);
       } else {
         return manufacturesList;
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }
@@ -155,14 +155,14 @@ export const openNotificationWithIcon = (type, message, description) => {
         body: JSON.stringify({ field_array: fieldList }),
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 201) {
         message.error(result.message);
       } else {
         return fieldList;
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
   }

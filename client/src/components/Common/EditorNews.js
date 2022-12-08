@@ -23,7 +23,7 @@ export const EditorConvertToHTML = ()=> {
     };
 
     const onSubmit = ()=>{
-        console.log('html',draftToHtml(convertToRaw(editorState.getCurrentContent())));
+       // console.log('html',draftToHtml(convertToRaw(editorState.getCurrentContent())));
     }
 
         return (<>

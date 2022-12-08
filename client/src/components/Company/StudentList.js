@@ -26,7 +26,7 @@ export const StudentList = () => {
     query = university !== -1 ? query + "&university=" + university : query;
     query = search !== "" ? query + "&search=" + search : query;
     const url = serverURL + "student" + query;
-    console.log(query);
+   // console.log(query);
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -38,20 +38,20 @@ export const StudentList = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống!");
       } else {
-        console.log(result);
+       // console.log(result);
         setListUser([...result.data]);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -64,7 +64,7 @@ export const StudentList = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "company") {
           <Alert
             message="Warning"
@@ -78,7 +78,7 @@ export const StudentList = () => {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
 
@@ -98,7 +98,7 @@ export const StudentList = () => {
         if (response.status !== 200) {
           message.error("Lỗi hệ thống!");
         } else {
-          console.log("result", result);
+         // console.log("result", result);
           if (result.data === "empty") {
             <Alert
               message="Warning"
@@ -112,7 +112,7 @@ export const StudentList = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   }
 
@@ -128,7 +128,7 @@ export const StudentList = () => {
         body: JSON.stringify(data),
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       if (response.status !== 201 && response.status !== 200) {
         openNotificationWithIcon(
           "error",

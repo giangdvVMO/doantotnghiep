@@ -10,11 +10,11 @@ function UserProvider({ children }) {
     const [token, setToken] = useState(window.localStorage.getItem('accessToken'));
     const [change, setChange] = useState(false);
     const fetchUser = async()=>{
-        console.log('fetch user account')
+       // console.log('fetch user account')
         const tokenx = token? token: window.localStorage.getItem('accessToken');
-        console.log('tokenx', tokenx);
+       // console.log('tokenx', tokenx);
         const id = decodeToken(tokenx).sub;
-        console.log("id",id);
+       // console.log("id",id);
         const url = serverURL + 'account/'+id;
             try {
                 const response = await fetch(url, {
@@ -32,7 +32,7 @@ function UserProvider({ children }) {
                 }
             }
             catch (err) {
-                console.log(err);
+               // console.log(err);
             }
     }
     useEffect(()=>{fetchUser()},[]);

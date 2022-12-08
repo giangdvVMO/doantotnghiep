@@ -16,15 +16,15 @@ export const StatisticCompany = () => {
   const [recruit, setRecruit] = useState([]);
   const navigate = useNavigate();
   const now = new Date();
-  console.log(now);
+ // console.log(now);
 
   //fetch user
   const fetchUser = async () => {
-    console.log("fetch user account");
+   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-    console.log("tokenx", tokenx);
+   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-    console.log("id", id);
+   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -37,7 +37,7 @@ export const StatisticCompany = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-        console.log("user fetch to set role", result);
+       // console.log("user fetch to set role", result);
         if (!result || result.role !== "company") {
             openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn ko có quyền xem trang này')
           navigate("/");
@@ -45,7 +45,7 @@ export const StatisticCompany = () => {
         changeUser({ ...result });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
     }
   };
   const calculate = (recruitList)=>{
@@ -67,7 +67,7 @@ export const StatisticCompany = () => {
   //FETCHCV
   async function fetchStatistic() {
     if(user){
-    console.log("fetchCV");
+   // console.log("fetchCV");
     const url = serverURL + "recruit/statistic/" + user._id;
     try {
       const response = await fetch(url, {
@@ -77,7 +77,7 @@ export const StatisticCompany = () => {
         },
       });
       const result = await response.json();
-      console.log("CV", result);
+     // console.log("CV", result);
       if (response.status !== 200) {
         message.error(result.message);
       } else {
@@ -85,7 +85,7 @@ export const StatisticCompany = () => {
         setRecruit([...result.data ]);
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       message.error("Đã có lỗi xảy ra!");
     }
 }

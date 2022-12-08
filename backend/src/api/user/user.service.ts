@@ -37,19 +37,27 @@ export class UserService {
       _id: id,
     };
     //check unique
-    const existUser = await this.userModel.aggregate([
+    const existUserName = await this.userModel.aggregate([
+      {
+        $match: { username: createUserDto.username },
+      },
+    ]);
+    if (existUserName.length) {
+      throw new BadRequestException('username');
+      return;
+    }
+    const existEmail = await this.userModel.aggregate([
       {
         $match: {
-          $or: [
-            { email: createUserDto.email },
-            { username: createUserDto.username },
-          ],
+          email: createUserDto.email,
         },
       },
     ]);
-    if (existUser.length) {
-      throw new BadRequestException('Account exist');
+    if (existEmail.length) {
+      throw new BadRequestException('email');
+      return;
     }
+    // }
     userDocument.password = bcrypt.hashSync(userDocument.password, SALT_ROUNDS);
     const user = await this.userModel.create(userDocument);
     return user;
