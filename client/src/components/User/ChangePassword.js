@@ -148,8 +148,8 @@ export const ChangePassword = ({ setIsOpenModal }) => {
             <Form
                 ref={ref}
                 onKeyUp={handleKeyUp}
-                className='form'
-                name="basic"
+                className='formchange'
+                name="basicform"
                 layout='vertical'
                 initialValues={{ remember: true }}
                 autoComplete="off"

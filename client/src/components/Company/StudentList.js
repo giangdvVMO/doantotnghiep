@@ -100,14 +100,14 @@ export const StudentList = () => {
         } else {
          // console.log("result", result);
           if (result.data === "empty") {
-            <Alert
-              message="Warning"
-              description="Bạn hãy cập nhật thông tin công ty để sử dụng chức năng này."
-              type="warning"
-              showIcon
-              closable
-            />;
+            openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn hãy cập nhật thông tin công ty để sử dụng chức năng này.')
             navigate("/company-profile");
+          }else{
+            if(result.data.status === false){
+              openNotificationWithIcon('warning', 'Cảnh báo', 'Thông tin của bạn chưa được duyệt nhé!')
+              navigate("/home");
+              return;
+          }
           }
         }
       }
@@ -142,8 +142,7 @@ export const StudentList = () => {
   useEffect(() => {
     fetchUser();
   }, []);
-  useEffect(() => {
-    fetchCompany();
+  useEffect(() => {fetchCompany();
   }, [user]);
   useEffect(() => {
     fetchListStudent();
@@ -309,7 +308,6 @@ export const StudentList = () => {
           y: 800,
         }}
       />
-      ;
     </>
   );
 };

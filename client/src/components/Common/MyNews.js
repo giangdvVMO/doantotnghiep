@@ -307,7 +307,6 @@ export const MyNews = () => {
           y: 800,
         }}
       />
-      ;
       <Modal
         title="Xác nhận xóa"
         open={isOpenDelete}
@@ -317,5 +316,5 @@ export const MyNews = () => {
         <p>Bạn có chắc chắn muốn xóa!</p>
       </Modal> 
     </>
-  );
+  )
 };

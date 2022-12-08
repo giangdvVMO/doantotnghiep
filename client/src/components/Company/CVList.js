@@ -18,7 +18,7 @@ import "../../styles/manager-page.css";
 import { QuestionCircleTwoTone, SearchOutlined } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
 import "../../styles/list.css";
-import { postFields } from "../../common/service";
+import { openNotificationWithIcon, postFields } from "../../common/service";
 import { CardListCV } from "../Common/CardCV";
 
 const { Option } = Select;
@@ -121,9 +121,43 @@ export const CVList = () => {
     }
   };
 
+  async function fetchCompany() {
+    try {
+      if (user) {
+        const _id = user._id;
+        const url = serverURL + "company/" + _id;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        if (response.status !== 200) {
+          message.error("Lỗi hệ thống!");
+        } else {
+         // console.log("result", result);
+          if (result.data === "empty") {
+            openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn hãy cập nhật thông tin công ty để sử dụng chức năng này.')
+            navigate("/company-profile");
+          }else{
+            if(result.data.status === false){
+              openNotificationWithIcon('warning', 'Cảnh báo', 'Thông tin của bạn chưa được duyệt nhé!')
+              navigate("/home");
+              return;
+            }
+          }
+        }
+      }
+    } catch (err) {
+     // console.log(err);
+    }
+  }
+
   useEffect(() => {
     fetchUser();
   }, []);
+  useEffect(()=>{fetchCompany()},[])
   useEffect(() => {
     fetchField();
   }, []);
@@ -202,7 +236,6 @@ export const CVList = () => {
         <div className="filter">
           <label className="label-filter">
             Kinh nghiệm:
-              
           </label>
           <Select
               value={experience}

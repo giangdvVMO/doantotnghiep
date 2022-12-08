@@ -134,7 +134,6 @@ export const RecruitListStudent = () => {
         });
         const result = await response.json();
         if (response.status !== 200) {
-         // console.log("Lỗi hệ thống!");
           message.error("Lỗi hệ thống!");
         } else {
         if (result.data === "empty") {
@@ -142,7 +141,7 @@ export const RecruitListStudent = () => {
             navigate("/student-profile");
           } else {
                 if(result.data.status === false){
-                    openNotificationWithIcon('warning', 'Cảnh báo', 'Hãy đợi admin duyệt thông tin nhé!')
+                    openNotificationWithIcon('warning', 'Cảnh báo', 'Thông tin của bạn chưa được duyệt nhé!')
                     navigate("/home");
                     return;
                 }
@@ -155,7 +154,7 @@ export const RecruitListStudent = () => {
   }
 
   useEffect(() => {fetchUser();}, []);
-  useEffect(() => {fetchStudent();}, [user]);
+  useEffect(() => {fetchStudent();}, []);
   useEffect(() => {fetchField();}, []);
   useEffect(() => {fetchListRecruit(); }, [pageIndex, pageSize, field, experience, search, user]);
   const handleChangeField = (e) => {

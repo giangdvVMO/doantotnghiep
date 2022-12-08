@@ -336,7 +336,7 @@ if(user){
         pagination={{pageSize:5}}
       />
     </>
-  );}else{
+  )}else{
     return <div className="spin-container">
     <Spin />
   </div>;

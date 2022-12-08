@@ -7,7 +7,7 @@ import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
 import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
-import { DateToShortStringDate, postFields } from '../../common/service';
+import { DateToShortStringDate, openNotificationWithIcon, postFields } from '../../common/service';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -111,7 +111,41 @@ export const RecruitManager = () => {
                // console.log(err);
             }
     }
+    async function fetchCompany() {
+        try {
+          if (user) {
+            const _id = user._id;
+            const url = serverURL + "company/" + _id;
+            const response = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            const result = await response.json();
+            if (response.status !== 200) {
+              message.error("Lỗi hệ thống!");
+            } else {
+             // console.log("result", result);
+              if (result.data === "empty") {
+                openNotificationWithIcon('warning', 'Cảnh báo', 'Bạn hãy cập nhật thông tin công ty để sử dụng chức năng này.')
+                navigate("/company-profile");
+              }else{
+                if(result.data.status === false){
+                  openNotificationWithIcon('warning', 'Cảnh báo', 'Thông tin của bạn chưa được duyệt nhé!')
+                  navigate("/home");
+                  return;
+              }
+              }
+            }
+          }
+        } catch (err) {
+         // console.log(err);
+        }
+      }
+
     useEffect(()=>{fetchUser()},[]);
+    useEffect(()=>{fetchCompany()},[]);
     useEffect(()=>{fetchField();},[]);
     useEffect(()=>{fetchListRecruit();},[field, status, search, user])
     const columns = [
@@ -293,7 +327,7 @@ export const RecruitManager = () => {
                     x: 2000,
                     y: 800,
                 }}
-            />;
+            />
         </>
     )
 }

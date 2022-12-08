@@ -54,9 +54,9 @@ export const NewsView = () => {
   }
 
   async function fetchListNews() {
-    if(user){
-        let query = "?1=1"
-        query = status !== -1 ? query + "&status=" + status : query;
+    if(user&&(search||field.length)){
+        let query = "?1=1&status=1"
+        // query = status !== -1 ? query + "&status=" + status : query;
         query = search !== "" ? query + "&search=" + search : query;
         query = field.length&&!field.contain(-1) ? query + "&field=" + field : query;
        // console.log('field', field)
@@ -316,6 +316,22 @@ export const NewsView = () => {
           </div>
         </div>
       </div>
+      <div className="news-cate-container">
+                {
+                    listNews.map((item)=>{
+                        return (
+                            <div className="news-detail-container margin-news">
+                                <Image className="thumnail" src={item.thumnail}/>
+                                <Link onClick={()=>{viewNews(item._id)}}><div className="title-thumnail">{item.title}</div></Link>
+                                <div className="view-detail">
+                                  <div className="view-count"><EyeOutlined className="icon-view-news"/>{item.views?item.views: 0}</div>
+                                  <div className="view-date"><FieldTimeOutlined className="icon-view-news" />{DateToShortStringDate(item.create_date)}</div>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+            </div>
     </>
   )}
   else{

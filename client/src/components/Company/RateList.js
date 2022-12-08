@@ -319,6 +319,6 @@ if(user){
   );}else{
     return <div className="spin-container">
     <Spin />
-  </div>;
+  </div>
 }
 };

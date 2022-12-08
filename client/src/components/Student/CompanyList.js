@@ -135,7 +135,7 @@ export const CompanyList = () => {
               } else {
                     if(result.data.status === false){
                         // console.log('re')
-                        openNotificationWithIcon('warning', 'Cảnh báo', 'Hãy đợi admin duyệt thông tin nhé!')
+                        openNotificationWithIcon('warning', 'Cảnh báo', 'Thông tin của bạn chưa được duyệt nhé!')
                         navigate("/home");
                         return;
                     }
@@ -148,7 +148,7 @@ export const CompanyList = () => {
       }
 
     useEffect(()=>{fetchUser()}, []);
-    useEffect(()=>{fetchStudent()},[user]);
+    useEffect(()=>{fetchStudent()},[]);
     useEffect(()=>{fetchManufacture();},[])
     useEffect(()=>{fetchListCompany();},[scaleBound, manufacture, search])
     

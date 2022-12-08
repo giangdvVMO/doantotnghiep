@@ -172,8 +172,7 @@ export class CvService {
   }
 
   async suggest(id_company: number) {
-    const manufacture = await this.manuCompanyService.findNameManu(id_company);
-
+    // const manufacture = await this.manuCompanyService.findNameManu(id_company);
     //suggest by experience
     const studentMail = await this.letterService.findLetterStudent(id_company);
     let isExperience = {};
@@ -218,14 +217,77 @@ export class CvService {
 
     const hintList = await this.cvModel.aggregate([
       {
+        $lookup: {
+          from: 'tbl_student',
+          localField: 'id_student',
+          foreignField: '_id',
+          as: 'student',
+        },
+      },
+      {
+        $unwind: '$student',
+      },
+      {
+        $lookup: {
+          from: 'tbl_account',
+          localField: 'student._id',
+          foreignField: '_id',
+          as: 'account',
+        },
+      },
+      {
+        $unwind: '$account',
+      },
+      {
+        $match: {
+          'account.delete_date': null,
+          delete_date: null,
+          // ...condition,
+        },
+      },
+      //add field
+      {
+        $lookup: {
+          from: 'tbl_field_cv',
+          localField: '_id',
+          foreignField: 'id_cv',
+          as: 'field_cv',
+          pipeline: [
+            {
+              $group: {
+                _id: '$id_cv',
+                id_fields: {
+                  $push: '$id_field',
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$field_cv',
+      },
+      {
         $addFields: {
           isExperience: isExperience,
+          isField: {
+            $setIntersection: ['$field_cv.id_fields', studentMail.field],
+          },
+        },
+      },
+      {
+        $addFields: {
+          numberField: { $size: '$isField' },
         },
       },
       {
         $match: {
           isExperience: true,
+          numberField: { $ne: 0 },
         },
+      },
+      {
+        $sort: { numberField: -1 },
       },
     ]);
 

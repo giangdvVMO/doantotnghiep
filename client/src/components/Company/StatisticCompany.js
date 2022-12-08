@@ -52,7 +52,7 @@ export const StatisticCompany = () => {
     setCount(recruitList.length);
     let countApply = 0;
     let countViews = 0;
-    recruitList.map(item =>{
+    recruitList.forEach(item =>{
         countApply = countApply + item.apply.length;
         if(item.views.length){
             item.views.forEach(element => {
@@ -93,6 +93,21 @@ export const StatisticCompany = () => {
   useEffect(()=>{fetchUser()},[])
   useEffect(()=>{fetchStatistic()},[user]);
 
+  const sortView = (a,b)=>{
+    let countViewsA = 0;
+    let countViewsB = 0;
+            if(a.views.length){
+                a.views.forEach(element => {
+                    countViewsA=countViewsA+ element.views;
+                });
+            }
+            if(b.views.length){
+              b.views.forEach(element => {
+                  countViewsB=countViewsB+ element.views;
+              });
+            }
+            return countViewsA - countViewsB
+  }
   const columns = [
     {
       title: "Tiêu đề bài đăng",
@@ -127,6 +142,9 @@ export const StatisticCompany = () => {
                 });
             }
             return countViews
+      },
+      sorter:(a,b)=>{
+        return sortView(a,b);
       }
     },
     {

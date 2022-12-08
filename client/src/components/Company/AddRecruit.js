@@ -121,6 +121,11 @@ export const AddRecruit = () => {
             setOpenModal(true);
             setCompany({ ...initialCompany });
           } else {
+            if(result.data.status === false){
+              openNotificationWithIcon('warning', 'Cảnh báo', 'Thông tin của bạn chưa được duyệt nhé!')
+              navigate("/home");
+              return;
+            }
            // console.log("fetch Company", result.data);
             setCompany({ ...company, ...result.data });
             fetchManuCompany();

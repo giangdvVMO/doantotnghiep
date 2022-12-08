@@ -360,9 +360,9 @@ if(fields){
         pagination={{pageSize:5}}
       />
     </>
-  );}else{
+  )}else{
     return <div className="spin-container">
     <Spin />
-  </div>;
+  </div>
 }
 };
