@@ -137,11 +137,61 @@ export class ApplyService {
           localField: 'id_student',
           foreignField: '_id',
           as: 'student',
+          pipeline: [
+            {
+              $lookup: {
+                from: 'tbl_account',
+                localField: 'id_account',
+                foreignField: '_id',
+                as: 'account',
+                pipeline: [
+                  {
+                    $match: {
+                      status: true,
+                      delete_date: null,
+                    },
+                  },
+                ],
+              },
+            },
+            {
+              $unwind: '$account',
+            },
+          ],
         },
       },
       {
         $unwind: '$student',
       },
+      {
+        $lookup: {
+          from: 'tbl_letter_student',
+          localField: 'id_student',
+          foreignField: 'id_student',
+          as: 'letter_student',
+          pipeline: [
+            {
+              $lookup: {
+                from: 'tbl_letter',
+                localField: 'id_letter',
+                foreignField: '_id',
+                as: 'letter',
+              },
+            },
+            {
+              $unwind: '$letter',
+            },
+            {
+              $sort: {
+                'letter.create_date': -1,
+              },
+            },
+          ],
+        },
+      },
+      // {
+      //   $unwind: '$letter_student',
+      // },
     ]);
     return { data: result };
   }

@@ -1,11 +1,11 @@
-import { Alert, Button, Image, Input, message, Select, Table } from "antd";
+import { Alert, Button, Image, Input, message, Select, Table, Tag } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
 import { UserContext } from "../User/UserProvider";
 import "../../styles/manager-page.css";
-import { SearchOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { majorList, universityList } from "../../data/list";
 import { serverURL } from "../../configs/server.config";
 import { DateToShortStringDate, openNotificationWithIcon } from "../../common/service";
@@ -117,6 +117,30 @@ export const StudentList = () => {
     }
   }
 
+  async function fetchApply() {
+    try {
+      if (user) {
+        const _id = user._id;
+        const url = serverURL + "apply/" + _id;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const result = await response.json();
+        if (response.status !== 200) {
+          message.error("Lỗi hệ thống!");
+        } else {
+          setListApply([...result.data])
+        }
+      }
+    } catch (err) {
+     // console.log(err);
+     message.error("Đã xảy ra lỗi!");
+    }
+  }
+
   const handleViewCV = async (id_cv, id_company) => {
     const url = serverURL + "cv-view";
     const data = { id_cv, id_company };
@@ -139,9 +163,6 @@ export const StudentList = () => {
       }
     } catch (err) {}
   };
-  const fetchApply = ()=>{
-
-  }
   useEffect(() => {
     fetchUser();
   }, []);
@@ -245,7 +266,7 @@ export const StudentList = () => {
       width: 200,
       key: "fullname",
       render: (_, record)=>{
-        return <div>{record.student.fullname}</div>
+        return <div>{record.student.account.fullname}</div>
       }
     },
     {
@@ -260,8 +281,8 @@ export const StudentList = () => {
       title: "Vị trí ứng tuyển",
       width: 120,
       key: "position",
-      render: ()=>{
-        return <div></div>
+      render: (_, record)=>{
+        return <div style={{color: 'orange'}}>{record.recruit.title}</div>
       }
     },
     {
@@ -270,7 +291,8 @@ export const StudentList = () => {
       key: "date",
       render: (_, record)=>{
         return <div>{DateToShortStringDate(record.apply_date)}</div>
-      }
+      },
+      sorter:(a,b)=> {return new Date(a.apply_date) - new Date(b.apply_date)}
     },
     {
       title: "Trường",
@@ -303,6 +325,59 @@ export const StudentList = () => {
       },
       width: 150,
       key: "course",
+    },
+    {
+      title: "Trạng thái",
+      width: 150,
+      key: 'status_apply',
+      render: (_, record)=>{
+        
+        if(record.letter_student.length){
+          const diffDate =  new Date(record.apply_date) - new Date(record.letter_student[0].letter.create_date);
+          console.log('apply_date', record.apply_date);
+          console.log('letter', record.letter_student[0].letter.create_date);
+          console.log("diffDate",diffDate);
+          if(diffDate<=0){
+            record.status_apply=1;
+            return <Tag icon={<CheckCircleOutlined />} color="success">
+                      Đã gửi thư mời
+                    </Tag>
+          }
+        }
+        const miliseconds = new Date() - new Date(record.recruit.end_date)
+          console.log("end_date", miliseconds)
+          if(miliseconds<=0){
+            record.status_apply=3;
+            const remain = Math.ceil(Math.abs(miliseconds/(24*3600*1000)));
+            return <Tag icon={<CloseCircleOutlined />} color="error">
+                      Quá hạn {remain} ngày
+                    </Tag>
+          }
+          record.status_apply=2;
+        return <Tag icon={<ExclamationCircleOutlined />} color="warning">
+                  Chưa gửi thư mời
+                </Tag>
+      },
+      filters: [
+       
+        {
+          text: 'Đã gửi thư',
+          value: 1,
+        },
+        {
+          text: 'Chưa gửi thư',
+          value: 2,
+        },
+        {
+          text: 'Quá hạn',
+          value: 3,
+        },
+      ],
+      filterSearch: true,
+      onFilter: (value, record) => {
+        return record.status_apply === +value;
+      },
+      fixed: 'right'
     },
     {
       title: "Hành động",
