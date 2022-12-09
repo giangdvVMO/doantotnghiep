@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import moment from 'moment';
 import { Model } from 'mongoose';
 import { ApplyService } from '../apply/apply.service';
 import { LetterService } from '../letter/letter.service';
@@ -58,7 +59,7 @@ export class RateService {
   async confirm(id: number, confirmDto: ConfirmDto) {
     const result = await this.rateModel.updateOne(
       { _id: id },
-      { ...confirmDto, confirm_date: new Date(), status: true },
+      { ...confirmDto, confirm_date: moment().utc(true), status: true },
     );
     if (result.modifiedCount) {
       return {

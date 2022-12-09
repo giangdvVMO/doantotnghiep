@@ -11,6 +11,7 @@ import { ChangeUserPasswordDto, UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './user.schema';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { SALT_ROUNDS } from 'src/configs/constant.config';
+import moment from 'moment';
 @Injectable()
 export class UserService {
   constructor(
@@ -181,7 +182,7 @@ export class UserService {
   }
 
   async confirmUser(id: number) {
-    const confirm_date = new Date();
+    const confirm_date = moment().utc(true);
     const result = await this.userModel.updateOne(
       { _id: id },
       { confirm_date },
@@ -198,7 +199,7 @@ export class UserService {
   }
 
   async remove(id: number) {
-    const delete_date = new Date();
+    const delete_date = moment().utc(true);
     const result = await this.userModel.updateOne({ _id: id }, { delete_date });
     if (result.modifiedCount) {
       return {

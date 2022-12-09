@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import moment from 'moment';
 import { Model } from 'mongoose';
 import { FieldRecruitService } from '../field-recruit/field-recruit.service';
 import { ConfirmRecruitDto } from './dto/confirm-recruit.dto';
@@ -36,7 +37,7 @@ export class RecruitService {
     const result = await this.recruitModel.create({
       ...createRecruitDto,
       _id: _id,
-      create_date: new Date(),
+      create_date: moment().utc(true),
     });
     const createFieldRecruitDto = {
       id_recruit: _id,
@@ -106,7 +107,7 @@ export class RecruitService {
   }
 
   async remove(id: number, data: number) {
-    const delete_date = new Date();
+    const delete_date = moment().utc(true);
     const result = await this.recruitModel.updateOne(
       { _id: id },
       { delete_date, delete_id: data },
@@ -125,7 +126,7 @@ export class RecruitService {
   async confirm(id: number, confirmDto: ConfirmRecruitDto) {
     const result = await this.recruitModel.updateOne(
       { _id: id },
-      { ...confirmDto, confirm_date: new Date(), status: true },
+      { ...confirmDto, confirm_date: moment().utc(true), status: true },
     );
     if (result.modifiedCount) {
       return {

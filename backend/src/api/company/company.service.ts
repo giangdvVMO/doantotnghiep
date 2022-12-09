@@ -7,6 +7,7 @@ import { ConfirmCompanyDto } from './dto/confirm-company.dto';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { QueryParamCompanyDto } from './dto/query-param-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import * as moment from 'moment';
 
 @Injectable()
 export class CompanyService {
@@ -265,7 +266,7 @@ export class CompanyService {
         introduction,
         update_id,
         status,
-        update_date: new Date(),
+        update_date: moment().utc(true),
       },
     );
 
@@ -292,7 +293,7 @@ export class CompanyService {
   async confirm(id: number, confirmDto: ConfirmCompanyDto) {
     const result = await this.companyModel.updateOne(
       { _id: id },
-      { ...confirmDto, confirm_date: new Date(), status: true },
+      { ...confirmDto, confirm_date: moment().utc(true), status: true },
     );
     if (result.modifiedCount) {
       return {

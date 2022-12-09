@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 
 import { RoleEnum, StatusEnum } from 'src/share/common/enum';
 import { maxLengthPhone } from 'src/share/common/constanst';
+import * as moment from 'moment';
 
 export type UserDocument = User & Document;
 
@@ -40,7 +41,7 @@ export class User {
   @Prop({ type: String, maxlength: maxLengthPhone })
   phone: string;
 
-  @Prop({ type: Date, default: Date.now(), required: true })
+  @Prop({ type: Date, default: moment().utc(true), required: true })
   create_date: Date;
 
   @Prop({ type: Date, default: null })

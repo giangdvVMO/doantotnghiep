@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import * as moment from 'moment';
 
 export type NotiDocument = Noti & Document;
 
@@ -25,7 +26,7 @@ export class Noti {
   @Prop({ type: Boolean, default: false, required: true })
   status: boolean;
 
-  @Prop({ type: Date, default: Date.now(), required: true })
+  @Prop({ type: Date, default: moment().utc(true), required: true })
   create_date: Date;
 }
 

@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import moment from 'moment';
 import { Model } from 'mongoose';
 import { DateToShortString } from 'src/share/external-services/parseDateToString';
 import { ConfirmStudentDto } from './dto/confirm-student.dto';
@@ -198,7 +199,7 @@ export class StudentService {
     this.checkId(id);
     const result = await this.studentModel.updateOne(
       { _id: id },
-      { ...updateStudentDto, status: false, update_date: new Date() },
+      { ...updateStudentDto, status: false, update_date: moment().utc(true) },
     );
     if (result.modifiedCount) {
       return {
@@ -215,7 +216,7 @@ export class StudentService {
     this.checkId(id);
     const result = await this.studentModel.updateOne(
       { _id: id },
-      { ...confirmDto, confirm_date: new Date(), status: true },
+      { ...confirmDto, confirm_date: moment().utc(true), status: true },
     );
     if (result.modifiedCount) {
       return {

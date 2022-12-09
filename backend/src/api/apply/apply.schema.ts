@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import * as moment from 'moment';
 
 export type ApplyDocument = Apply & Document;
 
@@ -13,7 +14,7 @@ export class Apply {
   @Prop({ type: Number, ref: 'tbl_recruit', required: true })
   id_recruit: number;
 
-  @Prop({ type: Date, default: new Date(), required: true })
+  @Prop({ type: Date, default: moment().utc(true), required: true })
   apply_date: Date;
 }
 

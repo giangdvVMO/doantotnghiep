@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import * as moment from 'moment';
 
 export type CompanyDocument = Company & Document;
 
@@ -49,7 +50,7 @@ export class Company {
   @Prop({ type: Number, ref: 'tbl_account' })
   confirm_id: number;
 
-  @Prop({ type: Date, default: Date.now(), required: true })
+  @Prop({ type: Date, default: moment().utc(true), required: true })
   create_date: Date;
 
   @Prop({ type: Date, default: null })

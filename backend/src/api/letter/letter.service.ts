@@ -9,6 +9,7 @@ import { ConditionLetterDto, CreateLetterDto } from './dto/create-letter.dto';
 import { UpdateLetterDto } from './dto/update-letter.dto';
 import { Letter, LetterDocument } from './letter.schema';
 import * as _ from 'lodash';
+import moment from 'moment';
 
 @Injectable()
 export class LetterService {
@@ -147,7 +148,7 @@ export class LetterService {
     const result = await this.letterModel.create({
       ...createLetterDto,
       _id: _id,
-      create_date: new Date(),
+      create_date: moment().utc(true),
     });
 
     if (result) {

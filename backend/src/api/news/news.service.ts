@@ -5,6 +5,7 @@ import { FieldNewsService } from '../field_news/field_news.service';
 import { ConfirmNewsDto, CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { News, NewsDocument } from './news.schema';
+import moment from 'moment';
 
 @Injectable()
 export class NewsService {
@@ -39,7 +40,7 @@ export class NewsService {
       status: status,
       content,
       _id: await this.calculateId(),
-      create_date: new Date(),
+      create_date: moment().utc(true),
       views: 0,
     };
 
@@ -56,7 +57,7 @@ export class NewsService {
   async confirm(id: number, confirmDto: ConfirmNewsDto) {
     const result = await this.newsModel.updateOne(
       { _id: id },
-      { ...confirmDto, confirm_date: new Date(), status: true },
+      { ...confirmDto, confirm_date: moment().utc(true), status: true },
     );
     if (result.modifiedCount) {
       return {
@@ -303,7 +304,7 @@ export class NewsService {
   }
 
   async remove(id: number, data: number) {
-    const delete_date = new Date();
+    const delete_date = moment().utc(true);
     const result = await this.newsModel.updateOne(
       { _id: id },
       { delete_date, delete_id: data },

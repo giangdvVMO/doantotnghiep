@@ -14,6 +14,7 @@ import { QueryParamCVDto } from './dto/query-param-cv.dto';
 import { title } from 'process';
 import { ManuCompanyService } from '../manu-company/manu-company.service';
 import { LetterService } from '../letter/letter.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class CvService {
@@ -45,7 +46,7 @@ export class CvService {
       file_cv,
       status: status === 'false' ? false : true,
       _id: createCvDto.id_student,
-      create_date: Date.now(),
+      create_date: moment().utc(true),
     };
     if (file_cv) {
       console.log('file_cv', file_cv);
@@ -63,20 +64,6 @@ export class CvService {
     const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
     return resultCreate;
   }
-
-  // async updateOne(id: number, updateCvDto: UpdateFullCVDto) {
-  //   const { fields, ...data } = updateCvDto;
-  //   const dataUpdate: any = {
-  //     ...data,
-  //     update_date: new Date(),
-  //   };
-  //   const resultUpdate = await this.cvModel.updateOne({ _id: id }, dataUpdate);
-  //   if (fields) {
-  //     const dataCreateFieldCV = { id_cv: id, fields };
-  //     const createFieldCV = await this.fieldCvService.create(dataCreateFieldCV);
-  //   }
-  //   return resultUpdate;
-  // }
 
   async findOne(id: number) {
     const data = await this.cvModel.aggregate([
@@ -151,7 +138,7 @@ export class CvService {
       speciality,
       status: status === 'true' ? true : false,
       update_id: +update_id,
-      update_date: new Date(),
+      update_date: moment().utc(true),
     };
     if (file_cv) {
       console.log('file_cv', file_cv);
