@@ -118,12 +118,12 @@ export class ApplyService {
               },
             },
             {
-              $match: {
-                _id: id_company,
-              },
+              $unwind: '$company',
             },
             {
-              $unwind: '$company',
+              $match: {
+                'company._id': id_company,
+              },
             },
           ],
         },

@@ -8,7 +8,7 @@ import "../../styles/manager-page.css";
 import { SearchOutlined } from "@ant-design/icons";
 import { majorList, universityList } from "../../data/list";
 import { serverURL } from "../../configs/server.config";
-import { openNotificationWithIcon } from "../../common/service";
+import { DateToShortStringDate, openNotificationWithIcon } from "../../common/service";
 
 const { Option } = Select;
 
@@ -233,50 +233,74 @@ export const StudentList = () => {
 
   const columnsApply = [
     {
+      title: "STT",
+      width: 80,
+      key: "index",
+      render: (_, record, index)=>{
+        return <p>{index+1}</p>
+      }
+    },
+    {
       title: "Họ và tên",
-      dataIndex: "fullname",
       width: 200,
       key: "fullname",
+      render: (_, record)=>{
+        return <div>{record.student.fullname}</div>
+      }
     },
     {
       title: "GPA",
-      dataIndex: "gpa",
+      render: (_, record)=>{
+        return <div>{record.student.gpa}</div>
+      },
       width: 100,
       key: "gpa",
     },
     {
       title: "Vị trí ứng tuyển",
-      dataIndex: "phone",
       width: 120,
       key: "position",
+      render: ()=>{
+        return <div></div>
+      }
     },
     {
       title: "Ngày ứng tuyển",
-      dataIndex: "cccd",
       width: 200,
       key: "date",
+      render: (_, record)=>{
+        return <div>{DateToShortStringDate(record.apply_date)}</div>
+      }
     },
     {
       title: "Trường",
-      dataIndex: "university",
+      render: (_, record)=>{
+        return <div>{record.student.university}</div>
+      },
       width: 150,
       key: "university",
     },
     {
       title: "Khoa",
-      dataIndex: "faculty",
+      render: (_, record)=>{
+        return <div>{record.student.faculty}</div>
+      },
       width: 150,
       key: "faculty",
     },
     {
       title: "Chuyên ngành",
-      dataIndex: "major",
+      render: (_, record)=>{
+        return <div>{record.student.major}</div>
+      },
       width: 150,
       key: "major",
     },
     {
       title: "Khóa học",
-      dataIndex: "course",
+      render: (_, record)=>{
+        return <div>{record.student.course}</div>
+      },
       width: 150,
       key: "course",
     },
@@ -286,9 +310,9 @@ export const StudentList = () => {
       width: 150,
       render: (_, record) => (
         <Link
-          to={`../student/${record._id}`}
+          to={`../student/${record.student._id}`}
           onCLick={() => {
-            handleViewCV(record._id, user._id);
+            handleViewCV(record.student._id, user._id);
           }}
         >
           Xem hồ sơ
