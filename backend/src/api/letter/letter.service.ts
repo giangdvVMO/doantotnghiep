@@ -100,9 +100,21 @@ export class LetterService {
                       as: 'field_cv',
                       pipeline: [
                         {
+                          $lookup: {
+                            from: 'tbl_field',
+                            localField: 'id_field',
+                            foreignField: '_id',
+                            as: 'field_name',
+                          },
+                        },
+                        {
+                          $unwind: '$field_name',
+                        },
+                        {
                           $group: {
                             _id: '$id_cv',
-                            fieldId: { $push: '$id_field' },
+                            fieldId: { $push: '$field_name.nameField' },
+                            // fieldId: { $push: '$id_field' },
                           },
                         },
                       ],
@@ -127,6 +139,7 @@ export class LetterService {
         $unwind: '$letter',
       },
     ]);
+    // return students;
     const field = [];
     const experience = [];
     if (!students.length) return null;

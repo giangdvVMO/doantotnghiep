@@ -415,7 +415,7 @@ export const RecruitDetailAdmin = () => {
                 <Form.Item label="Giới tính:" name="gender" className="label">
                   <p className="text-display">
                     {recruit.gender === null
-                      ? "all"
+                      ? "Tất cả"
                       : recruit.gender === false
                       ? "nam"
                       : "nữ"}

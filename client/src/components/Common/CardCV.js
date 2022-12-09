@@ -48,13 +48,6 @@ export const CardListCV = ({ listCV, id_company }) => {
         <div class={classCss}>
           <div class="additional">
             <div class="user-card">
-              {/* <div class="level center-card">
-                {changeExperience(item.experience)}
-              </div> */}
-              {/* <Avatar
-                className="avatar-cv"
-                src="https://joeschmoe.io/api/v1/random"
-              /> */}
               {
                 item.account.avatar?
                 <Avatar
@@ -67,21 +60,7 @@ export const CardListCV = ({ listCV, id_company }) => {
                   src={avatarImage}
                 />
               }
-              {/* {item.fields.map((field, index) => {
-                if (index < 2) {
-                  return (
-                    <div class="points center-card">{field.nameField}</div>
-                  );
-                }
-                if (index === 2) {
-                  return (
-                    <div class="points center-card">
-                      {`+${item.fields.length - 2} lĩnh vực`}
-                    </div>
-                  );
-                }
-                return "";
-              })} */}
+            
             </div>
             <div class="more-info">
               <h1>{item.title}</h1>
@@ -124,11 +103,18 @@ export const CardListCV = ({ listCV, id_company }) => {
             <div class="fields">
                 <p>Lĩnh vực</p>
                 {
+                  item.fields?
                     item.fields.map(field=>{
                         return (
                             <Tag color="#55acee" style={{margin: '5px'}}>{field.nameField}</Tag>
                         )
                     })
+                    :
+                    item.field_cv.id_fields.map(field=>{
+                      return (
+                          <Tag color="#55acee" style={{margin: '5px'}}>{field}</Tag>
+                      )
+                  })
                 }
             </div>
             <p class="hover">Hover để xem thêm</p>

@@ -175,6 +175,15 @@ export const StudentList = () => {
 
   const columns = [
     {
+      title: 'STT',
+      key: '_id',
+      width: 80,
+      fixed: 'left',
+      render: (_, record, index)=>{
+          return <div>{index+1}</div>
+      }
+  },
+    {
       title: "Họ và tên",
       dataIndex: "fullname",
       width: 200,
@@ -420,12 +429,12 @@ export const StudentList = () => {
           <label className="label-filter">Trường:</label>
           <Select
             value={university}
-            defaultValue="all"
+            defaultValue="Tất cả"
             labelInValue="Chuyên ngành"
             className="filter-content"
             onChange={handleChangeUniversity}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             {universityList.map((university) => {
               return (
                 <Option key={university} value={university}>
@@ -439,12 +448,12 @@ export const StudentList = () => {
           <label className="label-filter">Chuyên ngành:</label>
           <Select
             value={major}
-            defaultValue="all"
+            defaultValue="Tất cả"
             labelInValue="Chuyên ngành"
             className="filter-content"
             onChange={handleChangeMajor}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             {majorList.map((major) => {
               return (
                 <Option key={major} value={major}>

@@ -31,9 +31,12 @@ export const CVList = () => {
   const [specialtity, setSpeciality] = useState('');
   const [experience, setExperience] = useState(-1)
   const [listCV, setListCV] = useState([]);
+  const [listhintCV, setListhintCV] = useState([]);
   const [pageIndex, setPageIndex] = useState(1);
+  const [pageIndexHint, setPageIndexHint] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [total, setPageTotal] = useState(1);
+  const [totalHint, setPageTotalHint] = useState(1);
 
   //fetch Fields
   async function fetchField() {
@@ -88,6 +91,32 @@ export const CVList = () => {
     } catch (err) {
      // console.log(err);
     }
+  }
+
+  async function fetchListHintCV() {
+    if(user&& user._id){
+    let query = "?pageIndex=" + pageIndexHint + "&pageSize=" + pageSize;
+    const url = serverURL + "cv/suggest/"+user._id + query;
+   // console.log(query);
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      if (response.status !== 200) {
+        message.error("Lỗi hệ thống!");
+      } else {
+        console.log("result", result);
+        setPageTotalHint(result.total);
+        setListhintCV(result.data);
+      }
+    } catch (err) {
+     message.error('Đã xảy ra lỗi!')
+    }
+  }
   }
 
   //fetch user
@@ -164,6 +193,9 @@ export const CVList = () => {
   useEffect(() => {
     fetchListCV();
   }, [pageIndex, pageSize, field, experience, specialtity, search, user]);
+  useEffect(() => {
+    fetchListHintCV();
+  }, [pageIndexHint,user]);
   const handleChangeField = (e) => {
    // console.log(e);
     const value = e.map((item) => {
@@ -191,6 +223,10 @@ export const CVList = () => {
    // console.log(current, pageSize);
     setPageIndex(current);
   };
+  const onShowSizeChangeHint = (current, pageSize) => {
+    // console.log(current, pageSize);
+     setPageIndexHint(current);
+   };
   if(fields&&user){
   return (
     <>
@@ -280,6 +316,18 @@ export const CVList = () => {
             />
           </div>
         </>
+        <div className="title">Có thể bạn quan tâm</div>
+        <div className="list-container">
+            <CardListCV listCV={listhintCV} id_company={user._id} />
+          </div>
+          <div className="pagination">
+            <Pagination
+              pageSize={pageSize}
+              onChange={onShowSizeChangeHint}
+              defaultCurrent={pageIndexHint}
+              total={totalHint}
+            />
+          </div>
     </>
   );}else {
     return <div className="spin-container">

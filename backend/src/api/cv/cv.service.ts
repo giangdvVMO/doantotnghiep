@@ -11,10 +11,10 @@ import { CreateCvDto } from './dto/create-cv.dto';
 import { UpdateCvDto } from './dto/update-cv.dto';
 // import { imgbbUploader } from 'imgbb-uploader';
 import { QueryParamCVDto } from './dto/query-param-cv.dto';
-import { title } from 'process';
 import { ManuCompanyService } from '../manu-company/manu-company.service';
 import { LetterService } from '../letter/letter.service';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 
 @Injectable()
 export class CvService {
@@ -158,13 +158,19 @@ export class CvService {
     return resultUpdate;
   }
 
-  async suggest(id_company: number) {
-    // const manufacture = await this.manuCompanyService.findNameManu(id_company);
+  async suggest(id_company: number, query: any) {
+    const { pageIndex = 1, pageSize = 5 } = query;
+    const manufacture = await this.manuCompanyService.findNameManu(id_company);
+    console.log('manufacture', manufacture);
     //suggest by experience
     const studentMail = await this.letterService.findLetterStudent(id_company);
+    const fieldhint = studentMail
+      ? _.uniq([...manufacture, ...studentMail.field])
+      : [...manufacture];
+    console.log('fieldhint', fieldhint);
     let isExperience = {};
     if (studentMail) {
-      console.log(studentMail);
+      console.log('studentMail', studentMail);
       const min = studentMail.experience.min;
       const max = studentMail.experience.max;
       console.log(min, max);
@@ -241,10 +247,21 @@ export class CvService {
           as: 'field_cv',
           pipeline: [
             {
+              $lookup: {
+                from: 'tbl_field',
+                localField: 'id_field',
+                foreignField: '_id',
+                as: 'field_name',
+              },
+            },
+            {
+              $unwind: '$field_name',
+            },
+            {
               $group: {
                 _id: '$id_cv',
                 id_fields: {
-                  $push: '$id_field',
+                  $push: '$field_name.nameField',
                 },
               },
             },
@@ -258,7 +275,7 @@ export class CvService {
         $addFields: {
           isExperience: isExperience,
           isField: {
-            $setIntersection: ['$field_cv.id_fields', studentMail.field],
+            $setIntersection: ['$field_cv.id_fields', fieldhint],
           },
         },
       },
@@ -278,8 +295,12 @@ export class CvService {
       },
     ]);
 
-    // const hintList = await this.cvModel.aggregate([{}]);
+    return {
+      total: Math.ceil(hintList.length / pageSize),
+      data: _.slice(hintList, (pageIndex - 1) * pageSize, pageIndex * pageSize),
+    };
     return { data: hintList };
+    // return { data: studentMail };
   }
 
   async findAll(query: QueryParamCVDto) {

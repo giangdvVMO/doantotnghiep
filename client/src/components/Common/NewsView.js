@@ -291,7 +291,7 @@ export const NewsView = () => {
             className="filter-content"
             onChange={handleChangeField}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             {fields.map((fieldNews) => {
               return (
                 <Option key={fieldNews._id} value={fieldNews._id}>

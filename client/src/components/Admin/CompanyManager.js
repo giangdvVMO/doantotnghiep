@@ -88,6 +88,15 @@ export const CompanyManager = () => {
 
   const columns = [
     {
+      title: 'STT',
+      key: '_id',
+      width: 80,
+      fixed: 'left',
+      render: (_, record, index)=>{
+          return <div>{index+1}</div>
+      }
+  },
+    {
       title: "Tên công ty",
       dataIndex: "com_name",
       width: 200,
@@ -218,12 +227,12 @@ export const CompanyManager = () => {
           <label className="label-filter">Số lao động:</label>
           <Select
             value={scaleBound}
-            defaultValue="all"
+            defaultValue="Tất cả"
             labelInValue="Số lao động"
             className="filter-content"
             onChange={handleChangeScale}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             {scaleList.map((scale) => {
               return (
                 <Option key={scale} value={scale}>
@@ -237,12 +246,12 @@ export const CompanyManager = () => {
           <label className="label-filter">Trạng thái:</label>
           <Select
             value={status}
-            defaultValue="all"
+            defaultValue="Tất cả"
             labelInValue="Trạng thái"
             className="filter-content"
             onChange={handleChangeSelect}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             <Option value={1}>duyệt</Option>
             <Option value={0}>chưa duyệt</Option>
           </Select>

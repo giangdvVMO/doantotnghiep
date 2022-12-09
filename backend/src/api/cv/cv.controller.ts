@@ -60,11 +60,11 @@ export class CvController {
   }
 
   @Get('suggest/:id_company')
-  hint(@Param('id_company') query: string) {
-    if (!parseInt(query)) {
+  hint(@Param('id_company') param: string, @Query() query: QueryParamCVDto) {
+    if (!parseInt(param)) {
       throw new BadRequestException('id không hợp lệ');
     }
-    return this.cvService.suggest(+query);
+    return this.cvService.suggest(+param, query);
   }
 
   @Get(':id')

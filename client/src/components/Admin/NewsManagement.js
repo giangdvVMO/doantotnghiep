@@ -207,6 +207,15 @@ export const NewsManagement = () => {
 
   const columns = [
     {
+      title: 'STT',
+      key: '_id',
+      width: 80,
+      fixed: 'left',
+      render: (_, record, index)=>{
+          return <div>{index+1}</div>
+      }
+  },
+    {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title",
@@ -314,7 +323,7 @@ export const NewsManagement = () => {
             className="filter-content"
             onChange={handleChangeField}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             {fields.map((fieldNews) => {
               return (
                 <Option key={fieldNews._id} value={fieldNews._id}>
@@ -328,12 +337,12 @@ export const NewsManagement = () => {
           <label className="label-filter">Trạng thái:</label>
           <Select
             value={status}
-            defaultValue="all"
+            defaultValue="Tất cả"
             labelInValue="Trạng thái"
             className="filter-content"
             onChange={handleChangeSelect}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             <Option value={1}>duyệt</Option>
             <Option value={0}>chưa duyệt</Option>
           </Select>

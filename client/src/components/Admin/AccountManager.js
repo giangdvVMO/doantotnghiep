@@ -17,7 +17,7 @@ export const AccountManager = () => {
     const [search, setSearch] = useState('');
     const [current, setCurrent] = useState(1);
     const [totalPage, setTotal] = useState(0);
-    const [role, setRole] = useState('all')
+    const [role, setRole] = useState('Tất cả')
     const [listUser, setListUser] = useState([]);
     const navigate = useNavigate();
     if(!user||user.role!=='admin'){
@@ -28,7 +28,7 @@ export const AccountManager = () => {
                 let query = '?current='+current;
                 query = status!==-1? query+'&status='+status:query;
                 query = search!==-1? query+'&search='+search:query;
-                query = role!=='all'? query+ '&role='+role: query;
+                query = role!=='Tất cả'? query+ '&role='+role: query;
                 const url = serverURL + 'account'+ query;
                // console.log(query);
                 try {
@@ -76,10 +76,12 @@ export const AccountManager = () => {
     const columns = [
         {
             title: 'STT',
-            dataIndex: '_id',
             key: '_id',
             width: 80,
             fixed: 'left',
+            render: (_, record, index)=>{
+                return <div>{index+1}</div>
+            }
         },
         {
             title: 'Tên đăng nhập',
@@ -183,12 +185,12 @@ export const AccountManager = () => {
                     <label className='label-filter'>Trạng thái:</label>
                     <Select
                         value={status}
-                        defaultValue='all'
+                        defaultValue='Tất cả'
                         labelInValue={true}
                         className='filter-content'
                         onChange={handleChangeSelect}
                     >
-                        <Option value={-1}>all</Option>
+                        <Option value={-1}>Tất cả</Option>
                         <Option value={1}>active</Option>
                         <Option value={0}>inactive</Option>
                     </Select>
@@ -197,12 +199,12 @@ export const AccountManager = () => {
                     <label className='label-filter'>Vị trí:</label>
                     <Select
                         value={role}
-                        defaultValue='all'
+                        defaultValue='Tất cả'
                         labelInValue={true}
                         className='filter-content'
                         onChange={handleChangerole}
                     >
-                        <Option value={"all"}>all</Option>
+                        <Option value={"Tất cả"}>Tất cả</Option>
                         <Option value={"student"}>Sinh viên</Option>
                         <Option value={"company"}>Doanh nghiệp</Option>
                         <Option value={"admin"}>Quản trị viên</Option>

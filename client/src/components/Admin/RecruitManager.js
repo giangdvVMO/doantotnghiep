@@ -118,6 +118,15 @@ export const RecruitManagerAdmin = () => {
   }, [field, status, search]);
   const columns = [
     {
+      title: 'STT',
+      key: '_id',
+      width: 80,
+      fixed: 'left',
+      render: (_, record, index)=>{
+          return <div>{index+1}</div>
+      }
+  },
+    {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title",
@@ -169,7 +178,7 @@ export const RecruitManagerAdmin = () => {
       key: "gender",
       width:120,
       render:(_, record)=>{
-        return record.gender===true? 'Nam':record.gender===false? 'Nữ': 'All'
+        return record.gender===true? 'Nam':record.gender===false? 'Nữ': 'Tất cả'
       }
     },
     {
@@ -288,12 +297,12 @@ if(fields){
           <Select
             mode="multiple"
             value={field}
-            defaultValue="all"
+            defaultValue="Tất cả"
             labelInValue="Lĩnh vực bài đăng"
             className="filter-content"
             onChange={handleChangeField}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             {fields.map((field) => {
               return (
                 <Option key={field._id} value={field._id}>
@@ -308,12 +317,12 @@ if(fields){
                     <Select
                     mode='multiple'
                         value={field}
-                        defaultValue='all'
+                        defaultValue='Tất cả'
                         labelInValue='Địa điểm'
                         className='filter-content'
                         onChange={handleChangeField}
                     >
-                        <Option value={-1}>all</Option>
+                        <Option value={-1}>Tất cả</Option>
                         {
                             fields.map((field)=>{
                                 return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
@@ -325,12 +334,12 @@ if(fields){
           <label className="label-filter">Trạng thái:</label>
           <Select
             value={status}
-            defaultValue="all"
+            defaultValue="Tất cả"
             labelInValue="Trạng thái"
             className="filter-content"
             onChange={handleChangeSelect}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             <Option value={1}>duyệt</Option>
             <Option value={0}>chưa duyệt</Option>
           </Select>

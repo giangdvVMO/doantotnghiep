@@ -150,8 +150,18 @@ export const RecruitManager = () => {
     useEffect(()=>{fetchListRecruit();},[field, status, search, user])
     const columns = [
         {
+            title: 'STT',
+            key: '_id',
+            width: 80,
+            fixed: 'left',
+            render: (_, record, index)=>{
+                return <div>{index+1}</div>
+            }
+        },
+        {
             title: 'Tiêu đề',
             dataIndex: 'title',
+            width: 150,
             key: 'title',
         },
         {
@@ -161,8 +171,11 @@ export const RecruitManager = () => {
         },
         {
             title: 'Lương',
-            dataIndex: 'salary',
+            width: 120,
             key: 'salary',
+            render:(_,record)=>{
+                return <div style={{textAlign: 'right'}}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(record.salary)}</div>
+            }
         },
         {
             title: 'Số lượng tuyển',
@@ -176,8 +189,11 @@ export const RecruitManager = () => {
         },
         {
             title: 'Giới tính',
-            dataIndex: 'gender',
+            // dataIndex: 'gender',
             key: 'gender',
+            render:(_,record)=>{
+                return <div style={{textAlign: 'center'}}>{record.gender?record.gender: 'Không yêu cầu'}</div>
+            }
         },
         {
             title: 'Địa chỉ làm việc',
@@ -282,12 +298,12 @@ export const RecruitManager = () => {
                     <Select
                     mode='multiple'
                         value={field}
-                        defaultValue='all'
+                        defaultValue='Tất cả'
                         labelInValue='Lĩnh vực bài đăng'
                         className='filter-content'
                         onChange={handleChangeField}
                     >
-                        <Option value={-1}>all</Option>
+                        <Option value={-1}>Tất cả</Option>
                         {
                             fields.map((field)=>{
                                 return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
@@ -299,12 +315,12 @@ export const RecruitManager = () => {
                     <label className='label-filter'>Trạng thái:</label>
                     <Select
                         value={status}
-                        defaultValue='all'
+                        defaultValue='Tất cả'
                         labelInValue='Trạng thái'
                         className='filter-content'
                         onChange={handleChangeSelect}
                     >
-                        <Option value={-1}>all</Option>
+                        <Option value={-1}>Tất cả</Option>
                         <Option value={1}>duyệt</Option>
                         <Option value={0}>chưa duyệt</Option>
                     </Select>

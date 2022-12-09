@@ -262,12 +262,12 @@ if(user){
           <label className="label-filter">Trạng thái:</label>
           <Select
             value={status}
-            defaultValue="all"
+            defaultValue="Tất cả"
             labelInValue="Trạng thái"
             className="filter-content"
             onChange={handleChangeSelect}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             <Option value={1}>duyệt</Option>
             <Option value={0}>chưa duyệt</Option>
           </Select>

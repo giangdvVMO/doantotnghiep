@@ -160,7 +160,7 @@ export const RecruitCompanyListStudent = () => {
                     <Select
                     mode='multiple'
                         value={field}
-                        defaultValue='all'
+                        defaultValue='Tất cả'
                         labelInValue='Lĩnh vực bài đăng'
                         className='filter-content'
                         onChange={handleChangeField}
@@ -176,7 +176,7 @@ export const RecruitCompanyListStudent = () => {
                     <label className='label-filter'>Kinh nghiệm:</label>
                     <Select
                         value={experience}
-                        defaultValue='all'
+                        defaultValue='Tất cả'
                         labelInValue='Trạng thái'
                         className='filter-content'
                         onChange={handleChangeSelect}

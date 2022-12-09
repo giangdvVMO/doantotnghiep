@@ -118,6 +118,15 @@ export const CVManagerAdmin = () => {
     useEffect(()=>{fetchListCV()},[field, status, search])
     const columns = [
         {
+            title: 'STT',
+            key: '_id',
+            width: 80,
+            fixed: 'left',
+            render: (_, record, index)=>{
+                return <div>{index+1}</div>
+            }
+        },
+        {
             title: 'Tiêu đề',
             dataIndex: 'title',
             width: 150,
@@ -238,7 +247,7 @@ export const CVManagerAdmin = () => {
                         onChange={handleChangeSelect}
                         optionLabelProp='label'
                     >
-                        <Option value={-1} label='all'>all</Option>
+                        <Option value={-1} label='Tất cả'>Tất cả</Option>
                         <Option value={1} label='public'>public</Option>
                         <Option value={0} label='private'>private</Option>
                     </Select>

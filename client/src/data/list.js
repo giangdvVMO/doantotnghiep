@@ -25,7 +25,7 @@ export const universityList = [
   export const scaleList = ["0-100", "100-500", "500-1000", "Trên 1000"];
   
   export const levelList = [
-    "all",
+    "Tất cả",
     "Fresher",
     "Junior",
     "Pre-Senior",
@@ -33,12 +33,12 @@ export const universityList = [
     "PM",
   ];
   
-  export const wayWorkingList = ["all", "parttime", "fulltime"];
+  export const wayWorkingList = ["Tất cả", "parttime", "fulltime"];
   
   export const genderList = [
     {
       id: null,
-      label: "all",
+      label: "Tất cả",
     },
     {
       id: 0,

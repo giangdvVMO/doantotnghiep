@@ -22,7 +22,7 @@ export const RateManagerAdmin = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState(-1);
   const [search, setSearch] = useState("");
-  const [type_rate, setType] = useState('all');
+  const [type_rate, setType] = useState('Tất cả');
   const [listRate, setListRate] = useState([]);
   const [currentId, setCurrentId] = useState('');
   const [isOpenConfirm, setOpenConfirm] = useState(false);
@@ -34,7 +34,7 @@ export const RateManagerAdmin = () => {
     let query = "?1=1";
     query = status !== -1 ? query + "&status=" + status : query;
     query = search !== "" ? query + "&search=" + search : query;
-    query = type_rate !== "all" ? query + "&type_rate=" + type_rate : query;
+    query = type_rate !== "Tất cả" ? query + "&type_rate=" + type_rate : query;
     const url = serverURL + "rate" + query;
    // console.log(query);
     try {
@@ -92,6 +92,15 @@ export const RateManagerAdmin = () => {
     fetchListRate();
   }, [user, status, search, type_rate]);
   const columns = [
+    {
+      title: 'STT',
+      key: '_id',
+      width: 80,
+      fixed: 'left',
+      render: (_, record, index)=>{
+          return <div>{index+1}</div>
+      }
+  },
     {
       title: "Tiêu đề",
       dataIndex: "title",
@@ -271,12 +280,12 @@ if(user){
           <label className="label-filter">Trạng thái:</label>
           <Select
             value={status}
-            defaultValue="all"
+            defaultValue="Tất cả"
             labelInValue={true}
             className="filter-content"
             onChange={handleChangeSelect}
           >
-            <Option value={-1}>all</Option>
+            <Option value={-1}>Tất cả</Option>
             <Option value={1}>duyệt</Option>
             <Option value={0}>chưa duyệt</Option>
           </Select>
@@ -285,12 +294,12 @@ if(user){
           <label className="label-filter">Loại đánh giá:</label>
           <Select
             value={type_rate}
-            defaultValue="all"
+            defaultValue="Tất cả"
             labelInValue={true}
             className="filter-content"
             onChange={handleChangeType}
           >
-            <Option value={"all"}>all</Option>
+            <Option value={"Tất cả"}>Tất cả</Option>
             <Option value={"student"}>student</Option>
             <Option value={"company"}>company</Option>
           </Select>
