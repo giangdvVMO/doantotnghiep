@@ -11,6 +11,7 @@ import { serverURL } from '../../configs/server.config';
 import { openNotificationWithIcon, postManufactures } from '../../common/service';
 
 const { Option } = Select;
+const {TextArea} = Input;
 export const CompanyList = () => {
     const { user, changeUser, token } = useContext(UserContext);
     const navigate = useNavigate();
@@ -174,41 +175,52 @@ export const CompanyList = () => {
         {
             title: 'Địa chỉ',
             dataIndex: 'address',
+            width: 150,
             key: 'address',
         },
         {
             title: 'Năm thành lập',
             dataIndex: 'year',
+            width: 100,
             key: 'year',
         },
         {
             title: 'Số điện thoại',
             dataIndex: 'com_phone',
+            width: 120,
             key: 'com_phone',
         },
         {
             title: 'Email',
             dataIndex: 'com_email',
+            width: 120,
             key: 'com_email',
         },
         {
             title: 'Website',
             dataIndex: 'website',
+            width: 150,
             key: 'website',
         },
         {
             title: 'Số lao động',
             dataIndex: 'scale',
+            width: 100,
             key: 'scale',
         },
         {
-            title: 'Giới thiệu',
-            dataIndex: 'introduction',
-            key: 'introduction',
+            title: "Giới thiệu",
+            dataIndex: "introduction",
+            key: "introduction",
+            width: 150,
+            render: (_,record) =>{ 
+              return <TextArea value={record.introduction} bordered={false}/>
+            }
         },
         {
             title: 'Ngành sản xuất',
             key: 'manufactures',
+            width: 200,
             render: (_,record) =>{ return (<>{
                 record.manufactures.map((manu) => {return(
                     <Tag className="tag" color="cyan">{manu.name_manu}</Tag>)
@@ -219,6 +231,7 @@ export const CompanyList = () => {
         {
             title: 'Hành động',
             key: 'action',
+            width: 150,
             render: (_, record) => (
                 <Link to={`../company/${record._id}`}>Xem chi tiết</Link>
             ),
