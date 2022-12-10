@@ -118,7 +118,9 @@ const SignIn = () => {
             catch (err) {
                // console.log(err);
             }
-        }
+        }else{
+            openNotificationWithIcon('error','Sai thông tin', 'Bạn chưa điền đúng thông tin!')
+          }
         return;
     }
 

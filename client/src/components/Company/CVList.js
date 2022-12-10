@@ -15,7 +15,7 @@ import { decodeToken } from "react-jwt";
 
 import { UserContext } from "../User/UserProvider";
 import "../../styles/manager-page.css";
-import { QuestionCircleTwoTone, SearchOutlined } from "@ant-design/icons";
+import { QuestionCircleTwoTone, SearchOutlined, SoundTwoTone } from "@ant-design/icons";
 import { serverURL } from "../../configs/server.config";
 import "../../styles/list.css";
 import { openNotificationWithIcon, postFields } from "../../common/service";
@@ -317,6 +317,10 @@ export const CVList = () => {
           </div>
         </>
         <div className="title">Có thể bạn quan tâm</div>
+        <div className='hint-text'><SoundTwoTone twoToneColor={'orange'} 
+              style={{marginRight: '10px', marginLeft: '10px'}} />
+              Các CV gợi ý theo thông tin CV bạn đã tuyển dụng hoặc theo lĩnh vực sản xuất của doanh nghiệp!
+              </div>
         <div className="list-container">
             <CardListCV listCV={listhintCV} id_company={user._id} />
           </div>

@@ -103,3 +103,8 @@
     height: 50px;
     width: 50px;
 }
+
+.hint-text{
+    color: #ffa500;
+    margin: 10px 0px;
+}
