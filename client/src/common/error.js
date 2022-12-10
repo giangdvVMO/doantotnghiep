@@ -54,7 +54,7 @@ export const messageRecruitError = {
 };
 
 export const messageCVError = {
-  title: "Tiêu đề không được bỏ trống",
+  title: "Tiêu đề không được bỏ trống, không quá 50 kí tự, không chứa kí tự đặc biệt",
   fileCV: "Định dạng CV chưa đúng",
   field: "Chưa chọn lĩnh vực",
   experience: 'Nhập số tháng kinh nghiệm chưa đúng'

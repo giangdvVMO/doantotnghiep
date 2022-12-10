@@ -84,7 +84,7 @@ export const AddRecruit = () => {
          // console.log("Lỗi hệ thống!");
           message.error("Lỗi hệ thống!");
         } else {
-         // console.log("result", result);
+         console.log("result", result);
           if (result.data === "empty") {
             //   setOpenModal(true);
             setCompany({ ...initialCompany });
@@ -116,7 +116,7 @@ export const AddRecruit = () => {
          // console.log("Lỗi hệ thống!");
           message.error("Lỗi hệ thống!");
         } else {
-         // console.log("result", result);
+         console.log("result", result);
           if (result.data === "empty") {
             setOpenModal(true);
             setCompany({ ...initialCompany });
@@ -385,7 +385,7 @@ export const AddRecruit = () => {
         },
       });
       const result = await response.json();
-     // console.log(result);
+     console.log(result);
       if (response.status !== 201) {
         message.error(result.message);
       } else {

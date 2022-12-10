@@ -9,7 +9,7 @@ import { ConditionLetterDto, CreateLetterDto } from './dto/create-letter.dto';
 import { UpdateLetterDto } from './dto/update-letter.dto';
 import { Letter, LetterDocument } from './letter.schema';
 import * as _ from 'lodash';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Injectable()
 export class LetterService {

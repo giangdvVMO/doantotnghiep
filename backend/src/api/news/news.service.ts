@@ -5,7 +5,7 @@ import { FieldNewsService } from '../field_news/field_news.service';
 import { ConfirmNewsDto, CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { News, NewsDocument } from './news.schema';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Injectable()
 export class NewsService {

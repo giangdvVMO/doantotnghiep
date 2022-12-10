@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { DateToShortString } from 'src/share/external-services/parseDateToString';
 import { ConfirmStudentDto } from './dto/confirm-student.dto';

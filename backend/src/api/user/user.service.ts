@@ -11,7 +11,7 @@ import { ChangeUserPasswordDto, UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './user.schema';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { SALT_ROUNDS } from 'src/configs/constant.config';
-import moment from 'moment';
+import * as moment from 'moment';
 @Injectable()
 export class UserService {
   constructor(

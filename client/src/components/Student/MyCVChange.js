@@ -20,7 +20,7 @@ import {
   import "../../styles/form.css";
   import "../../styles/my-account.css";
   import '../../styles/cv.css'
-  import { checkString, checkArray, checkFileCV, checkNumber } from "../../common/validation";
+  import { checkString, checkArray, checkFileCV, checkNumber, checkContent, checkSpecial } from "../../common/validation";
   import {
     DateToShortString,
     openNotificationWithIcon,
@@ -209,7 +209,7 @@ import TextArea from "antd/lib/input/TextArea";
     //handle change
     //validate
     function checkTitleFunc(title) {
-      if (!checkString(title)) {
+      if (!checkSpecial(title,50)) {
         setValidateTitle({
           status: "error",
           errorMsg: messageCVError.title,
@@ -733,7 +733,7 @@ import TextArea from "antd/lib/input/TextArea";
                             <div className="wrap-label-cv border-underline"><span className="label-left-cv">Chứng chỉ</span></div>
                                 <div className="text-cv">
                                 <pre>
-                                  {CV.speciality}
+                                  {CV.certificate}
                                 </pre>
                                 </div>
                             <div>

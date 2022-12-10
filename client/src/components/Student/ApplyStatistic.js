@@ -157,7 +157,7 @@ export const ApplyStatistic = ({user})=>{
             </div>
 
             <div className='view-count_container'>
-                <div>DANH SÁCH CHI TIẾT BÀI ĐĂNG ĐÃ ỨNG TUYỂN</div>
+                <div>DANH SÁCH CHI TIẾT DOANH NGHIỆP</div>
                 </div>
             <div className='table-statistic'>
               <Table

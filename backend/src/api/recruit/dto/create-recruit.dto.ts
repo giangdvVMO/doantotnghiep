@@ -45,7 +45,7 @@ export class CreateRecruitDto {
     description: 'level',
   })
   @IsNotEmpty()
-  @IsEnum(['all', 'Fresher', 'Junior', 'Pre-Senior', 'Senior', 'PM'])
+  @IsEnum(['Tất cả', 'Fresher', 'Junior', 'Pre-Senior', 'Senior', 'PM'])
   level: string;
 
   @ApiPropertyOptional({

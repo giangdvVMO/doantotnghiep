@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { ApplyService } from '../apply/apply.service';
 import { LetterService } from '../letter/letter.service';

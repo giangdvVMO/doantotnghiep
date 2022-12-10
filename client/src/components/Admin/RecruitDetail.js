@@ -221,7 +221,7 @@ export const RecruitDetailAdmin = () => {
           const title = "Phản hồi duyệt thông tin bài đăng tuyển dụng";
           const type = "infor";
           const content = `Admin ${user.fullname} duyệt thông tin bài đăng tuyển dụng.`;
-          createNoti(user._id, company._id, title, type, content, link);
+          // createNoti(user._id, [company._id], title, type, content, link);
           fetchRecruit();
         }
       }

@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { FieldRecruitService } from '../field-recruit/field-recruit.service';
 import { ConfirmRecruitDto } from './dto/confirm-recruit.dto';
