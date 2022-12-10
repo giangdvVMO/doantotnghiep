@@ -15,6 +15,13 @@ const formatMajor = (major)=>{
   return major;
 }
 
+const formatTitleCV = (title)=>{
+  if(title.length>18){
+    return title.slice(0,16)+'...';
+  }
+  return title;
+}
+
 export const CardListCV = ({ listCV, id_company }) => {
 
     const handleViewCV = async (id_cv, id_company) => {
@@ -63,7 +70,7 @@ export const CardListCV = ({ listCV, id_company }) => {
             
             </div>
             <div class="more-info">
-              <h1>{item.title}</h1>
+              <h1>{formatTitleCV(item.title)}</h1>
               <div class="coords">
                 <span>Họ và tên</span>
                 <span>{item.account.fullname}</span>
