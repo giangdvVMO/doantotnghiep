@@ -417,9 +417,10 @@ export const StudentProfile = () => {
           },
         });
         const result = await response.json();
-       // console.log(result);
+       console.log(result);
         if (response.status !== 201) {
           message.error(result.message);
+          return;
         } else {
           const link = "admin/student/" + student._id;
           const title = "Yêu cầu duyệt thông tin sinh viên";
@@ -437,6 +438,7 @@ export const StudentProfile = () => {
       } catch (err) {
        // console.log(err);
         message.error("Đã có lỗi xảy ra!");
+        return;
       }
     } else {
       const url = serverURL + "student/" + student._id;
@@ -465,6 +467,7 @@ export const StudentProfile = () => {
        // console.log("result update", result);
         if (response.status !== 200) {
           message.error(result.message);
+          return;
         } else {
           const link = "admin/student/" + student._id;
           const title = "Yêu cầu duyệt thông tin sinh viên";
@@ -483,6 +486,7 @@ export const StudentProfile = () => {
       } catch (err) {
        // console.log(err);
         message.error("Đã có lỗi xảy ra!");
+        return;
       }
     }
     fetchStudent();
