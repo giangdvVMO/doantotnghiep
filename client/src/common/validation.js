@@ -172,8 +172,18 @@ export const checkArray = (data)=>{
 }
 
 export const checkFileCV = (data)=>{
-   // console.log("data",data)
-    return data.length;
+    if(!data){
+        return false;
+    }
+   const extentions = data.split('.');
+   const extention = extentions[extentions.length-1];
+   const condition = data&&(data.includes('png')||data.includes('img')||data.includes('jpeg')||data.includes('pdf'));
+   console.log('condition', condition) 
+   if(condition){
+        return true;
+    }
+    return false;
+    // return data.length;
 }
 
 

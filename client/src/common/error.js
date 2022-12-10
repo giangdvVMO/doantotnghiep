@@ -55,9 +55,12 @@ export const messageRecruitError = {
 
 export const messageCVError = {
   title: "Tiêu đề không được bỏ trống, không quá 50 kí tự, không chứa kí tự đặc biệt",
-  fileCV: "Định dạng CV chưa đúng",
+  fileCV: "Định dạng CV chưa đúng (pdf/png/jpeg/jpg)",
   field: "Chưa chọn lĩnh vực",
-  experience: 'Nhập số tháng kinh nghiệm chưa đúng'
+  experience: 'Nhập số tháng kinh nghiệm chưa đúng',
+  certificate: 'Chứng chỉ không được chứa kí tự đặc biệt, không quá 1000 kí tự',
+  summary: 'Tổng quát không được chứa kí tự đặc biệt, không quá 1000 kí tự',
+  speciality: 'Chuyên môn không quá 1000 kí tự',
 };
 
 export const messageNewsError = {

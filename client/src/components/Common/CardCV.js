@@ -9,7 +9,7 @@ import { avatarImage, domain } from "../../data/default-image";
 import "../../styles/card.css";
 
 const formatMajor = (major)=>{
-  if(major.length>18){
+  if(major.length>15){
     return major.slice(0,15)+'...';
   }
   return major;

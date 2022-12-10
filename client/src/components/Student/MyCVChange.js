@@ -203,6 +203,9 @@ import TextArea from "antd/lib/input/TextArea";
     const [validateFileCV, setValidateFileCV] = useState(defaultTrueStatus);
     const [validateFields, setValidateFields] = useState(defaultTrueStatus);
     const [validateExperience, setValidateExperience] = useState(defaultTrueStatus);
+    const [validateSummary, setValidateSummary] = useState(defaultTrueStatus);
+    const [validateSpeciality, setValidateSpeciality] = useState(defaultTrueStatus);
+    const [validateCertificate, setValidateCertificate] = useState(defaultTrueStatus);
     const ref = useRef();
     const refButtonSubmit = useRef();
   
@@ -221,32 +224,58 @@ import TextArea from "antd/lib/input/TextArea";
       }
     }
 
-    function checkExperienceFunc(title) {
-        if (!checkNumber(title)) {
-          setValidateTitle({
+    function checkCertificateFunc(Certificate) {
+      if (!checkSpecial(Certificate,1000)) {
+        setValidateCertificate({
+          status: "error",
+          errorMsg: messageCVError.certificate
+        });
+        return false;
+      } else {
+        setValidateCertificate(defaultTrueStatus);
+        return true;
+      }
+    }
+
+    function checkSummaryFunc(Summary) {
+      if (!checkSpecial(Summary,1000)) {
+        setValidateSummary({
+          status: "error",
+          errorMsg: messageCVError.summary
+        });
+        return false;
+      } else {
+        setValidateSummary(defaultTrueStatus);
+        return true;
+      }
+    }
+
+    function checkSpecialityFunc(Speciality) {
+      if (!Speciality||Speciality.length>1000) {
+        setValidateSpeciality({
+          status: "error",
+          errorMsg: messageCVError.speciality
+        });
+        return false;
+      } else {
+        setValidateSpeciality(defaultTrueStatus);
+        return true;
+      }
+    }
+
+    function checkExperienceFunc(experience) {
+        if (!checkNumber(experience)) {
+          setValidateExperience({
             status: "error",
             errorMsg: messageCVError.experience,
           });
           return false;
         } else {
-          setValidateTitle(defaultTrueStatus);
+          setValidateExperience(defaultTrueStatus);
           return true;
         }
       }
   
-    function checkFileFunc(data) {
-      if (!checkFileCV(data)) {
-        setValidateFileCV({
-          status: "error",
-          errorMsg: messageCVError.fileCV,
-        });
-        return false;
-      } else {
-        setValidateFileCV(defaultTrueStatus);
-        return true;
-      }
-    }
-
     function checkFileFunc(data) {
       if (!checkFileCV(data)) {
         setValidateFileCV({
@@ -364,20 +393,14 @@ import TextArea from "antd/lib/input/TextArea";
      // console.log("account", account);
      // console.log("student", student);
       count = checkTitleFunc(CV.title) ? count : count + 1;
-     // console.log("count", count);
       count = file||CV.file_cv? count: count+1;
-     // console.log("count", count);
-      count = CV.certificate?count: count+1;
-     // console.log("count", count);
-      count = CV.speciality?count: count+1;
-     // console.log("count", count);
-      count = CV.experience?count: count+1;
-     // console.log("count", count);
-      count = CV.summary?count: count+1;
-     // console.log("count", count);
-      // count = checkFileFunc(CV.file_cv) ? count : count + 1;
+      count = checkCertificateFunc(CV.certificate)?count: count+1;
+      count = checkSpecialityFunc(CV.speciality)?count: count+1;
+      count = checkExperienceFunc(CV.experience)?count: count+1;
+      count = checkSummaryFunc(CV.summary)?count: count+1;
+     console.log("file", file)
+    count = file?(checkFileFunc(file.type)?count: count+1):(checkFieldFunc(CV.file_cv)?count: count+1);
       count = checkFieldFunc(CV.fields) ? count : count + 1;
-     // console.log("count", count);
      // console.log(CV);
       if (count === 0) {
         if (CV._id === -1) {
@@ -385,7 +408,8 @@ import TextArea from "antd/lib/input/TextArea";
         } else {
           updateCV();
         }
-      }
+      }else
+        openNotificationWithIcon('error', 'Sai thông tin', 'Bạn nhập thông tin chưa chính xác!')
       return;
     }
   
@@ -395,8 +419,19 @@ import TextArea from "antd/lib/input/TextArea";
      // console.log("edit", CV);
       // return;
     }
+    async function refreshStatus(){
+      setValidateExperience(defaultTrueStatus);
+      setValidateFields(defaultTrueStatus);
+      setValidateFileCV(defaultTrueStatus);
+      setValidateTitle(defaultTrueStatus);
+      setValidateCertificate(defaultTrueStatus);
+      setValidateSpeciality(defaultTrueStatus);
+      setValidateSummary(defaultTrueStatus);
+    }
+
     async function handleCancel(e) {
       setIsEdit(false);
+      refreshStatus();
       fetchCV();
       return;
     }
@@ -604,6 +639,8 @@ import TextArea from "antd/lib/input/TextArea";
                                     label="Tổng quan:"
                                     name="summary"
                                     className="label-cv"
+                                    validateStatus={validateSummary.status}
+                                    help={validateSummary.errorMsg}
                                     required
                                 >
                                             <TextArea rows={5} value={CV.summary} 
@@ -634,6 +671,8 @@ import TextArea from "antd/lib/input/TextArea";
                                 label="Chuyên môn:"
                                 name="speciality"
                                 className="label-cv"
+                                validateStatus={validateSpeciality.status}
+                                help={validateSpeciality.errorMsg}
                                 required
                             >
                                     
@@ -647,6 +686,8 @@ import TextArea from "antd/lib/input/TextArea";
                                         label="Chứng chỉ:"
                                         name="certificate"
                                         className="label-cv"
+                                        validateStatus={validateCertificate.status}
+                                        help={validateCertificate.errorMsg}
                                         required
                                     >
                                                 <TextArea rows={5} value={CV.certificate} 
@@ -687,7 +728,12 @@ import TextArea from "antd/lib/input/TextArea";
                             })}
                           </Select>
                       </Form.Item>
-                      <Form.Item label="FILE CV:" className="label-cv" required>
+                      <Form.Item 
+                        label="FILE CV:" 
+                        className="label-cv" 
+                        validateStatus={validateFileCV.status}
+                        help={validateFileCV.errorMsg}
+                        required>
                           <>
                           <input type='file' onChange={handleChange}></input>
                           {CV.file_cv?<a href={domain+CV.file_cv} target={"_blank"} rel="noreferrer">Link</a>:''}

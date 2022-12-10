@@ -510,6 +510,8 @@ export const StudentProfile = () => {
         updateAccount();
       }
       updateStudent();
+    }else{
+      openNotificationWithIcon('error', 'Sai thông tin', 'Bạn nhập thông tin chưa chính xác!')
     }
     return;
   }

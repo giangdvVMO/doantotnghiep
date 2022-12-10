@@ -90,6 +90,7 @@ export const Email = ({id_student, id_company, setOpenEmail, setRate}) => {
                 );
                 const result = await response.json();
                 if(response.status!==201){
+                    console.log(result);
                     message.error("Không thành công!");
                 }else{
                     openNotificationWithIcon('success', 'Thông báo', 'Bạn đã gửi thư tới sinh viên')

@@ -442,6 +442,8 @@ export const AddRecruit = () => {
    // console.log(recruit);
     if (count === 0) {
       createRecruit();
+    }else{
+      openNotificationWithIcon('error', 'Sai thông tin', 'Bạn nhập thông tin chưa chính xác!')
     }
     return;
   }

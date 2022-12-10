@@ -467,6 +467,8 @@ export const CompanyProfile = () => {
    // console.log("count", count);
     if (count === 0) {
       updateCompany();
+    }else{
+      openNotificationWithIcon('error', 'Sai thông tin', 'Bạn nhập thông tin chưa chính xác!')
     }
     return;
   }
