@@ -14,7 +14,7 @@ export class Apply {
   @Prop({ type: Number, ref: 'tbl_recruit', required: true })
   id_recruit: number;
 
-  @Prop({ type: Date, default: moment().utc(true), required: true })
+  @Prop({ type: Date, required: true })
   apply_date: Date;
 }
 

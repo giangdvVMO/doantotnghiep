@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Apply, ApplyDocument } from './apply.schema';
 import { ConditionDto, CreateApplyDto } from './dto/create-apply.dto';
+import * as moment from 'moment';
 
 @Injectable()
 export class ApplyService {
@@ -15,7 +16,7 @@ export class ApplyService {
     if (exist) {
       throw new BadRequestException('Đã có bản ghi');
     }
-    const result = await this.applyModel.create(apply);
+    const result = await this.applyModel.create({...apply, apply_date: moment().utc(true)});
     return { data: result };
   }
 

@@ -5,6 +5,7 @@ import { AccountNotiService } from '../account_noti/account_noti.service';
 import { CreateNotiDto } from './dto/create-noti.dto';
 import { UpdateNotiDto } from './dto/update-noti.dto';
 import { Noti, NotiDocument } from './noti.schema';
+import * as moment from 'moment'
 
 @Injectable()
 export class NotiService {
@@ -33,6 +34,7 @@ export class NotiService {
       title: createNotiDto.title,
       content: createNotiDto.content,
       link: createNotiDto.link,
+      create_date: moment().utc(true),
     });
     console.log('result', result);
     if (result) {
@@ -40,6 +42,7 @@ export class NotiService {
         id_noti: id,
         send_id: createNotiDto.send_id,
         receive_id: createNotiDto.receive_id,
+        create_date: moment().utc(true),
       };
       const resultMany = await this.accountNotiService.bulkCreate(
         createAccountNotiDto,

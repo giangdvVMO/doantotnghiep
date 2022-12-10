@@ -76,30 +76,31 @@ export const getUserAdmin = async()=>{
 }
 
 export const formatDate = (datex)=>{
-    const date = new Date(datex)
-    const currentDate = new Date();
-    const year = currentDate.getFullYear()-date.getFullYear();
-    const month = currentDate.getMonth()-date.getMonth();
-    const day = currentDate.getDate()-date.getDate();
-    const hour = currentDate.getHours()-date.getHours();
-    const minutes = currentDate.getMinutes()-date.getMinutes();
-    const seconds = currentDate.getSeconds()-date.getSeconds();
-    if(year>0){
-        return `${year} năm trước`
+    const date = Date.parse(datex);
+    
+    console.log("date", date);
+    const currentDate = Date.now();
+    console.log("currentDate", currentDate);
+    const seconds = Math.floor((currentDate - date + 7*60*60*1000)/1000);
+    if(seconds<60){
+      return `${seconds} giây trước`
     }
-    if(month>0){
-        return `${month} tháng trước`
+    const minutes = Math.floor(seconds/60);
+    if(minutes<60){
+      return `${minutes} phút trước`
+    } 
+    const hours = Math.floor(minutes/60);
+    if(hours<60){
+      return `${hours} giờ trước`
+    } 
+    const days = Math.floor(hours/24);
+    if(days<60){
+      return `${days} ngày trước`
+    } 
+    const months = Math.floor(days/24);
+    if(months<60){
+      return `${months} ngày trước`
     }
-    if(day>0){
-        return `${day} ngày trước`
-    }
-    if(hour>0){
-        return `${hour} giờ trước`
-    }
-    if(minutes>0){
-        return `${minutes} phút trước`
-    }
-    return `${seconds} giây trước`
 }
 
 export const changeExperience = (experience)=>{

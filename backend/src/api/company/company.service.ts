@@ -17,7 +17,7 @@ export class CompanyService {
     private readonly manuCompanyService: ManuCompanyService,
   ) {}
   async create(createCompanyDto: CreateCompanyDto) {
-    const result = await this.companyModel.create(createCompanyDto);
+    const result = await this.companyModel.create({...createCompanyDto, create_date: moment().utc(true)});
     return result;
   }
 

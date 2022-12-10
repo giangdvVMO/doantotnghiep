@@ -355,7 +355,7 @@ export const StudentList = () => {
         }
         const miliseconds = new Date() - new Date(record.recruit.end_date)
           console.log("end_date", miliseconds)
-          if(miliseconds<=0){
+          if(miliseconds>=0){
             record.status_apply=3;
             const remain = Math.ceil(Math.abs(miliseconds/(24*3600*1000)));
             return <Tag icon={<CloseCircleOutlined />} color="error">

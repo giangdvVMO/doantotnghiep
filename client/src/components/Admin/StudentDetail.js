@@ -7,7 +7,7 @@ import {decodeToken , isExpired} from 'react-jwt';
 import { UserContext } from "../User/UserProvider"
 import '../../styles/form.css'
 import '../../styles/my-account.css'
-import { DateToShortString, openNotificationWithIcon } from "../../common/service";
+import { createNoti, DateToShortString, openNotificationWithIcon } from "../../common/service";
 import TextArea from "antd/lib/input/TextArea";
 import { serverURL } from "../../configs/server.config";
 import { domain } from "../../data/default-image";
@@ -86,6 +86,10 @@ export const StudentDetailAdmin = ()=>{
                 if(result.data===false){
                     message.warning('Cập nhật không thành công, hãy kiểm tra lại!');
                 }else{
+                    const title = "Duyệt thông tin sinh viên";
+                    const type = "infor";
+                    const content = `Admin ${user.fullname} đã duyệt thông tin của bạn! Bạn có thể sử dụng các tính năng của trang web!Chúc bạn thành công!`;
+                    createNoti(user._id, [student._id], title, type, content);
                     message.success('Cập nhật thành công!');
                     fetchStudent();
                 }
@@ -169,10 +173,14 @@ export const StudentDetailAdmin = ()=>{
     }
     async function handleSubmitDeny(){
         if(checkReasonFunc(reason)){
+            const title = "Từ chối duyệt thông tin sinh viên";
+          const type = "infor";
+          const content = `Admin ${user.fullname} đã từ chối duyệt thông tin của bạn!Lí do: ${reason}`;
+          createNoti(user._id, [student._id], title, type, content);
             openNotificationWithIcon('success', 'Thành công','Đã gửi thông báo tới sinh viên!')
             setOpen(false);
         }else{
-            openNotificationWithIcon('error', 'Thất bại','Hãy nhập lí do từ chối!')
+            openNotificationWithIcon('error', 'Thất bại','Hãy nhập lấy do từ chối!')
         }
         // set notification (later)
         

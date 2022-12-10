@@ -26,7 +26,7 @@ export class Noti {
   @Prop({ type: Boolean, default: false, required: true })
   status: boolean;
 
-  @Prop({ type: Date, default: moment().utc(true), required: true })
+  @Prop({ type: Date, required: true })
   create_date: Date;
 }
 

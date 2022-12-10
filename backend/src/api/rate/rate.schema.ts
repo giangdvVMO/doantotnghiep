@@ -38,7 +38,7 @@ export class Rate {
   @Prop({ type: Number, ref: 'tbl_account' })
   delete_id: number;
 
-  @Prop({ type: Date, default: moment().utc(true), required: true })
+  @Prop({ type: Date, required: true })
   create_date: Date;
 
   @Prop({ type: Date, default: null })

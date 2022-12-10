@@ -37,6 +37,7 @@ export class RateService {
     const result = await this.rateModel.create({
       ...createRateDto,
       _id,
+      create_date: moment().utc(true)
     });
     return { data: result };
   }

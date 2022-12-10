@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import * as moment from 'moment';
+
 
 export type CVDocument = CV & Document;
 
@@ -41,7 +41,7 @@ export class CV {
   @Prop({ type: Number, ref: 'tbl_account' })
   delete_id: number;
 
-  @Prop({ type: Date, default: moment().utc(true), required: true })
+  @Prop({ type: Date, required: true })
   create_date: Date;
 
   @Prop({ type: Date, default: null })
