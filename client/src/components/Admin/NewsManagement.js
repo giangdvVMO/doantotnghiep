@@ -181,10 +181,11 @@ export const NewsManagement = () => {
       if (response.status !== 200) {
         message.error(result.message);
       } else {
-          // const title = "Duyệt bài đăng tin tức";
-          // const type = "infor";
-          // const content = `Admin ${user.fullname} đã duyệt bài đăng tin tức của bạn.`;
-          // createNoti(user._id, [currentAccount._id], title, type, content);
+          const title = "Duyệt bài đăng tin tức";
+          const type = "infor";
+          const content = `Admin ${user.fullname} đã duyệt bài đăng tin tức của bạn.`;
+          console.log("currentAccount._id",currentAccount._id);
+          createNoti(user._id, [currentAccount._id], title, type, content);
           openNotificationWithIcon('success','Thông báo',"Bạn đã duyệt tin tức thành công, thông báo đã gửi tới người đăng bài!");
         fetchListNews();
         setOpenConfirm(false);

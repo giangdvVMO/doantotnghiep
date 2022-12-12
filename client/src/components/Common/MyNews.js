@@ -60,7 +60,6 @@ export const MyNews = () => {
         query = search !== "" ? query + "&search=" + search : query;
         query = field.length ? query + "&field=" + field : query;
        // console.log('field', field)
-        message.success('field', field)
         const url = serverURL + "news" + query;
        // console.log(query);
         try {

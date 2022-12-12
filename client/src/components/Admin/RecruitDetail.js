@@ -131,7 +131,7 @@ export const RecruitDetailAdmin = () => {
       if (response.status !== 200) {
         message.error(result.message);
       } else {
-        message.success("Load recruit thành công!");
+        // message.success("Load recruit thành công!");
         setRecruit({ ...result.data });
       }
     } catch (err) {
@@ -221,7 +221,7 @@ export const RecruitDetailAdmin = () => {
           const title = "Phản hồi duyệt thông tin bài đăng tuyển dụng";
           const type = "infor";
           const content = `Admin ${user.fullname} duyệt thông tin bài đăng tuyển dụng.`;
-          // createNoti(user._id, [company._id], title, type, content, link);
+          createNoti(user._id, [company._id], title, type, content, link);
           fetchRecruit();
         }
       }
@@ -283,8 +283,13 @@ export const RecruitDetailAdmin = () => {
     return;
   }
   async function handleSubmitDeny() {
+    const title = "Từ chối duyệt thông tin bài tuyển dụng";
+    const type = "infor";
+    const content = `Admin ${user.fullname} đã từ chối duyệt thông tin bài đăng của bạn! Hãy kiểm tra lại!`;
+    const link = "company/recruit/" + recruit._id;
+    createNoti(user._id,[company._id], title, type, content, link);
     // set notification (later)
-    message.success("Đã gửi thông báo tới sinh viên!");
+    message.success("Đã gửi thông báo tới doanh nghiệp!");
     setOpen(false);
   }
   async function handleCancelDeny() {

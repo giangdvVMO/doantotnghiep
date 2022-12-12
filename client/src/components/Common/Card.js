@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import {
   changeExperience,
   DateToShortStringDate,
+  formatDescription,
   openNotificationWithIcon,
 } from "../../common/service";
 import { serverURL } from "../../configs/server.config";
@@ -68,7 +69,7 @@ export const CardList = ({ listRecruit, id_student }) => {
               })}
             </div>
             <div class="more-info">
-              <h1>{item.title}</h1>
+              <h2>{item.title}</h2>
               
               <div class="coords">
                 <span>Hạn tuyển dụng</span>
@@ -101,8 +102,8 @@ export const CardList = ({ listRecruit, id_student }) => {
             </div>
           </div>
           <div class="general">
-            <h1>{item.title}</h1>
-            <p>{item.description}</p>
+            <h2>{item.title}</h2>
+            <p>{formatDescription(item.description)}</p>
             <p class="hover">Hover để xem thêm</p>
           </div>
         </div>

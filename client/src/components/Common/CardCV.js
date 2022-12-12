@@ -2,6 +2,7 @@ import { BookTwoTone, ContactsTwoTone } from "@ant-design/icons";
 import { Avatar, Tag } from "antd";
 import { Link } from "react-router-dom";
 import {
+  changeExperience,
   openNotificationWithIcon,
 } from "../../common/service";
 import { serverURL } from "../../configs/server.config";
@@ -55,6 +56,9 @@ export const CardListCV = ({ listCV, id_company }) => {
         <div class={classCss}>
           <div class="additional">
             <div class="user-card">
+              <div class="level center-card">
+                {changeExperience(item.experience)}
+              </div>
               {
                 item.account.avatar?
                 <Avatar
@@ -70,7 +74,7 @@ export const CardListCV = ({ listCV, id_company }) => {
             
             </div>
             <div class="more-info">
-              <h1>{formatTitleCV(item.title)}</h1>
+              <h2>{formatTitleCV(item.title)}</h2>
               <div class="coords">
                 <span>Họ và tên</span>
                 <span>{item.account.fullname}</span>
@@ -106,7 +110,7 @@ export const CardListCV = ({ listCV, id_company }) => {
             </div>
           </div>
           <div class="general">
-            <h1>{item.title}</h1>
+            <h2>{item.title}</h2>
             <div class="fields">
                 <p>Lĩnh vực</p>
                 {

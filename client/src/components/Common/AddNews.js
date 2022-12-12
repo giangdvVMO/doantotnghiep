@@ -97,7 +97,6 @@ export const AddNews = ()=>{
       if (response.status !== 200) {
         // message.error(result.message);
       } else {
-        // message.success("Load field thành công!");
         setListField(result.data);
       }
     } catch (err) {

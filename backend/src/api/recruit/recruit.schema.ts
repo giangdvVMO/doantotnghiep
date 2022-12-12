@@ -35,13 +35,13 @@ export class Recruit {
   @Prop({ type: Number })
   experience: number;
 
-  @Prop({ type: String, maxlength: 500 })
+  @Prop({ type: String, maxlength: 1000 })
   description: string;
 
-  @Prop({ type: String, maxlength: 500 })
+  @Prop({ type: String, maxlength: 1000 })
   requirement: string;
 
-  @Prop({ type: String, maxlength: 500 })
+  @Prop({ type: String, maxlength: 1000 })
   welfare: string;
 
   @Prop({ type: Date, default: null })

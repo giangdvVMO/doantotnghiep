@@ -165,7 +165,7 @@ export const RecruitProfile = ()=>{
             if(response.status!==200){
                 message.error(result.message);
             }else{
-                message.success("Load recruit thành công!");
+                // message.success("Load recruit thành công!");
                 setRecruit({...result.data});
             }
         }
@@ -880,6 +880,8 @@ export const RecruitProfile = ()=>{
                             <TextArea rows={5} value={recruit.description} 
                                 defaultValue={recruit.description} 
                                 onChange= {handleChangeDescription}
+                                showCount
+                                maxLength={1000}
                             />:
                             <pre style={{textAlign:'left'}}>
                                 {recruit.description}
@@ -899,6 +901,8 @@ export const RecruitProfile = ()=>{
                             <TextArea rows={5} value={recruit.requirement} 
                                 defaultValue={recruit.requirement} 
                                 onChange= {handleChangeRequirement}
+                                showCount
+                                maxLength={1000}
                             />:
                             <pre style={{textAlign:'left'}}>
                                 {recruit.requirement}
@@ -918,6 +922,8 @@ export const RecruitProfile = ()=>{
                             <TextArea rows={5} value={recruit.welfare} 
                                 defaultValue={recruit.welfare} 
                                 onChange= {handleChangeWelfare}
+                                showCount
+                                maxLength={1000}
                             />:
                             <pre style={{textAlign:'left'}}>
                                 {recruit.welfare}
@@ -925,24 +931,6 @@ export const RecruitProfile = ()=>{
                         }
                         </Form.Item>
                         <div className='two-colums'>
-                            {/* <Form.Item
-                                label="Ngày bắt đầu:"
-                                name="start_date"
-                                className='label'
-                                validateStatus={validateStartDate.status}
-                                help={validateStartDate.errorMsg}
-                                required
-                            >
-                            {
-                                isEdit?
-                                <DatePicker className='birthday-input'
-                                    value={recruit.start_date}
-                                    onChange={handleChangeStartDate} 
-                                    defaultValue= {moment(moment(recruit.start_date),'DD/MM/YYYY')}
-                                />:
-                                <p className="text-display">{DateToShortString(recruit.start_date)}</p>
-                            }
-                            </Form.Item> */}
                             <Form.Item
                                 label="Ngày kết thúc:"
                                 name="end_date"

@@ -11,7 +11,7 @@
   margin: 0 auto;
   min-width: 600px;
   max-width: 1250px;
-  min-height: calc(100vh - 400px)
+  min-height: calc(100vh - 220px)
 }
 .footer{
   /* min-height: 100px; */

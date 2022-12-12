@@ -1,5 +1,4 @@
 
-
 .center-card {
   position: absolute;
   top: 50%;
@@ -113,10 +112,9 @@
   height: 100%;
 }
 
-/* .card .additional .more-info h1 {
-  color: #fff;
-  margin-bottom: 0;
-} */
+.card .additional .more-info h2 {
+  font-weight: 900;
+}
 
 .card.red .additional .more-info .titlecard {
   color: #5c0800;
@@ -224,6 +222,10 @@
   /* right: 1rem; */
   /* font-size: 0.9em; */
   opacity: 0.5;
+}
+
+.card .general h2{
+  font-weight: 900;
 }
 /* 
 .red{

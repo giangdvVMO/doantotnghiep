@@ -13,6 +13,13 @@ export const DateToShortStringDate = (dateString)=>{
     return date.getDate() +'/'+(date.getMonth()+1)+'/'+date.getFullYear();
 }
 
+export const formatDescription = (description)=>{
+  if(description.length>230){
+    return description.slice(0,220)+'...';
+  }
+  return description;
+}
+
 export const createNoti = async(id_send, id_receive, title, type, content, link)=>{
         try {
             const url = serverURL + 'noti';
@@ -90,17 +97,18 @@ export const formatDate = (datex)=>{
       return `${minutes} phút trước`
     } 
     const hours = Math.floor(minutes/60);
-    if(hours<60){
+    if(hours<24){
       return `${hours} giờ trước`
     } 
     const days = Math.floor(hours/24);
-    if(days<60){
+    if(days<30){
       return `${days} ngày trước`
     } 
-    const months = Math.floor(days/24);
-    if(months<60){
-      return `${months} ngày trước`
+    const months = Math.floor(days/30);
+    if(months<12){
+      return `${months} tháng trước`
     }
+    return `${Math.floor(months/12)} năm trước`
 }
 
 export const changeExperience = (experience)=>{
@@ -110,10 +118,10 @@ export const changeExperience = (experience)=>{
     if(experience<12){
         return 'Dưới 1 năm kinh nghiệm'
     }
-    if(experience<12*2){
-        return 'Dưới 2 năm kinh nghiệm'
-    }
-    return 'Trên 2 năm kinh nghiệm'
+    // if(experience<12*2){
+    //     return 'Dưới 2 năm kinh nghiệm'
+    // }
+    return 'Trên 1 năm kinh nghiệm'
 }
 export const openNotificationWithIcon = (type, message, description) => {
     notification[type]({
