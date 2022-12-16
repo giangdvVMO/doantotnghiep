@@ -68,4 +68,8 @@ export class QueryParamRecruitDto {
   @ApiPropertyOptional()
   @IsOptional()
   date: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  salary: string;
 }

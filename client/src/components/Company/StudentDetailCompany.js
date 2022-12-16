@@ -1,17 +1,14 @@
-import { BankOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import { BankOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
-  Card,
-  Form,
-  Image,
   message,
   Modal,
   Rate,
   Skeleton,
   Tag,
 } from "antd";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
@@ -20,7 +17,6 @@ import "../../styles/form.css";
 import "../../styles/my-account.css";
 import {
   createNoti,
-  DateToShortString,
   openNotificationWithIcon,
 } from "../../common/service";
 import { serverURL } from "../../configs/server.config";
@@ -54,11 +50,11 @@ export const StudentDetailCompany = () => {
   const [CV, setCV] = useState(null);
   const [isOpenConfirm, setOpenConfirm] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [rate, setRate] = useState(false);
   const [rateList, setRateList] = useState([]);
   const [isOpenRate, setOpenRate] = useState(false);
   const [isOpenEmail, setOpenEmail] = useState(false);
   const [overall, setOverall] = useState(0);
+  const [status, setStatus] = useState(0);
 
   const { id } = useParams();
 
@@ -135,6 +131,14 @@ export const StudentDetailCompany = () => {
         if (response.status !== 200) {
           message.error(result.message);
         } else {
+          if(!result||!result.data){
+            openNotificationWithIcon(
+              "warning",
+              "Thông báo",
+              "Sinh viên chưa cập nhật CV!"
+            );
+            return;
+          }
           if (!result.data.status) {
             openNotificationWithIcon(
               "warning",
@@ -143,6 +147,7 @@ export const StudentDetailCompany = () => {
             );
             setCV();
           } else {
+            console.log("result.data", result.data);
             setCV({ ...result.data });
           }
         }
@@ -154,10 +159,10 @@ export const StudentDetailCompany = () => {
   }
 
   async function fetchApply() {
-    if (account && student &&!rate) {
+    if (account && student._id!=-1) {
       const url =
         serverURL +
-        `apply/condition?id_student=${student._id}&id_company=${account._id}`;
+        `apply/con?id_student=${student._id}&id_company=${account._id}`;
       try {
         const response = await fetch(url, {
           method: "GET",
@@ -169,83 +174,44 @@ export const StudentDetailCompany = () => {
         if (response.status !== 200) {
           message.error(result.message);
         } else {
-          if (result.data.length) {
-            openNotificationWithIcon(
-              "info",
-              "Thông báo",
-              "Sinh viên đã ứng tuyển công ty bạn, hãy gửi thư phỏng vấn nếu phù hợp!"
-            );
-          }
-        }
-      } catch (err) {
-       // console.log(err);
-        message.error("Đã có lỗi xảy ra!");
-      }
-    }
-  }
+          setStatus(result);
+          switch(result){
+            case 1: {
+              openNotificationWithIcon(
+                "info",
+                "Thông báo",
+                "Bạn đã gửi thư mời tuyển dụng cho sinh viên này!"
+              );
+              break;
+            }
 
-  async function fetchLetter() {
-    if (account && student._id !== -1&&!rate) {
-      const url =
-        serverURL +
-        `letter/condition?id_student=${student._id}&id_company=${account._id}`;
-      try {
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const result = await response.json();
-       // console.log("result letter", result);
-        if (response.status !== 200) {
-          message.error(result.message);
-        } else {
-          if (result.data.length) {
-            openNotificationWithIcon(
-              "info",
-              "Thông báo",
-              "Bạn đã gửi thư mời phỏng vấn rồi!"
-            );
-            setDisabled(true);
-          } else {
-            setDisabled(false);
-          }
-        }
-      } catch (err) {
-       // console.log(err);
-        message.error("Đã có lỗi xảy ra!");
-      }
-    }
-  }
+            case 2: {
+              openNotificationWithIcon(
+                "info",
+                "Thông báo",
+                "Sinh viên đã ứng tuyển công ty bạn, hãy gửi thư phỏng vấn nếu phù hợp!"
+              );
+              break;
+            }
 
-  async function fetchConditionRate() {
-    if (account && student._id !== -1) {
-      const url =
-        serverURL +
-        `rate/precondition?id_student=${student._id}&id_company=${account._id}`;
-      try {
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const result = await response.json();
-       // console.log("result letter", result);
-        if (response.status !== 200) {
-          message.error(result.message);
-        } else {
-          if (result.data===true) {
-            openNotificationWithIcon(
-              "info",
-              "Thông báo",
-              "Bạn có thể thực hiện đánh giá sinh viên!"
-            );
-            setRate(true);
-          } else {
-            setRate(false);
+            case 3: {
+              break;
+            }
+
+            case 4: {
+              openNotificationWithIcon(
+                "info",
+                "Thông báo",
+                "Sinh viên đã ứng tuyển tiếp ở công ty bạn, hãy gửi thư phỏng vấn nếu phù hợp!"
+              );
+              break;
+            }
+
+            default: {
+              break;
+            }
           }
+          
         }
       } catch (err) {
        // console.log(err);
@@ -296,12 +262,12 @@ export const StudentDetailCompany = () => {
   useEffect(() => {
     fetchCV();
   }, [student]);
-  useEffect(() => {
-    fetchConditionRate();
-  }, [student, account]);
-  useEffect(() => {
-    fetchLetter();
-  }, [student, account]);
+  // useEffect(() => {
+  //   fetchConditionRate();
+  // }, [student, account]);
+  // useEffect(() => {
+  //   fetchLetter();
+  // }, [student, account]);
   useEffect(() => {
     fetchApply();
   }, [student, account]);
@@ -309,20 +275,9 @@ export const StudentDetailCompany = () => {
     fetchListRate();
   }, [student, account]);
   
-
-  const ref = useRef();
-  const refButtonSubmit = useRef();
-
-  function handleKeyUp(e) {
-    if (e.keyCode === 13) {
-     // console.log("enter");
-      refButtonSubmit.current.focus();
-      refButtonSubmit.current.click();
-    }
-  }
   const renderButtonGroup = () => {
-    if (CV||rate){
-      if(!rate){
+    if (CV){
+      if(status===0||status===2){
       return (
         <div className="apply-container">
           <Button
@@ -335,6 +290,27 @@ export const StudentDetailCompany = () => {
           </Button>
         </div>
       );}
+      if(status===4){
+        return (
+          <div className="apply-container">
+            <Button
+              type="primary"
+              className="apply-btn"
+              disabled={disabled}
+              onClick={handleApply}
+            >
+              Gửi thư mời phỏng vấn
+            </Button>
+            <Button
+            type="primary"
+            className="apply-btn"
+            onClick={handleRate}
+          >
+            Thêm đánh giá
+          </Button>
+          </div>
+        );
+      }
       return (
         <div className="apply-container">
           <Button
@@ -478,7 +454,7 @@ export const StudentDetailCompany = () => {
                             <div className="wrap-label-cv border-underline"><span className="label-left-cv">Chứng chỉ</span></div>
                                 <div className="text-cv">
                                 <pre>
-                                  {CV.speciality}
+                                  {CV.certificate}
                                 </pre>
                                 </div>
                             <div>
@@ -501,7 +477,7 @@ export const StudentDetailCompany = () => {
                         ) : (
                           <p>Chưa có file CV đính kèm</p>
                         )}
-                        {rate?
+                        {status===3?
                           <div className="notice">
                                 Bạn đã tuyển sinh viên này, bạn có thể đổi trạng thái CV thành private!
                                 <Button type="primary" style={{marginLeft: '10px'}} onClick={async()=>{await handleChangeStatus()}}>Đổi trạng thái</Button>
@@ -538,7 +514,7 @@ export const StudentDetailCompany = () => {
           footer={null}
           destroyOnClose={()=>{setOpenEmail(false)}}
         >
-          <Email id_student={student._id} id_company={account._id} setOpenEmail={setOpenEmail} setRate={setRate}/>
+          <Email id_student={student._id} id_company={account._id} setOpenEmail={setOpenEmail} setStatus={setStatus}/>
         </Modal>
 
       {/* đánh giá */}

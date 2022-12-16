@@ -5,7 +5,7 @@ import {decodeToken} from 'react-jwt';
 
 import { UserContext } from '../User/UserProvider';
 import '../../styles/manager-page.css'
-import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { serverURL } from '../../configs/server.config';
 import { DateToShortStringDate, openNotificationWithIcon, postFields } from '../../common/service';
 

@@ -5,7 +5,7 @@ import { decodeToken } from "react-jwt";
 
 import { UserContext } from "../User/UserProvider";
 import "../../styles/manager-page.css";
-import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, SearchOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { majorList, universityList } from "../../data/list";
 import { serverURL } from "../../configs/server.config";
 import { DateToShortStringDate, openNotificationWithIcon } from "../../common/service";
@@ -27,7 +27,6 @@ export const StudentList = () => {
     query = university !== -1 ? query + "&university=" + university : query;
     query = search !== "" ? query + "&search=" + search : query;
     const url = serverURL + "student" + query;
-   // console.log(query);
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -39,20 +38,15 @@ export const StudentList = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống!");
       } else {
-       // console.log(result);
         setListUser([...result.data]);
       }
     } catch (err) {
-     // console.log(err);
     }
   }
   //fetch user
   const fetchUser = async () => {
-   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -65,21 +59,19 @@ export const StudentList = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-       // console.log("user fetch to set role", result);
         if (!result || result.role !== "company") {
-          <Alert
-            message="Warning"
-            description="Bạn không có quyền xem trang này."
-            type="warning"
-            showIcon
-            closable
-          />;
+          // <Alert
+          //   message="Warning"
+          //   description="Bạn không có quyền xem trang này."
+          //   type="warning"
+          //   showIcon
+          //   closable
+          // />;
           navigate("/home");
         }
         changeUser({ ...result });
       }
     } catch (err) {
-     // console.log(err);
     }
   };
 

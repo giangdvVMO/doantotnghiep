@@ -235,7 +235,7 @@ export class CvService {
         $match: {
           'account.delete_date': null,
           delete_date: null,
-          status: true
+          status: true,
           // ...condition,
         },
       },

@@ -20,11 +20,8 @@ export const StatisticCompany = () => {
 
   //fetch user
   const fetchUser = async () => {
-   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {

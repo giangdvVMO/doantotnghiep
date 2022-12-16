@@ -69,7 +69,7 @@ export const CompanyManager = () => {
       } else {
        // console.log("user fetch to set role", result);
         if (!result || result.role !== "admin") {
-          message.warn("Bạn ko có quyền xem trang này");
+          // message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
         }
         changeUser({ ...result });

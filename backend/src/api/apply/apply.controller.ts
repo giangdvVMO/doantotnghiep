@@ -34,6 +34,11 @@ export class ApplyController {
     return this.applyService.findCondition(conditionDto);
   }
 
+  @Get('con')
+  findCon(@Query() conditionDto: ConditionDto) {
+    return this.applyService.conditionCV(conditionDto);
+  }
+
   @Get('statistic')
   statistic(@Query() query: QueryDto) {
     const { id_student, month, year } = query;

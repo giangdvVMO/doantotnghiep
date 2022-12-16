@@ -150,7 +150,7 @@ export const checkString = (data)=>{
 
 export const checkNumber = (data)=>{
    // console.log("data",data);
-    if(data === 0) return true;
+    if(data === 0||data==='0') return true;
     return +data;
 }
 

@@ -15,10 +15,10 @@ const {TextArea} = Input;
 export const CompanyList = () => {
     const { user, changeUser, token } = useContext(UserContext);
     const navigate = useNavigate();
-    if(!user||user.role!=='student'){
-        message.warn('Bạn ko có quyền xem trang này');
-        navigate('/home')
-    }
+    // if(!user||user.role!=='student'){
+    //     message.warn('Bạn ko có quyền xem trang này');
+    //     navigate('/home')
+    // }
     const [scaleBound, setScaleBound] = useState(-1);
     const [manufactures, setManufactures] = useState([{_id:'', name_manu: ''}]);
     const [manufacture, setManufacture] = useState(-1);

@@ -312,24 +312,6 @@ if(fields){
             })}
           </Select>
         </div>
-        {/* <div className='filter'>
-                    <label className='label-filter'>Địa điểm:</label>
-                    <Select
-                    mode='multiple'
-                        value={field}
-                        defaultValue='Tất cả'
-                        labelInValue='Địa điểm'
-                        className='filter-content'
-                        onChange={handleChangeField}
-                    >
-                        <Option value={-1}>Tất cả</Option>
-                        {
-                            fields.map((field)=>{
-                                return (<Option key={field._id} value={field._id}>{field.nameField}</Option>)
-                            })
-                        }
-                    </Select>
-                </div> */}
         <div className="filter">
           <label className="label-filter">Trạng thái:</label>
           <Select

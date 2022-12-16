@@ -178,6 +178,7 @@ export class RecruitService {
       experience,
       pageIndex,
       pageSize,
+      salary,
       date,
     } = query;
     console.log('field', field);
@@ -239,6 +240,36 @@ export class RecruitService {
       default: {
         isExperience = true;
         break;
+      }
+    }
+    let isSalary: any = true;
+    if (salary && +salary) {
+      switch (+salary) {
+        case 1: {
+          isSalary = {
+            $and: [{ $gte: ['$salary', 0] }, { $lt: ['$salary', 5000000] }],
+          };
+          break;
+        }
+        case 2: {
+          isSalary = {
+            $and: [
+              { $gte: ['$salary', 5000000] },
+              { $lt: ['$salary', 10000000] },
+            ],
+          };
+          break;
+        }
+        case 3: {
+          isSalary = {
+            $gte: ['$salary', 10000000],
+          };
+          break;
+        }
+        default: {
+          isSalary = true;
+          break;
+        }
       }
     }
 
@@ -356,6 +387,7 @@ export class RecruitService {
           isfields: field_condition,
           isExperience: isExperience,
           isExpired: isExpired,
+          isSalary: isSalary,
         },
       },
       {
@@ -363,6 +395,7 @@ export class RecruitService {
           result: true,
           isfields: true,
           isExperience: true,
+          isSalary: true,
           isExpired: true,
         },
       },

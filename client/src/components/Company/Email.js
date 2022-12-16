@@ -8,7 +8,7 @@ import { createNoti, openNotificationWithIcon } from '../../common/service';
 import { messageEmail } from '../../common/error';
 import TextArea from 'antd/lib/input/TextArea';
 
-export const Email = ({id_student, id_company, setOpenEmail, setRate}) => {
+export const Email = ({id_student, id_company, setOpenEmail, setStatus}) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
@@ -101,8 +101,7 @@ export const Email = ({id_student, id_company, setOpenEmail, setRate}) => {
                     const content = `Doanh nghiệp vừa gửi thư tuyển dụng cho bạn.`;
                     createNoti(id_company, [id_student], title, type, content, link);
                     //send mail
-                    
-                    setRate(true);
+                    setStatus(3);
             }
 
                 setOpenEmail(false);

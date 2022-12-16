@@ -32,6 +32,7 @@ export const RecruitListStudent = () => {
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [total, setPageTotal] = useState(1);
+  const [salary, setSalary] = useState(-1);
 
   //fetch Fields
   async function fetchField() {
@@ -68,6 +69,7 @@ export const RecruitListStudent = () => {
     query = field.length && !field.includes(-1) ? query + "&field=" + field : query;
     query = experience !== -1 ? query + "&experience=" + experience : query;
     query = search !== "" ? query + "&search=" + search : query;
+    query = salary !== -1 ? query + "&salary=" + salary : query;
     const url = serverURL + "recruit" + query;
    // console.log(query);
     try {
@@ -92,11 +94,8 @@ export const RecruitListStudent = () => {
 
   //fetch user
   const fetchUser = async () => {
-   // console.log("fetch user account");
     const tokenx = token ? token : window.localStorage.getItem("accessToken");
-   // console.log("tokenx", tokenx);
     const id = decodeToken(tokenx).sub;
-   // console.log("id", id);
     const url = serverURL + "account/" + id;
     try {
       const response = await fetch(url, {
@@ -109,7 +108,6 @@ export const RecruitListStudent = () => {
       if (response.status !== 200) {
         message.error("Lỗi hệ thống load user!");
       } else {
-       // console.log("user fetch to set role", result);
         if (!result || result.role !== "student") {
           message.warn("Bạn ko có quyền xem trang này");
           navigate("/");
@@ -156,7 +154,7 @@ export const RecruitListStudent = () => {
   useEffect(() => {fetchUser();}, []);
   useEffect(() => {fetchStudent();}, []);
   useEffect(() => {fetchField();}, []);
-  useEffect(() => {fetchListRecruit(); }, [pageIndex, pageSize, field, experience, search, user]);
+  useEffect(() => {fetchListRecruit(); }, [pageIndex, pageSize, field, experience, search, salary, user]);
   const handleChangeField = (e) => {
    // console.log(e);
     const value = e.map((item) => {
@@ -168,6 +166,10 @@ export const RecruitListStudent = () => {
 
   const handleChangeSelect = (e) => {
     setExperience(e.value);
+    setPageIndex(1);
+  };
+  const handleChangeSalary = (e) => {
+    setSalary(e.value);
     setPageIndex(1);
   };
   const handleChangeSearch = (e) => {
@@ -217,6 +219,21 @@ export const RecruitListStudent = () => {
               <Option value={0}>Không yêu cầu</Option>
               <Option value={1}>Dưới 1 năm</Option>
               <Option value={2}>Từ 1 tới 5 năm</Option>
+            </Select>
+          </div>
+          <div className="filter">
+            <label className="label-filter">Lương:</label>
+            <Select
+              value={salary}
+              defaultValue="Tất cả"
+              labelInValue={true}
+              className="filter-content"
+              onChange={handleChangeSalary}
+            >
+              <Option value={-1}>Tất cả</Option>
+              <Option value={1}>ít hơn 5 triệu</Option>
+              <Option value={2}>Từ 5 tới 10 triệu</Option>
+              <Option value={3}>Lớn hơn 10 triệu</Option>
             </Select>
           </div>
           <div className="filter">
